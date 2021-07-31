@@ -1,0 +1,10 @@
+  {
+    "GREETING": {
+        "ja": "おはよう",
+        "en": "hello"
+    },
+    "CATCHCOPY": {
+      "ja": "誰かと一緒に本を読もう",
+      "en": "Let's Read Books with the CoReader"
+    }
+  }
