@@ -1,21 +1,13 @@
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Head from 'next/head'
-import dict from '../localesDictionary.json'
+import uselocalesFilter from '../utils/translate'
 
-const sentences = Object.keys(dict)
-
-function localesFilter(locale){
-   return sentences.reduce((result, sentence)=> {
-    result[sentence] = dict[sentence][locale]
-    return result
-  }, {})
-}
 
 export default function Home() {
   const { locale } = useRouter();
 
-  const t = localesFilter(locale)
+  const t = uselocalesFilter(locale)
 
   return (
     <div>
