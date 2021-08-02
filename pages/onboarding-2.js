@@ -1,5 +1,5 @@
-import { Fragment } from 'react'
-import { Popover, Transition } from '@headlessui/react'
+import { Fragment, useState } from 'react'
+import { Popover, Transition, RadioGroup } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -12,7 +12,45 @@ const navigation = [
   { name: 'Pricing', href: '#' },
 ]
 
-export default function Home() {
+const genderSettings = [
+  { name: 'Male'},
+  { name: 'Female'},
+  { name: 'LGBTQ'}
+
+]
+const genreSettings = [
+  { 
+    firstGenre: 'Bussiness',
+    secondGenre: 'Economics',
+  },
+  { 
+    firstGenre: 'Art',
+    secondGenre: 'Design',
+  },
+  { 
+    firstGenre: 'Technology',
+    secondGenre: 'Science',
+  },
+  { 
+    firstGenre: 'Literature',
+    secondGenre: 'Philosophy',
+  },
+  { 
+    firstGenre: 'Health',
+    secondGenre: 'Sports',
+  },
+  { 
+    firstGenre: 'Sociology',
+    secondGenre: 'History',
+  },
+]
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ')
+}
+
+export default function Onboarding2() {
+  const [selected, setSelected] = useState(genderSettings[0])
   const { locale } = useRouter();
 
   const t = uselocalesFilter(locale)
@@ -20,59 +58,12 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Tsundoku</title>
+        <title>Onboarding-2</title>
         <meta name="description" content="一緒に読書してくれる誰かを探すためのマッチングサービス" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <div className="relative bg-gray-50 overflow-hidden">
-        <div className="hidden sm:block sm:absolute sm:inset-y-0 sm:h-full sm:w-full" aria-hidden="true">
-          <div className="relative h-full max-w-7xl mx-auto">
-            <svg
-              className="absolute right-full transform translate-y-1/4 translate-x-1/4 lg:translate-x-1/2"
-              width={404}
-              height={784}
-              fill="none"
-              viewBox="0 0 404 784"
-            >
-              <defs>
-                <pattern
-                  id="f210dbf6-a58d-4871-961e-36d5016a0f49"
-                  x={0}
-                  y={0}
-                  width={20}
-                  height={20}
-                  patternUnits="userSpaceOnUse"
-                >
-                  <rect x={0} y={0} width={4} height={4} className="text-gray-200" fill="currentColor" />
-                </pattern>
-              </defs>
-              <rect width={404} height={784} fill="url(#f210dbf6-a58d-4871-961e-36d5016a0f49)" />
-            </svg>
-            <svg
-              className="absolute left-full transform -translate-y-3/4 -translate-x-1/4 md:-translate-y-1/2 lg:-translate-x-1/2"
-              width={404}
-              height={784}
-              fill="none"
-              viewBox="0 0 404 784"
-            >
-              <defs>
-                <pattern
-                  id="5d0dd344-b041-4d26-bec4-8d33ea57ec9b"
-                  x={0}
-                  y={0}
-                  width={20}
-                  height={20}
-                  patternUnits="userSpaceOnUse"
-                >
-                  <rect x={0} y={0} width={4} height={4} className="text-gray-200" fill="currentColor" />
-                </pattern>
-              </defs>
-              <rect width={404} height={784} fill="url(#5d0dd344-b041-4d26-bec4-8d33ea57ec9b)" />
-            </svg>
-          </div>
-        </div>
-
         <div className="relative pt-6 pb-16 sm:pb-24">
           <Popover>
             {({ open }) => (
@@ -85,7 +76,7 @@ export default function Home() {
                     <div className="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0">
                       <div className="flex items-center justify-between w-full md:w-auto">
                         <a href="#">
-                          <span className="sr-only">Workflow</span>
+                          <span className="sr-only">Tsundoku</span>
                           <img
                             className="h-8 w-auto sm:h-10"
                             src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
@@ -176,33 +167,99 @@ export default function Home() {
           </Popover>
 
           <main className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
-            <div className="text-center">
-              <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                <span className="block xl:inline">Data to enrich your</span>{' '}
-                <span className="block text-indigo-600 xl:inline">online business</span>
-              </h1>
-              <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-                Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet
-                fugiat veniam occaecat fugiat aliqua.
-              </p>
-              <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
-                <div className="rounded-md shadow">
-                  <a
-                    href="#"
-                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
-                  >
-                    Get started
-                  </a>
-                </div>
-                <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
-                  <a
-                    href="#"
-                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10"
-                  >
-                    Live demo
-                  </a>
-                </div>
+            <div className="py-3">
+              <h1 className="text-2xl font-bold">Tell us a little bit about you...</h1>
+              <p className="text-base text-gray-500">(It takes 1 minute to finish this.)</p>
+            </div>
+            <div className="py-3">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                Name
+              </label>
+              <div className="mt-1">
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  autoComplete="given-name"
+                  className="p-3 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                />
               </div>
+            </div>
+            <div className="py-3">
+              <label htmlFor="Gender" className="block text-sm font-medium text-gray-700">
+                Gender
+              </label>
+              <RadioGroup className="mt-1" value={selected} onChange={setSelected}>
+                <RadioGroup.Label className="sr-only">Gender setting</RadioGroup.Label>
+                <div className="bg-white rounded-md -space-y-px">
+                  {genderSettings.map((gender, genderSettingIdx) => (
+                    <RadioGroup.Option
+                      key={gender.name}
+                      value={gender}
+                      className={({ checked }) =>
+                        classNames(
+                          genderSettingIdx === 0 ? 'rounded-tl-md rounded-tr-md' : '',
+                          genderSettingIdx === genderSettings.length - 1 ? 'rounded-bl-md rounded-br-md' : '',
+                          checked ? 'bg-tsundoku-brown-sub border-tsundoku-brown-main z-10' : 'border-gray-200',
+                          'relative border p-4 flex cursor-pointer focus:outline-none'
+                        )
+                      }
+                    >
+                      {({ active, checked }) => (
+                        <>
+                          <span
+                            className={classNames(
+                              checked ? 'bg-tsundoku-brown-main border-transparent' : 'bg-white border-gray-300',
+                              active ? '' : '',
+                              'h-4 w-4 mt-0.5 cursor-pointer rounded-full border flex items-center justify-center'
+                            )}
+                            aria-hidden="true"
+                          >
+                            <span className="rounded-full bg-white w-1.5 h-1.5" />
+                          </span>
+                          <div className="ml-3 flex flex-col">
+                            <RadioGroup.Label
+                              as="span"
+                              className={classNames(checked ? 'text-orange-900' : 'text-gray-900', 'block text-sm font-medium')}
+                            >
+                              {gender.name}
+                            </RadioGroup.Label>
+                          </div>
+                        </>
+                      )}
+                    </RadioGroup.Option>
+                  ))}
+                </div>
+              </RadioGroup>
+            </div>
+            <div className="py-3">
+              <label htmlFor="Genre" className="block text-sm font-medium text-gray-700">
+                What genres do interest you ?
+              </label>
+              <div className="grid grid-cols-2 gap-4 mt-3">
+                {genreSettings.map((genre) => {
+                  return (
+                    <div className="relative border border-gray-300 rounded-md aspect-w-1 aspect-h-1" key={genre.firstGenre}>
+                      <div className="absolute inset-1/2 w-3/4 h-12 text-center transform -translate-x-1/2 -translate-y-1/2">
+                        <p>{genre.firstGenre}</p>
+                        <p>{genre.secondGenre}</p>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+            <div className="py-3">
+                <div className="flex justify-end">
+                  <Link href="/onboarding-2"><a>
+                    <button
+                      type="button"
+                      className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
+                    >
+                      Next
+                    </button>
+                  </a></Link>
+                </div>
             </div>
           </main>
         </div>
@@ -211,17 +268,18 @@ export default function Home() {
       <footer>
         <div className="flex text-blue-400">
           <div>
-            <Link href="/" locale="en">
+            <Link href="/onboarding-2" locale="en">
               <a>English</a>
             </Link>
           </div>
           <div className="ml-4">
-            <Link href="/" locale="ja">
+            <Link href="/onboarding-2" locale="ja">
               <a>日本語</a>
             </Link>
           </div>
         </div>
         <div className="text-center">
+          <div>Onboarding-2</div>
           <div>{t.TRANSLATE_TEST}</div>
         </div>
       </footer>

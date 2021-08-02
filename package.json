@@ -11,6 +11,7 @@
   "dependencies": {
     "@headlessui/react": "^1.4.0",
     "@heroicons/react": "^1.0.3",
+    "@tailwindcss/aspect-ratio": "^0.2.1",
     "autoprefixer": "^10.3.1",
     "json-loader": "^0.5.7",
     "next": "11.0.1",
