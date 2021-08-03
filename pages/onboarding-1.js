@@ -1,6 +1,7 @@
 import { Fragment, useState } from 'react'
-import { Popover, Transition, RadioGroup } from '@headlessui/react'
+import { Popover, Transition, RadioGroup, Listbox } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
+import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Head from 'next/head'
@@ -18,41 +19,24 @@ const genderSettings = [
   { name: 'LGBTQ'}
 
 ]
-const genreSettings = [
-  { 
-    firstGenre: 'Bussiness',
-    secondGenre: 'Economics',
-  },
-  { 
-    firstGenre: 'Art',
-    secondGenre: 'Design',
-  },
-  { 
-    firstGenre: 'Technology',
-    secondGenre: 'Science',
-  },
-  { 
-    firstGenre: 'Literature',
-    secondGenre: 'Philosophy',
-  },
-  { 
-    firstGenre: 'Health',
-    secondGenre: 'Sports',
-  },
-  { 
-    firstGenre: 'Sociology',
-    secondGenre: 'History',
-  },
+
+const countries = [
+  { id: 1, name: 'Japan' },
+  { id: 2, name: 'United State' },
 ]
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Onboarding1() {
-  const [selected, setSelected] = useState(genderSettings[0])
-  const { locale } = useRouter();
+  //InitialState
+  const [genderSelected, setGenderSelected] = useState(genderSettings[0])
+  const [countrySelected, setCountrySelected] = useState(countries[0])
 
+  //Translate
+  const { locale } = useRouter();
   const t = uselocalesFilter(locale)
 
   return (
@@ -189,7 +173,7 @@ export default function Onboarding1() {
               <label htmlFor="Gender" className="block text-sm font-medium text-gray-700">
                 Gender
               </label>
-              <RadioGroup className="mt-1" value={selected} onChange={setSelected}>
+              <RadioGroup className="mt-1" value={genderSelected} onChange={setGenderSelected}>
                 <RadioGroup.Label className="sr-only">Gender setting</RadioGroup.Label>
                 <div className="bg-white rounded-md -space-y-px">
                   {genderSettings.map((gender, genderSettingIdx) => (
@@ -233,21 +217,66 @@ export default function Onboarding1() {
               </RadioGroup>
             </div>
             <div className="py-3">
-              <label htmlFor="Genre" className="block text-sm font-medium text-gray-700">
-                What genres do interest you ?
-              </label>
-              <div className="grid grid-cols-2 gap-4 mt-3">
-                {genreSettings.map((genre) => {
-                  return (
-                    <div className="relative border border-gray-300 rounded-md aspect-w-1 aspect-h-1" key={genre.firstGenre}>
-                      <div className="absolute inset-1/2 w-3/4 h-12 text-center transform -translate-x-1/2 -translate-y-1/2">
-                        <p>{genre.firstGenre}</p>
-                        <p>{genre.secondGenre}</p>
-                      </div>
+              <Listbox value={countrySelected} onChange={setCountrySelected}>
+                {({ open }) => (
+                  <>
+                    <Listbox.Label className="block text-sm font-medium text-gray-700">Country</Listbox.Label>
+                    <div className="mt-1 relative">
+                      <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-tsundoku-brown-main focus:border-tsundoku-brown-main sm:text-sm">
+                        <span className="block truncate">{countrySelected.name}</span>
+                        <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                          <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                        </span>
+                      </Listbox.Button>
+
+                      <Transition
+                        show={open}
+                        as={Fragment}
+                        leave="transition ease-in duration-100"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                      >
+                        <Listbox.Options
+                          static
+                          className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                        >
+                          {countries.map((country) => (
+                            <Listbox.Option
+                              key={country.id}
+                              className={({ active }) =>
+                                classNames(
+                                  active ? 'text-white bg-tsundoku-brown-main' : 'text-gray-900',
+                                  'cursor-default select-none relative py-2 pl-8 pr-4'
+                                )
+                              }
+                              value={country}
+                            >
+                              {({ selected, active }) => (
+                                <>
+                                  <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
+                                    {country.name}
+                                  </span>
+
+                                  {selected ? (
+                                    <span
+                                      className={classNames(
+                                        active ? 'text-white' : 'text-tsundoku-brown-main',
+                                        'absolute inset-y-0 left-0 flex items-center pl-1.5'
+                                      )}
+                                    >
+                                      <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                    </span>
+                                  ) : null}
+                                </>
+                              )}
+                            </Listbox.Option>
+                          ))}
+                        </Listbox.Options>
+                      </Transition>
                     </div>
-                  )
-                })}
-              </div>
+                  </>
+                )}
+              </Listbox>
             </div>
             <div className="py-3">
                 <div className="flex justify-end">
