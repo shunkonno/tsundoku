@@ -12,12 +12,11 @@ const navigation = [
   { name: 'Pricing', href: '#' },
 ]
 
-const genderSettings = [
-  { name: 'Male'},
-  { name: 'Female'},
-  { name: 'LGBTQ'}
-
+const genderOfMatchSettings = [
+  { name: 'No Restriction'},
+  { name: 'Man Only'},
 ]
+
 const genreSettings = [
   { 
     firstGenre: 'Bussiness',
@@ -50,7 +49,7 @@ function classNames(...classes) {
 }
 
 export default function Onboarding2() {
-  const [selected, setSelected] = useState(genderSettings[0])
+  const [selected, setSelected] = useState(genderOfMatchSettings[0])
   const { locale } = useRouter();
 
   const t = uselocalesFilter(locale)
@@ -168,38 +167,24 @@ export default function Onboarding2() {
 
           <main className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
             <div className="py-3">
-              <h1 className="text-2xl font-bold">Tell us a little bit about you...</h1>
-              <p className="text-base text-gray-500">(It takes 1 minute to finish this.)</p>
+              <h1 className="text-2xl font-bold">Tell us how you’d like to participate.</h1>
             </div>
-            <div className="py-3">
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                Name
-              </label>
-              <div className="mt-1">
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  autoComplete="given-name"
-                  className="p-3 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-            </div>
+            
             <div className="py-3">
               <label htmlFor="Gender" className="block text-sm font-medium text-gray-700">
-                Gender
+                GenderRestriction
               </label>
               <RadioGroup className="mt-1" value={selected} onChange={setSelected}>
                 <RadioGroup.Label className="sr-only">Gender setting</RadioGroup.Label>
                 <div className="bg-white rounded-md -space-y-px">
-                  {genderSettings.map((gender, genderSettingIdx) => (
+                  {genderOfMatchSettings.map((gender, genderOfMatchSettingsIdx) => (
                     <RadioGroup.Option
                       key={gender.name}
                       value={gender}
                       className={({ checked }) =>
                         classNames(
-                          genderSettingIdx === 0 ? 'rounded-tl-md rounded-tr-md' : '',
-                          genderSettingIdx === genderSettings.length - 1 ? 'rounded-bl-md rounded-br-md' : '',
+                          genderOfMatchSettingsIdx === 0 ? 'rounded-tl-md rounded-tr-md' : '',
+                          genderOfMatchSettingsIdx === genderOfMatchSettings.length - 1 ? 'rounded-bl-md rounded-br-md' : '',
                           checked ? 'bg-tsundoku-brown-sub border-tsundoku-brown-main z-10' : 'border-gray-200',
                           'relative border p-4 flex cursor-pointer focus:outline-none'
                         )
