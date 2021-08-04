@@ -166,7 +166,12 @@ export default function Onboarding2() {
               </>
             )}
           </Popover>
+        </div>
+      </div>
 
+      {/* main content */}
+      <div className="relative pb-16 bg-gray-50 overflow-hidden">
+        <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
           <main className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
             <div className="py-3">
               <Link href="/onboarding-1"><a>
@@ -261,25 +266,6 @@ export default function Onboarding2() {
           </main>
         </div>
       </div>
-
-      <footer>
-        <div className="flex text-blue-400">
-          <div>
-            <Link href="/onboarding-2" locale="en">
-              <a>English</a>
-            </Link>
-          </div>
-          <div className="ml-4">
-            <Link href="/onboarding-2" locale="ja">
-              <a>日本語</a>
-            </Link>
-          </div>
-        </div>
-        <div className="text-center">
-          <div>Onboarding-2</div>
-          <div>{t.TRANSLATE_TEST}</div>
-        </div>
-      </footer>
     </div>
   )
 }
