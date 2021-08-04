@@ -74,7 +74,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="relative pt-6 pb-16 sm:pb-24">
+        <div className="relative py-6 sm:pb-24">
           <Popover>
             {({ open }) => (
               <>
@@ -175,7 +175,11 @@ export default function Home() {
               </>
             )}
           </Popover>
+        </div>
+      </div>
 
+      <div className="relative pb-16 bg-gray-50 overflow-hidden">
+        <div className="sm:block  sm:h-full sm:w-full" aria-hidden="true">
           <main className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
             <div className="text-center">
               <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
