@@ -167,7 +167,12 @@ export default function Onboarding2() {
               </>
             )}
           </Popover>
+        </div>
+      </div>
 
+      {/* main content */}
+      <div className="relative pb-16 bg-gray-50 overflow-hidden">
+        <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
           <main className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
             <div className="py-3">
               <div className="bg-tsundoku-blue-light px-6 py-4">
