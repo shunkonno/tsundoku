@@ -4,8 +4,9 @@ import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Head from 'next/head'
-import Header from '../components/Header'
 import uselocalesFilter from '../utils/translate'
+import Header from '../components/Header'
+import FooterSmall from '../components/FooterSmall'
 
 const genderSettings = [
   { name: 'Male'},
@@ -189,6 +190,8 @@ export default function Onboarding1() {
         </div>
       </div>
       {/* END main content */}
+
+      <FooterSmall />
 
     </div>
   )

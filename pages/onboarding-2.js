@@ -3,8 +3,9 @@ import { RadioGroup } from '@headlessui/react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Head from 'next/head'
-import Header from '../components/Header'
 import uselocalesFilter from '../utils/translate'
+import Header from '../components/Header'
+import FooterSmall from '../components/FooterSmall'
 
 const genderOfMatchSettings = [
   { name: 'No Restriction'},
@@ -158,6 +159,8 @@ export default function Onboarding2() {
         </div>
       </div>
       {/* END main content */}
+
+      <FooterSmall />
 
     </div>
   )
