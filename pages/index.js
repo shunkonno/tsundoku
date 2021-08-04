@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Head from 'next/head'
 import uselocalesFilter from '../utils/translate'
+import Footer from '../components/Footer'
 
 const navigation = [
   { name: 'How to work', href: '#' },
@@ -207,6 +208,7 @@ export default function Home() {
           </main>
         </div>
       </div>
+      <Footer />
 
       <footer>
         <div className="flex text-blue-400">
