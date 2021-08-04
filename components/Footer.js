@@ -126,7 +126,7 @@ export default function Footer() {
               </div>
             </div>
           </div>
-          <div class="mt-12 bg-gray-500">
+          <div className="mt-12 bg-gray-500">
             <h2 id="debug">
               ///Debug Area///
             </h2>
