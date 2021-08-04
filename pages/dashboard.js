@@ -46,6 +46,7 @@ export default function Onboarding2() {
       </div>
 
       <Footer />
+      
     </div>
   )
 }

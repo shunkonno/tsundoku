@@ -43,7 +43,7 @@ export default function Onboarding1() {
       <Header />
 
       {/* main content */}
-      <div className="relative pb-16 bg-gray-50 overflow-hidden">
+      <div className="pb-16 bg-gray-50 overflow-hidden">
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
           <main className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
             <div className="py-3">

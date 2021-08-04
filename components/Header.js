@@ -16,7 +16,7 @@ export default function Header() {
 
   return (
     <>
-      <div className="relative bg-gray-50 overflow-hidden">
+      <div className="relative bg-gray-50">
         <div className="hidden sm:block sm:absolute sm:inset-y-0 sm:h-full sm:w-full" aria-hidden="true">
           <div className="relative h-full max-w-7xl mx-auto">
             <svg
@@ -84,7 +84,7 @@ export default function Header() {
                           />
                         </a>
                         <div className="-mr-2 flex items-center md:hidden">
-                          <Popover.Button className="bg-gray-50 rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                          <Popover.Button className="bg-gray-50 rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-tsundoku-blue-main">
                             <span className="sr-only">Open main menu</span>
                             <MenuIcon className="h-6 w-6" aria-hidden="true" />
                           </Popover.Button>
@@ -102,7 +102,7 @@ export default function Header() {
                       <span className="inline-flex rounded-md shadow">
                         <a
                           href="#"
-                          className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50"
+                          className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-tsundoku-blue-main bg-white hover:bg-gray-50"
                         >
                           {t.LOGIN}
                         </a>
@@ -124,7 +124,7 @@ export default function Header() {
                   <Popover.Panel
                     focus
                     static
-                    className="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden"
+                    className="absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden"
                   >
                     <div className="rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden">
                       <div className="px-5 pt-4 flex items-center justify-between">
@@ -136,7 +136,7 @@ export default function Header() {
                           />
                         </div>
                         <div className="-mr-2">
-                          <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                          <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-tsundoku-blue-main">
                             <span className="sr-only">Close menu</span>
                             <XIcon className="h-6 w-6" aria-hidden="true" />
                           </Popover.Button>
@@ -155,7 +155,7 @@ export default function Header() {
                       </div>
                       <a
                         href="#"
-                        className="block w-full px-5 py-3 text-center font-medium text-indigo-600 bg-gray-50 hover:bg-gray-100"
+                        className="block w-full px-5 py-3 text-center font-medium text-tsundoku-blue-main bg-gray-50 hover:bg-gray-100"
                       >
                         {t.LOGIN}
                       </a>
