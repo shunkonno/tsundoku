@@ -14,7 +14,7 @@
   }
   ```
 */
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon, ChevronDownIcon } from '@heroicons/react/solid'
@@ -72,27 +72,51 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-function FindLanguageBylocaleCode(localeCode) {
-  const localeData = locales.find((locale)=>{
+function FindLocaleByLocaleCode(localeCode) {
+  const localeObject = locales.find((locale)=>{
     return locale.localeCode == localeCode
   })
   
-  return localeData.language
+  return localeObject
   
 }
 
+
+
 export default function Footer() {
-  const { locale } = useRouter();
+  const router = useRouter();
+  // useEffect(() => {
+  //   const { pathname } = router
+  //   switch(locale) {
+  //     case "en":
+  //       router.push(pathname, pathname, { locale: locale })
+  //       break;
+  //     case "ja":
+  //       router.push(pathname, pathname, { locale: locale })
+  //       break;
+  //     default:
+  //       return
+  //   }
+    
+  // })
 
-  const language = FindLanguageBylocaleCode(locale)
+  function debug(){
+    console.log(localeSelected)
+  }
 
-  const [languageSelected, setLanguageSelected] = useState(language)
+  const currentLocale = FindLocaleByLocaleCode(router.locale)
+
+  const [localeSelected, setLocaleSelected] = useState(currentLocale)
+
 
   return (
     <footer className="bg-gray-800" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
+      <button onClick={debug}>
+        debug
+      </button>
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
         <div className="pb-8 xl:grid xl:grid-cols-5 xl:gap-8">
           <div className="grid grid-cols-2 gap-8 xl:col-span-4">
@@ -112,13 +136,13 @@ export default function Footer() {
             </div>
           </div>
           <div className="mt-12">
-            <Listbox value={languageSelected} onChange={setLanguageSelected}>
+            <Listbox value={localeSelected} onChange={setLocaleSelected}>
               {({ open }) => (
                 <>
                   <Listbox.Label className="block font-medium text-gray-400">Language</Listbox.Label>
                   <div className="mt-1 relative">
                     <Listbox.Button className="relative w-full appearance-none block text-left bg-none bg-gray-700 border border-transparent rounded-md mt-4 py-2 pl-3 pr-10 text-base text-white focus:outline-none focus:ring-white focus:border-white sm:text-sm">
-                      <span className="block truncate">{languageSelected}</span>
+                      <span className="block truncate">{localeSelected.language}</span>
                       <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                         <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                       </span>
@@ -144,7 +168,7 @@ export default function Footer() {
                                 'cursor-default select-none relative py-2 pl-8 pr-4'
                               )
                             }
-                            value={locale.language}
+                            value={locale}
                           >
                             {({ selected, active }) => (
                               <>
