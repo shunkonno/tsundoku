@@ -1,5 +1,6 @@
 import { Fragment } from 'react'
 import { useRouter } from 'next/router'
+import { Link } from 'next/link'
 import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import uselocalesFilter from '../utils/translate'
@@ -28,8 +29,8 @@ export default function Header() {
                   >
                     <div className="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0">
                       <div className="flex items-center justify-between w-full md:w-auto">
-                        <a href="#">
-                          <span className="sr-only">Workflow</span>
+                        <a href="/">
+                          <span className="sr-only">Tsundoku</span>
                           <img
                             className="h-8 w-auto sm:h-10"
                             src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
