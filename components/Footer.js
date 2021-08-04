@@ -18,6 +18,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon, ChevronDownIcon } from '@heroicons/react/solid'
+import uselocalesFilter from '../utils/translate'
 
 const navigation = {
   support: [
@@ -78,45 +79,35 @@ function FindLocaleByLocaleCode(localeCode) {
   })
   
   return localeObject
-  
 }
 
 
 
 export default function Footer() {
   const router = useRouter();
-  // useEffect(() => {
-  //   const { pathname } = router
-  //   switch(locale) {
-  //     case "en":
-  //       router.push(pathname, pathname, { locale: locale })
-  //       break;
-  //     case "ja":
-  //       router.push(pathname, pathname, { locale: locale })
-  //       break;
-  //     default:
-  //       return
-  //   }
-    
-  // })
-
-  function debug(){
-    console.log(localeSelected)
-  }
 
   const currentLocale = FindLocaleByLocaleCode(router.locale)
 
   const [localeSelected, setLocaleSelected] = useState(currentLocale)
 
+  //localeSelectedが変更されると、そのlocaleのURLにリダイレクトする
+  useEffect(() => {
+    console.log(localeSelected)
+    const { pathname } = router
+    const { localeCode } = localeSelected
+    if( currentLocale != localeSelected ) {
+      router.push(pathname, pathname, { locale: localeCode })
+    }
+  },[localeSelected])
+
+  const t = uselocalesFilter(router.locale)
 
   return (
     <footer className="bg-gray-800" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
-      <button onClick={debug}>
-        debug
-      </button>
+      
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
         <div className="pb-8 xl:grid xl:grid-cols-5 xl:gap-8">
           <div className="grid grid-cols-2 gap-8 xl:col-span-4">
@@ -134,6 +125,15 @@ export default function Footer() {
                 </ul>
               </div>
             </div>
+          </div>
+          <div class="mt-12 bg-gray-500">
+            <h2 id="debug">
+              ///Debug Area///
+            </h2>
+            <p>{t.TRANSLATE_TEST}</p>
+            <button className="text-white p-1 border border-gray-200" onClick={()=> console.log(localeSelected)}>
+              show current locale in console
+            </button>
           </div>
           <div className="mt-12">
             <Listbox value={localeSelected} onChange={setLocaleSelected}>

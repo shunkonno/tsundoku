@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Head from 'next/head'
 import uselocalesFilter from '../utils/translate'
+import Footer from '../components/Footer'
 
 const navigation = [
   { name: 'How to work', href: '#' },
@@ -186,24 +187,7 @@ export default function Onboarding2() {
         </div>
       </div>
 
-      <footer>
-        <div className="flex text-blue-400">
-          <div>
-            <Link href="/onboarding-2" locale="en">
-              <a>English</a>
-            </Link>
-          </div>
-          <div className="ml-4">
-            <Link href="/onboarding-2" locale="ja">
-              <a>日本語</a>
-            </Link>
-          </div>
-        </div>
-        <div className="text-center">
-          <div>Dashboard</div>
-          <div>{t.TRANSLATE_TEST}</div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }

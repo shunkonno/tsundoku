@@ -209,24 +209,6 @@ export default function Home() {
         </div>
       </div>
       <Footer />
-
-      <footer>
-        <div className="flex text-blue-400">
-          <div>
-            <Link href="/" locale="en">
-              <a>English</a>
-            </Link>
-          </div>
-          <div className="ml-4">
-            <Link href="/" locale="ja">
-              <a>日本語</a>
-            </Link>
-          </div>
-        </div>
-        <div className="text-center">
-          <div>{t.TRANSLATE_TEST}</div>
-        </div>
-      </footer>
     </div>
   )
 }
