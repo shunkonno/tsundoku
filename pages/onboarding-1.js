@@ -32,7 +32,7 @@ function classNames(...classes) {
 
 export default function Onboarding1() {
   //InitialState
-  const [genderSelected, setGenderSelected] = useState(genderSettings[0])
+  const [genderSelected, setGenderSelected] = useState()
   const [countrySelected, setCountrySelected] = useState(countries[0])
 
   //Translate
@@ -160,12 +160,12 @@ export default function Onboarding1() {
                 Name
               </label>
               <div className="mt-1">
-                <input
+              <input
                   type="text"
                   name="name"
                   id="name"
                   autoComplete="given-name"
-                  className="p-3 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="p-3 shadow-sm block w-full sm:text-sm border border-gray-300 focus:ring-tsundoku-brown-main focus:border-tsundoku-brown-main rounded-md"
                 />
               </div>
             </div>
