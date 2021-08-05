@@ -11,7 +11,7 @@ function classNames(...classes) {
 export default function Onboarding2() {
   //Translate
   const { locale } = useRouter();
-  const t = uselocalesFilter(locale)
+  const t = uselocalesFilter("dashboard",locale)
 
   return (
     <div>
@@ -46,7 +46,7 @@ export default function Onboarding2() {
       </div>
 
       <Footer />
-      
+
     </div>
   )
 }

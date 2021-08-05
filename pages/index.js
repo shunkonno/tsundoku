@@ -7,7 +7,7 @@ import Footer from '../components/Footer'
 export default function Home() {
   const { locale } = useRouter();
 
-  const t = uselocalesFilter(locale)
+  const t = uselocalesFilter("LP", locale)
 
   return (
     <div>

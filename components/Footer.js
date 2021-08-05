@@ -81,8 +81,6 @@ function FindLocaleByLocaleCode(localeCode) {
   return localeObject
 }
 
-
-
 export default function Footer() {
   const router = useRouter();
 
@@ -92,7 +90,6 @@ export default function Footer() {
 
   //localeSelectedが変更されると、そのlocaleのURLにリダイレクトする
   useEffect(() => {
-    console.log(localeSelected)
     const { pathname } = router
     const { localeCode } = localeSelected
     if( currentLocale != localeSelected ) {
@@ -100,7 +97,7 @@ export default function Footer() {
     }
   },[localeSelected])
 
-  const t = uselocalesFilter(router.locale)
+  const t = uselocalesFilter("footer", router.locale)
 
   return (
     <footer className="bg-gray-800" aria-labelledby="footer-heading">
@@ -130,7 +127,7 @@ export default function Footer() {
             <h2 id="debug">
               ///Debug Area///
             </h2>
-            <p>{t.TRANSLATE_TEST}</p>
+            <p>{t.TranslateTest}</p>
             <button className="text-white p-1 border border-gray-200" onClick={()=> console.log(localeSelected)}>
               show current locale in console
             </button>

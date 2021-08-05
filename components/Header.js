@@ -13,7 +13,7 @@ const navigation = [
 
 export default function Header() {
   const { locale } = useRouter();
-  const t = uselocalesFilter(locale)
+  const t = uselocalesFilter("header", locale)
 
   return (
     <>
@@ -111,7 +111,7 @@ export default function Header() {
                         href="#"
                         className="block w-full px-5 py-3 text-center font-medium text-tsundoku-blue-main bg-gray-50 hover:bg-gray-100"
                       >
-                        {t.LOGIN}
+                        {/* {t.Login} */}ログイン
                       </a>
                     </div>
                   </Popover.Panel>

@@ -11,7 +11,7 @@ import FooterSmall from '../components/FooterSmall'
 const genderSettings = [
   { name: 'Male'},
   { name: 'Female'},
-  { name: 'LGBTQ'}
+  { name: 'None of above'}
 ]
 
 const countries = [
@@ -30,7 +30,7 @@ export default function Onboarding1() {
 
   //Translate
   const { locale } = useRouter();
-  const t = uselocalesFilter(locale)
+  const t = uselocalesFilter("Onboarding1", locale)
 
   return (
     <div>
