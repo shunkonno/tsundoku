@@ -13,7 +13,7 @@ export const dict =
     },
   },
   {
-    "Onboarding1": {
+    "Onboarding": {
       "Heading1": {
         "en": "headin2",
         "ja": "見出し1"
