@@ -51,7 +51,7 @@ export const dict =
   {
     "header": {
       "Login": {
-        "en": "Log in",
+        "en": "LOG IN",
         "ja": "ログイン"
       },
       "text2": {

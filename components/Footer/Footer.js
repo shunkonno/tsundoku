@@ -132,8 +132,8 @@ export default function Footer() {
               </div>
             </div>
           </div>
-          {/* デバックエリア
-          <div className="mt-12 bg-gray-500">
+          {/* デバッグエリア */}
+          {/* <div className="mt-12 bg-gray-500">
             <h2 id="debug">///Debug Area///</h2>
             <p>{t.TranslateTest}</p>
             <button
@@ -142,8 +142,8 @@ export default function Footer() {
             >
               show current locale in console
             </button>
-          </div> 
-          */}
+          </div>  */}
+         
           <div className="mt-12">
             <Listbox value={localeSelected} onChange={setLocaleSelected}>
               {({ open }) => (

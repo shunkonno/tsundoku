@@ -59,10 +59,10 @@ export default function Header() {
                     <div className="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0">
                       <span className="inline-flex rounded-md shadow">
                         <a
-                          href="#"
+                          href="/signin"
                           className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-tsundoku-blue-main bg-white hover:bg-gray-50"
                         >
-                          {t.LOGIN}
+                          {t.Login}
                         </a>
                       </span>
                     </div>
@@ -112,10 +112,10 @@ export default function Header() {
                         ))}
                       </div>
                       <a
-                        href="#"
+                        href="/signin"
                         className="block w-full px-5 py-3 text-center font-medium text-tsundoku-blue-main bg-gray-50 hover:bg-gray-100"
                       >
-                        {/* {t.Login} */}ログイン
+                        {t.Login}
                       </a>
                     </div>
                   </Popover.Panel>
