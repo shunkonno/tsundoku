@@ -2,7 +2,7 @@
 import { useAuth } from '../lib/auth'
 
 // Components
-import Header from '../components/Header'
+import { Header } from '../components/Header'
 
 export default function SignIn() {
   // ============================================================

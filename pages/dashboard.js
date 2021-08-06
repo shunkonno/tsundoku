@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import uselocalesFilter from '../utils/translate'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import { Header } from '../components/Header'
+import { Footer } from '../components/Footer'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -10,14 +10,17 @@ function classNames(...classes) {
 
 export default function Onboarding2() {
   //Translate
-  const { locale } = useRouter();
-  const t = uselocalesFilter("dashboard",locale)
+  const { locale } = useRouter()
+  const t = uselocalesFilter('dashboard', locale)
 
   return (
     <div>
       <Head>
         <title>DASHBOARD</title>
-        <meta name="description" content="一緒に読書してくれる誰かを探すためのマッチングサービス" />
+        <meta
+          name="description"
+          content="一緒に読書してくれる誰かを探すためのマッチングサービス"
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -29,7 +32,9 @@ export default function Onboarding2() {
           <main className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
             <div className="py-3">
               <div className="bg-tsundoku-blue-light px-6 py-4">
-                <div className="text-center mb-12">Hi (user.name), Let's Read.</div>
+                <div className="text-center mb-12">
+                  Hi (user.name), Let's Read.
+                </div>
                 <div className="flex justify-center mb-4">
                   <button
                     type="button"
@@ -38,7 +43,9 @@ export default function Onboarding2() {
                     Start Session
                   </button>
                 </div>
-                <div className="text-center text-sm">Last Session : (user.lastsessiondate)</div>
+                <div className="text-center text-sm">
+                  Last Session : (user.lastsessiondate)
+                </div>
               </div>
             </div>
           </main>
@@ -46,7 +53,6 @@ export default function Onboarding2() {
       </div>
 
       <Footer />
-
     </div>
   )
 }

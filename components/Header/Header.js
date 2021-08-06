@@ -3,17 +3,17 @@ import { useRouter } from 'next/router'
 import { Link } from 'next/link'
 import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
-import uselocalesFilter from '../utils/translate'
+import uselocalesFilter from '../../utils/translate'
 
 const navigation = [
   { name: 'How to work', href: '#' },
   { name: 'Features', href: '#' },
-  { name: 'Pricing', href: '#' },
+  { name: 'Pricing', href: '#' }
 ]
 
 export default function Header() {
-  const { locale } = useRouter();
-  const t = uselocalesFilter("header", locale)
+  const { locale } = useRouter()
+  const t = uselocalesFilter('header', locale)
 
   return (
     <>
@@ -47,7 +47,11 @@ export default function Header() {
                     </div>
                     <div className="hidden md:flex md:space-x-10">
                       {navigation.map((item) => (
-                        <a key={item.name} href={item.href} className="font-medium text-gray-500 hover:text-gray-900">
+                        <a
+                          key={item.name}
+                          href={item.href}
+                          className="font-medium text-gray-500 hover:text-gray-900"
+                        >
                           {item.name}
                         </a>
                       ))}
