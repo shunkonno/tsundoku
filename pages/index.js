@@ -42,6 +42,13 @@ export default function Home() {
 
   const tiers = [
     {
+      name: 'フリープラン',
+      href: '#',
+      priceMonthly: 0,
+      description: 'All the basics for starting a new business',
+      includedFeatures: ['Potenti felis, in cras at at ligula nunc.', 'Orci neque eget pellentesque.'],
+    },
+    {
       name: 'スタンダードプラン',
       href: '#',
       priceMonthly: 12,
@@ -51,13 +58,6 @@ export default function Home() {
         'Orci neque eget pellentesque.',
         'Donec mauris sit in eu tincidunt etiam.',
       ],
-    },
-    {
-      name: 'フリープラン',
-      href: '#',
-      priceMonthly: 0,
-      description: 'All the basics for starting a new business',
-      includedFeatures: ['Potenti felis, in cras at at ligula nunc.', 'Orci neque eget pellentesque.'],
     },
   ]
 
@@ -149,7 +149,7 @@ export default function Home() {
                     <h2 className="text-base text-tsundoku-brown-main font-semibold tracking-wide uppercase">FEATURE</h2>
                   </div>
                 </div>
-                <div className="lg:mx-auto lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-2 lg:grid-flow-col-dense lg:gap-24">
+                <div className="lg:mt-6 lg:mx-auto lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-2 lg:grid-flow-col-dense lg:gap-24">
                   
                   <div className="max-w-xl mx-auto sm:px-6 lg:py-32 lg:max-w-none lg:mx-0 lg:px-0 lg:col-start-2">
                     <div>
@@ -196,86 +196,86 @@ export default function Home() {
                 </div>
               </div>
             </div>
-
-            <div className="bg-tsundoku-brown-sub">
-              <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-24 lg:px-8 lg:flex lg:items-center lg:justify-between">
-                <h2 className="font-extrabold tracking-tight md:text-4xl">
-                  <p className="block text-tsundoku-brown-main text-3xl leading-normal mb-2">1分で準備完了。</p>
-                  <p className="block text-white text-xl leading-normal">複雑な設定はありません。</p>
-                  <p className="block text-white text-xl leading-normal">気軽に始めてみてください。</p>
-                </h2>
-                <div className="mt-8 flex lg:mt-0 lg:flex-shrink-0">
-                  <div className="inline-flex rounded-md shadow">
-                    <a
-                      href="#"
-                      className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-tsundoku-brown-main hover:bg-tsundoku-brown-main"
-                    >
-                      Googleアカウントで無料ではじめる
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white">
-              <div className="max-w-7xl mx-auto py-24 px-4 sm:px-6 lg:px-8">
-                <div className="sm:flex sm:flex-col sm:align-center">
-                  <h1 className="text-3xl font-extrabold text-gray-900 sm:text-center">料金プラン</h1>
-                  <p className="mt-5 text-base text-gray-500 sm:text-center">
-                    無料でも利用できますが、最大限のパフォーマンスを得たい方は、ぜひスタンダードプランのご利用をおすすめ致します。
-                  </p>
-                  <div className="relative self-center mt-6 bg-gray-100 rounded-lg p-0.5 flex sm:mt-8">
-                    <button
-                      type="button"
-                      className="relative w-1/2 bg-white border-gray-200 rounded-md shadow-sm py-2 text-sm font-medium text-gray-900 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-tsundoku-blue-main focus:z-10 sm:w-auto sm:px-8"
-                    >
-                      Monthly billing
-                    </button>
-                    <button
-                      type="button"
-                      className="ml-0.5 relative w-1/2 border border-transparent rounded-md py-2 text-sm font-medium text-gray-700 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-tsundoku-blue-main focus:z-10 sm:w-auto sm:px-8"
-                    >
-                      Yearly billing
-                    </button>
-                  </div>
-                </div>
-                <div className="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-4">
-                  {tiers.map((tier) => (
-                    <div key={tier.name} className="border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200">
-                      <div className="p-6">
-                        <h2 className="text-lg leading-6 font-medium text-gray-900">{tier.name}</h2>
-                        <p className="mt-4 text-sm text-gray-500">{tier.description}</p>
-                        <p className="mt-8">
-                          <span className="text-4xl font-extrabold text-gray-900">${tier.priceMonthly}</span>{' '}
-                          <span className="text-base font-medium text-gray-500">/mo</span>
-                        </p>
-                        <a
-                          href={tier.href}
-                          className={classNames(
-                            tier.name == "スタンダードプラン" ? 'text-white font-semibold bg-tsundoku-blue-main border border-tsundoku-blue-main hover:bg-blue-600' : 'text-tsundoku-blue-main bg-blue-50 border border-blue-50',
-                            'mt-8 block w-full rounded-md py-2 text-sm  text-center '
-                          )}
-                        >
-                          {tier.name}を選択
-                        </a>
-                      </div>
-                      <div className="pt-6 pb-8 px-6">
-                        <h3 className="text-xs font-medium text-gray-900 tracking-wide uppercase">What's included</h3>
-                        <ul className="mt-6 space-y-4">
-                          {tier.includedFeatures.map((feature) => (
-                            <li key={feature} className="flex space-x-3">
-                              <CheckIcon className="flex-shrink-0 h-5 w-5 text-green-500" aria-hidden="true" />
-                              <span className="text-sm text-gray-500">{feature}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
           </main>
+
+          <div className="bg-tsundoku-brown-sub">
+            <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-24 lg:px-8 lg:flex lg:items-center lg:justify-between">
+              <h2 className="font-extrabold tracking-tight md:text-4xl">
+                <p className="block text-tsundoku-brown-main text-3xl leading-normal mb-2">1分で準備完了。</p>
+                <p className="block text-white text-xl leading-normal">複雑な設定はありません。</p>
+                <p className="block text-white text-xl leading-normal">気軽に始めてみてください。</p>
+              </h2>
+              <div className="mt-8 flex lg:mt-0 lg:flex-shrink-0">
+                <div className="inline-flex rounded-md shadow">
+                  <a
+                    href="#"
+                    className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-tsundoku-brown-main hover:bg-tsundoku-brown-main"
+                  >
+                    Googleアカウントで無料ではじめる
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white">
+            <div className="max-w-7xl mx-auto py-24 px-4 sm:px-6 lg:px-8">
+              <div className="sm:flex sm:flex-col sm:align-center">
+                <h1 className="text-3xl font-extrabold text-gray-900 sm:text-center">料金プラン</h1>
+                <p className="mt-5 text-base text-gray-500 sm:text-center">
+                  無料でも利用できますが、最大限のパフォーマンスを得たい方は、ぜひスタンダードプランのご利用をおすすめ致します。
+                </p>
+                <div className="relative self-center mt-6 bg-gray-100 rounded-lg p-0.5 flex sm:mt-8">
+                  <button
+                    type="button"
+                    className="relative w-1/2 bg-white border-gray-200 rounded-md shadow-sm py-2 text-sm font-medium text-gray-900 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-tsundoku-blue-main focus:z-10 sm:w-auto sm:px-8"
+                  >
+                    Monthly billing
+                  </button>
+                  <button
+                    type="button"
+                    className="ml-0.5 relative w-1/2 border border-transparent rounded-md py-2 text-sm font-medium text-gray-700 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-tsundoku-blue-main focus:z-10 sm:w-auto sm:px-8"
+                  >
+                    Yearly billing
+                  </button>
+                </div>
+              </div>
+              <div className="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-4">
+                {tiers.map((tier) => (
+                  <div key={tier.name} className="border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200">
+                    <div className="p-6">
+                      <h2 className="text-lg leading-6 font-medium text-gray-900">{tier.name}</h2>
+                      <p className="mt-4 text-sm text-gray-500">{tier.description}</p>
+                      <p className="mt-8">
+                        <span className="text-4xl font-extrabold text-gray-900">${tier.priceMonthly}</span>{' '}
+                        <span className="text-base font-medium text-gray-500">/mo</span>
+                      </p>
+                      <a
+                        href={tier.href}
+                        className={classNames(
+                          tier.name == "スタンダードプラン" ? 'text-white font-semibold bg-tsundoku-blue-main border border-tsundoku-blue-main hover:bg-blue-600' : 'text-tsundoku-blue-main bg-blue-50 border border-blue-50',
+                          'mt-8 block w-full rounded-md py-2 text-sm  text-center '
+                        )}
+                      >
+                        {tier.name}を選択
+                      </a>
+                    </div>
+                    <div className="pt-6 pb-8 px-6">
+                      <h3 className="text-xs font-medium text-gray-900 tracking-wide uppercase">What's included</h3>
+                      <ul className="mt-6 space-y-4">
+                        {tier.includedFeatures.map((feature) => (
+                          <li key={feature} className="flex space-x-3">
+                            <CheckIcon className="flex-shrink-0 h-5 w-5 text-green-500" aria-hidden="true" />
+                            <span className="text-sm text-gray-500">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       {/* END main content */}
