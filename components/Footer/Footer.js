@@ -104,7 +104,7 @@ export default function Footer() {
   const t = uselocalesFilter('footer', router.locale)
 
   return (
-    <footer className="bg-gray-800" aria-labelledby="footer-heading">
+    <footer className="bg-tsundoku-blue-dark" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
@@ -132,6 +132,7 @@ export default function Footer() {
               </div>
             </div>
           </div>
+          {/* デバックエリア
           <div className="mt-12 bg-gray-500">
             <h2 id="debug">///Debug Area///</h2>
             <p>{t.TranslateTest}</p>
@@ -141,7 +142,8 @@ export default function Footer() {
             >
               show current locale in console
             </button>
-          </div>
+          </div> 
+          */}
           <div className="mt-12">
             <Listbox value={localeSelected} onChange={setLocaleSelected}>
               {({ open }) => (
@@ -150,7 +152,7 @@ export default function Footer() {
                     Language
                   </Listbox.Label>
                   <div className="mt-1 relative">
-                    <Listbox.Button className="relative w-full appearance-none block text-left bg-none bg-gray-700 border border-transparent rounded-md mt-4 py-2 pl-3 pr-10 text-base text-white focus:outline-none focus:ring-white focus:border-white sm:text-sm">
+                    <Listbox.Button className="relative w-full appearance-none block text-left bg-none bg-blueGray-700 border border-transparent rounded-md mt-4 py-2 pl-3 pr-10 text-base text-white focus:outline-none focus:ring-white focus:border-white sm:text-sm">
                       <span className="block truncate">
                         {localeSelected.language}
                       </span>
