@@ -1,15 +1,18 @@
-// Auth
-import { useAuth } from '../lib/auth'
-
+// ============================================================
+// Imports
+// ============================================================
 // Components
 import { Header } from '../components/Header'
+
+// Funtions
+import { useAuth } from '../lib/auth'
 
 export default function SignIn() {
   // ============================================================
   // Initialize
   // ============================================================
 
-  // Call auth
+  // Auth
   const auth = useAuth()
 
   // ============================================================
@@ -18,7 +21,6 @@ export default function SignIn() {
 
   return (
     <div>
-      {/* Header Tags */}
       <Header />
 
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-0">
