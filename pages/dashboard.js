@@ -45,13 +45,11 @@ export default function Dashboard() {
 
   console.log(userInfo)
 
-
   // Routing
   const router = useRouter()
 
- 
   useEffect(() => {
-    if (!user) {
+    if (user === false) {
       // If the access isn't authenticated, redirect to index page
       router.push('/')
     } else if (userInfo && !('name' in userInfo)) {
