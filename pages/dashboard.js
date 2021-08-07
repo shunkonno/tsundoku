@@ -1,17 +1,73 @@
+// ============================================================
+// Imports
+// ============================================================
+import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-import uselocalesFilter from '../utils/translate'
+import useSWR from 'swr'
+
+// Components
 import { Header } from '../components/Header'
 import { Footer } from '../components/Footer'
 
+// Functions
+import uselocalesFilter from '../utils/translate'
+import { useAuth } from '../lib/auth'
+import fetcher from '../utils/fetcher'
+
+// ============================================================
+// Helper Functions
+// ============================================================
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Onboarding2() {
-  //Translate
+export default function Dashboard() {
+  // ============================================================
+  // Initialize
+  // ============================================================
+
+  // Auth
+  const auth = useAuth()
+  const user = auth.user
+
+  console.log(auth)
+
+  // Fetch logged user info on client side
+  const { data: userInfo } = useSWR(
+    user ? ['/api/user', user.token] : null,
+    fetcher,
+    {
+      onErrorRetry: ({ retryCount }) => {
+        // Retry up to 10 times
+        if (retryCount >= 10) return
+      }
+    }
+  )
+
+  // Routing
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!user) {
+      // If the access isn't authenticated, redirect to index page
+      router.push('/')
+    } else if (userInfo && !('name' in userInfo)) {
+      // If the authenticated user hasn't entered a name, redirect to onboarding flow
+      router.push('/onboarding')
+    }
+  })
+
+  // Set locale
   const { locale } = useRouter()
   const t = uselocalesFilter('dashboard', locale)
+
+  // ============================================================
+  // Return Page
+  // ============================================================
+  if (user === null || !userInfo) {
+    return <div>Waiting..</div>
+  }
 
   return (
     <div>
