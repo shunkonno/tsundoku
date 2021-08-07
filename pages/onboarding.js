@@ -2,7 +2,7 @@
 // Import
 // ============================================================
 import { Fragment, useState } from 'react'
-import { useRouter } from 'next/router'
+import router, { useRouter } from 'next/router'
 import Link from 'next/link'
 import Head from 'next/head'
 
@@ -11,12 +11,12 @@ import { Header } from '../components/Header'
 import { FooterSmall } from '../components/Footer'
 
 // Assets
-import { Transition, RadioGroup, Listbox } from '@headlessui/react'
-import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
+import { Transition, RadioGroup } from '@headlessui/react'
 
 // Functions
 import { useAuth } from '../lib/auth'
 import uselocalesFilter from '../utils/translate'
+import { updateUser } from '../lib/db'
 
 // ============================================================
 // Settings
@@ -44,10 +44,12 @@ export default function Onboarding() {
   // Auth
   const auth = useAuth()
   const user = auth.user
+  const { uid, email, provider, token } = user
 
   console.log(user)
 
   // InitialState
+  const [userName, setUserName] = useState("")
   const [genderSelected, setGenderSelected] = useState()
   const [genderOfMatchSelected, setGenderOfMatchSelected] = useState(
     genderOfMatchSettings[0]
@@ -57,7 +59,21 @@ export default function Onboarding() {
   const { locale } = useRouter()
   const t = uselocalesFilter('Onboarding', locale)
 
-  console.log(genderSelected)
+  // Function
+  const handleClick = (e, path) => {
+    e.preventDefault()
+
+    updateUser(uid, {
+      uid,
+      email,
+      provider,
+      token,
+      name: userName
+    })
+
+    router.push(path)
+  }
+
 
   // ============================================================
   // Return Page
@@ -96,6 +112,7 @@ export default function Onboarding() {
                   id="name"
                   autoComplete="given-name"
                   className="p-3 shadow-sm block w-full sm:text-sm border border-gray-300 focus:ring-tsundoku-brown-main focus:border-tsundoku-brown-main rounded-md"
+                  onChange={(e) => {setUserName(e.target.value)}}
                 />
               </div>
             </div>
@@ -258,16 +275,13 @@ export default function Onboarding() {
 
             <div className="py-6">
               <div className="flex justify-end">
-                <Link href="/dashboard">
-                  <a>
-                    <button
-                      type="button"
-                      className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
-                    >
-                      完了
-                    </button>
-                  </a>
-                </Link>
+                <p
+                  type="button"
+                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
+                  onClick={(e) => handleClick(e, '/dashboard')}
+                >
+                  完了
+                </p>
               </div>
             </div>
           </main>

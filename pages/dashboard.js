@@ -31,7 +31,7 @@ export default function Dashboard() {
   const auth = useAuth()
   const user = auth.user
 
-  console.log(auth)
+  console.log(auth.user)
 
   // Fetch logged user info on client side
   const { data: userInfo } = useSWR(
@@ -45,18 +45,20 @@ export default function Dashboard() {
     }
   )
 
-  // Routing
-  const router = useRouter()
+  console.log(userInfo)
 
-  useEffect(() => {
-    if (!user) {
-      // If the access isn't authenticated, redirect to index page
-      router.push('/')
-    } else if (userInfo && !('name' in userInfo)) {
-      // If the authenticated user hasn't entered a name, redirect to onboarding flow
-      router.push('/onboarding')
-    }
-  })
+  // Routing
+  // const router = useRouter()
+
+  // useEffect(() => {
+  //   if (!user) {
+  //     // If the access isn't authenticated, redirect to index page
+  //     router.push('/')
+  //   } else if (userInfo && !('name' in userInfo)) {
+  //     // If the authenticated user hasn't entered a name, redirect to onboarding flow
+  //     router.push('/onboarding')
+  //   }
+  // })
 
   // Set locale
   const { locale } = useRouter()
@@ -89,7 +91,7 @@ export default function Dashboard() {
             <div className="py-3">
               <div className="bg-tsundoku-blue-light px-6 py-4">
                 <div className="text-center mb-12">
-                  Hi (user.name), Let's Read.
+                  Hi {userInfo?.name}, Let's Read.
                 </div>
                 <div className="flex justify-center mb-4">
                   <button
