@@ -1,29 +1,24 @@
-/*
-  This example requires Tailwind CSS v2.0+
-
-  This example requires some changes to your config:
-
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ]
-  }
-  ```
-*/
+// ============================================================
+// Import
+// ============================================================
 import { Fragment, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+
+// Assets
 import { Listbox, Transition } from '@headlessui/react'
 import {
   CheckIcon,
   SelectorIcon,
   ChevronDownIcon
 } from '@heroicons/react/solid'
+
+// Functions
+import { useAuth } from '../../lib/auth'
 import uselocalesFilter from '../../utils/translate'
 
+// ============================================================
+// Settings
+// ============================================================
 const navigation = {
   support: [
     { name: 'Pricing', href: '#' },
@@ -73,6 +68,9 @@ const locales = [
   { id: 2, localeCode: 'ja', language: '日本語' }
 ]
 
+// ============================================================
+// Helper Functions
+// ============================================================
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
@@ -86,13 +84,22 @@ function FindLocaleByLocaleCode(localeCode) {
 }
 
 export default function Footer() {
+  // ============================================================
+  // Initialize
+  // ============================================================
+
+  // Auth
+  const auth = useAuth()
+  const user = auth.user
+
+  // Routing
   const router = useRouter()
 
+  // Set locale
   const currentLocale = FindLocaleByLocaleCode(router.locale)
-
   const [localeSelected, setLocaleSelected] = useState(currentLocale)
 
-  //localeSelectedが変更されると、そのlocaleのURLにリダイレクトする
+  // localeSelectedが変更されると、そのlocaleのURLにリダイレクトする
   useEffect(() => {
     const { pathname } = router
     const { localeCode } = localeSelected
@@ -103,6 +110,9 @@ export default function Footer() {
 
   const t = uselocalesFilter('footer', router.locale)
 
+  // ============================================================
+  // Return Page
+  // ===========================================================
   return (
     <footer className="bg-tsundoku-blue-dark" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">
@@ -129,6 +139,13 @@ export default function Footer() {
                     </li>
                   ))}
                 </ul>
+                <button
+                  onClick={(e) => {
+                    auth.signout()
+                  }}
+                >
+                  Logout
+                </button>
               </div>
             </div>
           </div>
@@ -143,7 +160,7 @@ export default function Footer() {
               show current locale in console
             </button>
           </div>  */}
-         
+
           <div className="mt-12">
             <Listbox value={localeSelected} onChange={setLocaleSelected}>
               {({ open }) => (

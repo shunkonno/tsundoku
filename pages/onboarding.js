@@ -1,13 +1,26 @@
+// ============================================================
+// Import
+// ============================================================
 import { Fragment, useState } from 'react'
-import { Transition, RadioGroup, Listbox } from '@headlessui/react'
-import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Head from 'next/head'
-import uselocalesFilter from '../utils/translate'
+
+// Components
 import { Header } from '../components/Header'
 import { FooterSmall } from '../components/Footer'
 
+// Assets
+import { Transition, RadioGroup, Listbox } from '@headlessui/react'
+import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
+
+// Functions
+import { useAuth } from '../lib/auth'
+import uselocalesFilter from '../utils/translate'
+
+// ============================================================
+// Settings
+// ============================================================
 const genderSettings = [
   { label: 'Man', name: '男性' },
   { label: 'Female', name: '女性' },
@@ -16,22 +29,39 @@ const genderSettings = [
 
 const genderOfMatchSettings = [{ name: '制限なし' }, { name: '女性のみ' }]
 
+// ============================================================
+// Helper Functions
+// ============================================================
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Onboarding1() {
+export default function Onboarding() {
+  // ============================================================
+  // Initialize
+  // ============================================================
 
-  //InitialState
+  // Auth
+  const auth = useAuth()
+  const user = auth.user
+
+  console.log(user)
+
+  // InitialState
   const [genderSelected, setGenderSelected] = useState()
-  const [genderOfMatchSelected, setGenderOfMatchSelected] = useState(genderOfMatchSettings[0])
+  const [genderOfMatchSelected, setGenderOfMatchSelected] = useState(
+    genderOfMatchSettings[0]
+  )
 
-  //Translate
+  // Translate
   const { locale } = useRouter()
   const t = uselocalesFilter('Onboarding', locale)
 
   console.log(genderSelected)
 
+  // ============================================================
+  // Return Page
+  // ===========================================================
   return (
     <div>
       <Head>
@@ -50,9 +80,7 @@ export default function Onboarding1() {
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
           <main className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
             <div className="py-3">
-              <h1 className="text-2xl font-bold">
-                まず最初に教えてください。
-              </h1>
+              <h1 className="text-2xl font-bold">まず最初に教えてください。</h1>
             </div>
             <div className="py-3">
               <label
@@ -157,7 +185,9 @@ export default function Onboarding1() {
                 </label>
                 <div className="py-3 text-sm">
                   <p>女性の方は、マッチングする対象を限定できます。</p>
-                  <p className="text-gray-500">(この設定はあとから変更できます。)</p>
+                  <p className="text-gray-500">
+                    (この設定はあとから変更できます。)
+                  </p>
                 </div>
                 <RadioGroup
                   className="mt-1"
@@ -207,7 +237,9 @@ export default function Onboarding1() {
                                 <RadioGroup.Label
                                   as="span"
                                   className={classNames(
-                                    checked ? 'text-orange-900' : 'text-gray-900',
+                                    checked
+                                      ? 'text-orange-900'
+                                      : 'text-gray-900',
                                     'block text-sm font-medium'
                                   )}
                                 >
@@ -224,7 +256,6 @@ export default function Onboarding1() {
               </div>
             </Transition>
 
-            
             <div className="py-6">
               <div className="flex justify-end">
                 <Link href="/dashboard">
