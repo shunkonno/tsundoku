@@ -44,17 +44,26 @@ export default function Dashboard() {
   )
 
   console.log(userInfo)
+  console.log(user)
 
   // Routing
   const router = useRouter()
+
+  console.log(router.query.welcome)
 
   useEffect(() => {
     if (user === false) {
       // If the access isn't authenticated, redirect to index page
       router.push('/')
-    } else if (userInfo && !('name' in userInfo)) {
-      // If the authenticated user hasn't entered a name, redirect to onboarding flow
-      router.push('/onboarding')
+    } else if (
+      userInfo &&
+      !('name' in userInfo) &&
+      router.query.welcome !== 'true'
+    ) {
+      // If the user signed in for the first time, they won't have a username
+      // Redirect user to onboarding process, as long as the welcome parameter is not set to true
+      // The welcome parameter is set to true when the user submits form in onboarding process
+      router.push('/settings/new')
     }
   })
 
