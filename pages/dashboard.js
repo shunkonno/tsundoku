@@ -31,8 +31,6 @@ export default function Dashboard() {
   const auth = useAuth()
   const user = auth.user
 
-  console.log(auth.user)
-
   // Fetch logged user info on client side
   const { data: userInfo } = useSWR(
     user ? ['/api/user', user.token] : null,
@@ -47,18 +45,20 @@ export default function Dashboard() {
 
   console.log(userInfo)
 
-  // Routing
-  // const router = useRouter()
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     // If the access isn't authenticated, redirect to index page
-  //     router.push('/')
-  //   } else if (userInfo && !('name' in userInfo)) {
-  //     // If the authenticated user hasn't entered a name, redirect to onboarding flow
-  //     router.push('/onboarding')
-  //   }
-  // })
+  // Routing
+  const router = useRouter()
+
+ 
+  useEffect(() => {
+    if (!user) {
+      // If the access isn't authenticated, redirect to index page
+      router.push('/')
+    } else if (userInfo && !('name' in userInfo)) {
+      // If the authenticated user hasn't entered a name, redirect to onboarding flow
+      router.push('/onboarding')
+    }
+  })
 
   // Set locale
   const { locale } = useRouter()

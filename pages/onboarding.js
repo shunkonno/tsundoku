@@ -2,7 +2,7 @@
 // Import
 // ============================================================
 import { Fragment, useState } from 'react'
-import router, { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Head from 'next/head'
 
@@ -44,9 +44,10 @@ export default function Onboarding() {
   // Auth
   const auth = useAuth()
   const user = auth.user
-  const { uid, email, provider, token } = user
+  const { uid } = user
 
-  console.log(user)
+  // Routing
+  const router = useRouter()
 
   // InitialState
   const [userName, setUserName] = useState("")
@@ -56,24 +57,19 @@ export default function Onboarding() {
   )
 
   // Translate
-  const { locale } = useRouter()
-  const t = uselocalesFilter('Onboarding', locale)
+  const t = uselocalesFilter('Onboarding', router.locale)
 
   // Function
   const handleClick = (e, path) => {
     e.preventDefault()
 
     updateUser(uid, {
-      uid,
-      email,
-      provider,
-      token,
       name: userName
     })
-
+    
     router.push(path)
+    
   }
-
 
   // ============================================================
   // Return Page
