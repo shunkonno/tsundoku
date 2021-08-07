@@ -7,16 +7,16 @@ import Link from 'next/link'
 import Head from 'next/head'
 
 // Components
-import { Header } from '../components/Header'
-import { FooterSmall } from '../components/Footer'
+import { Header } from '../../../components/Header'
+import { FooterSmall } from '../../../components/Footer'
 
 // Assets
 import { Transition, RadioGroup } from '@headlessui/react'
 
 // Functions
-import { useAuth } from '../lib/auth'
-import uselocalesFilter from '../utils/translate'
-import { updateUser } from '../lib/db'
+import { useAuth } from '../../../lib/auth'
+import uselocalesFilter from '../../../utils/translate'
+import { updateUser } from '../../../lib/db'
 
 // ============================================================
 // Settings
@@ -36,7 +36,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Onboarding() {
+export default function NewUserSettings() {
   // ============================================================
   // Initialize
   // ============================================================
@@ -44,7 +44,6 @@ export default function Onboarding() {
   // Auth
   const auth = useAuth()
   const user = auth.user
-  const { uid } = user
 
   // Routing
   const router = useRouter()
@@ -59,15 +58,15 @@ export default function Onboarding() {
   // Translate
   const t = uselocalesFilter('Onboarding', router.locale)
 
-  // Function
-  const handleClick = (e, path) => {
+  // Handle form submit
+  const handleSubmit = (e) => {
     e.preventDefault()
 
-    updateUser(uid, {
+    updateUser(user.uid, {
       name: userName
     })
 
-    router.push(path)
+    router.push({ pathname: '/dashboard', query: { welcome: true } })
   }
 
   // ============================================================
@@ -275,7 +274,7 @@ export default function Onboarding() {
                 <p
                   type="button"
                   className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
-                  onClick={(e) => handleClick(e, '/dashboard')}
+                  onClick={(e) => handleSubmit(e)}
                 >
                   完了
                 </p>
