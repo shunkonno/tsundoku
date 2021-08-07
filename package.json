@@ -13,10 +13,12 @@
     "@heroicons/react": "^1.0.3",
     "@tailwindcss/aspect-ratio": "^0.2.1",
     "firebase": "^8.9.0",
+    "firebase-admin": "^9.11.0",
     "json-loader": "^0.5.7",
     "next": "11.0.1",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "swr": "^0.5.6"
   },
   "devDependencies": {
     "autoprefixer": "^10.3.1",
