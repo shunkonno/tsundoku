@@ -1,6 +1,8 @@
 // ============================================================
 // Imports
 // ============================================================
+import { useRouter } from 'next/router'
+
 // Components
 import { Header } from '../components/Header'
 
@@ -14,6 +16,14 @@ export default function SignIn() {
 
   // Auth
   const auth = useAuth()
+  const user = auth.user
+
+  // Routing
+  const router = useRouter()
+
+  if (user) {
+    router.push('/dashboard')
+  }
 
   // ============================================================
   // Return Page
