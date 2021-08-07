@@ -50,7 +50,7 @@ export default function Onboarding() {
   const router = useRouter()
 
   // InitialState
-  const [userName, setUserName] = useState("")
+  const [userName, setUserName] = useState('')
   const [genderSelected, setGenderSelected] = useState()
   const [genderOfMatchSelected, setGenderOfMatchSelected] = useState(
     genderOfMatchSettings[0]
@@ -66,9 +66,8 @@ export default function Onboarding() {
     updateUser(uid, {
       name: userName
     })
-    
+
     router.push(path)
-    
   }
 
   // ============================================================
@@ -108,7 +107,9 @@ export default function Onboarding() {
                   id="name"
                   autoComplete="given-name"
                   className="p-3 shadow-sm block w-full sm:text-sm border border-gray-300 focus:ring-tsundoku-brown-main focus:border-tsundoku-brown-main rounded-md"
-                  onChange={(e) => {setUserName(e.target.value)}}
+                  onChange={(e) => {
+                    setUserName(e.target.value)
+                  }}
                 />
               </div>
             </div>
