@@ -18,7 +18,7 @@ export default function Header() {
   return (
     <>
       <div className="relative bg-gray-50">
-        <div className="relative py-6 sm:pb-24">
+        <div className="relative py-6">
           <Popover>
             {({ open }) => (
               <>
