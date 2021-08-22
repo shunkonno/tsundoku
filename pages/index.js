@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import uselocalesFilter from '../utils/translate'
+import Image from 'next/image'
 import { Header } from '../components/Header'
 import { Footer } from '../components/Footer'
 import { 
@@ -21,21 +22,21 @@ export default function Home() {
 
   const flows = [
     {
-      name: '1on1の読書ルームに参加する',
+      name: '読書時間を確保できる',
       description:
-        '1対1のボイスチャットルームを立ち上げて参加します。難しい設定は一切なし。ルームに参加するボタンを押すだけです。',
+        '指定の時間にマッチングするためのルームを作成します。事前に読書する時間を押さえておくことで、"プレコミット効果"により、高いモチベーションを発揮できます。',
       icon: GlobeAltIcon,
     },
     {
-      name: '本を読みたい人を自動でマッチング',
+      name: 'ルームに参加する',
       description:
-        'いま本を読みたい人を自動で検索し、マッチングします。マッチングしたらボイスチャットが開始され、任意でビデオをオンにすることも可能。',
+        '1対1のボイスチャットルームを立ち上げて参加します。難しい設定は一切なし。スムーズに読書へ移行します。',
       icon: ScaleIcon,
     },
     {
       name: '落ち着いて読書に集中できる',
       description:
-        '近くに人がいるときの適度な緊張感はパフォーマンスを向上させると言われています。エビデンス(根拠)はこちらにまとめました。',
+        '近くに人がいるときの適度な緊張感はパフォーマンスを向上させると言われています。効率的に理解度を深め、本からより多くの知見を吸収しましょう。',
       icon: LightningBoltIcon,
     },
   ]
@@ -70,26 +71,30 @@ export default function Home() {
           name="description" 
           content="一緒に読書してくれる誰かを探すためのマッチングサービス" 
         />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP&display=swap" rel="stylesheet" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Header />
 
       {/* main content */}
-      <div className="relative bg-gray-50 overflow-hidden">
+      <div className="relative bg-gray-50 overflow-hidden font-Noto">
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="mx-auto max-w-7xl sm:mt-24">
-            <div className="px-4 text-center py-12">
+          <main className="mx-auto max-w-7xl sm:mt-4">
+            <div className="px-4 text-center py-4 sm:py-12">
               <h1 className="text-4xl leading-normal tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
                 <span className="block xl:inline">気持ちよく</span>
-                <span className="text-tsundoku-blue-main xl:inline">本に集中</span>
+                <span className=" xl:inline">本に</span>
+                <span className="text-tsundoku-blue-main inline">集中</span>
                 <span className="inline">しよう</span>
               </h1>
-              <p className="mt-5 max-w-md mx-auto text-sm text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-                読書がうまく進みませんか？
+              <p className="mt-5 max-w-md mx-auto text-sm text-gray-500 sm:text-lg md:mt-12 md:text-xl md:max-w-3xl">
+                誰かと一緒に本を読んで
               </p>
-              <p className="mt-2 max-w-md mx-auto text-sm text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-                それなら、一緒に本を読む"誰か"を見つけよう。
+              <p className="mt-2 max-w-md mx-auto text-sm text-gray-500 sm:text-lg md:mt-2 md:text-xl md:max-w-3xl">
+                効果的な読書時間を手に入れよう
               </p>
               <div className="mt-6 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
                 <div className="rounded-md shadow">
@@ -100,10 +105,18 @@ export default function Home() {
                     Googleアカウントで無料ではじめる
                   </a>
                 </div>
-                
+              </div>
+             
+            </div>
+            <div className="mx-auto max-w-4xl py-12">
+              <div>
+                <Image src="/img/mainvisual_tsundoku_tr.png" alt="mainvisual" width={3820} height={2160} />
               </div>
             </div>
-            <div className="py-12 bg-gray-50">
+
+
+            {/* 積んドクとは */}
+            {/* <div className="py-12 bg-gray-50">
               <div className="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                 <div className="">
                   <h2 className="text-center text-base text-tsundoku-brown-main font-semibold tracking-wide uppercase">積んドクとは</h2>
@@ -113,7 +126,7 @@ export default function Home() {
                   
                 </div>
               </div>
-            </div>
+            </div> */}
             
             <div className="py-12 bg-gray-50">
               <div className="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -141,11 +154,11 @@ export default function Home() {
                 </dl>
               </div>
             </div>
-
-            <div className="px-4 mt-12 relative bg-gray-50 pt-16 pb-32 overflow-hidden">
+            {/* 特徴：ソーシャル */}
+            {/* <div className="px-4 mt-12 relative bg-gray-50 pt-16 pb-32 overflow-hidden">
               <div>
                 <div className="max-w-xl mx-auto sm:px-6 lg:max-w-7xl lg:px-8">
-                  <div className="text-right lg:text-center">
+                  <div className=s"text-right lg:text-center">
                     <h2 className="text-base text-tsundoku-brown-main font-semibold tracking-wide uppercase">FEATURE</h2>
                   </div>
                 </div>
@@ -195,7 +208,8 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
+
           </main>
 
           <div className="bg-tsundoku-brown-sub">

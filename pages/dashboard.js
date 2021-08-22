@@ -43,13 +43,8 @@ export default function Dashboard() {
     }
   )
 
-  console.log(userInfo)
-  console.log(user)
-
   // Routing
   const router = useRouter()
-
-  console.log(router.query.welcome)
 
   useEffect(() => {
     if (user === false) {
@@ -70,6 +65,29 @@ export default function Dashboard() {
   // Set locale
   const { locale } = useRouter()
   const t = uselocalesFilter('dashboard', locale)
+
+  // ============================================================
+  // Button Handler
+  // ============================================================
+
+  const createRoom = async (e) => {
+    e.preventDefault()
+
+    const url = 'https://api.daily.co/v1/rooms'
+
+    const options = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_DAILY_API_KEY
+      }
+    }
+
+    fetch(url, options)
+      .then((res) => res.json())
+      .then((json) => console.log(json))
+      .catch((err) => console.error('error:' + err))
+  }
 
   // ============================================================
   // Return Page
@@ -104,6 +122,9 @@ export default function Dashboard() {
                   <button
                     type="button"
                     className="block w-full px-6 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
+                    onClick={(e) => {
+                      createRoom(e)
+                    }}
                   >
                     Start Session
                   </button>

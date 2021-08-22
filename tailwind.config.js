@@ -31,6 +31,9 @@ module.exports = {
       }
     },
     extend: {
+      fontFamily: {
+        Noto: ['Noto Serif JP'],
+      },
     },
   },
   variants: {
