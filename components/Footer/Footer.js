@@ -145,12 +145,6 @@ export default function Footer() {
                     </li>
                   ))}
                 </ul>
-                <button
-                  className="mt-4 text-gray-400"
-                  onClick={(e) => handleLogout()}
-                >
-                  Logout
-                </button>
               </div>
             </div>
           </div>

@@ -4,12 +4,6 @@ import uselocalesFilter from '../utils/translate'
 import Image from 'next/image'
 import { Header } from '../components/Header'
 import { Footer } from '../components/Footer'
-import { 
-  GlobeAltIcon, 
-  LightningBoltIcon, 
-  ScaleIcon } 
-from '@heroicons/react/outline'
-import { CheckIcon } from '@heroicons/react/solid'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')

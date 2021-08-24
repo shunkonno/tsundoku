@@ -1,19 +1,253 @@
+// ============================================================
+// Imports
+// ============================================================
 import { Fragment } from 'react'
 import { useRouter } from 'next/router'
-import { Link } from 'next/link'
+import Link from 'next/link'
+import useSWR from 'swr'
+
+//Assets
 import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
+
+// Functions
 import uselocalesFilter from '../../utils/translate'
+import { useAuth } from '../../lib/auth'
+import fetcher from '../../utils/fetcher'
 
 const navigation = [
+  { name: 'Setting', href: '#' },
+]
+
+const LpNavigation = [
   { name: 'How to work', href: '#' },
   { name: 'Features', href: '#' },
   { name: 'Pricing', href: '#' }
 ]
 
 export default function Header() {
-  const { locale } = useRouter()
+
+  // ============================================================
+  // Initialize
+  // ============================================================
+  // Auth
+  const auth = useAuth()
+  const user = auth.user
+
+  // Fetch logged user info on client side
+  const { data: userInfo } = useSWR(
+    user ? ['/api/user', user.token] : null,
+    fetcher,
+    {
+      onErrorRetry: ({ retryCount }) => {
+        // Retry up to 10 times
+        if (retryCount >= 10) return
+      }
+    }
+  )
+  console.log(user)
+
+  const router = useRouter()
+  const { locale, pathname } = router
   const t = uselocalesFilter('header', locale)
+
+  //Function
+  const handleLogout = () => {
+    auth.signout()
+    router.push('/')
+  } 
+
+  const renderHeaderButton = () => {
+    //ログインしているかどうか確認
+    //ログインしていれば、ログアウトボタンを表示
+    if(user) {
+      //ダッシュボードにいるかどうか確認
+      if(pathname == '/dashboard') {
+        return(
+          //ダッシュボードにいれば、ダッシュボードへのリンクを表示しない
+          <div className="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0">
+            <div className="text-right ml-8">
+              <button
+                className="text-gray-400 text-sm"
+                onClick={(e) => handleLogout()}
+              >
+                {t.LOGOUT}
+              </button>
+            </div>
+          </div>
+        )
+      } else {
+        //ダッシュボードにいなければダッシュボードへのリンクを表示
+        return(
+          <div className="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0">
+            <span className="inline-flex rounded-md shadow">
+              <Link href="/dashboard">
+                <a
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-tsundoku-blue-main bg-white hover:bg-gray-50"
+                >
+                  {t.TODASHBOARD}
+                </a>
+              </Link>
+            </span>
+            <div className="text-right ml-8">
+              <button
+                className="text-gray-400 text-sm"
+                onClick={(e) => handleLogout()}
+              >
+                {t.LOGOUT}
+              </button>
+            </div>
+          </div>
+        )
+      }
+    }
+    //ログインしていなければ、ログインボタンを表示(/signinページ以外)
+    else {
+      if(pathname == '/signin') {
+        return
+      }
+      else {
+        return (
+          <div className="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0">
+            <span className="inline-flex rounded-md shadow">
+              <Link href="/signin">
+                <a
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-tsundoku-blue-main bg-white hover:bg-gray-50"
+                >
+                  {t.LOGIN}
+                </a>
+              </Link>
+            </span>
+          </div>
+        )
+      }
+    }
+  }
+
+  const renderHeaderButtonPopover = () => {
+    if(user) {
+      if(pathname == '/dashboard') {
+        return(
+          <div className="text-right my-4 mr-2">
+            <button
+              className="text-gray-400 text-sm"
+              onClick={(e) => handleLogout()}
+            >
+              {t.LOGOUT}
+            </button>
+          </div>
+        )
+      } else {
+        return (
+          <>
+            <div className="text-right my-4 mr-2">
+              <button
+                className="text-gray-400 text-sm"
+                onClick={(e) => handleLogout()}
+              >
+                {t.LOGOUT}
+              </button>
+            </div>
+            <Link href="/dashboard">
+              <a
+                className="block w-full px-5 py-3 text-center font-medium text-tsundoku-blue-main bg-gray-50 hover:bg-gray-100"
+              >
+                {t.TODASHBOARD}
+              </a>
+            </Link>
+          </> 
+        )
+      }
+    }
+    else {
+      if(pathname == '/signin'){
+        return
+      }
+      else {
+        return(
+          <Link href="/signin">
+            <a
+              className="block w-full px-5 py-3 text-center font-medium text-tsundoku-blue-main bg-gray-50 hover:bg-gray-100"
+            >
+              {t.LOGIN}
+            </a>
+          </Link>
+        )
+      }
+    }
+  }
+
+  const renderNavigation = () => {
+    if(pathname == '/') {
+      return (
+        <div className="hidden md:flex md:space-x-10">
+          {LpNavigation.map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              className="font-medium text-gray-500 hover:text-gray-900"
+            >
+              {item.name}
+            </a>
+          ))}
+        </div>
+      )
+    } else {
+        if(user){
+          return(
+            <div className="hidden md:flex md:space-x-10">
+              {navigation.map((item) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="font-medium text-gray-500 hover:text-gray-900"
+                >
+                  {item.name}
+                </a>
+              ))}
+            </div>
+          )
+        } else {
+          return
+        }
+    }
+  }
+
+  const renderNavigationPopover = () => {
+    if(pathname == '/') {
+      return (
+        <div className="px-2 pt-2 pb-3">
+          {LpNavigation.map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+            >
+              {item.name}
+            </a>
+          ))}
+        </div>
+      )
+    } else {
+      if(user){
+        return(
+          <div className="px-2 pt-2 pb-3">
+            {navigation.map((item) => (
+              <a
+                key={item.name}
+                href={item.href}
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+              >
+                {item.name}
+              </a>
+            ))}
+          </div>
+        )
+      } else {
+        return
+      }
+    }
+  }
 
   return (
     <>
@@ -24,12 +258,13 @@ export default function Header() {
               <>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6">
                   <nav
-                    className="relative flex items-center justify-between sm:h-10 md:justify-center"
+                    className="relative flex items-center justify-between md:justify-center sm:h-10 "
                     aria-label="Global"
                   >
                     <div className="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0">
                       <div className="flex items-center justify-between w-full md:w-auto">
-                        <a href="/">
+                        <Link href="/">
+                        <a>
                           <span className="sr-only">Tsundoku</span>
                           <img
                             className="h-8 w-auto sm:h-10"
@@ -37,6 +272,7 @@ export default function Header() {
                             alt=""
                           />
                         </a>
+                        </Link>
                         <div className="-mr-2 flex items-center md:hidden">
                           <Popover.Button className="bg-gray-50 rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-tsundoku-blue-main">
                             <span className="sr-only">Open main menu</span>
@@ -45,26 +281,9 @@ export default function Header() {
                         </div>
                       </div>
                     </div>
-                    <div className="hidden md:flex md:space-x-10">
-                      {navigation.map((item) => (
-                        <a
-                          key={item.name}
-                          href={item.href}
-                          className="font-medium text-gray-500 hover:text-gray-900"
-                        >
-                          {item.name}
-                        </a>
-                      ))}
-                    </div>
-                    <div className="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0">
-                      <span className="inline-flex rounded-md shadow">
-                        <a
-                          href="/signin"
-                          className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-tsundoku-blue-main bg-white hover:bg-gray-50"
-                        >
-                          {t.Login}
-                        </a>
-                      </span>
+                    <div>
+                    {renderNavigation()}
+                    {renderHeaderButton()}
                     </div>
                   </nav>
                 </div>
@@ -100,23 +319,8 @@ export default function Header() {
                           </Popover.Button>
                         </div>
                       </div>
-                      <div className="px-2 pt-2 pb-3">
-                        {navigation.map((item) => (
-                          <a
-                            key={item.name}
-                            href={item.href}
-                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                          >
-                            {item.name}
-                          </a>
-                        ))}
-                      </div>
-                      <a
-                        href="/signin"
-                        className="block w-full px-5 py-3 text-center font-medium text-tsundoku-blue-main bg-gray-50 hover:bg-gray-100"
-                      >
-                        {t.Login}
-                      </a>
+                      {renderNavigationPopover()}
+                      {renderHeaderButtonPopover()}
                     </div>
                   </Popover.Panel>
                 </Transition>

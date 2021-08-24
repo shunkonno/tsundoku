@@ -50,13 +50,17 @@ export const dict =
   },
   {
     "header": {
-      "Login": {
+      "LOGIN": {
         "en": "LOGIN",
         "ja": "ログイン"
       },
-      "text2": {
-      "en": "text2",
-      "ja": "テキスト2"
+      "TODASHBOARD": {
+      "en": "Dashboard",
+      "ja": "マイページ"
+      },
+      "LOGOUT": {
+        "en": "LOGOUT",
+        "ja": "ログアウト"
       }
     }
   },
