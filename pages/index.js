@@ -20,27 +20,6 @@ export default function Home() {
 
   const t = uselocalesFilter("LP", locale)
 
-  const flows = [
-    {
-      name: '読書時間を確保できる',
-      description:
-        '指定の時間にマッチングするためのルームを作成します。事前に読書する時間を押さえておくことで、"プレコミット効果"により、高いモチベーションを発揮できます。',
-      icon: GlobeAltIcon,
-    },
-    {
-      name: 'ルームに参加する',
-      description:
-        '1対1のボイスチャットルームを立ち上げて参加します。難しい設定は一切なし。スムーズに読書へ移行します。',
-      icon: ScaleIcon,
-    },
-    {
-      name: '落ち着いて読書に集中できる',
-      description:
-        '近くに人がいるときの適度な緊張感はパフォーマンスを向上させると言われています。効率的に理解度を深め、本からより多くの知見を吸収しましょう。',
-      icon: LightningBoltIcon,
-    },
-  ]
-
   const tiers = [
     {
       name: 'フリープラン',
@@ -73,6 +52,7 @@ export default function Home() {
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP&display=swap" rel="stylesheet" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -80,77 +60,82 @@ export default function Home() {
       <Header />
 
       {/* main content */}
-      <div className="relative bg-gray-50 overflow-hidden font-Noto">
+      <div className="relative bg-gray-50 overflow-hidden font-NotoSerif">
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
           <main className="mx-auto max-w-7xl sm:mt-4">
-            <div className="px-4 text-center py-4 sm:py-12">
-              <h1 className="text-4xl leading-normal tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                <span className="block xl:inline">気持ちよく</span>
-                <span className=" xl:inline">本に</span>
-                <span className="text-tsundoku-blue-main inline">集中</span>
-                <span className="inline">しよう</span>
-              </h1>
-              <p className="mt-5 max-w-md mx-auto text-sm text-gray-500 sm:text-lg md:mt-12 md:text-xl md:max-w-3xl">
-                誰かと一緒に本を読んで
-              </p>
-              <p className="mt-2 max-w-md mx-auto text-sm text-gray-500 sm:text-lg md:mt-2 md:text-xl md:max-w-3xl">
-                効果的な読書時間を手に入れよう
-              </p>
-              <div className="mt-6 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
-                <div className="rounded-md shadow">
-                  <a
-                    href="#"
-                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-tsundoku-blue-main hover:bg-blue-600 md:py-4 md:text-lg md:px-10"
-                  >
-                    Googleアカウントで無料ではじめる
-                  </a>
+            <div className="px-4 text-center md:text-left py-4 sm:py-12 md:flex">
+              <div className="md:w-3/5 md:px-4 lg:px-24 xl:px-32 md:py-24">
+                <h1 className="text-4xl leading-normal tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+                  <span className="inline">読書に</span>
+                  <span className="text-tsundoku-blue-main inline">没頭</span>
+                  <span className="inline">する</span>
+                  <span className="block sm:mt-2">時間をつくる</span>
+                </h1>
+                <p className="font-sans mt-5 max-w-md mx-auto text-sm text-gray-500 sm:text-lg md:mt-12 md:text-xl md:max-w-3xl">
+                  誰かとゆるくつながるカフェのような環境で、
+                </p>
+                <p className="font-sans mt-2 max-w-md mx-auto text-sm text-gray-500 sm:text-lg md:mt-2 md:text-xl md:max-w-3xl">
+                  読書に集中する。
+                </p>
+                <div className="mt-6 sm:mt-12 max-w-md mx-auto sm:flex sm:justify-center">
+                  <div className="rounded-md shadow">
+                    <a
+                      href="#"
+                      className="font-sans w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-tsundoku-blue-main hover:bg-blue-600 md:py-4 md:text-lg md:px-10"
+                    >
+                      Googleアカウントで無料ではじめる
+                    </a>
+                  </div>
                 </div>
               </div>
-             
-            </div>
-            <div className="mx-auto max-w-4xl py-12">
-              <div>
-                <Image src="/img/mainvisual_tsundoku_tr.png" alt="mainvisual" width={3820} height={2160} />
+              <div class="sm:max-w-sm md:max-w-none md:w-2/5 mx-auto flex items-center py-12 md:py-0">
+                <Image src="/img/mainvisual_circle_2160x2160.png" alt="mainvisual" width={2160} height={2160} />
               </div>
             </div>
-
-
-            {/* 積んドクとは */}
-            {/* <div className="py-12 bg-gray-50">
-              <div className="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-                <div className="">
-                  <h2 className="text-center text-base text-tsundoku-brown-main font-semibold tracking-wide uppercase">積んドクとは</h2>
-                  <p className="mt-4 text-sm lg:text-center leading-relaxed text-gray-900 sm:text-base">
-                    積んドクは、誰かと一緒に本を読むことで生まれる集中力によって、より持続的で効果的な読書体験を提供するWebサービスです。
-                  </p>
-                  
-                </div>
-              </div>
-            </div> */}
-            
-            <div className="py-12 bg-gray-50">
+            <div className="py-4 sm:py-12 bg-gray-50">
               <div className="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                 <div className="lg:text-center">
-                  <h2 className="text-base text-tsundoku-brown-main font-semibold tracking-wide uppercase">得られるメリット</h2>
-                  <p className="mt-2 text-3xl leading-normal font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-                    高いモチベーションを維持する
-                  </p>
-                  <p className="mt-4 max-w-2xl text-base text-gray-500 lg:mx-auto">
+                  <h2 className="text-base sm:text-xl text-tsundoku-brown-main font-semibold tracking-wide uppercase">得られるメリット</h2>
+                  <span className="block sm:inline mt-2 text-3xl leading-normal font-extrabold tracking-tight text-gray-900 lg:text-5xl">
+                    高いモチベーションを
+                  </span>
+                  <span className="block sm:inline text-3xl leading-normal font-extrabold tracking-tight text-gray-900 lg:text-5xl">
+                    維持する
+                  </span>
+                  <p className="font-sans mt-4 max-w-2xl text-base sm:text-lg text-gray-500 lg:mx-auto">
                     自宅にいてもカフェにいるときの集中力を
                   </p>
                 </div>
-                <dl className="mt-10 space-y-10 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-8">
-                  {flows.map((flow) => (
-                    <div key={flow.name}>
-                      <dt>
-                        <div className="flex items-center justify-center h-12 w-12 rounded-md bg-tsundoku-brown-main text-white">
-                          <flow.icon className="h-6 w-6" aria-hidden="true" />
-                        </div>
-                        <p className="mt-5 text-lg leading-normal font-medium text-gray-900">{flow.name}</p>
-                      </dt>
-                      <dd className="mt-2 leading-normal text-sm text-gray-500">{flow.description}</dd>
-                    </div>
-                  ))}
+                <dl className="mt-10 mb-12 sm:mb-24">
+                  <div>
+                    <dt>
+                      <p className="mt-12 sm:mt-24 text-lg lg:text-3xl leading-normal font-medium text-gray-900">
+                        <span className="text-tsundoku-brown-main">○ </span>
+                        落ち着いて読書に集中
+                      </p>
+                    </dt>
+                    <dd className="font-sans mt-2 sm:mt-8 leading-normal text-sm sm:text-lg text-gray-500">他人がいることで生まれる適度な緊張感(ソーシャルプレッシャー)により、他のことに
+                    気をとられることなく、読書に集中できます。</dd>
+                  </div>
+                  <div>
+                    <dt>
+                      <p className="mt-12 sm:mt-24 text-right text-lg lg:text-3xl leading-normal font-medium text-gray-900">
+                        <span className="text-tsundoku-brown-main">○ </span>
+                        読書時間を確保
+                      </p>
+                    </dt>
+                    <dd className="font-sans mt-2 sm:mt-8 sm:text-right leading-normal text-sm sm:text-lg text-gray-500">読書する時間帯を事前に決めます。そうすることで、プレコミット効果により、高い生産性を実現できます。
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>
+                      <p className="mt-12 sm:mt-24 text-lg lg:text-3xl leading-normal font-medium text-gray-900">
+                        <span className="text-tsundoku-brown-main">○ </span>
+                        孤独感を緩和
+                      </p>
+                    </dt>
+                    <dd className="font-sans mt-2 sm:mt-8 leading-normal text-sm sm:text-lg text-gray-500">黙々と読書に取り組んでいる間は、ときに孤独なもの。一緒に同じことをしている誰かがいるという安心感は、メンタルのケアにも役立ちます。</dd>
+                  </div>
                 </dl>
               </div>
             </div>
@@ -212,18 +197,18 @@ export default function Home() {
 
           </main>
 
-          <div className="bg-tsundoku-brown-sub">
-            <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-24 lg:px-8 lg:flex lg:items-center lg:justify-between">
-              <h2 className="font-extrabold tracking-tight md:text-4xl">
-                <p className="block text-tsundoku-brown-main text-3xl leading-normal mb-2">1分で準備完了。</p>
+          <div className="bg-tsundoku-brown-sub mb-24">
+            <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 md:py-24 md:px-8 md:flex md:items-center md:justify-between">
+              <h2 className="font-sans font-bold tracking-tight md:text-4xl">
+                <p className="block text-tsundoku-brown-main text-3xl sm:text-4xl tracking-wider leading-normal mb-2">1分で準備完了。</p>
                 <p className="block text-white text-xl leading-normal">複雑な設定はありません。</p>
                 <p className="block text-white text-xl leading-normal">気軽に始めてみてください。</p>
               </h2>
-              <div className="mt-8 flex lg:mt-0 lg:flex-shrink-0">
+              <div className="mt-8 flex md:mt-0 md:flex-shrink-0">
                 <div className="inline-flex rounded-md shadow">
                   <a
                     href="#"
-                    className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-tsundoku-brown-main hover:bg-tsundoku-brown-main"
+                    className="font-sans inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-tsundoku-brown-main hover:bg-tsundoku-brown-main"
                   >
                     Googleアカウントで無料ではじめる
                   </a>
@@ -232,7 +217,8 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="bg-white">
+          {/* 料金セクション */}
+          {/* <div className="bg-white">
             <div className="max-w-7xl mx-auto py-24 px-4 sm:px-6 lg:px-8">
               <div className="sm:flex sm:flex-col sm:align-center">
                 <h1 className="text-3xl font-extrabold text-gray-900 sm:text-center">料金プラン</h1>
@@ -289,7 +275,9 @@ export default function Home() {
                 ))}
               </div>
             </div>
-          </div>
+          </div> */}
+          {/* 料金セクション END */}
+
         </div>
       </div>
       {/* END main content */}
