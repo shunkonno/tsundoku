@@ -17,6 +17,7 @@ export default function Session() {
       // TODO: Change language based on locale (https://docs.daily.co/reference#properties)
       lang: 'en',
       showLeaveButton: true,
+      videoSource: false,
       iframeStyle: { position: 'fixed', width: '100%', height: '100%' }
     })
 
