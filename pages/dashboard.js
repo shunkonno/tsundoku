@@ -18,6 +18,7 @@ import { MailIcon, PhoneIcon } from '@heroicons/react/solid'
 import uselocalesFilter from '../utils/translate'
 import { useAuth } from '../lib/auth'
 import fetcher from '../utils/fetcher'
+import { addSession, updateSession } from '../lib/db'
 
 // ============================================================
 // Helper Functions
@@ -39,7 +40,7 @@ const dummySessions = [
     datetime: '2020/8/17 PM 3:00',
     duration: '2 時間',
     imageUrl:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60'
   },
   {
     sessionId: '2',
@@ -50,7 +51,7 @@ const dummySessions = [
     datetime: '2020/8/28 AM 1:00',
     duration: '1 時間',
     imageUrl:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60'
   },
   {
     sessionId: '3',
@@ -61,7 +62,7 @@ const dummySessions = [
     datetime: '2020/9/15 AM 9:00',
     duration: '15 分',
     imageUrl:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60'
   },
   {
     sessionId: '4',
@@ -72,7 +73,7 @@ const dummySessions = [
     datetime: '2020/8/17 PM 3:00',
     duration: '2 時間',
     imageUrl:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60'
   },
   {
     sessionId: '5',
@@ -83,7 +84,7 @@ const dummySessions = [
     datetime: '2020/8/28 AM 1:00',
     duration: '1 時間',
     imageUrl:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60'
   },
   {
     sessionId: '6',
@@ -94,7 +95,7 @@ const dummySessions = [
     datetime: '2020/9/15 AM 9:00',
     duration: '15 分',
     imageUrl:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60'
   }
 ]
 
@@ -104,7 +105,7 @@ export default function Dashboard() {
   // ============================================================
 
   //State
-  const [ existJoinRoomFlag, setExistJoinRoomFlag ] = useState(false)
+  const [existJoinRoomFlag, setExistJoinRoomFlag] = useState(false)
 
   // Auth
   const auth = useAuth()
@@ -121,7 +122,6 @@ export default function Dashboard() {
       }
     }
   )
-
 
   // Fetch all sessions data on client side
   // const { data: sessions } = useSWR(
@@ -159,17 +159,16 @@ export default function Dashboard() {
   const t = uselocalesFilter('dashboard', locale)
 
   //checkJoinRoomExist
-    const checkResult = dummySessions.some((session) => {
-      console.log(session.guestId)
-      return userInfo?.uid == session.guestId
-    })
-
+  const checkResult = dummySessions.some((session) => {
+    console.log(session.guestId)
+    return userInfo?.uid == session.guestId
+  })
 
   // ============================================================
   // Button Handler
   // ============================================================
 
-  const createRoom = async (e) => {
+  const createSession = async (e) => {
     e.preventDefault()
 
     const url = 'https://api.daily.co/v1/rooms'
@@ -184,23 +183,26 @@ export default function Dashboard() {
 
     fetch(url, options)
       .then((res) => res.json())
-      .then((json) => console.log(json))
+      .then((sessionInfo) => {
+        addSession(sessionInfo.name, {
+          sessionId: sessionInfo.name,
+          ownerId: user.uid
+        })
+        console.log(sessionInfo)
+      })
       .catch((err) => console.error('error:' + err))
   }
 
-
-  // ここにルームを予約したときの挙動を書く
-  const reserveRoom = async (e) => {
-    e.preventDefault()
-
-    alert("YOU RESERVED THIS ROOM! CONGRATURATION !!!")
+  // Handle session reservation
+  const reserveSession = async (sessionId) => {
+    // Set user's uid to guestId
+    updateSession(sessionId, { guestId: user.uid })
   }
 
-  // ここにルームを予約を取り消したときの挙動を書く
-  const cancelRoom = async (e) => {
-    e.preventDefault()
-
-    alert("you cancel.")
+  // Handle session reservation cancellation
+  const cancelSession = async (sessionId) => {
+    // Update guestId to an empty string
+    updateSession(sessionId, { guestId: '' })
   }
 
   // ============================================================
@@ -227,148 +229,196 @@ export default function Dashboard() {
       <div className="relative pb-16 bg-gray-50 overflow-hidden">
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
           <main className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
-            {
-            checkResult ?
-            <div className="py-3">
-              <div className="bg-gray-200 rounded-sm px-4 py-2 mb-4">
-                参加予定のルーム
-              </div>
-              <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {dummySessions.map((session) => (
-                  userInfo.uid == session.guestId || userInfo.uid == session.ownerId ?
-                  <Disclosure>
-                  {({ open }) => (
-                    <li>
-                    <div key={session.sessionId} className="bg-white rounded-lg shadow divide-y divide-gray-200">
-                      <div className="w-full flex items-center justify-between p-6 space-x-6">
-                        <div className="flex-1 truncate">
-                          <div className="flex items-center space-x-3">
-                            <div className="flex items-center">
-                              <img className="w-10 h-10 mr-4 mb-2 bg-gray-300 rounded-full flex-shrink-0" src={session.imageUrl} alt="" />
-                              <h3 className="text-gray-900 text-sm font-medium truncate">{session.ownerName}</h3>
-                            </div>
-                          </div>
-                          <p className="mt-1 text-gray-500 text-sm truncate">開始日時 {session.datetime}</p>
-                          <p className="mt-1 text-gray-500 text-sm truncate">予定時間 {session.duration}</p>
-                        </div>
-                        <Disclosure.Button className="">
-                          <p className="text-gray-500 text-sm">予約取り消し</p>
-                        </Disclosure.Button>
-                      </div>
-                      { open && (
-                      <div>
-                        <Transition
-                          enter="transition duration-100 ease-out"
-                          enterFrom="transform scale-95 opacity-0"
-                          enterTo="transform scale-100 opacity-100"
-                          leave="transition duration-75 ease-out"
-                          leaveFrom="transform scale-100 opacity-100"
-                          leaveTo="transform scale-95 opacity-0"
-                        >
-                          <Disclosure.Panel className="text-gray-500">
-                            <div className="-mt-px p-2 flex justify-center divide-x divide-gray-200">
-                              <div className="-ml-px flex flex-col items-center">
-                                <p className="text-sm">このルームの予約を取り消しますか？</p>
-                                <div
-                                  className="relative mt-2 border border-transparent rounded-br-lg hover:text-gray-500"
-                                  onClick={(e) => cancelRoom(e)}
-                                >
-                                  <span className="inline-block bg-blue-500 rounded-sm px-12 py-2 text-sm text-white font-medium">確定</span>
+            {checkResult ? (
+              <div className="py-3">
+                <div className="bg-gray-200 rounded-sm px-4 py-2 mb-4">
+                  参加予定のルーム
+                </div>
+                <ul
+                  role="list"
+                  className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+                >
+                  {dummySessions.map((session) =>
+                    userInfo.uid == session.guestId ||
+                    userInfo.uid == session.ownerId ? (
+                      <Disclosure>
+                        {({ open }) => (
+                          <li>
+                            <div
+                              key={session.sessionId}
+                              className="bg-white rounded-lg shadow divide-y divide-gray-200"
+                            >
+                              <div className="w-full flex items-center justify-between p-6 space-x-6">
+                                <div className="flex-1 truncate">
+                                  <div className="flex items-center space-x-3">
+                                    <div className="flex items-center">
+                                      <img
+                                        className="w-10 h-10 mr-4 mb-2 bg-gray-300 rounded-full flex-shrink-0"
+                                        src={session.imageUrl}
+                                        alt=""
+                                      />
+                                      <h3 className="text-gray-900 text-sm font-medium truncate">
+                                        {session.ownerName}
+                                      </h3>
+                                    </div>
+                                  </div>
+                                  <p className="mt-1 text-gray-500 text-sm truncate">
+                                    開始日時 {session.datetime}
+                                  </p>
+                                  <p className="mt-1 text-gray-500 text-sm truncate">
+                                    予定時間 {session.duration}
+                                  </p>
                                 </div>
+                                <Disclosure.Button className="">
+                                  <p className="text-gray-500 text-sm">
+                                    予約取り消し
+                                  </p>
+                                </Disclosure.Button>
                               </div>
+                              {open && (
+                                <div>
+                                  <Transition
+                                    enter="transition duration-100 ease-out"
+                                    enterFrom="transform scale-95 opacity-0"
+                                    enterTo="transform scale-100 opacity-100"
+                                    leave="transition duration-75 ease-out"
+                                    leaveFrom="transform scale-100 opacity-100"
+                                    leaveTo="transform scale-95 opacity-0"
+                                  >
+                                    <Disclosure.Panel className="text-gray-500">
+                                      <div className="-mt-px p-2 flex justify-center divide-x divide-gray-200">
+                                        <div className="-ml-px flex flex-col items-center">
+                                          <p className="text-sm">
+                                            このルームの予約を取り消しますか？
+                                          </p>
+                                          <div
+                                            className="relative mt-2 border border-transparent rounded-br-lg hover:text-gray-500"
+                                            onClick={() =>
+                                              cancelSession(session.sessionId)
+                                            }
+                                          >
+                                            <span className="inline-block bg-blue-500 rounded-sm px-12 py-2 text-sm text-white font-medium">
+                                              確定
+                                            </span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </Disclosure.Panel>
+                                  </Transition>
+                                </div>
+                              )}
                             </div>
-                          </Disclosure.Panel>
-                        </Transition>
-                      </div>
-                      )}
-                    </div>
-                    </li>
+                          </li>
+                        )}
+                      </Disclosure>
+                    ) : (
+                      <></>
                     )
-                  }
-                  </Disclosure>
-                  :
-                  <></>
-                ))}
-              </ul>
-            </div>
-            :
-            <></>
-            }
+                  )}
+                </ul>
+              </div>
+            ) : (
+              <></>
+            )}
             <div className="py-3">
               <div className="bg-gray-200 rounded-sm px-4 py-2 mb-4">
                 空きルーム一覧
               </div>
-              <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <ul
+                role="list"
+                className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+              >
                 {dummySessions.map((session) => (
                   <Disclosure>
-                  {({ open }) => (
-                    <li>
-                    <div key={session.sessionId} className="bg-white rounded-lg shadow divide-y divide-gray-200">
-                      <div className="w-full flex items-center justify-between p-6 space-x-6">
-                        <div className="flex-1 truncate">
-                          <div className="flex items-center space-x-3">
-                            <div className="flex items-center">
-                              <img className="w-10 h-10 mr-4 mb-2 bg-gray-300 rounded-full flex-shrink-0" src={session.imageUrl} alt="" />
-                              <h3 className="text-gray-900 text-sm font-medium truncate">{session.ownerName}</h3>
-                            </div>
-                          </div>
-                          <p className="mt-1 text-gray-500 text-sm truncate">開始日時 {session.datetime}</p>
-                          <p className="mt-1 text-gray-500 text-sm truncate">予定時間 {session.duration}</p>
-                        </div>
-                        <Disclosure.Button className="">
-                          <p className="text-blue-500">予約する</p>
-                        </Disclosure.Button>
-                      </div>
-                      { open && (
-                      <div>
-                        <Transition
-                          enter="transition duration-100 ease-out"
-                          enterFrom="transform scale-95 opacity-0"
-                          enterTo="transform scale-100 opacity-100"
-                          leave="transition duration-75 ease-out"
-                          leaveFrom="transform scale-100 opacity-100"
-                          leaveTo="transform scale-95 opacity-0"
+                    {({ open }) => (
+                      <li>
+                        <div
+                          key={session.sessionId}
+                          className="bg-white rounded-lg shadow divide-y divide-gray-200"
                         >
-                          <Disclosure.Panel className="text-gray-500">
-                            <div className="-mt-px p-2 flex justify-center divide-x divide-gray-200">
-                              <div className="-ml-px flex flex-col items-center">
-                                <p className="text-sm">このルームを予約しますか？</p>
-                                <div
-                                  className="relative mt-2 border border-transparent rounded-br-lg hover:text-gray-500"
-                                  onClick={(e) => reserveRoom(e)}
-                                >
-                                  <span className="inline-block bg-blue-500 rounded-sm px-12 py-2 text-sm text-white font-medium">確定</span>
+                          <div className="w-full flex items-center justify-between p-6 space-x-6">
+                            <div className="flex-1 truncate">
+                              <div className="flex items-center space-x-3">
+                                <div className="flex items-center">
+                                  <img
+                                    className="w-10 h-10 mr-4 mb-2 bg-gray-300 rounded-full flex-shrink-0"
+                                    src={session.imageUrl}
+                                    alt=""
+                                  />
+                                  <h3 className="text-gray-900 text-sm font-medium truncate">
+                                    {session.ownerName}
+                                  </h3>
                                 </div>
                               </div>
+                              <p className="mt-1 text-gray-500 text-sm truncate">
+                                開始日時 {session.datetime}
+                              </p>
+                              <p className="mt-1 text-gray-500 text-sm truncate">
+                                予定時間 {session.duration}
+                              </p>
                             </div>
-                          </Disclosure.Panel>
-                        </Transition>
-                      </div>
-                      )}
-                    </div>
-                    </li>
-                    )
-                  }
+                            <Disclosure.Button className="">
+                              <p className="text-blue-500">予約する</p>
+                            </Disclosure.Button>
+                          </div>
+                          {open && (
+                            <div>
+                              <Transition
+                                enter="transition duration-100 ease-out"
+                                enterFrom="transform scale-95 opacity-0"
+                                enterTo="transform scale-100 opacity-100"
+                                leave="transition duration-75 ease-out"
+                                leaveFrom="transform scale-100 opacity-100"
+                                leaveTo="transform scale-95 opacity-0"
+                              >
+                                <Disclosure.Panel className="text-gray-500">
+                                  <div className="-mt-px p-2 flex justify-center divide-x divide-gray-200">
+                                    <div className="-ml-px flex flex-col items-center">
+                                      <p className="text-sm">
+                                        このルームを予約しますか？
+                                      </p>
+                                      <div
+                                        className="relative mt-2 border border-transparent rounded-br-lg hover:text-gray-500"
+                                        onClick={() =>
+                                          reserveSession(session.sessionId)
+                                        }
+                                      >
+                                        <span className="inline-block bg-blue-500 rounded-sm px-12 py-2 text-sm text-white font-medium">
+                                          確定
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </Disclosure.Panel>
+                              </Transition>
+                            </div>
+                          )}
+                        </div>
+                      </li>
+                    )}
                   </Disclosure>
                 ))}
               </ul>
             </div>
           </main>
-          <div className="z-10 w-full fixed bottom-0 shadow-lg" style={{ boxShadow: "0 -2px 4px 0 rgba(0, 0, 0, 0.06)" }}>
-              <div className="bg-white px-6 py-4">
-                <div className="flex justify-center">
-                  <button
-                    type="button"
-                    className="block w-full px-6 py-2 border border-transparent text-base font-bold rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
-                    onClick={(e) => {
-                      createRoom(e)
-                    }}
-                  >
-                    ルームを作成する
-                  </button>
-                </div>
+          <div
+            className="z-10 w-full fixed bottom-0 shadow-lg"
+            style={{ boxShadow: '0 -2px 4px 0 rgba(0, 0, 0, 0.06)' }}
+          >
+            <div className="bg-white px-6 py-4">
+              <div className="flex justify-center">
+                <button
+                  type="button"
+                  className="block w-full px-6 py-2 border border-transparent text-base font-bold rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
+                  onClick={(e) => {
+                    createSession(e)
+                  }}
+                >
+                  ルームを作成する
+                </button>
               </div>
             </div>
+          </div>
         </div>
       </div>
 
