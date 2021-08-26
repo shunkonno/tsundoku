@@ -15,6 +15,8 @@ module.exports = {
       blue: colors.blue,
       indigo: colors.indigo,
       red: colors.red,
+      green: colors.green,
+      teal: colors.teal,
       yellow: colors.yellow,
       orange: colors.orange,
       tsundoku: {
