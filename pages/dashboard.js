@@ -1,9 +1,10 @@
 // ============================================================
 // Imports
 // ============================================================
-import { useState, useEffect } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
+import Link from 'next/link'
 import useSWR from 'swr'
 
 // Components
@@ -11,21 +12,11 @@ import { Header } from '../components/Header'
 import { Footer } from '../components/Footer'
 import { Disclosure, Transition } from '@headlessui/react'
 
-//Assets
-import { MailIcon, PhoneIcon } from '@heroicons/react/solid'
-
 // Functions
 import uselocalesFilter from '../utils/translate'
 import { useAuth } from '../lib/auth'
 import fetcher from '../utils/fetcher'
-import { addSession, updateSession } from '../lib/db'
-
-// ============================================================
-// Helper Functions
-// ============================================================
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
+import { updateSession } from '../lib/db'
 
 // ============================================================
 // dummydata
@@ -104,9 +95,6 @@ export default function Dashboard() {
   // Initialize
   // ============================================================
 
-  //State
-  const [existJoinRoomFlag, setExistJoinRoomFlag] = useState(false)
-
   // Auth
   const auth = useAuth()
   const user = auth.user
@@ -158,40 +146,14 @@ export default function Dashboard() {
   const { locale } = useRouter()
   const t = uselocalesFilter('dashboard', locale)
 
-  //checkJoinRoomExist
+  //checkJoinRoomExist すべてのセッションのguestIdからログイン中のguestIdが1つでも一致していればtrue。1つもなければfalse。
   const checkResult = dummySessions.some((session) => {
-    console.log(session.guestId)
     return userInfo?.uid == session.guestId
   })
 
   // ============================================================
   // Button Handler
   // ============================================================
-
-  const createSession = async (e) => {
-    e.preventDefault()
-
-    const url = 'https://api.daily.co/v1/rooms'
-
-    const options = {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_DAILY_API_KEY
-      }
-    }
-
-    fetch(url, options)
-      .then((res) => res.json())
-      .then((sessionInfo) => {
-        addSession(sessionInfo.name, {
-          sessionId: sessionInfo.name,
-          ownerId: user.uid
-        })
-        console.log(sessionInfo)
-      })
-      .catch((err) => console.error('error:' + err))
-  }
 
   // Handle session reservation
   const reserveSession = async (sessionId) => {
@@ -278,6 +240,7 @@ export default function Dashboard() {
                               {open && (
                                 <div>
                                   <Transition
+                                    show= { open }
                                     enter="transition duration-100 ease-out"
                                     enterFrom="transform scale-95 opacity-0"
                                     enterTo="transform scale-100 opacity-100"
@@ -401,21 +364,18 @@ export default function Dashboard() {
               </ul>
             </div>
           </main>
+          {/* FixedCreateRoomButton */}
           <div
             className="z-10 w-full fixed bottom-0 shadow-lg"
             style={{ boxShadow: '0 -2px 4px 0 rgba(0, 0, 0, 0.06)' }}
           >
             <div className="bg-white px-6 py-4">
               <div className="flex justify-center">
-                <button
-                  type="button"
-                  className="block w-full px-6 py-2 border border-transparent text-base font-bold rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
-                  onClick={(e) => {
-                    createSession(e)
-                  }}
-                >
+                <Link href="/newRoom">
+                <a className="block w-full px-6 py-2 border border-transparent text-base text-center font-bold rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main">
                   ルームを作成する
-                </button>
+                </a>
+                </Link>
               </div>
             </div>
           </div>

@@ -120,7 +120,7 @@ export default function Footer() {
   // Return Page
   // ===========================================================
   return (
-    <footer className="bg-tsundoku-blue-dark" aria-labelledby="footer-heading">
+    <footer className="relative z-0 bg-tsundoku-blue-dark" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>

@@ -25,19 +25,19 @@ export const dict =
     }
   },
   {
-    "Onboarding2": {
-      "Heading2": {
-        "en": "headin2",
-        "ja": "見出し2"
+    "dashboard": {
+      "text1": {
+        "en": "text1",
+        "ja": "テキスト1"
       },
-      "Title": {
-      "en": "Onboarding2",
-      "ja": "オンボーディング2"
+      "text2": {
+      "en": "text2",
+      "ja": "テキスト2"
       }
     }
   },
   {
-    "dashboard": {
+    "newRoom": {
       "text1": {
         "en": "text1",
         "ja": "テキスト1"
