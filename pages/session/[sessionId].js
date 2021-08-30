@@ -2,9 +2,16 @@
 // Imports
 // ============================================================
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import Script from 'next/script'
 
 export default function Session() {
+  // ============================================================
+  // Initialize
+  // ============================================================
+  const router = useRouter()
+  const { sessionId } = router.query
+
   // ============================================================
   // Initialize Video Call
   // ============================================================
@@ -15,15 +22,13 @@ export default function Session() {
   function callDailyIframe() {
     const callFrame = window.DailyIframe.createFrame({
       // TODO: Change language based on locale (https://docs.daily.co/reference#properties)
-      lang: 'en',
+      lang: 'jp',
       showLeaveButton: true,
-      videoSource: false,
       iframeStyle: { position: 'fixed', width: '100%', height: '100%' }
     })
 
-    // TODO: Dynamically generate room url
     // TODO: Set domain config with REST API (redirect_on_meeting_exit)
-    callFrame.join({ url: 'https://tsundoku.daily.co/new-prebuilt-test' })
+    callFrame.join({ url: 'https://tsundoku.daily.co/' + sessionId })
   }
 
   // ============================================================
