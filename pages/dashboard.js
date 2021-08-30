@@ -240,7 +240,7 @@ export default function Dashboard() {
                               {open && (
                                 <div>
                                   <Transition
-                                    show= { open }
+                                    show={open}
                                     enter="transition duration-100 ease-out"
                                     enterFrom="transform scale-95 opacity-0"
                                     enterTo="transform scale-100 opacity-100"
@@ -372,9 +372,9 @@ export default function Dashboard() {
             <div className="bg-white px-6 py-4">
               <div className="flex justify-center">
                 <Link href="/newRoom">
-                <a className="block w-full px-6 py-2 border border-transparent text-base text-center font-bold rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main">
-                  ルームを作成する
-                </a>
+                  <a className="block w-full px-6 py-2 border border-transparent text-base text-center font-bold rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main">
+                    ルームを作成する
+                  </a>
                 </Link>
               </div>
             </div>
