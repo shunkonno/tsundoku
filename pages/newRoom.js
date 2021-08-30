@@ -5,6 +5,7 @@ import { Fragment, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import useSWR from 'swr'
+import moment from 'moment'
 
 // Components
 import { Header } from '../components/Header'
@@ -108,7 +109,7 @@ export default function Dashboard() {
   // ============================================================
 
   //State
-  const [year, setYear] = useState('')
+  const [year, setYear] = useState('2021')
   const [month, setMonth] = useState(monthData[3])
   const [day, setDay] = useState(dayData[3])
   const [startTime, setStartTime] = useState(timeData[4])
@@ -150,6 +151,14 @@ export default function Dashboard() {
 
   const createSession = async (e) => {
     e.preventDefault()
+
+    const hoursAndMinutes = startTime.split(':')
+    const hours = hoursAndMinutes[0]
+    const minutes = hoursAndMinutes[1]
+
+    const dateTime = moment({years: year, months: month, days: day, hours: hours, minutes: minutes, seconds: 0}).toISOString()
+
+    console.log(dateTime)
 
     const url = 'https://api.daily.co/v1/rooms'
 
