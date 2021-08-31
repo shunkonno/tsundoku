@@ -205,7 +205,7 @@ export default function Dashboard() {
       {/* main content */}
       <div className="relative pb-16 bg-gray-50">
         <div className="sm:block sm:w-full" aria-hidden="true">
-          <main className="py-12 mx-auto max-w-7xl px-4 sm:mt-24">
+          <main className="py-12 mx-auto max-w-7xl px-4 sm:py-24">
             <h1 className="text-xl font-bold py-3">
               新しいルームを作成する
             </h1>

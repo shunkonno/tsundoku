@@ -4,6 +4,7 @@
 import { Fragment } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import Image from 'next/image'
 import useSWR from 'swr'
 
 //Assets
@@ -266,11 +267,15 @@ export default function Header() {
                         <Link href="/">
                         <a>
                           <span className="sr-only">Tsundoku</span>
-                          <img
-                            className="h-8 w-auto sm:h-10"
-                            src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-                            alt=""
-                          />
+                          <picture>
+                            <source className="h-8 w-auto sm:h-10" srcset="/img/logos/tsundoku-logo-mark-and-typo.svg" media="(max-width: 639px)"/>
+                            <source className="h-8 w-auto sm:h-10" srcset="/img/logos/tsundoku-logo-mark-and-typo.svg" media="(min-width: 640px)"/>
+                            <img
+                               className="h-8 w-auto sm:h-10"
+                              src="/img/logos/tsundoku-logo-mark-only.svg"
+                              alt="tsundoku-logo-mark-only"
+                            />
+                          </picture>
                         </a>
                         </Link>
                         <div className="-mr-2 flex items-center md:hidden">
@@ -307,9 +312,9 @@ export default function Header() {
                       <div className="px-5 pt-4 flex items-center justify-between">
                         <div>
                           <img
-                            className="h-8 w-auto"
-                            src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-                            alt=""
+                            className="h-8 w-auto sm:h-10"
+                            src="/img/logos/tsundoku-logo-mark-only.svg"
+                            alt="tsundoku-logo-mark-only"
                           />
                         </div>
                         <div className="-mr-2">
