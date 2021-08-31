@@ -4,7 +4,7 @@
 import { useRouter } from 'next/router'
 
 // Components
-import { Header } from '../components/Header'
+import { LpHeader } from '../components/Header'
 
 // Funtions
 import { useAuth } from '../lib/auth'
