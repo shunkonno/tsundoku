@@ -214,11 +214,11 @@ export default function Dashboard() {
                                 <div className="flex-1 truncate">
                                   <div className="flex items-center space-x-3">
                                     <div className="flex items-center">
-                                      <img
+                                      {/* <img
                                         className="w-10 h-10 mr-4 mb-2 bg-gray-300 rounded-full flex-shrink-0"
                                         src={session.imageUrl}
                                         alt=""
-                                      />
+                                      /> */}
                                       <h3 className="text-gray-900 text-sm font-medium truncate">
                                         {session.ownerName}
                                       </h3>
@@ -303,11 +303,11 @@ export default function Dashboard() {
                             <div className="flex-1 truncate">
                               <div className="flex items-center space-x-3">
                                 <div className="flex items-center">
-                                  <img
+                                  {/* <img
                                     className="w-10 h-10 mr-4 mb-2 bg-gray-300 rounded-full flex-shrink-0"
                                     src={session.imageUrl}
                                     alt=""
-                                  />
+                                  /> */}
                                   <h3 className="text-gray-900 text-sm font-medium truncate">
                                     {session.ownerName}
                                   </h3>
