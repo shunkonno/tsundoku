@@ -1,22 +1,23 @@
 // ============================================================
 // Import
 // ============================================================
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 import Head from 'next/head'
+import useSWR from 'swr'
 
 // Components
-import { AppHeader } from '../../../components/Header'
-import { FooterSmall } from '../../../components/Footer'
+import { AppHeader } from '../../components/Header'
+import { Footer } from '../../components/Footer'
 
 // Assets
 import { Transition, RadioGroup } from '@headlessui/react'
 
 // Functions
-import { useAuth } from '../../../lib/auth'
-import uselocalesFilter from '../../../utils/translate'
-import { updateUser } from '../../../lib/db'
+import { useAuth } from '../../lib/auth'
+import uselocalesFilter from '../../utils/translate'
+import { updateUser } from '../../lib/db'
+import fetcher from '../../utils/fetcher'
 
 // ============================================================
 // Settings
@@ -36,7 +37,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function NewUserSettings() {
+export default function UserSettings() {
   // ============================================================
   // Initialize
   // ============================================================
@@ -45,18 +46,39 @@ export default function NewUserSettings() {
   const auth = useAuth()
   const user = auth.user
 
+  // Fetch logged user info on client side
+  const { data: userInfo } = useSWR(
+    user ? ['/api/user', user.token] : null,
+    fetcher,
+    {
+      onErrorRetry: ({ retryCount }) => {
+        // Retry up to 10 times
+        if (retryCount >= 10) return
+      }
+    }
+  )
+
   // Routing
   const router = useRouter()
 
   // InitialState
-  const [userName, setUserName] = useState('')
+  const [userName, setUserName] = useState("")
   const [genderSelected, setGenderSelected] = useState()
   const [genderOfMatchSelected, setGenderOfMatchSelected] = useState(
     genderOfMatchSettings[0]
   )
 
+  useEffect(() => {
+    if (user === false) {
+      // If the access isn't authenticated, redirect to index page
+      router.push('/')
+    } else if (userInfo) {
+      setUserName(userInfo.name)
+    }
+  },[userInfo])
+
   // Translate
-  const t = uselocalesFilter('Onboarding', router.locale)
+  const t = uselocalesFilter('userSettings', router.locale)
 
   // Handle form submit
   const handleSubmit = (e) => {
@@ -66,7 +88,7 @@ export default function NewUserSettings() {
       name: userName
     })
 
-    router.push({ pathname: '/dashboard', query: { welcome: true } })
+    alert("ユーザー設定を更新しました。")
   }
 
   // ============================================================
@@ -90,7 +112,7 @@ export default function NewUserSettings() {
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
           <main className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
             <div className="py-3">
-              <h1 className="text-2xl font-bold">まず最初に教えてください。</h1>
+              <h1 className="text-2xl font-bold">ユーザー設定</h1>
             </div>
             <div className="py-3">
               <label
@@ -100,18 +122,22 @@ export default function NewUserSettings() {
                 名前(ニックネーム)
               </label>
               <div className="mt-1">
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  autoComplete="given-name"
-                  className="p-3 shadow-sm block w-full sm:text-sm border border-gray-300 focus:ring-tsundoku-brown-main focus:border-tsundoku-brown-main rounded-md"
-                  onChange={(e) => {
-                    setUserName(e.target.value)
-                  }}
-                />
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      autoComplete="given-name"
+                      value={userName}
+                      className="p-3 shadow-sm block w-full sm:text-sm border border-gray-300 focus:ring-tsundoku-brown-main focus:border-tsundoku-brown-main rounded-md"
+                      onChange={(e) => {
+                        setUserName(e.target.value)
+                      }}
+                    />
+                
               </div>
             </div>
+
+            {/* 性別 */}
             <div className="py-3">
               <label
                 htmlFor="Gender"
@@ -179,6 +205,8 @@ export default function NewUserSettings() {
                 </div>
               </RadioGroup>
             </div>
+            {/* 性別 END */}
+            
             <Transition
               show={genderSelected?.label == 'Female'}
               as={Fragment}
@@ -276,7 +304,7 @@ export default function NewUserSettings() {
                   className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
                   onClick={(e) => handleSubmit(e)}
                 >
-                  完了
+                  保存
                 </p>
               </div>
             </div>
@@ -285,7 +313,7 @@ export default function NewUserSettings() {
       </div>
       {/* END main content */}
 
-      <FooterSmall />
+      <Footer />
     </div>
   )
 }

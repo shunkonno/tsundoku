@@ -37,6 +37,14 @@ export const dict =
     }
   },
   {
+    "userSettings": {
+      "text1": {
+        "en": "text1",
+        "ja": "テキスト1"
+      }
+    }
+  },
+  {
     "newRoom": {
       "text1": {
         "en": "text1",
@@ -67,8 +75,8 @@ export const dict =
   {
     "footer": {
       "TranslateTest": {
-        "en": "This is English Test",
-        "ja": "これは日本語のテストです"
+        "en": "Current language setting is English",
+        "ja": "現在設定されている言語は日本語です。"
       },
       "TranslateTest2": {
         "en": "This is English Test2",
