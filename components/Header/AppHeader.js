@@ -219,8 +219,8 @@ export default function AppHeader() {
                         <a>
                           <span className="sr-only">Tsundoku</span>
                           <picture>
-                            <source className="h-8 w-auto sm:h-10" srcset="/img/logos/tsundoku-logo-mark-and-typo.svg" media="(max-width: 639px)"/>
-                            <source className="h-8 w-auto sm:h-10" srcset="/img/logos/tsundoku-logo-mark-and-typo.svg" media="(min-width: 640px)"/>
+                            <source className="h-8 w-auto sm:h-10" srcSet="/img/logos/tsundoku-logo-mark-and-typo.svg" media="(max-width: 639px)"/>
+                            <source className="h-8 w-auto sm:h-10" srcSet="/img/logos/tsundoku-logo-mark-and-typo.svg" media="(min-width: 640px)"/>
                             <img
                                className="h-8 w-auto sm:h-10"
                               src="/img/logos/tsundoku-logo-mark-only.svg"
