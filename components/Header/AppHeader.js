@@ -4,7 +4,6 @@
 import { Fragment } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import Image from 'next/image'
 import useSWR from 'swr'
 
 //Assets
@@ -17,13 +16,7 @@ import { useAuth } from '../../lib/auth'
 import fetcher from '../../utils/fetcher'
 
 const navigation = [
-  { name: 'Setting', href: '#' },
-]
-
-const LpNavigation = [
-  { name: 'How to work', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Pricing', href: '#' }
+  { name: 'Setting', href: '/settings' },
 ]
 
 export default function AppHeader() {
@@ -46,7 +39,7 @@ export default function AppHeader() {
       }
     }
   )
-  console.log(user)
+  console.log(userInfo)
 
   const router = useRouter()
   const { locale, pathname } = router
@@ -102,26 +95,21 @@ export default function AppHeader() {
         )
       }
     }
-    //ログインしていなければ、ログインボタンを表示(/signinページ以外)
+    //ログインしていなければ、ログインボタンを表示
     else {
-      if(pathname == '/signin') {
-        return
-      }
-      else {
-        return (
-          <div className="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0">
-            <span className="inline-flex rounded-md shadow">
-              <Link href="/signin">
-                <a
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-tsundoku-blue-main bg-white hover:bg-gray-50"
-                >
-                  {t.LOGIN}
-                </a>
-              </Link>
-            </span>
-          </div>
-        )
-      }
+      return (
+        <div className="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0">
+          <span className="inline-flex rounded-md shadow">
+            <Link href="/signin">
+              <a
+                className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-tsundoku-blue-main bg-white hover:bg-gray-50"
+              >
+                {t.LOGIN}
+              </a>
+            </Link>
+          </span>
+        </div>
+      )
     }
   }
 
@@ -161,28 +149,23 @@ export default function AppHeader() {
       }
     }
     else {
-      if(pathname == '/signin'){
-        return
-      }
-      else {
-        return(
-          <Link href="/signin">
-            <a
-              className="block w-full px-5 py-3 text-center font-medium text-tsundoku-blue-main bg-gray-50 hover:bg-gray-100"
-            >
-              {t.LOGIN}
-            </a>
-          </Link>
-        )
-      }
+      return (
+        <Link href="/signin">
+          <a
+            className="block w-full px-5 py-3 text-center font-medium text-tsundoku-blue-main bg-gray-50 hover:bg-gray-100"
+          >
+            {t.LOGIN}
+          </a>
+        </Link>
+      )
     }
   }
 
   const renderNavigation = () => {
-    if(pathname == '/') {
-      return (
+    if(user) {
+      return(
         <div className="hidden md:flex md:space-x-10">
-          {LpNavigation.map((item) => (
+          {navigation.map((item) => (
             <a
               key={item.name}
               href={item.href}
@@ -194,31 +177,15 @@ export default function AppHeader() {
         </div>
       )
     } else {
-        if(user){
-          return(
-            <div className="hidden md:flex md:space-x-10">
-              {navigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="font-medium text-gray-500 hover:text-gray-900"
-                >
-                  {item.name}
-                </a>
-              ))}
-            </div>
-          )
-        } else {
-          return
-        }
+      return
     }
   }
 
   const renderNavigationPopover = () => {
-    if(pathname == '/') {
-      return (
+    if(user){
+      return(
         <div className="px-2 pt-2 pb-3">
-          {LpNavigation.map((item) => (
+          {navigation.map((item) => (
             <a
               key={item.name}
               href={item.href}
@@ -230,23 +197,7 @@ export default function AppHeader() {
         </div>
       )
     } else {
-      if(user){
-        return(
-          <div className="px-2 pt-2 pb-3">
-            {navigation.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-              >
-                {item.name}
-              </a>
-            ))}
-          </div>
-        )
-      } else {
-        return
-      }
+      return
     }
   }
 

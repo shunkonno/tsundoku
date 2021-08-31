@@ -17,10 +17,6 @@ import { useAuth } from '../../lib/auth'
 import fetcher from '../../utils/fetcher'
 
 const navigation = [
-  { name: 'Setting', href: '#' },
-]
-
-const LpNavigation = [
   { name: 'How to work', href: '#' },
   { name: 'Features', href: '#' },
   { name: 'Pricing', href: '#' }
@@ -62,45 +58,27 @@ export default function LpHeader() {
     //ログインしているかどうか確認
     //ログインしていれば、ログアウトボタンを表示
     if(user) {
-      //ダッシュボードにいるかどうか確認
-      if(pathname == '/dashboard') {
-        return(
-          //ダッシュボードにいれば、ダッシュボードへのリンクを表示しない
-          <div className="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0">
-            <div className="text-right ml-8">
-              <button
-                className="text-gray-400 text-sm"
-                onClick={(e) => handleLogout()}
+      return (
+        <div className="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0">
+          <span className="inline-flex rounded-md shadow">
+            <Link href="/dashboard">
+              <a
+                className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-tsundoku-blue-main bg-white hover:bg-gray-50"
               >
-                {t.LOGOUT}
-              </button>
-            </div>
+                {t.TODASHBOARD}
+              </a>
+            </Link>
+          </span>
+          <div className="text-right ml-8">
+            <button
+              className="text-gray-400 text-sm"
+              onClick={(e) => handleLogout()}
+            >
+              {t.LOGOUT}
+            </button>
           </div>
-        )
-      } else {
-        //ダッシュボードにいなければダッシュボードへのリンクを表示
-        return(
-          <div className="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0">
-            <span className="inline-flex rounded-md shadow">
-              <Link href="/dashboard">
-                <a
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-tsundoku-blue-main bg-white hover:bg-gray-50"
-                >
-                  {t.TODASHBOARD}
-                </a>
-              </Link>
-            </span>
-            <div className="text-right ml-8">
-              <button
-                className="text-gray-400 text-sm"
-                onClick={(e) => handleLogout()}
-              >
-                {t.LOGOUT}
-              </button>
-            </div>
-          </div>
-        )
-      }
+        </div>
+      )
     }
     //ログインしていなければ、ログインボタンを表示(/signinページ以外)
     else {
@@ -127,8 +105,8 @@ export default function LpHeader() {
 
   const renderHeaderButtonPopover = () => {
     if(user) {
-      if(pathname == '/dashboard') {
-        return(
+      return(
+        <>
           <div className="text-right my-4 mr-2">
             <button
               className="text-gray-400 text-sm"
@@ -137,28 +115,15 @@ export default function LpHeader() {
               {t.LOGOUT}
             </button>
           </div>
-        )
-      } else {
-        return (
-          <>
-            <div className="text-right my-4 mr-2">
-              <button
-                className="text-gray-400 text-sm"
-                onClick={(e) => handleLogout()}
-              >
-                {t.LOGOUT}
-              </button>
-            </div>
-            <Link href="/dashboard">
-              <a
-                className="block w-full px-5 py-3 text-center font-medium text-tsundoku-blue-main bg-gray-50 hover:bg-gray-100"
-              >
-                {t.TODASHBOARD}
-              </a>
-            </Link>
-          </> 
-        )
-      }
+          <Link href="/dashboard">
+            <a
+              className="block w-full px-5 py-3 text-center font-medium text-tsundoku-blue-main bg-gray-50 hover:bg-gray-100"
+            >
+              {t.TODASHBOARD}
+            </a>
+          </Link>
+        </>
+      )
     }
     else {
       if(pathname == '/signin'){
@@ -179,75 +144,35 @@ export default function LpHeader() {
   }
 
   const renderNavigation = () => {
-    if(pathname == '/') {
-      return (
-        <div className="hidden md:flex md:space-x-10">
-          {LpNavigation.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              className="font-medium text-gray-500 hover:text-gray-900"
-            >
-              {item.name}
-            </a>
-          ))}
-        </div>
-      )
-    } else {
-        if(user){
-          return(
-            <div className="hidden md:flex md:space-x-10">
-              {navigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="font-medium text-gray-500 hover:text-gray-900"
-                >
-                  {item.name}
-                </a>
-              ))}
-            </div>
-          )
-        } else {
-          return
-        }
-    }
+    return(
+      <div className="hidden md:flex md:space-x-10">
+        {navigation.map((item) => (
+          <a
+            key={item.name}
+            href={item.href}
+            className="font-medium text-gray-500 hover:text-gray-900"
+          >
+            {item.name}
+          </a>
+        ))}
+      </div>
+    )
   }
 
   const renderNavigationPopover = () => {
-    if(pathname == '/') {
-      return (
-        <div className="px-2 pt-2 pb-3">
-          {LpNavigation.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-            >
-              {item.name}
-            </a>
-          ))}
-        </div>
-      )
-    } else {
-      if(user){
-        return(
-          <div className="px-2 pt-2 pb-3">
-            {navigation.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-              >
-                {item.name}
-              </a>
-            ))}
-          </div>
-        )
-      } else {
-        return
-      }
-    }
+    return (
+      <div className="px-2 pt-2 pb-3">
+        {navigation.map((item) => (
+          <a
+            key={item.name}
+            href={item.href}
+            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+          >
+            {item.name}
+          </a>
+        ))}
+      </div>
+    )
   }
 
   return (
