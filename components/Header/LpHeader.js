@@ -42,7 +42,7 @@ export default function LpHeader() {
       }
     }
   )
-  console.log(user)
+  console.log(userInfo)
 
   const router = useRouter()
   const { locale, pathname } = router
