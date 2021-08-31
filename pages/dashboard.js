@@ -8,7 +8,7 @@ import Link from 'next/link'
 import useSWR from 'swr'
 
 // Components
-import { Header } from '../components/Header'
+import { AppHeader } from '../components/Header'
 import { Footer } from '../components/Footer'
 import { Disclosure, Transition } from '@headlessui/react'
 
@@ -185,7 +185,7 @@ export default function Dashboard() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
+      <AppHeader />
 
       {/* main content */}
       <div className="relative pb-16 bg-gray-50 overflow-hidden">

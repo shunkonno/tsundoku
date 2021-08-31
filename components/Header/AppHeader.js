@@ -26,7 +26,7 @@ const LpNavigation = [
   { name: 'Pricing', href: '#' }
 ]
 
-export default function Header() {
+export default function AppHeader() {
 
   // ============================================================
   // Initialize

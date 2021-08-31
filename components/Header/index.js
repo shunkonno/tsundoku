@@ -1,3 +1,4 @@
-import Header from './header'
+import LpHeader from './LpHeader'
+import AppHeader from './AppHeader'
 
-export { Header }
+export { LpHeader, AppHeader }

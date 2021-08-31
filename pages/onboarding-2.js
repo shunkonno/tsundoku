@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Head from 'next/head'
 import uselocalesFilter from '../utils/translate'
-import { Header } from '../components/Header'
+import { AppHeader } from '../components/Header'
 import { FooterSmall } from '../components/Footer'
 
 const genderOfMatchSettings = [{ name: 'No Restriction' }, { name: 'Man Only' }]
@@ -59,7 +59,7 @@ export default function Onboarding2() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
+      <AppHeader />
 
       {/* main content */}
       <div className="relative pb-16 bg-gray-50 overflow-hidden">

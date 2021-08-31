@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 import uselocalesFilter from '../utils/translate'
 import Image from 'next/image'
-import { Header } from '../components/Header'
+import { LpHeader } from '../components/Header'
 import { Footer } from '../components/Footer'
 
 function classNames(...classes) {
@@ -51,7 +51,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
+      <LpHeader />
 
       {/* main content */}
       <div className="relative bg-gray-50 overflow-hidden font-NotoSerif">
