@@ -36,11 +36,11 @@ export default function SignIn() {
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-0">
         <main>
           <div className="sm:mx-auto sm:w-full sm:max-w-md">
-            {/* <img
-              className="mx-auto h-24 w-auto"
-              src="/images/logo/makeport-logo.svg"
+            <img
+              className="mx-auto h-12 w-auto"
+              src="/img/logos/tsundoku-logo-mark-only.svg"
               alt="Makeport"
-            /> */}
+            />
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
               サインイン
             </h2>
