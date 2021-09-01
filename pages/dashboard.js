@@ -12,6 +12,9 @@ import { AppHeader } from '../components/Header'
 import { Footer } from '../components/Footer'
 import { Disclosure, Transition } from '@headlessui/react'
 
+//Assets
+import { CheckCircleIcon, XIcon } from '@heroicons/react/solid'
+
 // Functions
 import uselocalesFilter from '../utils/translate'
 import { useAuth } from '../lib/auth'
@@ -95,6 +98,9 @@ export default function Dashboard() {
   // Initialize
   // ============================================================
 
+  //Initial State
+  const [alertOpen, setAlertOpen] = useState(false)
+
   // Auth
   const auth = useAuth()
   const user = auth.user
@@ -144,6 +150,12 @@ export default function Dashboard() {
     }
   })
 
+  useEffect(()=> {
+    if(router.query.successCreateRoom == 'true' ) {
+      setAlertOpen(true)
+    }
+  },[])
+
   // Set locale
   const { locale } = useRouter()
   const t = uselocalesFilter('dashboard', locale)
@@ -191,8 +203,45 @@ export default function Dashboard() {
 
       {/* main content */}
       <div className="relative pb-16 bg-gray-50 overflow-hidden">
+        {/* Alert */
+            <Transition
+              show={alertOpen}
+              as={Fragment}
+              enter="transition duration-75"
+              enterFrom="transform -translate-y-1/4 opacity-0"
+              enterTo="transform -translate-y-0 opacity-100"
+              leave="transition-opacity duration-150"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+            <div className="absolute w-full px-4">
+              <div className="mt-4 rounded-md bg-green-50 p-4">
+                <div className="flex">
+                  <div className="flex-shrink-0">
+                    <CheckCircleIcon className="h-5 w-5 text-green-400" aria-hidden="true" />
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-sm font-medium text-green-800">新しいルームを作成しました。</p>
+                  </div>
+                  <div className="ml-auto pl-3">
+                    <div className="-mx-1.5 -my-1.5">
+                      <button
+                        type="button"
+                        className="inline-flex bg-green-50 rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"
+                        onClick={()=> setAlertOpen(false)}
+                      >
+                        <span className="sr-only">Dismiss</span>
+                        <XIcon className="h-5 w-5" aria-hidden="true" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </Transition>
+            }
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
+          <main className="relative mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
             {checkResult ? (
               <div className="py-3">
                 <div className="bg-gray-200 rounded-sm px-4 py-2 mb-4">
