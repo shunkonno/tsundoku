@@ -99,7 +99,8 @@ export default function Dashboard() {
   // ============================================================
 
   //Initial State
-  const [alertOpen, setAlertOpen] = useState(false)
+  const [createRoomAlertOpen, setCreateRoomAlertOpen] = useState(false)
+  const [reserveRoomAlertOpen, setReserveRoomAlertOpen] = useState(false)
 
   // Auth
   const auth = useAuth()
@@ -152,7 +153,10 @@ export default function Dashboard() {
 
   useEffect(()=> {
     if(router.query.successCreateRoom == 'true' ) {
-      setAlertOpen(true)
+      setCreateRoomAlertOpen(true)
+    }
+    else if(router.query.successReserveRoom == 'true' ) {
+      setReserveRoomAlertOpen(true)
     }
   },[])
 
@@ -172,7 +176,8 @@ export default function Dashboard() {
   // Handle session reservation
   const reserveSession = async (sessionId) => {
     // Set user's uid to guestId
-    updateSession(sessionId, { guestId: user.uid })
+    await updateSession(sessionId, { guestId: user.uid })
+    await router.push({ pathname: '/dashboard', query: { successReserveRoom: true } })
   }
 
   // Handle session reservation cancellation
@@ -204,8 +209,9 @@ export default function Dashboard() {
       {/* main content */}
       <div className="relative pb-16 bg-gray-50 overflow-hidden">
         {/* Alert */
+          <>
             <Transition
-              show={alertOpen}
+              show={createRoomAlertOpen}
               as={Fragment}
               enter="transition duration-75"
               enterFrom="transform -translate-y-1/4 opacity-0"
@@ -239,7 +245,43 @@ export default function Dashboard() {
               </div>
             </div>
             </Transition>
-            }
+            <Transition
+              show={reserveRoomAlertOpen}
+              as={Fragment}
+              enter="transition duration-75"
+              enterFrom="transform -translate-y-1/4 opacity-0"
+              enterTo="transform -translate-y-0 opacity-100"
+              leave="transition-opacity duration-150"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+            <div className="absolute w-full px-4">
+              <div className="mt-4 rounded-md bg-green-50 p-4">
+                <div className="flex">
+                  <div className="flex-shrink-0">
+                    <CheckCircleIcon className="h-5 w-5 text-green-400" aria-hidden="true" />
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-sm font-medium text-green-800">ルームの参加を予約しました。</p>
+                  </div>
+                  <div className="ml-auto pl-3">
+                    <div className="-mx-1.5 -my-1.5">
+                      <button
+                        type="button"
+                        className="inline-flex bg-green-50 rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"
+                        onClick={()=> setAlertOpen(false)}
+                      >
+                        <span className="sr-only">Dismiss</span>
+                        <XIcon className="h-5 w-5" aria-hidden="true" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </Transition>
+          </>
+        }
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
           <main className="relative mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
             {checkResult ? (
