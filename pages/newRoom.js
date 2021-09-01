@@ -176,6 +176,14 @@ const timeData = [
   '23:45',
 ]
 
+const durationData = [
+  '15分',
+  '30分',
+  '45分',
+  '60分',
+  '90分',
+]
+
 // ============================================================
 // Helper Functions
 // ============================================================
@@ -193,7 +201,7 @@ export default function Dashboard() {
   const [month, setMonth] = useState(monthData[3])
   const [day, setDay] = useState(dayData[3])
   const [startTime, setStartTime] = useState(timeData[4])
-  const [endTime, setEndTime] = useState(timeData[8])
+  const [duration, setDuration] = useState(durationData[3])
 
   // Auth
   const auth = useAuth()
@@ -229,30 +237,6 @@ export default function Dashboard() {
   // Button Handler
   // ============================================================
 
-  const datetimeTest = async(e) => {
-    e.preventDefault()
-
-    const hoursAndMinutes = startTime.split(':')
-    const hours = hoursAndMinutes[0]
-    const minutes = hoursAndMinutes[1]
-
-    console.log(month)
-    console.log(day)
-    console.log(hours)
-    console.log(minutes)
-
-    const monthFormoment = Number(month) - 1
-    const dayFormoment = Number(day) + 1
-    // 2013-02-08 09:30
-    const dateTime = moment(`${year}-${month}-${day} ${hours}:${minutes}`).toISOString()
-    const ts = Date.parse(dateTime)
-    const jaTime = new Date(ts)
-
-    console.log(dateTime)
-    console.log(jaTime)
-
-  }
-
   const createSession = async (e) => {
     e.preventDefault()
 
@@ -260,12 +244,9 @@ export default function Dashboard() {
     const hours = hoursAndMinutes[0]
     const minutes = hoursAndMinutes[1]
 
-    console.log(month)
-    console.log(day)
+    const datetime = moment(`${year}-${month}-${day} ${hours}:${minutes}`).toISOString()
 
-    const dateTime = moment(`${year}-${month}-${day} ${hours}:${minutes}`).toISOString()
-
-    console.log(dateTime)
+    const durationAmount = duration.replace('分','')
 
     const url = 'https://api.daily.co/v1/rooms'
 
@@ -277,17 +258,18 @@ export default function Dashboard() {
       }
     }
 
-    fetch(url, options)
+    await fetch(url, options)
       .then((res) => res.json())
       .then((sessionInfo) => {
         addSession(sessionInfo.name, {
           sessionId: sessionInfo.name,
           ownerId: user.uid,
-          startTime: dateTime,
-          duration: 90
+          startTime: datetime,
+          duration: durationAmount
         })
         console.log(sessionInfo)
       })
+      .then(router.push({ pathname: '/dashboard', query: { successCreateRoom: true } }))
       .catch((err) => console.error('error:' + err))
   }
 
@@ -315,9 +297,6 @@ export default function Dashboard() {
       <div className="relative pb-16 bg-gray-50">
         <div className="sm:block sm:w-full" aria-hidden="true">
           <main className="py-12 mx-auto max-w-7xl px-4 sm:py-24">
-            <button onClick={(e) => datetimeTest(e)}>
-              日付変換test
-            </button>
             <h1 className="text-xl font-bold py-3">
               新しいルームを作成する
             </h1>
@@ -511,13 +490,13 @@ export default function Dashboard() {
           {/* 開始時刻 END */}
 
           {/* 終了時刻 */}
-          <Listbox value={endTime} onChange={setEndTime}>
+          <Listbox value={duration} onChange={setDuration}>
             {({ open }) => (
               <div className="py-3">
-                <Listbox.Label className="block text-sm font-medium text-gray-700">終了時刻(予定)</Listbox.Label>
+                <Listbox.Label className="block text-sm font-medium text-gray-700">所要時間</Listbox.Label>
                 <div className="mt-1 relative">
                   <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    <span className="block truncate">{endTime}</span>
+                    <span className="block truncate">{duration}</span>
                     <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                       <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                     </span>
@@ -531,21 +510,21 @@ export default function Dashboard() {
                     leaveTo="opacity-0"
                   >
                     <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                      {timeData.map((selectEndTime) => (
+                      {durationData.map((duration) => (
                         <Listbox.Option
-                          key={selectEndTime}
+                          key={duration}
                           className={({ active }) =>
                             classNames(
                               active ? 'text-white bg-indigo-600' : 'text-gray-900',
                               'cursor-default select-none relative py-2 pl-8 pr-4'
                             )
                           }
-                          value={selectEndTime}
+                          value={duration}
                         >
                           {({ selected, active }) => (
                             <>
                               <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
-                                {selectEndTime}
+                                {duration}
                               </span>
 
                               {selected ? (
