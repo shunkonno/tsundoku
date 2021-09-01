@@ -179,7 +179,7 @@ export default function NewUserSettings() {
                 </div>
               </RadioGroup>
             </div>
-            <Transition
+            {/* <Transition
               show={genderSelected?.label == 'Female'}
               as={Fragment}
               enter="transition duration-300"
@@ -267,7 +267,7 @@ export default function NewUserSettings() {
                   </div>
                 </RadioGroup>
               </div>
-            </Transition>
+            </Transition> */}
 
             <div className="py-6">
               <div className="flex justify-end">
