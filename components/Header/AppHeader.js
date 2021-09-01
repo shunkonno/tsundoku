@@ -39,7 +39,7 @@ export default function AppHeader() {
       }
     }
   )
-  console.log(userInfo)
+  // console.log(userInfo)
 
   const router = useRouter()
   const { locale, pathname } = router

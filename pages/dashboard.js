@@ -113,7 +113,7 @@ export default function Dashboard() {
 
   // Fetch all sessions data on client side
   // const { data: sessions } = useSWR(
-  //   user ? 'api/session/index' : null,
+  //   user ? '/api/session' : null,
   //   fetcher,
   //   {
   //     onErrorRetry: ({ retryCount }) => {
@@ -122,6 +122,8 @@ export default function Dashboard() {
   //     }
   //   }
   // )
+
+  // console.log(sessions)
 
   // Routing
   const router = useRouter()

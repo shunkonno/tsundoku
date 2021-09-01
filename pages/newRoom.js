@@ -94,6 +94,86 @@ const timeData = [
   '3:15',
   '3:30',
   '3:45',
+  '4:00',
+  '4:15',
+  '4:30',
+  '4:45',
+  '5:00',
+  '5:15',
+  '5:30',
+  '5:45',
+  '6:00',
+  '6:15',
+  '6:30',
+  '6:45',
+  '7:00',
+  '7:15',
+  '7:30',
+  '7:45',
+  '8:00',
+  '8:15',
+  '8:30',
+  '8:45',
+  '9:00',
+  '9:15',
+  '9:30',
+  '9:45',
+  '10:00',
+  '10:15',
+  '10:30',
+  '10:45',
+  '11:00',
+  '11:15',
+  '11:30',
+  '11:45',
+  '12:00',
+  '12:15',
+  '12:30',
+  '12:45',
+  '13:00',
+  '13:15',
+  '13:30',
+  '13:45',
+  '14:00',
+  '14:15',
+  '14:30',
+  '14:45',
+  '15:00',
+  '15:15',
+  '15:30',
+  '15:45',
+  '16:00',
+  '16:15',
+  '16:30',
+  '16:45',
+  '17:00',
+  '17:15',
+  '17:30',
+  '17:45',
+  '18:00',
+  '18:15',
+  '18:30',
+  '18:45',
+  '19:00',
+  '19:15',
+  '19:30',
+  '19:45',
+  '20:00',
+  '20:15',
+  '20:30',
+  '20:45',
+  '21:00',
+  '21:15',
+  '21:30',
+  '21:45',
+  '22:00',
+  '22:15',
+  '22:30',
+  '22:45',
+  '23:00',
+  '23:15',
+  '23:30',
+  '23:45',
 ]
 
 // ============================================================
@@ -149,6 +229,30 @@ export default function Dashboard() {
   // Button Handler
   // ============================================================
 
+  const datetimeTest = async(e) => {
+    e.preventDefault()
+
+    const hoursAndMinutes = startTime.split(':')
+    const hours = hoursAndMinutes[0]
+    const minutes = hoursAndMinutes[1]
+
+    console.log(month)
+    console.log(day)
+    console.log(hours)
+    console.log(minutes)
+
+    const monthFormoment = Number(month) - 1
+    const dayFormoment = Number(day) + 1
+    // 2013-02-08 09:30
+    const dateTime = moment(`${year}-${month}-${day} ${hours}:${minutes}`).toISOString()
+    const ts = Date.parse(dateTime)
+    const jaTime = new Date(ts)
+
+    console.log(dateTime)
+    console.log(jaTime)
+
+  }
+
   const createSession = async (e) => {
     e.preventDefault()
 
@@ -156,7 +260,10 @@ export default function Dashboard() {
     const hours = hoursAndMinutes[0]
     const minutes = hoursAndMinutes[1]
 
-    const dateTime = moment({years: year, months: month, days: day, hours: hours, minutes: minutes, seconds: 0}).toISOString()
+    console.log(month)
+    console.log(day)
+
+    const dateTime = moment(`${year}-${month}-${day} ${hours}:${minutes}`).toISOString()
 
     console.log(dateTime)
 
@@ -175,7 +282,9 @@ export default function Dashboard() {
       .then((sessionInfo) => {
         addSession(sessionInfo.name, {
           sessionId: sessionInfo.name,
-          ownerId: user.uid
+          ownerId: user.uid,
+          startTime: dateTime,
+          duration: 90
         })
         console.log(sessionInfo)
       })
@@ -206,6 +315,9 @@ export default function Dashboard() {
       <div className="relative pb-16 bg-gray-50">
         <div className="sm:block sm:w-full" aria-hidden="true">
           <main className="py-12 mx-auto max-w-7xl px-4 sm:py-24">
+            <button onClick={(e) => datetimeTest(e)}>
+              日付変換test
+            </button>
             <h1 className="text-xl font-bold py-3">
               新しいルームを作成する
             </h1>
