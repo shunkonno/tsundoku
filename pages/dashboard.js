@@ -175,19 +175,28 @@ export default function Dashboard(sessions) {
   // ============================================================
 
   // Handle session reservation
-  const reserveSession = async (sessionId) => {
-    // Set user's uid to guestId
-    await updateSession(sessionId, { guestId: user.uid })
-    await router.push({
-      pathname: '/dashboard',
-      query: { successReserveRoom: true }
-    })
+  const reserveSession = async (session) => {
+    // If guestId has already been set, the user can't reserve the session
+    // Redirect and show alert banner
+    if (session.guestId) {
+      await router.push({
+        pathname: '/dashboard',
+        query: { successReserveRoom: false }
+      })
+    } else {
+      // Set user's uid to guestId
+      await updateSession(session.sessionId, { guestId: user.uid })
+      await router.push({
+        pathname: '/dashboard',
+        query: { successReserveRoom: true }
+      })
+    }
   }
 
   // Handle session reservation cancellation
-  const cancelSession = async (sessionId) => {
+  const cancelSession = async (session) => {
     // Update guestId to an empty string
-    updateSession(sessionId, { guestId: '' })
+    updateSession(session.sessionId, { guestId: '' })
   }
 
   // ============================================================
@@ -365,7 +374,7 @@ export default function Dashboard(sessions) {
                                           <div
                                             className="relative mt-2 border border-transparent rounded-br-lg hover:text-gray-500"
                                             onClick={() =>
-                                              cancelSession(session.sessionId)
+                                              cancelSession(session)
                                             }
                                           >
                                             <span className="inline-block bg-blue-500 rounded-sm px-12 py-2 text-sm text-white font-medium">
@@ -450,9 +459,7 @@ export default function Dashboard(sessions) {
                                       </p>
                                       <div
                                         className="relative mt-2 border border-transparent rounded-br-lg hover:text-gray-500"
-                                        onClick={() =>
-                                          reserveSession(session.sessionId)
-                                        }
+                                        onClick={() => reserveSession(session)}
                                       >
                                         <span className="inline-block bg-blue-500 rounded-sm px-12 py-2 text-sm text-white font-medium">
                                           確定
