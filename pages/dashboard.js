@@ -20,6 +20,7 @@ import uselocalesFilter from '../utils/translate'
 import { useAuth } from '../lib/auth'
 import fetcher from '../utils/fetcher'
 import { updateSession } from '../lib/db'
+import { fetchSessions } from '../lib/db-admin'
 
 // ============================================================
 // dummydata
@@ -92,11 +93,26 @@ const dummySessions = [
       'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60'
   }
 ]
+// ============================================================
+// Fetch static data
+// ============================================================
+export async function getStaticProps(context) {
+  // Fetch all sessions
+  const sessions = await fetchSessions()
 
-export default function Dashboard() {
+  return {
+    props: {
+      sessions
+    }
+  }
+}
+
+export default function Dashboard(sessions) {
   // ============================================================
   // Initialize
   // ============================================================
+
+  console.log(sessions)
 
   //Initial State
   const [createRoomAlertOpen, setCreateRoomAlertOpen] = useState(false)
@@ -118,20 +134,6 @@ export default function Dashboard() {
     }
   )
 
-  // Fetch all sessions data on client side
-  // const { data: sessions } = useSWR(
-  //   user ? '/api/session' : null,
-  //   fetcher,
-  //   {
-  //     onErrorRetry: ({ retryCount }) => {
-  //       // Retry up to 10 times
-  //       if (retryCount >= 10) return
-  //     }
-  //   }
-  // )
-
-  // console.log(sessions)
-
   // Routing
   const router = useRouter()
 
@@ -151,14 +153,13 @@ export default function Dashboard() {
     }
   })
 
-  useEffect(()=> {
-    if(router.query.successCreateRoom == 'true' ) {
+  useEffect(() => {
+    if (router.query.successCreateRoom == 'true') {
       setCreateRoomAlertOpen(true)
-    }
-    else if(router.query.successReserveRoom == 'true' ) {
+    } else if (router.query.successReserveRoom == 'true') {
       setReserveRoomAlertOpen(true)
     }
-  },[])
+  }, [])
 
   // Set locale
   const { locale } = useRouter()
@@ -177,7 +178,10 @@ export default function Dashboard() {
   const reserveSession = async (sessionId) => {
     // Set user's uid to guestId
     await updateSession(sessionId, { guestId: user.uid })
-    await router.push({ pathname: '/dashboard', query: { successReserveRoom: true } })
+    await router.push({
+      pathname: '/dashboard',
+      query: { successReserveRoom: true }
+    })
   }
 
   // Handle session reservation cancellation
@@ -208,7 +212,8 @@ export default function Dashboard() {
 
       {/* main content */}
       <div className="relative pb-16 bg-gray-50 overflow-hidden">
-        {/* Alert */
+        {
+          /* Alert */
           <>
             <Transition
               show={createRoomAlertOpen}
@@ -220,30 +225,35 @@ export default function Dashboard() {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-            <div className="absolute w-full px-4">
-              <div className="mt-4 rounded-md bg-green-50 p-4">
-                <div className="flex">
-                  <div className="flex-shrink-0">
-                    <CheckCircleIcon className="h-5 w-5 text-green-400" aria-hidden="true" />
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-sm font-medium text-green-800">新しいルームを作成しました。</p>
-                  </div>
-                  <div className="ml-auto pl-3">
-                    <div className="-mx-1.5 -my-1.5">
-                      <button
-                        type="button"
-                        className="inline-flex bg-green-50 rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"
-                        onClick={()=> setAlertOpen(false)}
-                      >
-                        <span className="sr-only">Dismiss</span>
-                        <XIcon className="h-5 w-5" aria-hidden="true" />
-                      </button>
+              <div className="absolute w-full px-4">
+                <div className="mt-4 rounded-md bg-green-50 p-4">
+                  <div className="flex">
+                    <div className="flex-shrink-0">
+                      <CheckCircleIcon
+                        className="h-5 w-5 text-green-400"
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <div className="ml-3">
+                      <p className="text-sm font-medium text-green-800">
+                        新しいルームを作成しました。
+                      </p>
+                    </div>
+                    <div className="ml-auto pl-3">
+                      <div className="-mx-1.5 -my-1.5">
+                        <button
+                          type="button"
+                          className="inline-flex bg-green-50 rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"
+                          onClick={() => setAlertOpen(false)}
+                        >
+                          <span className="sr-only">Dismiss</span>
+                          <XIcon className="h-5 w-5" aria-hidden="true" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
             </Transition>
             <Transition
               show={reserveRoomAlertOpen}
@@ -255,30 +265,35 @@ export default function Dashboard() {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-            <div className="absolute w-full px-4">
-              <div className="mt-4 rounded-md bg-green-50 p-4">
-                <div className="flex">
-                  <div className="flex-shrink-0">
-                    <CheckCircleIcon className="h-5 w-5 text-green-400" aria-hidden="true" />
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-sm font-medium text-green-800">ルームの参加を予約しました。</p>
-                  </div>
-                  <div className="ml-auto pl-3">
-                    <div className="-mx-1.5 -my-1.5">
-                      <button
-                        type="button"
-                        className="inline-flex bg-green-50 rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"
-                        onClick={()=> setAlertOpen(false)}
-                      >
-                        <span className="sr-only">Dismiss</span>
-                        <XIcon className="h-5 w-5" aria-hidden="true" />
-                      </button>
+              <div className="absolute w-full px-4">
+                <div className="mt-4 rounded-md bg-green-50 p-4">
+                  <div className="flex">
+                    <div className="flex-shrink-0">
+                      <CheckCircleIcon
+                        className="h-5 w-5 text-green-400"
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <div className="ml-3">
+                      <p className="text-sm font-medium text-green-800">
+                        ルームの参加を予約しました。
+                      </p>
+                    </div>
+                    <div className="ml-auto pl-3">
+                      <div className="-mx-1.5 -my-1.5">
+                        <button
+                          type="button"
+                          className="inline-flex bg-green-50 rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"
+                          onClick={() => setAlertOpen(false)}
+                        >
+                          <span className="sr-only">Dismiss</span>
+                          <XIcon className="h-5 w-5" aria-hidden="true" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
             </Transition>
           </>
         }
