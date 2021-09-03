@@ -10,9 +10,9 @@ function classNames(...classes) {
 }
 
 export default function Home() {
-  const { locale } = useRouter();
+  const { locale } = useRouter()
 
-  const t = uselocalesFilter("LP", locale)
+  const t = uselocalesFilter('LP', locale)
 
   const tiers = [
     {
@@ -20,7 +20,10 @@ export default function Home() {
       href: '#',
       priceMonthly: 0,
       description: 'All the basics for starting a new business',
-      includedFeatures: ['Potenti felis, in cras at at ligula nunc.', 'Orci neque eget pellentesque.'],
+      includedFeatures: [
+        'Potenti felis, in cras at at ligula nunc.',
+        'Orci neque eget pellentesque.'
+      ]
     },
     {
       name: 'スタンダードプラン',
@@ -30,24 +33,29 @@ export default function Home() {
       includedFeatures: [
         'Potenti felis, in cras at at ligula nunc. ',
         'Orci neque eget pellentesque.',
-        'Donec mauris sit in eu tincidunt etiam.',
-      ],
-    },
+        'Donec mauris sit in eu tincidunt etiam.'
+      ]
+    }
   ]
 
   return (
     <div>
-
       <Head>
         <title>Tsundoku</title>
-        <meta 
-          name="description" 
-          content="一緒に読書してくれる誰かを探すためのマッチングサービス" 
+        <meta
+          name="description"
+          content="一緒に読書してくれる誰かを探すためのマッチングサービス"
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP&display=swap" rel="stylesheet" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP&display=swap"
+          rel="stylesheet"
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -82,14 +90,21 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div class="sm:max-w-sm md:max-w-none md:w-2/5 mx-auto flex items-center py-12 md:py-0">
-                <Image src="/img/mainvisual_circle_2160x2160.png" alt="mainvisual" width={2160} height={2160} />
+              <div className="sm:max-w-sm md:max-w-none md:w-2/5 mx-auto flex items-center py-12 md:py-0">
+                <Image
+                  src="/img/mainvisual_circle_2160x2160.png"
+                  alt="mainvisual"
+                  width={2160}
+                  height={2160}
+                />
               </div>
             </div>
             <div className="py-4 sm:py-12 bg-gray-50">
               <div className="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                 <div className="lg:text-center">
-                  <h2 className="text-base sm:text-xl text-tsundoku-brown-main font-semibold tracking-wide uppercase">得られるメリット</h2>
+                  <h2 className="text-base sm:text-xl text-tsundoku-brown-main font-semibold tracking-wide uppercase">
+                    得られるメリット
+                  </h2>
                   <span className="block sm:inline mt-2 text-3xl leading-normal font-extrabold tracking-tight text-gray-900 lg:text-5xl">
                     高いモチベーションを
                   </span>
@@ -108,8 +123,10 @@ export default function Home() {
                         落ち着いて読書に集中
                       </p>
                     </dt>
-                    <dd className="font-sans mt-2 sm:mt-8 leading-normal text-sm sm:text-lg text-gray-500">他人がいることで生まれる適度な緊張感(ソーシャルプレッシャー)により、他のことに
-                    気をとられることなく、読書に集中できます。</dd>
+                    <dd className="font-sans mt-2 sm:mt-8 leading-normal text-sm sm:text-lg text-gray-500">
+                      他人がいることで生まれる適度な緊張感(ソーシャルプレッシャー)により、他のことに
+                      気をとられることなく、読書に集中できます。
+                    </dd>
                   </div>
                   <div>
                     <dt>
@@ -118,7 +135,8 @@ export default function Home() {
                         読書時間を確保
                       </p>
                     </dt>
-                    <dd className="font-sans mt-2 sm:mt-8 sm:text-right leading-normal text-sm sm:text-lg text-gray-500">読書する時間帯を事前に決めます。そうすることで、プレコミット効果により、高い生産性を実現できます。
+                    <dd className="font-sans mt-2 sm:mt-8 sm:text-right leading-normal text-sm sm:text-lg text-gray-500">
+                      読書する時間帯を事前に決めます。そうすることで、プレコミット効果により、高い生産性を実現できます。
                     </dd>
                   </div>
                   <div>
@@ -128,7 +146,9 @@ export default function Home() {
                         孤独感を緩和
                       </p>
                     </dt>
-                    <dd className="font-sans mt-2 sm:mt-8 leading-normal text-sm sm:text-lg text-gray-500">黙々と読書に取り組んでいる間は、ときに孤独なもの。一緒に同じことをしている誰かがいるという安心感は、メンタルのケアにも役立ちます。</dd>
+                    <dd className="font-sans mt-2 sm:mt-8 leading-normal text-sm sm:text-lg text-gray-500">
+                      黙々と読書に取り組んでいる間は、ときに孤独なもの。一緒に同じことをしている誰かがいるという安心感は、メンタルのケアにも役立ちます。
+                    </dd>
                   </div>
                 </dl>
               </div>
@@ -142,10 +162,10 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="lg:mt-6 lg:mx-auto lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-2 lg:grid-flow-col-dense lg:gap-24">
-                  
+
                   <div className="max-w-xl mx-auto sm:px-6 lg:py-32 lg:max-w-none lg:mx-0 lg:px-0 lg:col-start-2">
                     <div>
-                      
+
                       <div className="mt-6">
                         <p className="mt-2 text-right lg:text-left text-3xl leading-10 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
                           本からはじまる
@@ -188,15 +208,20 @@ export default function Home() {
                 </div>
               </div>
             </div> */}
-
           </main>
 
           <div className="bg-tsundoku-brown-sub mb-24">
             <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 md:py-24 md:px-8 md:flex md:items-center md:justify-between">
               <h2 className="font-sans font-bold tracking-tight md:text-4xl">
-                <p className="block text-tsundoku-brown-main text-3xl sm:text-4xl tracking-wider leading-normal mb-2">1分で準備完了。</p>
-                <p className="block text-white text-xl leading-normal">複雑な設定はありません。</p>
-                <p className="block text-white text-xl leading-normal">気軽に始めてみてください。</p>
+                <p className="block text-tsundoku-brown-main text-3xl sm:text-4xl tracking-wider leading-normal mb-2">
+                  1分で準備完了。
+                </p>
+                <p className="block text-white text-xl leading-normal">
+                  複雑な設定はありません。
+                </p>
+                <p className="block text-white text-xl leading-normal">
+                  気軽に始めてみてください。
+                </p>
               </h2>
               <div className="mt-8 flex md:mt-0 md:flex-shrink-0">
                 <div className="inline-flex rounded-md shadow">
@@ -271,13 +296,11 @@ export default function Home() {
             </div>
           </div> */}
           {/* 料金セクション END */}
-
         </div>
       </div>
       {/* END main content */}
 
       <Footer />
-
     </div>
   )
 }
