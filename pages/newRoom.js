@@ -259,7 +259,7 @@ export default function Dashboard() {
         addSession(sessionInfo.name, {
           sessionId: sessionInfo.name,
           ownerId: user.uid,
-          startTime: dateTime,
+          startDateTime: dateTime,
           duration: durationAmount
         })
 
