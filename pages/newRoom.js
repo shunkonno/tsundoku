@@ -24,10 +24,7 @@ import { addSession } from '../lib/db'
 // ============================================================
 // datetime data
 // ============================================================
-const yearData = [
-  '2021',
-  '2022'
-]
+const yearData = ['2021', '2022']
 
 const monthData = [
   '1',
@@ -41,7 +38,7 @@ const monthData = [
   '9',
   '10',
   '11',
-  '12',
+  '12'
 ]
 const dayData = [
   '1',
@@ -74,7 +71,7 @@ const dayData = [
   '28',
   '29',
   '30',
-  '31',
+  '31'
 ]
 
 const timeData = [
@@ -173,16 +170,10 @@ const timeData = [
   '23:00',
   '23:15',
   '23:30',
-  '23:45',
+  '23:45'
 ]
 
-const durationData = [
-  '15分',
-  '30分',
-  '45分',
-  '60分',
-  '90分',
-]
+const durationData = ['15分', '30分', '45分', '60分', '90分']
 
 // ============================================================
 // Helper Functions
@@ -240,14 +231,18 @@ export default function Dashboard() {
   const createSession = async (e) => {
     e.preventDefault()
 
+    // Get datetime
     const hoursAndMinutes = startTime.split(':')
     const hours = hoursAndMinutes[0]
     const minutes = hoursAndMinutes[1]
 
-    const datetime = moment(`${year}-${month}-${day} ${hours}:${minutes}`).toISOString()
+    const dateTime = moment(
+      `${year}-${month}-${day} ${hours}:${minutes}`
+    ).toISOString()
 
-    const durationAmount = duration.replace('分','')
+    const durationAmount = duration.replace('分', '')
 
+    // Create Daily Room
     const url = 'https://api.daily.co/v1/rooms'
 
     const options = {
@@ -264,12 +259,15 @@ export default function Dashboard() {
         addSession(sessionInfo.name, {
           sessionId: sessionInfo.name,
           ownerId: user.uid,
-          startTime: datetime,
+          startTime: dateTime,
           duration: durationAmount
         })
-        console.log(sessionInfo)
+
+        router.push({
+          pathname: '/dashboard',
+          query: { successCreateRoom: true }
+        })
       })
-      .then(router.push({ pathname: '/dashboard', query: { successCreateRoom: true } }))
       .catch((err) => console.error('error:' + err))
   }
 
@@ -297,11 +295,11 @@ export default function Dashboard() {
       <div className="relative pb-16 bg-gray-50">
         <div className="sm:block sm:w-full" aria-hidden="true">
           <main className="py-12 mx-auto max-w-7xl px-4 sm:py-24">
-            <h1 className="text-xl font-bold py-3">
-              新しいルームを作成する
-            </h1>
+            <h1 className="text-xl font-bold py-3">新しいルームを作成する</h1>
             <div className="py-3">
-              <label className="text-sm font-medium text-gray-700">実施日</label>
+              <label className="text-sm font-medium text-gray-700">
+                実施日
+              </label>
               <div className="grid grid-cols-2">
                 {/* 月 */}
                 <Listbox value={month} onChange={setMonth}>
@@ -311,7 +309,10 @@ export default function Dashboard() {
                         <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                           <span className="block truncate">{month}</span>
                           <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                            <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                            <SelectorIcon
+                              className="h-5 w-5 text-gray-400"
+                              aria-hidden="true"
+                            />
                           </span>
                         </Listbox.Button>
 
@@ -328,7 +329,9 @@ export default function Dashboard() {
                                 key={monthName}
                                 className={({ active }) =>
                                   classNames(
-                                    active ? 'text-white bg-indigo-600' : 'text-gray-900',
+                                    active
+                                      ? 'text-white bg-indigo-600'
+                                      : 'text-gray-900',
                                     'cursor-default select-none relative py-2 pl-8 pr-4'
                                   )
                                 }
@@ -336,18 +339,30 @@ export default function Dashboard() {
                               >
                                 {({ selected, active }) => (
                                   <>
-                                    <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
+                                    <span
+                                      className={classNames(
+                                        selected
+                                          ? 'font-semibold'
+                                          : 'font-normal',
+                                        'block truncate'
+                                      )}
+                                    >
                                       {monthName}
                                     </span>
 
                                     {selected ? (
                                       <span
                                         className={classNames(
-                                          active ? 'text-white' : 'text-indigo-600',
+                                          active
+                                            ? 'text-white'
+                                            : 'text-indigo-600',
                                           'absolute inset-y-0 left-0 flex items-center pl-1.5'
                                         )}
                                       >
-                                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                        <CheckIcon
+                                          className="h-5 w-5"
+                                          aria-hidden="true"
+                                        />
                                       </span>
                                     ) : null}
                                   </>
@@ -356,10 +371,11 @@ export default function Dashboard() {
                             ))}
                           </Listbox.Options>
                         </Transition>
-                        
                       </div>
                       <div className="flex justify-center items-center w-1/4">
-                        <Listbox.Label className="text-base font-medium text-gray-700">月</Listbox.Label>
+                        <Listbox.Label className="text-base font-medium text-gray-700">
+                          月
+                        </Listbox.Label>
                       </div>
                     </div>
                   )}
@@ -374,7 +390,10 @@ export default function Dashboard() {
                         <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                           <span className="block truncate">{day}</span>
                           <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                            <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                            <SelectorIcon
+                              className="h-5 w-5 text-gray-400"
+                              aria-hidden="true"
+                            />
                           </span>
                         </Listbox.Button>
 
@@ -391,7 +410,9 @@ export default function Dashboard() {
                                 key={dayName}
                                 className={({ active }) =>
                                   classNames(
-                                    active ? 'text-white bg-indigo-600' : 'text-gray-900',
+                                    active
+                                      ? 'text-white bg-indigo-600'
+                                      : 'text-gray-900',
                                     'cursor-default select-none relative py-2 pl-8 pr-4'
                                   )
                                 }
@@ -399,18 +420,30 @@ export default function Dashboard() {
                               >
                                 {({ selected, active }) => (
                                   <>
-                                    <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
+                                    <span
+                                      className={classNames(
+                                        selected
+                                          ? 'font-semibold'
+                                          : 'font-normal',
+                                        'block truncate'
+                                      )}
+                                    >
                                       {dayName}
                                     </span>
 
                                     {selected ? (
                                       <span
                                         className={classNames(
-                                          active ? 'text-white' : 'text-indigo-600',
+                                          active
+                                            ? 'text-white'
+                                            : 'text-indigo-600',
                                           'absolute inset-y-0 left-0 flex items-center pl-1.5'
                                         )}
                                       >
-                                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                        <CheckIcon
+                                          className="h-5 w-5"
+                                          aria-hidden="true"
+                                        />
                                       </span>
                                     ) : null}
                                   </>
@@ -421,7 +454,9 @@ export default function Dashboard() {
                         </Transition>
                       </div>
                       <div className="flex justify-center items-center w-1/4">
-                        <Listbox.Label className="text-base font-medium text-gray-700">日</Listbox.Label>
+                        <Listbox.Label className="text-base font-medium text-gray-700">
+                          日
+                        </Listbox.Label>
                       </div>
                     </div>
                   )}
@@ -429,128 +464,158 @@ export default function Dashboard() {
                 {/* 日 END */}
               </div>
             </div>
-          {/* 開始時刻 */}
-          <Listbox value={startTime} onChange={setStartTime}>
-            {({ open }) => (
-              <div className="py-3">
-                <Listbox.Label className="block text-sm font-medium text-gray-700">開始時刻</Listbox.Label>
-                <div className="mt-1 relative">
-                  <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    <span className="block truncate">{startTime}</span>
-                    <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                      <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                    </span>
-                  </Listbox.Button>
+            {/* 開始時刻 */}
+            <Listbox value={startTime} onChange={setStartTime}>
+              {({ open }) => (
+                <div className="py-3">
+                  <Listbox.Label className="block text-sm font-medium text-gray-700">
+                    開始時刻
+                  </Listbox.Label>
+                  <div className="mt-1 relative">
+                    <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                      <span className="block truncate">{startTime}</span>
+                      <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                        <SelectorIcon
+                          className="h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
+                      </span>
+                    </Listbox.Button>
 
-                  <Transition
-                    show={open}
-                    as={Fragment}
-                    leave="transition ease-in duration-100"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                  >
-                    <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                      {timeData.map((selectStartTime) => (
-                        <Listbox.Option
-                          key={selectStartTime}
-                          className={({ active }) =>
-                            classNames(
-                              active ? 'text-white bg-indigo-600' : 'text-gray-900',
-                              'cursor-default select-none relative py-2 pl-8 pr-4'
-                            )
-                          }
-                          value={selectStartTime}
-                        >
-                          {({ selected, active }) => (
-                            <>
-                              <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
-                                {selectStartTime}
-                              </span>
-
-                              {selected ? (
+                    <Transition
+                      show={open}
+                      as={Fragment}
+                      leave="transition ease-in duration-100"
+                      leaveFrom="opacity-100"
+                      leaveTo="opacity-0"
+                    >
+                      <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                        {timeData.map((selectStartTime) => (
+                          <Listbox.Option
+                            key={selectStartTime}
+                            className={({ active }) =>
+                              classNames(
+                                active
+                                  ? 'text-white bg-indigo-600'
+                                  : 'text-gray-900',
+                                'cursor-default select-none relative py-2 pl-8 pr-4'
+                              )
+                            }
+                            value={selectStartTime}
+                          >
+                            {({ selected, active }) => (
+                              <>
                                 <span
                                   className={classNames(
-                                    active ? 'text-white' : 'text-indigo-600',
-                                    'absolute inset-y-0 left-0 flex items-center pl-1.5'
+                                    selected ? 'font-semibold' : 'font-normal',
+                                    'block truncate'
                                   )}
                                 >
-                                  <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                  {selectStartTime}
                                 </span>
-                              ) : null}
-                            </>
-                          )}
-                        </Listbox.Option>
-                      ))}
-                    </Listbox.Options>
-                  </Transition>
+
+                                {selected ? (
+                                  <span
+                                    className={classNames(
+                                      active ? 'text-white' : 'text-indigo-600',
+                                      'absolute inset-y-0 left-0 flex items-center pl-1.5'
+                                    )}
+                                  >
+                                    <CheckIcon
+                                      className="h-5 w-5"
+                                      aria-hidden="true"
+                                    />
+                                  </span>
+                                ) : null}
+                              </>
+                            )}
+                          </Listbox.Option>
+                        ))}
+                      </Listbox.Options>
+                    </Transition>
+                  </div>
                 </div>
-              </div>
-            )}
-          </Listbox>
-          {/* 開始時刻 END */}
+              )}
+            </Listbox>
+            {/* 開始時刻 END */}
 
-          {/* 終了時刻 */}
-          <Listbox value={duration} onChange={setDuration}>
-            {({ open }) => (
-              <div className="py-3">
-                <Listbox.Label className="block text-sm font-medium text-gray-700">所要時間</Listbox.Label>
-                <div className="mt-1 relative">
-                  <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    <span className="block truncate">{duration}</span>
-                    <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                      <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                    </span>
-                  </Listbox.Button>
+            {/* 終了時刻 */}
+            <Listbox value={duration} onChange={setDuration}>
+              {({ open }) => (
+                <div className="py-3">
+                  <Listbox.Label className="block text-sm font-medium text-gray-700">
+                    所要時間
+                  </Listbox.Label>
+                  <div className="mt-1 relative">
+                    <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                      <span className="block truncate">{duration}</span>
+                      <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                        <SelectorIcon
+                          className="h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
+                      </span>
+                    </Listbox.Button>
 
-                  <Transition
-                    show={open}
-                    as={Fragment}
-                    leave="transition ease-in duration-100"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                  >
-                    <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                      {durationData.map((duration) => (
-                        <Listbox.Option
-                          key={duration}
-                          className={({ active }) =>
-                            classNames(
-                              active ? 'text-white bg-indigo-600' : 'text-gray-900',
-                              'cursor-default select-none relative py-2 pl-8 pr-4'
-                            )
-                          }
-                          value={duration}
-                        >
-                          {({ selected, active }) => (
-                            <>
-                              <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
-                                {duration}
-                              </span>
-
-                              {selected ? (
+                    <Transition
+                      show={open}
+                      as={Fragment}
+                      leave="transition ease-in duration-100"
+                      leaveFrom="opacity-100"
+                      leaveTo="opacity-0"
+                    >
+                      <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                        {durationData.map((duration) => (
+                          <Listbox.Option
+                            key={duration}
+                            className={({ active }) =>
+                              classNames(
+                                active
+                                  ? 'text-white bg-indigo-600'
+                                  : 'text-gray-900',
+                                'cursor-default select-none relative py-2 pl-8 pr-4'
+                              )
+                            }
+                            value={duration}
+                          >
+                            {({ selected, active }) => (
+                              <>
                                 <span
                                   className={classNames(
-                                    active ? 'text-white' : 'text-indigo-600',
-                                    'absolute inset-y-0 left-0 flex items-center pl-1.5'
+                                    selected ? 'font-semibold' : 'font-normal',
+                                    'block truncate'
                                   )}
                                 >
-                                  <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                  {duration}
                                 </span>
-                              ) : null}
-                            </>
-                          )}
-                        </Listbox.Option>
-                      ))}
-                    </Listbox.Options>
-                  </Transition>
-                </div>
-              </div>
-            )}
-          </Listbox>
-          {/* 終了時刻 END */}
 
-          {/* 作成ボタン */}
-          <div className="py-6">
+                                {selected ? (
+                                  <span
+                                    className={classNames(
+                                      active ? 'text-white' : 'text-indigo-600',
+                                      'absolute inset-y-0 left-0 flex items-center pl-1.5'
+                                    )}
+                                  >
+                                    <CheckIcon
+                                      className="h-5 w-5"
+                                      aria-hidden="true"
+                                    />
+                                  </span>
+                                ) : null}
+                              </>
+                            )}
+                          </Listbox.Option>
+                        ))}
+                      </Listbox.Options>
+                    </Transition>
+                  </div>
+                </div>
+              )}
+            </Listbox>
+            {/* 終了時刻 END */}
+
+            {/* 作成ボタン */}
+            <div className="py-6">
               <div className="flex justify-end">
                 <p
                   type="button"
@@ -561,7 +626,6 @@ export default function Dashboard() {
                 </p>
               </div>
             </div>
-
           </main>
         </div>
       </div>
