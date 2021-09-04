@@ -50,12 +50,14 @@ export async function getStaticPaths() {
   return { paths, fallback: true }
 }
 
-export default function Dashboard({sessions}) {
+export default function SessionDetail({sessions}) {
   // ============================================================
   // Initialize
   // ============================================================
 
   //Initial State
+  const [count, setCount] = useState(0)
+  const [enterRoomOpen, setEnterRoomOpen] = useState(false)
 
   // Auth
   const auth = useAuth()
@@ -73,6 +75,15 @@ export default function Dashboard({sessions}) {
     }
   )
 
+  // Routing
+  const router = useRouter()
+  const { sessionId } = router.query
+
+  // Filter Current session by sessionId
+  const currentSession = sessions.find((session) => {
+    return session.sessionId == sessionId
+  })
+
   useEffect(() => {
     if (user === false) {
       // If the access isn't authenticated, redirect to index page
@@ -80,15 +91,31 @@ export default function Dashboard({sessions}) {
     }
   })
 
-  // Routing
-  const router = useRouter()
-  const { sessionId } = router.query
+  useEffect(() => {
 
-  // Filter session by sessionId
-  const currentSession = sessions.find((session) => {
-    return session.sessionId == sessionId
-  })
+    const id = setInterval(() => {
+      setCount(count + 1);
+    }, 1000);
 
+    const baseTime = new Date()
+    
+    const unixBaseTime = moment(baseTime).unix()
+    const unixStartDateTime = moment(currentSession.startDateTime).unix()
+
+    const differenceTime =  unixStartDateTime - unixBaseTime
+    const thresholdOfEnterRoom = 5 * 60 // 5 minutes
+
+    if(differenceTime >= thresholdOfEnterRoom){
+      setEnterRoomOpen(false)
+    } else {
+      setEnterRoomOpen(true)
+    }
+
+    return () => clearInterval(id);
+
+  },[count])
+
+  
   // Function
   const formatDateTime = (datetimeIsoString) => {
     return moment(datetimeIsoString).format("M月D日 hh:mm")
@@ -183,6 +210,8 @@ export default function Dashboard({sessions}) {
               </div>
               <div className="py-6">
                 <div className="flex justify-center">
+                  {
+                  enterRoomOpen ?
                   <Link href={`/session/${currentSession.sessionId}`}>
                     <p
                       type="button"
@@ -192,6 +221,17 @@ export default function Dashboard({sessions}) {
                       ルームに入室する
                     </p>
                   </Link>
+                  :
+                  <div>
+                    <p
+                      type="button"
+                      className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-gray-600 opacity-75 bg-gray-400 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600"
+                    >
+                      ルームに入室する
+                    </p>
+                    <p className="text-center text-sm text-gray-800 mt-2">5分前から入室できます。</p>
+                  </div>
+                  }
                 </div>
               </div>
             </div>
