@@ -12,6 +12,7 @@ import { Footer } from '../../components/Footer'
 
 // Assets
 import { Transition, RadioGroup } from '@headlessui/react'
+import { CheckCircleIcon, XIcon } from '@heroicons/react/solid'
 
 // Functions
 import { useAuth } from '../../lib/auth'
@@ -23,9 +24,10 @@ import fetcher from '../../utils/fetcher'
 // Settings
 // ============================================================
 const genderSettings = [
-  { label: 'Man', name: '男性' },
+  { label: 'Male', name: '男性' },
   { label: 'Female', name: '女性' },
-  { label: 'Other', name: 'その他' }
+  { label: 'Other', name: 'その他' },
+  { label: 'No Answer', name: '回答しない' }
 ]
 
 const genderOfMatchSettings = [{ name: '制限なし' }, { name: '女性のみ' }]
@@ -68,27 +70,50 @@ export default function UserSettings() {
     genderOfMatchSettings[0]
   )
 
+  const [updateUserSettingsAlertOpen, setUpdateUserSettingsAlertOpen] = useState(false)
+
   useEffect(() => {
     if (user === false) {
       // If the access isn't authenticated, redirect to index page
       router.push('/')
     } else if (userInfo) {
+      userInfo.name ?
       setUserName(userInfo.name)
+      :
+      setUserName("")
+
+      setGenderSelected(userInfo?.gender)
     }
   },[userInfo])
+
+  useEffect(() => {
+    if (router.query.successUpdateUserSettings == 'true') {
+      setUpdateUserSettingsAlertOpen(true)
+      setTimeout(() => {
+        setUpdateUserSettingsAlertOpen(false)
+      }, 3000)
+    } 
+  }, [])
 
   // Translate
   const t = uselocalesFilter('userSettings', router.locale)
 
   // Handle form submit
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault()
 
-    updateUser(user.uid, {
-      name: userName
+    await updateUser(user.uid, {
+      name: userName,
+      gender: genderSelected
     })
 
-    alert("ユーザー設定を更新しました。")
+    await router.push({
+      pathname: '/empty',
+    })
+    await router.push({
+      pathname: '/settings',
+      query: { successUpdateUserSettings: true }
+    })
   }
 
   // ============================================================
@@ -97,7 +122,7 @@ export default function UserSettings() {
   return (
     <div>
       <Head>
-        <title>Onboarding</title>
+        <title>Settings</title>
         <meta
           name="description"
           content="一緒に読書してくれる誰かを探すためのマッチングサービス"
@@ -109,8 +134,51 @@ export default function UserSettings() {
 
       {/* main content */}
       <div className="pb-16 bg-gray-50 overflow-hidden">
+      {
+        /* Alert */
+          <Transition
+            show={updateUserSettingsAlertOpen}
+            as={Fragment}
+            enter="transition duration-75"
+            enterFrom="transform -translate-y-1/4 opacity-0"
+            enterTo="transform -translate-y-0 opacity-100"
+            leave="transition-opacity duration-150"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="absolute w-full px-4">
+              <div className="mt-4 rounded-md bg-green-50 p-4">
+                <div className="flex">
+                  <div className="flex-shrink-0">
+                    <CheckCircleIcon
+                      className="h-5 w-5 text-green-400"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-sm font-medium text-green-800">
+                      ユーザー設定を更新しました。
+                    </p>
+                  </div>
+                  <div className="ml-auto pl-3">
+                    <div className="-mx-1.5 -my-1.5">
+                      <button
+                        type="button"
+                        className="inline-flex bg-green-50 rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"
+                        onClick={() => setUpdateUserSettingsAlertOpen(false)}
+                      >
+                        <span className="sr-only">Dismiss</span>
+                        <XIcon className="h-5 w-5" aria-hidden="true" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Transition>
+        }
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
+          <main className="mt-16 mx-auto max-w-xl px-4 sm:mt-24">
             <div className="py-3">
               <h1 className="text-2xl font-bold">ユーザー設定</h1>
             </div>
@@ -157,7 +225,7 @@ export default function UserSettings() {
                   {genderSettings.map((gender, genderSettingIdx) => (
                     <RadioGroup.Option
                       key={gender.name}
-                      value={gender}
+                      value={gender.label}
                       className={({ checked }) =>
                         classNames(
                           genderSettingIdx === 0
@@ -169,6 +237,9 @@ export default function UserSettings() {
                           checked
                             ? 'bg-tsundoku-brown-sub border-tsundoku-brown-main z-10'
                             : 'border-gray-200',
+                          gender.label == genderSelected
+                            ? 'bg-tsundoku-brown-sub border-tsundoku-brown-main z-10'
+                            : 'border-gray-200',
                           'relative border p-4 flex cursor-pointer focus:outline-none'
                         )
                       }
@@ -178,6 +249,9 @@ export default function UserSettings() {
                           <span
                             className={classNames(
                               checked
+                                ? 'bg-tsundoku-brown-main border-transparent'
+                                : 'bg-white border-gray-300',
+                              gender == genderSelected
                                 ? 'bg-tsundoku-brown-main border-transparent'
                                 : 'bg-white border-gray-300',
                               active ? '' : '',
@@ -192,6 +266,7 @@ export default function UserSettings() {
                               as="span"
                               className={classNames(
                                 checked ? 'text-orange-900' : 'text-gray-900',
+                                gender == genderSelected ? 'text-orange-900' : 'text-gray-900',
                                 'block text-sm font-medium'
                               )}
                             >
@@ -207,7 +282,7 @@ export default function UserSettings() {
             </div>
             {/* 性別 END */}
             
-            <Transition
+            {/* <Transition
               show={genderSelected?.label == 'Female'}
               as={Fragment}
               enter="transition duration-300"
@@ -295,7 +370,7 @@ export default function UserSettings() {
                   </div>
                 </RadioGroup>
               </div>
-            </Transition>
+            </Transition> */}
 
             <div className="py-6">
               <div className="flex justify-end">
