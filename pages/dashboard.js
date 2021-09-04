@@ -388,7 +388,7 @@ export default function Dashboard({ sessions }) {
                     userInfo.uid == session.guestId ||
                     userInfo.uid == session.ownerId ? (
                       <Link
-                        href={`/session/detail/${session.sessionId}`}
+                        href={`/session/${session.sessionId}/detail`}
                         key={session.sessionId}
                       >
                         <a>

@@ -31,8 +31,6 @@ export async function getStaticProps(context) {
   // Fetch session info
   const session = await fetchOneSession(context.params.sessionId)
 
-  console.log(session)
-
   return {
     props: {
       session
@@ -213,7 +211,7 @@ function SessionDetail({ session }) {
               <div className="py-6">
                 <div className="flex justify-center">
                   {enterRoomOpen ? (
-                    <Link href={`/session/${session.sessionId}`}>
+                    <Link href={`/session/${session.sessionId}/join`}>
                       <p
                         type="button"
                         className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
