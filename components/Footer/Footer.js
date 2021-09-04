@@ -77,7 +77,7 @@ export default function Footer() {
   const handleLogout = () => {
     auth.signout()
     router.push('/')
-  } 
+  }
 
   // localeSelectedが変更されると、そのlocaleのURLにリダイレクトする
   useEffect(() => {
@@ -94,7 +94,10 @@ export default function Footer() {
   // Return Page
   // ===========================================================
   return (
-    <footer className="relative z-0 bg-tsundoku-blue-dark" aria-labelledby="footer-heading">
+    <footer
+      className="relative z-0 bg-tsundoku-blue-dark"
+      aria-labelledby="footer-heading"
+    >
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
@@ -224,7 +227,7 @@ export default function Footer() {
         </div>
       </div>
 
-          {/* <div className="mt-12 bg-gray-500">
+      {/* <div className="mt-12 bg-gray-500">
             <h2 id="debug">///Debug Area///</h2>
             <p>{t.TranslateTest}</p>
             <p>現在ログイン中のユーザーは、<br />[ { user ? user.email : "いません"} ]</p>
