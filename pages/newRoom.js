@@ -324,7 +324,7 @@ export default function Dashboard() {
       {/* main content */}
       <div className="relative pb-16 bg-gray-50">
         <div className="sm:block sm:w-full" aria-hidden="true">
-          <main className="py-12 mx-auto max-w-xl px-4 sm:py-24">
+          <main className="py-12 mx-auto max-w-xl px-4 sm:py-12">
             <h1 className="text-xl font-bold py-3">新しいルームを作成する</h1>
             <div className="py-3">
               <label className="text-sm font-medium text-gray-700">

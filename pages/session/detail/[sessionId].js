@@ -71,6 +71,7 @@ function SessionDetail({ session }) {
     }
   })
 
+<<<<<<< HEAD
   // Set locale
   const { locale } = router
   const t = uselocalesFilter('detail', locale)
@@ -97,6 +98,12 @@ function SessionDetail({ session }) {
 
   // Calculate current time and determine whether the room should be open or not
   useEffect(() => {
+||||||| merged common ancestors
+  useEffect(() => {
+
+=======
+  useEffect(() => {
+>>>>>>> 0c4ad9ea493fc6274f2ee8878f91bd3b5aafb5b5
     const id = setInterval(() => {
       setCount(count + 1)
     }, 1000)
@@ -152,7 +159,7 @@ function SessionDetail({ session }) {
       {/* main content */}
       <div className="relative pb-16 bg-gray-50 overflow-hidden">
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="relative mt-16 mx-auto max-w-3xl px-4 sm:mt-24">
+          <main className="relative mt-16 mx-auto max-w-3xl px-4 sm:mt-12">
             <div className="py-6">
               <Link href="/dashboard">
                 <a className="">
