@@ -46,7 +46,8 @@ export default function Dashboard({ sessions }) {
   const [createRoomAlertOpen, setCreateRoomAlertOpen] = useState(false)
   const [reserveRoomAlertOpen, setReserveRoomAlertOpen] = useState(false)
   const [cancelRoomAlertOpen, setCancelRoomAlertOpen] = useState(false)
-  const [failedReserveRoomAlertOpen, setFailedReserveRoomAlertOpen] = useState(false)
+  const [failedReserveRoomAlertOpen, setFailedReserveRoomAlertOpen] =
+    useState(false)
 
   // Auth
   const auth = useAuth()
@@ -100,7 +101,7 @@ export default function Dashboard({ sessions }) {
       }, 3000)
     } else if (router.query.successReserveRoom == 'false') {
       setFailedReserveRoomAlertOpen(true)
-      setTimeout(()=>{
+      setTimeout(() => {
         setFailedReserveRoomAlertOpen(false)
       }, 3000)
     } else if (router.query.successCancelRoom == 'true') {
@@ -136,28 +137,14 @@ export default function Dashboard({ sessions }) {
 
   const renderNoRoomStatement = (sessions) => {
     const filteredList = sessions.filter((session) => {
-      return !(session.ownerId == userInfo?.uid || session.guestId == userInfo?.uid)
+      return !(
+        session.ownerId == userInfo?.uid || session.guestId == userInfo?.uid
+      )
     })
-<<<<<<< HEAD
-    console.log(filteredList)
+
     if (!filteredList.length) {
       return (
         <div className="text-center">現在、予約可能なルームはありません。</div>
-||||||| merged common ancestors
-    console.log(filteredList)
-    if(!filteredList.length) {
-      return(
-        <div className="text-center">
-          現在、予約可能なルームはありません。
-        </div>
-=======
-
-    if(!filteredList.length) {
-      return(
-        <div className="text-center">
-          現在、予約可能なルームはありません。
-        </div>
->>>>>>> 0c4ad9ea493fc6274f2ee8878f91bd3b5aafb5b5
       )
     }
   }
@@ -376,20 +363,8 @@ export default function Dashboard({ sessions }) {
           </>
         }
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-<<<<<<< HEAD
-          <main className="relative mt-16 mx-auto max-w-5xl px-4 sm:mt-24">
-            <div className="w-full fixed z-10 -mx-4 sm:mx-0 bottom-0 shadow-lg sm:shadow-none sm:static">
-||||||| merged common ancestors
-          <main className="relative mt-16 mx-auto max-w-5xl px-4 sm:mt-24">
-            <div
-              className="w-full fixed z-10 -mx-4 sm:mx-0 bottom-0 shadow-lg sm:shadow-none sm:static"
-            >
-=======
           <main className="relative mt-16 mx-auto max-w-5xl px-4 sm:mt-12">
-            <div
-              className="w-full fixed z-10 -mx-4 sm:mx-0 bottom-0 shadow-lg sm:shadow-none sm:static"
-            >
->>>>>>> 0c4ad9ea493fc6274f2ee8878f91bd3b5aafb5b5
+            <div className="w-full fixed z-10 -mx-4 sm:mx-0 bottom-0 shadow-lg sm:shadow-none sm:static">
               <div className="bg-white sm:bg-gray-50 px-6 sm:px-0 py-4">
                 <div className="flex justify-center sm:justify-end">
                   <Link href="/newRoom">
@@ -463,33 +438,16 @@ export default function Dashboard({ sessions }) {
                 role="list"
                 className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
               >
-<<<<<<< HEAD
                 {sessions
                   .filter((session) => {
-                    return !(session.ownerId == userInfo?.uid)
+                    return !(
+                      session.ownerId == userInfo?.uid ||
+                      session.guestId == userInfo?.uid
+                    )
                   })
                   .map((session) => (
                     <Disclosure>
                       {({ open }) => (
-||||||| merged common ancestors
-                {
-                sessions
-                .filter((session) => {
-                  return !(session.ownerId == userInfo?.uid)
-                })
-                .map((session) => (
-                  <Disclosure>
-                    {({ open }) => (
-=======
-                {
-                sessions
-                .filter((session) => {
-                  return !(session.ownerId == userInfo?.uid || session.guestId == userInfo?.uid)
-                })
-                .map((session) => (
-                  <Disclosure>
-                    {({ open }) => (
->>>>>>> 0c4ad9ea493fc6274f2ee8878f91bd3b5aafb5b5
                         <li key={session.sessionId}>
                           <div className="bg-white rounded-lg shadow divide-y divide-gray-200">
                             <div className="w-full flex items-center justify-between p-6 space-x-6">

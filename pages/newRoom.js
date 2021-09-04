@@ -220,7 +220,7 @@ export default function Dashboard() {
     }
   })
 
-  useEffect(()=> {
+  useEffect(() => {
     const now = new Date()
     const Y = moment(now).format('YYYY')
     const M = moment(now).format('M')
@@ -229,13 +229,13 @@ export default function Dashboard() {
     const m = Number(moment(now).format('m'))
 
     let everyFifteenMinutes
-    if(45 <= m & m <= 59){
+    if ((45 <= m) & (m <= 59)) {
       everyFifteenMinutes = '00'
-    } else if(0 <= m && m < 15) {
+    } else if (0 <= m && m < 15) {
       everyFifteenMinutes = '15'
-    } else if(15 <= m && m < 30) {
+    } else if (15 <= m && m < 30) {
       everyFifteenMinutes = '30'
-    } else if(30 <= m && m < 45) {
+    } else if (30 <= m && m < 45) {
       everyFifteenMinutes = '45'
     } else {
       return
@@ -247,7 +247,7 @@ export default function Dashboard() {
     setMonth(M)
     setDay(D)
     setStartTime(initialTime)
-  } ,[])
+  }, [])
 
   // Set locale
   const { locale } = useRouter()
