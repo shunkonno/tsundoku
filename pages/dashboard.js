@@ -14,7 +14,7 @@ import { Footer } from '../components/Footer'
 import { Disclosure, Transition } from '@headlessui/react'
 
 //Assets
-import { CheckCircleIcon, XIcon } from '@heroicons/react/solid'
+import { CheckCircleIcon, ExclamationIcon, XIcon } from '@heroicons/react/solid'
 
 // Functions
 import uselocalesFilter from '../utils/translate'
@@ -46,6 +46,7 @@ export default function Dashboard({sessions}) {
   const [createRoomAlertOpen, setCreateRoomAlertOpen] = useState(false)
   const [reserveRoomAlertOpen, setReserveRoomAlertOpen] = useState(false)
   const [cancelRoomAlertOpen, setCancelRoomAlertOpen] = useState(false)
+  const [failedReserveRoomAlertOpen, setFailedReserveRoomAlertOpen] = useState(false)
 
   // Auth
   const auth = useAuth()
@@ -97,6 +98,11 @@ export default function Dashboard({sessions}) {
       setTimeout(()=>{
         setReserveRoomAlertOpen(false)
       }, 3000)
+    } else if (router.query.successReserveRoom == 'false') {
+      setFailedReserveRoomAlertOpen(true)
+      setTimeout(()=>{
+        setFailedReserveRoomAlertOpen(false)
+      }, 3000)
     } else if (router.query.successCancelRoom == 'true') {
       setCancelRoomAlertOpen(true)
       setTimeout(()=>{
@@ -128,9 +134,9 @@ export default function Dashboard({sessions}) {
 
   const renderNoRoomStatement = (sessions) => {
     const filteredList = sessions.filter((session) => {
-      return !(session.ownerId == userInfo?.uid)
+      return !(session.ownerId == userInfo?.uid || session.guestId == userInfo?.uid)
     })
-    console.log(filteredList)
+
     if(!filteredList.length) {
       return(
         <div className="text-center">
@@ -272,6 +278,46 @@ export default function Dashboard({sessions}) {
               </div>
             </Transition>
             <Transition
+              show={failedReserveRoomAlertOpen}
+              as={Fragment}
+              enter="transition duration-75"
+              enterFrom="transform -translate-y-1/4 opacity-0"
+              enterTo="transform -translate-y-0 opacity-100"
+              leave="transition-opacity duration-150"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div className="absolute w-full px-4">
+                <div className="mt-4 rounded-md bg-yellow-50 border-yellow-400 border-l-4 p-4">
+                  <div className="flex">
+                    <div className="flex-shrink-0">
+                      <ExclamationIcon
+                        className="h-5 w-5 text-yellow-400"
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <div className="ml-3">
+                      <p className="text-sm font-medium text-yellow-800">
+                        申し訳ございません。このルームはすでに満員となっております。
+                      </p>
+                    </div>
+                    <div className="ml-auto pl-3">
+                      <div className="-mx-1.5 -my-1.5">
+                        <button
+                          type="button"
+                          className="inline-flex bg-yellow-50 rounded-md p-1.5 text-yellow-500 hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-yellow-600"
+                          onClick={() => setFailedReserveRoomAlertOpen(false)}
+                        >
+                          <span className="sr-only">Dismiss</span>
+                          <XIcon className="h-5 w-5" aria-hidden="true" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Transition>
+            <Transition
               show={cancelRoomAlertOpen}
               as={Fragment}
               enter="transition duration-75"
@@ -392,7 +438,7 @@ export default function Dashboard({sessions}) {
                 {
                 sessions
                 .filter((session) => {
-                  return !(session.ownerId == userInfo?.uid)
+                  return !(session.ownerId == userInfo?.uid || session.guestId == userInfo?.uid)
                 })
                 .map((session) => (
                   <Disclosure>

@@ -92,7 +92,6 @@ export default function SessionDetail({sessions}) {
   })
 
   useEffect(() => {
-
     const id = setInterval(() => {
       setCount(count + 1);
     }, 1000);
