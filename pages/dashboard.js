@@ -363,7 +363,7 @@ export default function Dashboard({ sessions }) {
           </>
         }
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="relative mt-16 mx-auto max-w-5xl px-4 sm:mt-12">
+          <main className="relative mt-6 mx-auto max-w-5xl px-4 sm:mt-0">
             <div className="w-full fixed z-10 -mx-4 sm:mx-0 bottom-0 shadow-lg sm:shadow-none sm:static">
               <div className="bg-white sm:bg-gray-50 px-6 sm:px-0 py-4">
                 <div className="flex justify-center sm:justify-end">
