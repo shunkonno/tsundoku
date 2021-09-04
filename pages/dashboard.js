@@ -42,9 +42,6 @@ export default function Dashboard({sessions}) {
   // Initialize
   // ============================================================
 
-  
-  
-
   //Initial State
   const [createRoomAlertOpen, setCreateRoomAlertOpen] = useState(false)
   const [reserveRoomAlertOpen, setReserveRoomAlertOpen] = useState(false)
@@ -118,12 +115,12 @@ export default function Dashboard({sessions}) {
   const t = uselocalesFilter('dashboard', locale)
 
   //checkJoinRoomExist すべてのセッションのguestIdからログイン中のguestIdが1つでも一致していればtrue。1つもなければfalse。
-  // if(sessions){
-  //   const checkResult = sessions.some((session) => {
-  //     return userInfo?.uid == session.guestId
-  //   })
-  // }
-  const checkResult  = true
+  let checkResult
+  if(sessions){
+    checkResult = sessions.some((session) => {
+      return (userInfo?.uid == session.guestId) || (userInfo?.uid == session.ownerId)
+    })
+  }
 
   // ============================================================
   // Render Function
@@ -344,10 +341,9 @@ export default function Dashboard({sessions}) {
                   sessions.map((session) =>
                     userInfo.uid == session.guestId ||
                     userInfo.uid == session.ownerId ? (
-                      <Link href={`/session/detail/${session.sessionId}`}>
+                      <Link href={`/session/detail/${session.sessionId}`} key={session.sessionId}><a>
                           <li>
                             <div
-                              key={session.sessionId}
                               className="bg-white rounded-lg shadow divide-y divide-gray-200"
                             >
                               <div className="w-full flex items-center justify-between p-6 space-x-6">
@@ -375,7 +371,7 @@ export default function Dashboard({sessions}) {
                               
                             </div>
                           </li>
-                          </Link>
+                          </a></Link>
                     ) : (
                       <></>
                     )
@@ -401,9 +397,9 @@ export default function Dashboard({sessions}) {
                 .map((session) => (
                   <Disclosure>
                     {({ open }) => (
-                        <li>
+                        <li key={session.sessionId}>
                           <div
-                            key={session.sessionId}
+                            
                             className="bg-white rounded-lg shadow divide-y divide-gray-200"
                           >
                             <div className="w-full flex items-center justify-between p-6 space-x-6">
