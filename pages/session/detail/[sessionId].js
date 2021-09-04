@@ -71,7 +71,6 @@ function SessionDetail({ session }) {
     }
   })
 
-<<<<<<< HEAD
   // Set locale
   const { locale } = router
   const t = uselocalesFilter('detail', locale)
@@ -98,12 +97,6 @@ function SessionDetail({ session }) {
 
   // Calculate current time and determine whether the room should be open or not
   useEffect(() => {
-||||||| merged common ancestors
-  useEffect(() => {
-
-=======
-  useEffect(() => {
->>>>>>> 0c4ad9ea493fc6274f2ee8878f91bd3b5aafb5b5
     const id = setInterval(() => {
       setCount(count + 1)
     }, 1000)
