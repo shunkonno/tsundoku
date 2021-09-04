@@ -188,10 +188,10 @@ export default function Dashboard() {
   // ============================================================
 
   //State
-  const [year, setYear] = useState('2021')
-  const [month, setMonth] = useState(monthData[3])
-  const [day, setDay] = useState(dayData[3])
-  const [startTime, setStartTime] = useState(timeData[4])
+  const [year, setYear] = useState('')
+  const [month, setMonth] = useState('')
+  const [day, setDay] = useState('')
+  const [startTime, setStartTime] = useState('')
   const [duration, setDuration] = useState(durationData[3])
 
   // Auth
@@ -219,6 +219,35 @@ export default function Dashboard() {
       router.push('/')
     }
   })
+
+  useEffect(()=> {
+    const now = new Date()
+    const Y = moment(now).format('YYYY')
+    const M = moment(now).format('M')
+    const D = moment(now).format('D')
+    const h = moment(now).format('H')
+    const m = Number(moment(now).format('m'))
+
+    let everyFifteenMinutes
+    if(45 <= m & m <= 59){
+      everyFifteenMinutes = '00'
+    } else if(0 <= m && m < 15) {
+      everyFifteenMinutes = '15'
+    } else if(15 <= m && m < 30) {
+      everyFifteenMinutes = '30'
+    } else if(30 <= m && m < 45) {
+      everyFifteenMinutes = '45'
+    } else {
+      return
+    }
+
+    const initialTime = `${h}:${everyFifteenMinutes}`
+
+    setYear(Y)
+    setMonth(M)
+    setDay(D)
+    setStartTime(initialTime)
+  } ,[])
 
   // Set locale
   const { locale } = useRouter()
@@ -259,6 +288,7 @@ export default function Dashboard() {
         addSession(sessionInfo.name, {
           sessionId: sessionInfo.name,
           ownerId: user.uid,
+          ownerName: userInfo.name,
           startDateTime: dateTime,
           duration: durationAmount
         })
@@ -294,7 +324,7 @@ export default function Dashboard() {
       {/* main content */}
       <div className="relative pb-16 bg-gray-50">
         <div className="sm:block sm:w-full" aria-hidden="true">
-          <main className="py-12 mx-auto max-w-7xl px-4 sm:py-24">
+          <main className="py-12 mx-auto max-w-xl px-4 sm:py-24">
             <h1 className="text-xl font-bold py-3">新しいルームを作成する</h1>
             <div className="py-3">
               <label className="text-sm font-medium text-gray-700">
@@ -622,7 +652,7 @@ export default function Dashboard() {
                   className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
                   onClick={(e) => createSession(e)}
                 >
-                  作成
+                  作成する
                 </p>
               </div>
             </div>
