@@ -21,14 +21,14 @@ import uselocalesFilter from '../utils/translate'
 import { useAuth } from '../lib/auth'
 import fetcher from '../utils/fetcher'
 import { updateSession } from '../lib/db'
-import { fetchSessions } from '../lib/db-admin'
+import { fetchAllSessions } from '../lib/db-admin'
 
 // ============================================================
 // Fetch static data
 // ============================================================
 export async function getStaticProps(context) {
   // Fetch all sessions
-  const sessions = await fetchSessions()
+  const sessions = await fetchAllSessions()
 
   return {
     props: {
@@ -37,7 +37,7 @@ export async function getStaticProps(context) {
   }
 }
 
-export default function Dashboard({sessions}) {
+export default function Dashboard({ sessions }) {
   // ============================================================
   // Initialize
   // ============================================================
@@ -89,17 +89,17 @@ export default function Dashboard({sessions}) {
   useEffect(() => {
     if (router.query.successCreateRoom == 'true') {
       setCreateRoomAlertOpen(true)
-      setTimeout(()=>{
+      setTimeout(() => {
         setCreateRoomAlertOpen(false)
       }, 3000)
     } else if (router.query.successReserveRoom == 'true') {
       setReserveRoomAlertOpen(true)
-      setTimeout(()=>{
+      setTimeout(() => {
         setReserveRoomAlertOpen(false)
       }, 3000)
     } else if (router.query.successCancelRoom == 'true') {
       setCancelRoomAlertOpen(true)
-      setTimeout(()=>{
+      setTimeout(() => {
         setCancelRoomAlertOpen(false)
       }, 3000)
     }
@@ -107,7 +107,7 @@ export default function Dashboard({sessions}) {
 
   // Function
   const formatDateTime = (datetimeIsoString) => {
-    return moment(datetimeIsoString).format("M月D日 hh:mm")
+    return moment(datetimeIsoString).format('M月D日 hh:mm')
   }
 
   // Set locale
@@ -116,9 +116,11 @@ export default function Dashboard({sessions}) {
 
   //checkJoinRoomExist すべてのセッションのguestIdからログイン中のguestIdが1つでも一致していればtrue。1つもなければfalse。
   let checkResult
-  if(sessions){
+  if (sessions) {
     checkResult = sessions.some((session) => {
-      return (userInfo?.uid == session.guestId) || (userInfo?.uid == session.ownerId)
+      return (
+        userInfo?.uid == session.guestId || userInfo?.uid == session.ownerId
+      )
     })
   }
 
@@ -131,11 +133,9 @@ export default function Dashboard({sessions}) {
       return !(session.ownerId == userInfo?.uid)
     })
     console.log(filteredList)
-    if(!filteredList.length) {
-      return(
-        <div className="text-center">
-          現在、予約可能なルームはありません。
-        </div>
+    if (!filteredList.length) {
+      return (
+        <div className="text-center">現在、予約可能なルームはありません。</div>
       )
     }
   }
@@ -157,7 +157,7 @@ export default function Dashboard({sessions}) {
       // Set user's uid to guestId
       await updateSession(session.sessionId, { guestId: user.uid })
       await router.push({
-        pathname: '/empty',
+        pathname: '/empty'
       })
       await router.replace({
         pathname: '/dashboard',
@@ -315,9 +315,7 @@ export default function Dashboard({sessions}) {
         }
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
           <main className="relative mt-16 mx-auto max-w-5xl px-4 sm:mt-24">
-            <div
-              className="w-full fixed z-10 -mx-4 sm:mx-0 bottom-0 shadow-lg sm:shadow-none sm:static"
-            >
+            <div className="w-full fixed z-10 -mx-4 sm:mx-0 bottom-0 shadow-lg sm:shadow-none sm:static">
               <div className="bg-white sm:bg-gray-50 px-6 sm:px-0 py-4">
                 <div className="flex justify-center sm:justify-end">
                   <Link href="/newRoom">
@@ -337,15 +335,16 @@ export default function Dashboard({sessions}) {
                   role="list"
                   className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
                 >
-                  {
-                  sessions.map((session) =>
+                  {sessions.map((session) =>
                     userInfo.uid == session.guestId ||
                     userInfo.uid == session.ownerId ? (
-                      <Link href={`/session/detail/${session.sessionId}`} key={session.sessionId}><a>
+                      <Link
+                        href={`/session/detail/${session.sessionId}`}
+                        key={session.sessionId}
+                      >
+                        <a>
                           <li>
-                            <div
-                              className="bg-white rounded-lg shadow divide-y divide-gray-200"
-                            >
+                            <div className="bg-white rounded-lg shadow divide-y divide-gray-200">
                               <div className="w-full flex items-center justify-between p-6 space-x-6">
                                 <div className="flex-1 truncate">
                                   <div className="flex items-center space-x-3">
@@ -361,17 +360,18 @@ export default function Dashboard({sessions}) {
                                     </div>
                                   </div>
                                   <p className="mt-1 text-gray-500 text-sm truncate">
-                                    開始日時 {formatDateTime(session.startDateTime)}
+                                    開始日時{' '}
+                                    {formatDateTime(session.startDateTime)}
                                   </p>
                                   <p className="mt-1 text-gray-500 text-sm truncate">
                                     予定時間 {session.duration} 分
                                   </p>
                                 </div>
                               </div>
-                              
                             </div>
                           </li>
-                          </a></Link>
+                        </a>
+                      </Link>
                     ) : (
                       <></>
                     )
@@ -389,19 +389,15 @@ export default function Dashboard({sessions}) {
                 role="list"
                 className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
               >
-                {
-                sessions
-                .filter((session) => {
-                  return !(session.ownerId == userInfo?.uid)
-                })
-                .map((session) => (
-                  <Disclosure>
-                    {({ open }) => (
+                {sessions
+                  .filter((session) => {
+                    return !(session.ownerId == userInfo?.uid)
+                  })
+                  .map((session) => (
+                    <Disclosure>
+                      {({ open }) => (
                         <li key={session.sessionId}>
-                          <div
-                            
-                            className="bg-white rounded-lg shadow divide-y divide-gray-200"
-                          >
+                          <div className="bg-white rounded-lg shadow divide-y divide-gray-200">
                             <div className="w-full flex items-center justify-between p-6 space-x-6">
                               <div className="flex-1 truncate">
                                 <div className="flex items-center space-x-3">
@@ -417,22 +413,22 @@ export default function Dashboard({sessions}) {
                                   </div>
                                 </div>
                                 <p className="mt-1 text-gray-500 text-sm truncate">
-                                  開始日時 {formatDateTime(session.startDateTime)}
+                                  開始日時{' '}
+                                  {formatDateTime(session.startDateTime)}
                                 </p>
                                 <p className="mt-1 text-gray-500 text-sm truncate">
                                   予定時間 {session.duration} 分
                                 </p>
                               </div>
-                              {
-                              open ?
-                              <Disclosure.Button className="">
-                                <p className="text-gray-500">閉じる</p>
-                              </Disclosure.Button>
-                              :
-                              <Disclosure.Button className="">
-                                <p className="text-blue-500">予約する</p>
-                              </Disclosure.Button>
-                              }
+                              {open ? (
+                                <Disclosure.Button className="">
+                                  <p className="text-gray-500">閉じる</p>
+                                </Disclosure.Button>
+                              ) : (
+                                <Disclosure.Button className="">
+                                  <p className="text-blue-500">予約する</p>
+                                </Disclosure.Button>
+                              )}
                             </div>
                             {open && (
                               <div>
@@ -452,7 +448,9 @@ export default function Dashboard({sessions}) {
                                         </p>
                                         <div
                                           className="relative mt-3 border border-transparent rounded-br-lg hover:text-gray-500"
-                                          onClick={() => reserveSession(session)}
+                                          onClick={() =>
+                                            reserveSession(session)
+                                          }
                                         >
                                           <span className="inline-block bg-blue-500 rounded-sm px-16 py-3 text-sm text-white font-medium">
                                             確定
@@ -466,9 +464,9 @@ export default function Dashboard({sessions}) {
                             )}
                           </div>
                         </li>
-                    )}
-                  </Disclosure>
-                ))}
+                      )}
+                    </Disclosure>
+                  ))}
               </ul>
               {renderNoRoomStatement(sessions)}
             </div>
