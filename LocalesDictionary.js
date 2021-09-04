@@ -45,6 +45,14 @@ export const dict =
     }
   },
   {
+    "detail": {
+      "text1": {
+        "en": "text1",
+        "ja": "テキスト1"
+      }
+    }
+  },
+  {
     "newRoom": {
       "text1": {
         "en": "text1",
