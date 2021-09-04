@@ -7,6 +7,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import useSWR from 'swr'
 import moment from 'moment'
+import PropTypes from 'prop-types'
 
 // Components
 import { AppHeader } from '../../../components/Header'
@@ -21,68 +22,47 @@ import uselocalesFilter from '../../../utils/translate'
 import { useAuth } from '../../../lib/auth'
 import fetcher from '../../../utils/fetcher'
 import { updateSession } from '../../../lib/db'
-import { fetchSessions } from '../../../lib/db-admin'
+import { fetchOneSession, fetchAllSessions } from '../../../lib/db-admin'
 
 // ============================================================
 // Fetch static data
 // ============================================================
 export async function getStaticProps(context) {
-  // Fetch all sessions
-  const sessions = await fetchSessions()
+  // Fetch session info
+  const session = await fetchOneSession(context.params.sessionId)
+
+  console.log(session)
 
   return {
     props: {
-      sessions
+      session
     }
   }
 }
 
 export async function getStaticPaths() {
-  const sessions = await fetchSessions()
-  const paths = sessions.map((session) => (
-      {
-        params: {
-          sessionId: session.sessionId
-        }
-      }
-    )
-  )
+  const sessions = await fetchAllSessions()
+
+  const paths = sessions.map((session) => ({
+    params: {
+      sessionId: session.sessionId
+    }
+  }))
+
   return { paths, fallback: true }
 }
 
-export default function SessionDetail({sessions}) {
+function SessionDetail({ session }) {
   // ============================================================
-  // Initialize
-  // ============================================================
-
-  //Initial State
-  const [count, setCount] = useState(0)
-  const [enterRoomOpen, setEnterRoomOpen] = useState(false)
-
   // Auth
+  // ============================================================
   const auth = useAuth()
   const user = auth.user
 
-  // Fetch logged user info on client side
-  const { data: userInfo } = useSWR(
-    user ? ['/api/user', user.token] : null,
-    fetcher,
-    {
-      onErrorRetry: ({ retryCount }) => {
-        // Retry up to 10 times
-        if (retryCount >= 10) return
-      }
-    }
-  )
-
+  // ============================================================
   // Routing
+  // ============================================================
   const router = useRouter()
-  const { sessionId } = router.query
-
-  // Filter Current session by sessionId
-  const currentSession = sessions.find((session) => {
-    return session.sessionId == sessionId
-  })
 
   useEffect(() => {
     if (user === false) {
@@ -91,39 +71,52 @@ export default function SessionDetail({sessions}) {
     }
   })
 
-  useEffect(() => {
+  // Set locale
+  const { locale } = router
+  const t = uselocalesFilter('detail', locale)
 
+  // ============================================================
+  // Initialize State
+  // ============================================================
+  const [count, setCount] = useState(0)
+  const [enterRoomOpen, setEnterRoomOpen] = useState(false)
+
+  // Filter Current session by sessionId
+  // const session = sessions.find((session) => {
+  //   return session.sessionId == sessionId
+  // })
+
+  // ============================================================
+  // Helper Functions
+  // ============================================================
+
+  // Format datetime ISOString
+  const formatDateTime = (datetimeIsoString) => {
+    return moment(datetimeIsoString).format('M月D日 hh:mm')
+  }
+
+  // Calculate current time and determine whether the room should be open or not
+  useEffect(() => {
     const id = setInterval(() => {
-      setCount(count + 1);
-    }, 1000);
+      setCount(count + 1)
+    }, 1000)
 
     const baseTime = new Date()
-    
-    const unixBaseTime = moment(baseTime).unix()
-    const unixStartDateTime = moment(currentSession.startDateTime).unix()
 
-    const differenceTime =  unixStartDateTime - unixBaseTime
+    const unixBaseTime = moment(baseTime).unix()
+    const unixStartDateTime = moment(session.startDateTime).unix()
+
+    const differenceTime = unixStartDateTime - unixBaseTime
     const thresholdOfEnterRoom = 5 * 60 // 5 minutes
 
-    if(differenceTime >= thresholdOfEnterRoom){
+    if (differenceTime >= thresholdOfEnterRoom) {
       setEnterRoomOpen(false)
     } else {
       setEnterRoomOpen(true)
     }
 
-    return () => clearInterval(id);
-
-  },[count])
-
-  
-  // Function
-  const formatDateTime = (datetimeIsoString) => {
-    return moment(datetimeIsoString).format("M月D日 hh:mm")
-  }
-
-  // Set locale
-  const { locale } = router
-  const t = uselocalesFilter('detail', locale)
+    return () => clearInterval(id)
+  }, [count])
 
   // ============================================================
   // Button Handler
@@ -143,10 +136,6 @@ export default function SessionDetail({sessions}) {
   // ============================================================
   // Return Page
   // ============================================================
-  if (user === null || !userInfo) {
-    return <div>Waiting..</div>
-  }
-
   return (
     <div>
       <Head>
@@ -177,24 +166,37 @@ export default function SessionDetail({sessions}) {
             </div>
             <div className="bg-white shadow overflow-hidden sm:rounded-lg">
               <div className="px-4 py-5 sm:px-6">
-                <h3 className="text-lg leading-6 font-medium text-gray-900">ルーム詳細</h3>
+                <h3 className="text-lg leading-6 font-medium text-gray-900">
+                  ルーム詳細
+                </h3>
                 {/* <p className="mt-1 max-w-2xl text-sm text-gray-500">Personal details and application.</p> */}
               </div>
               <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
                 <dl className="sm:divide-y sm:divide-gray-200">
                   <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-sm font-medium text-gray-500">ルーム作成者</dt>
-                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{currentSession.ownerName}</dd>
+                    <dt className="text-sm font-medium text-gray-500">
+                      ルーム作成者
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      {session.ownerName}
+                    </dd>
                   </div>
                   <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-sm font-medium text-gray-500">開始日時</dt>
-                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{formatDateTime(currentSession.startDateTime)}</dd>
+                    <dt className="text-sm font-medium text-gray-500">
+                      開始日時
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      {formatDateTime(session.startDateTime)}
+                    </dd>
                   </div>
                   <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-sm font-medium text-gray-500">所要時間</dt>
-                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{currentSession.duration} 分</dd>
+                    <dt className="text-sm font-medium text-gray-500">
+                      所要時間
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      {session.duration} 分
+                    </dd>
                   </div>
-                  
                 </dl>
               </div>
               <div className="pb-6 px-4">
@@ -202,7 +204,7 @@ export default function SessionDetail({sessions}) {
                   <p
                     type="button"
                     className="text-xs text-gray-400"
-                    onClick={(e) => cancelSession(currentSession)}
+                    onClick={(e) => cancelSession(session)}
                   >
                     予約を取り消す
                   </p>
@@ -210,28 +212,28 @@ export default function SessionDetail({sessions}) {
               </div>
               <div className="py-6">
                 <div className="flex justify-center">
-                  {
-                  enterRoomOpen ?
-                  <Link href={`/session/${currentSession.sessionId}`}>
-                    <p
-                      type="button"
-                      className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
-                      
-                    >
-                      ルームに入室する
-                    </p>
-                  </Link>
-                  :
-                  <div>
-                    <p
-                      type="button"
-                      className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-gray-600 opacity-75 bg-gray-400 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600"
-                    >
-                      ルームに入室する
-                    </p>
-                    <p className="text-center text-sm text-gray-800 mt-2">5分前から入室できます。</p>
-                  </div>
-                  }
+                  {enterRoomOpen ? (
+                    <Link href={`/session/${session.sessionId}`}>
+                      <p
+                        type="button"
+                        className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
+                      >
+                        ルームに入室する
+                      </p>
+                    </Link>
+                  ) : (
+                    <div>
+                      <p
+                        type="button"
+                        className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-gray-600 opacity-75 bg-gray-400 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600"
+                      >
+                        ルームに入室する
+                      </p>
+                      <p className="text-center text-sm text-gray-800 mt-2">
+                        5分前から入室できます。
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -239,7 +241,13 @@ export default function SessionDetail({sessions}) {
         </div>
       </div>
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
   )
 }
+
+SessionDetail.propTypes = {
+  session: PropTypes.object.isRequired
+}
+
+export default SessionDetail
