@@ -360,7 +360,7 @@ export default function Dashboard({sessions}) {
           </>
         }
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="relative mt-16 mx-auto max-w-5xl px-4 sm:mt-24">
+          <main className="relative mt-16 mx-auto max-w-5xl px-4 sm:mt-12">
             <div
               className="w-full fixed z-10 -mx-4 sm:mx-0 bottom-0 shadow-lg sm:shadow-none sm:static"
             >

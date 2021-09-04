@@ -64,7 +64,7 @@ export default function Onboarding2() {
       {/* main content */}
       <div className="relative pb-16 bg-gray-50 overflow-hidden">
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
+          <main className="mt-16 mx-auto max-w-7xl px-4 sm:mt-12">
             <div className="py-3">
               <Link href="/onboarding-1">
                 <a>

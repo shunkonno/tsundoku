@@ -178,7 +178,7 @@ export default function UserSettings() {
           </Transition>
         }
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="mt-16 mx-auto max-w-xl px-4 sm:mt-24">
+          <main className="mt-16 mx-auto max-w-xl px-4 sm:mt-12">
             <div className="py-3">
               <h1 className="text-2xl font-bold">ユーザー設定</h1>
             </div>

@@ -55,7 +55,7 @@ export default function Home() {
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
           <main className="mx-auto max-w-7xl sm:mt-4">
             <div className="px-4 text-center md:text-left py-4 sm:py-12 md:flex">
-              <div className="md:w-3/5 md:px-4 lg:px-24 xl:px-32 md:py-24">
+              <div className="md:w-3/5 md:px-4 lg:px-24 xl:px-32 md:py-12">
                 <h1 className="text-4xl leading-normal tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
                   <span className="inline">読書に</span>
                   <span className="text-tsundoku-blue-main inline">没頭</span>
