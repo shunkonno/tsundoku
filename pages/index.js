@@ -1,42 +1,31 @@
-import { useRouter } from 'next/router'
+import router, { useRouter } from 'next/router'
 import Head from 'next/head'
-import uselocalesFilter from '../utils/translate'
 import Image from 'next/image'
+
+// Components
 import { LpHeader } from '../components/Header'
 import { Footer } from '../components/Footer'
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
+// Funtions
+import { useAuth } from '../lib/auth'
+import uselocalesFilter from '../utils/translate'
 
 export default function Home() {
+  // Auth
+  const auth = useAuth()
+
   const { locale } = useRouter()
 
   const t = uselocalesFilter('LP', locale)
 
-  const tiers = [
-    {
-      name: 'フリープラン',
-      href: '#',
-      priceMonthly: 0,
-      description: 'All the basics for starting a new business',
-      includedFeatures: [
-        'Potenti felis, in cras at at ligula nunc.',
-        'Orci neque eget pellentesque.'
-      ]
-    },
-    {
-      name: 'スタンダードプラン',
-      href: '#',
-      priceMonthly: 12,
-      description: 'All the basics for starting a new business',
-      includedFeatures: [
-        'Potenti felis, in cras at at ligula nunc. ',
-        'Orci neque eget pellentesque.',
-        'Donec mauris sit in eu tincidunt etiam.'
-      ]
-    }
-  ]
+  //handleButton
+  const handleSignin = async(e) => {
+    e.preventDefault()
+
+    await auth.signInWithGoogle()
+
+    await router.push('/dashboard')
+  }
 
   return (
     <div>
@@ -81,12 +70,14 @@ export default function Home() {
                 </p>
                 <div className="mt-6 sm:mt-12 max-w-md mx-auto sm:flex sm:justify-center">
                   <div className="rounded-md shadow">
-                    <a
-                      href="#"
+                    <button
                       className="font-sans w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-tsundoku-blue-main hover:bg-blue-600 md:py-4 md:text-lg md:px-10"
+                      onClick={(e) => {
+                        handleSignin(e)
+                      }}
                     >
                       Googleアカウントで無料ではじめる
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
