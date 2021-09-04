@@ -103,7 +103,7 @@ function SessionDetail({ session }) {
     const baseTime = new Date()
 
     const unixBaseTime = moment(baseTime).unix()
-    const unixStartDateTime = moment(session.startDateTime).unix()
+    const unixStartDateTime = moment(session?.startDateTime).unix()
 
     const differenceTime = unixStartDateTime - unixBaseTime
     const thresholdOfEnterRoom = 5 * 60 // 5 minutes
@@ -115,7 +115,7 @@ function SessionDetail({ session }) {
     }
 
     return () => clearInterval(id)
-  }, [count, session.startDateTime])
+  }, [count, session?.startDateTime])
 
   // ============================================================
   // Button Handler
@@ -124,7 +124,7 @@ function SessionDetail({ session }) {
   // Handle session reservation cancellation
   const cancelSession = async (session) => {
     // Update guestId to an empty string
-    await updateSession(session.sessionId, { guestId: '' })
+    await updateSession(session?.sessionId, { guestId: '' })
 
     await router.push({
       pathname: '/dashboard',
@@ -186,7 +186,7 @@ function SessionDetail({ session }) {
                       ルーム作成者
                     </dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {session.ownerName}
+                      {session?.ownerName}
                     </dd>
                   </div>
                   <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -194,7 +194,7 @@ function SessionDetail({ session }) {
                       開始日時
                     </dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {formatDateTime(session.startDateTime)}
+                      {formatDateTime(session?.startDateTime)}
                     </dd>
                   </div>
                   <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -202,7 +202,7 @@ function SessionDetail({ session }) {
                       所要時間
                     </dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {session.duration} 分
+                      {session?.duration} 分
                     </dd>
                   </div>
                 </dl>
@@ -210,7 +210,7 @@ function SessionDetail({ session }) {
               <div className="py-6">
                 <div className="flex justify-center">
                   {enterRoomOpen ? (
-                    <Link href={`/session/${session.sessionId}/join`}>
+                    <Link href={`/session/${session?.sessionId}/join`}>
                       <span
                         type="button"
                         className="cursor-pointer inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
