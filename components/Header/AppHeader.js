@@ -16,7 +16,7 @@ import { useAuth } from '../../lib/auth'
 import fetcher from '../../utils/fetcher'
 
 const navigation = [
-  { name: 'Setting', href: '/settings' },
+  { name: '設定', href: '/settings' },
 ]
 
 export default function AppHeader() {
@@ -53,52 +53,25 @@ export default function AppHeader() {
 
   const renderHeaderButton = () => {
     //ログインしているかどうか確認
-    //ログインしていれば、ログアウトボタンを表示
     if(user) {
-      //ダッシュボードにいるかどうか確認
-      if(pathname == '/dashboard') {
-        return(
-          //ダッシュボードにいれば、ダッシュボードへのリンクを表示しない
-          <div className="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0">
-            <div className="text-right ml-8">
-              <button
-                className="text-gray-400 text-sm"
-                onClick={(e) => handleLogout()}
-              >
-                {t.LOGOUT}
-              </button>
-            </div>
+      //ログインしていれば、ログアウトボタンを表示
+      return(
+        <div className="hidden md:flex md:items-center">
+          <div className="text-right ml-8">
+            <button
+              className="text-gray-400 text-sm"
+              onClick={(e) => handleLogout()}
+            >
+              {t.LOGOUT}
+            </button>
           </div>
-        )
-      } else {
-        //ダッシュボードにいなければダッシュボードへのリンクを表示
-        return(
-          <div className="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0">
-            <span className="inline-flex rounded-md shadow">
-              <Link href="/dashboard">
-                <a
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-tsundoku-blue-main bg-white hover:bg-gray-50"
-                >
-                  {t.TODASHBOARD}
-                </a>
-              </Link>
-            </span>
-            <div className="text-right ml-8">
-              <button
-                className="text-gray-400 text-sm"
-                onClick={(e) => handleLogout()}
-              >
-                {t.LOGOUT}
-              </button>
-            </div>
-          </div>
-        )
-      }
+        </div>
+      )
     }
-    //ログインしていなければ、ログインボタンを表示
+    //ログインしていなければ、ログインボタンを表示(ログインしていなければ/index.jsに飛ばされるので本来必要ない)
     else {
       return (
-        <div className="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0">
+        <div className="hidden md:flex">
           <span className="inline-flex rounded-md shadow">
             <Link href="/signin">
               <a
@@ -117,7 +90,7 @@ export default function AppHeader() {
     if(user) {
       if(pathname == '/dashboard') {
         return(
-          <div className="text-right my-4 mr-2">
+          <div className="my-4 ml-4">
             <button
               className="text-gray-400 text-sm"
               onClick={(e) => handleLogout()}
@@ -166,13 +139,13 @@ export default function AppHeader() {
       return(
         <div className="hidden md:flex md:space-x-10">
           {navigation.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              className="font-medium text-gray-500 hover:text-gray-900"
-            >
-              {item.name}
-            </a>
+            <Link href={item.href} key={item.name}>
+              <a
+                className="font-medium text-gray-500 hover:text-gray-900"
+              >
+                {item.name}
+              </a>
+            </Link>
           ))}
         </div>
       )
@@ -186,13 +159,13 @@ export default function AppHeader() {
       return(
         <div className="px-2 pt-2 pb-3">
           {navigation.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-            >
-              {item.name}
-            </a>
+            <Link key={item.name} href={item.href}>
+              <a
+                className="block px-3 py-4 text-right rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+              >
+                {item.name}
+              </a>
+            </Link>
           ))}
         </div>
       )
@@ -210,12 +183,12 @@ export default function AppHeader() {
               <>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6">
                   <nav
-                    className="relative flex items-center justify-between md:justify-center sm:h-10 "
+                    className="relative w-full flex items-center justify-between sm:h-10 "
                     aria-label="Global"
                   >
-                    <div className="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0">
-                      <div className="flex items-center justify-between w-full md:w-auto">
-                        <Link href="/">
+                    <div className="flex items-center">
+                      <div className="flex items-center justify-between md:w-auto">
+                        <Link href="/dashboard">
                         <a>
                           <span className="sr-only">Tsundoku</span>
                           <picture>
@@ -229,15 +202,16 @@ export default function AppHeader() {
                           </picture>
                         </a>
                         </Link>
-                        <div className="-mr-2 flex items-center md:hidden">
-                          <Popover.Button className="bg-gray-50 rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-tsundoku-blue-main">
-                            <span className="sr-only">Open main menu</span>
-                            <MenuIcon className="h-6 w-6" aria-hidden="true" />
-                          </Popover.Button>
-                        </div>
+                        
                       </div>
                     </div>
-                    <div>
+                    <div className="flex">
+                    <div className="-mr-2 flex items-center md:hidden">
+                      <Popover.Button className="bg-gray-50 rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-tsundoku-blue-main">
+                        <span className="sr-only">Open main menu</span>
+                        <MenuIcon className="h-6 w-6" aria-hidden="true" />
+                      </Popover.Button>
+                    </div>
                     {renderNavigation()}
                     {renderHeaderButton()}
                     </div>
@@ -262,11 +236,15 @@ export default function AppHeader() {
                     <div className="rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden">
                       <div className="px-5 pt-4 flex items-center justify-between">
                         <div>
+                        <Link href="/dashboard">
+                        <a>
                           <img
                             className="h-8 w-auto sm:h-10"
                             src="/img/logos/tsundoku-logo-mark-only.svg"
                             alt="tsundoku-logo-mark-only"
                           />
+                          </a>
+                        </Link>
                         </div>
                         <div className="-mr-2">
                           <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-tsundoku-blue-main">
