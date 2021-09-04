@@ -239,7 +239,7 @@ function SessionDetail({ session }) {
         </div>
       </div>
 
-      {/* <Footer /> */}
+      <Footer />
     </div>
   )
 }
