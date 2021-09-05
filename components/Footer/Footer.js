@@ -73,12 +73,6 @@ export default function Footer() {
   const currentLocale = FindLocaleByLocaleCode(router.locale)
   const [localeSelected, setLocaleSelected] = useState(currentLocale)
 
-  // Function
-  const handleLogout = () => {
-    auth.signout()
-    router.push('/')
-  }
-
   // localeSelectedが変更されると、そのlocaleのURLにリダイレクトする
   useEffect(() => {
     const { pathname } = router
