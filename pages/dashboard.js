@@ -363,9 +363,9 @@ export default function Dashboard({ sessions }) {
           </>
         }
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="relative mt-6 mx-auto max-w-5xl px-4 sm:mt-0">
+          <main className="relative mt-16 mx-auto max-w-5xl px-4 sm:mt-20">
             <div className="w-full fixed z-10 -mx-4 sm:mx-0 bottom-0 shadow-lg sm:shadow-none sm:static">
-              <div className="bg-white sm:bg-gray-50 px-6 sm:px-0 py-4">
+              <div className="bg-white sm:bg-gray-50 px-6 sm:px-0 py-4 sm:py-0">
                 <div className="flex justify-center sm:justify-end">
                   <Link href="/newRoom">
                     <a className="block w-full sm:w-auto px-6 py-2 border border-transparent text-base text-center font-bold rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main">

@@ -44,7 +44,7 @@ export default function Session() {
       />
 
       <Head>
-        <title>DASHBOARD</title>
+        <title>JOIN</title>
         <meta
           name="description"
           content="一緒に読書してくれる誰かを探すためのマッチングサービス"
