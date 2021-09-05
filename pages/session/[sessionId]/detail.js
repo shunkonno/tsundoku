@@ -171,7 +171,7 @@ function SessionDetail({ session }) {
                   </h3>
                   <span
                     type="button"
-                    className="text-xs text-red-600 hover:text-red-768768768768700 cursor-default align-bottom"
+                    className="text-xs cursor-pointer text-red-600 hover:text-red-700 align-bottom"
                     onClick={(e) => cancelSession(session)}
                   >
                     予約を取り消す
