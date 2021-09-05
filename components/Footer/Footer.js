@@ -95,18 +95,18 @@ export default function Footer() {
   // ===========================================================
   return (
     <footer
-      className="relative z-0 bg-tsundoku-blue-dark"
+      className="relative z-0 bg-gray-50"
       aria-labelledby="footer-heading"
     >
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
 
-      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
-        <div className="pb-8 xl:grid xl:grid-cols-5 xl:gap-8">
+      <div className="max-w-5xl mx-auto py-4 px-4 sm:px-6 lg:py-4 lg:px-4">
+        {/* <div className="pb-8 xl:grid xl:grid-cols-5 xl:gap-8">
           <div className="grid grid-cols-2 gap-8 xl:col-span-4">
             <div className="md:grid md:grid-cols-2 md:gap-8">
-              {/* <div className="md:mt-0">
+              <div className="md:mt-0">
                 <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">
                   Support
                 </h3>
@@ -122,7 +122,7 @@ export default function Footer() {
                     </li>
                   ))}
                 </ul>
-              </div> */}
+              </div>
             </div>
           </div>
 
@@ -207,7 +207,7 @@ export default function Footer() {
               )}
             </Listbox>
           </div>
-        </div>
+        </div> */}
         <div className="mt-8 mb-10 border-t border-blueGray-700 pt-8 md:flex md:items-center md:justify-between">
           <div className="flex space-x-6 md:order-2">
             {navigation.social.map((item) => (

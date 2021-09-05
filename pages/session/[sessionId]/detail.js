@@ -82,6 +82,7 @@ function SessionDetail({ session }) {
   // Filter Current session by sessionId
   // const session = sessions.find((session) => {
   //   return session.sessionId == sessionId
+
   // })
 
   // ============================================================
@@ -102,7 +103,7 @@ function SessionDetail({ session }) {
     const baseTime = new Date()
 
     const unixBaseTime = moment(baseTime).unix()
-    const unixStartDateTime = moment(session.startDateTime).unix()
+    const unixStartDateTime = moment(session?.startDateTime).unix()
 
     const differenceTime = unixStartDateTime - unixBaseTime
     const thresholdOfEnterRoom = 5 * 60 // 5 minutes
@@ -114,7 +115,7 @@ function SessionDetail({ session }) {
     }
 
     return () => clearInterval(id)
-  }, [count])
+  }, [count, session?.startDateTime])
 
   // ============================================================
   // Button Handler
@@ -123,7 +124,7 @@ function SessionDetail({ session }) {
   // Handle session reservation cancellation
   const cancelSession = async (session) => {
     // Update guestId to an empty string
-    await updateSession(session.sessionId, { guestId: '' })
+    await updateSession(session?.sessionId, { guestId: '' })
 
     await router.push({
       pathname: '/dashboard',
@@ -150,7 +151,7 @@ function SessionDetail({ session }) {
       {/* main content */}
       <div className="relative pb-16 bg-gray-50 overflow-hidden">
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="relative mt-16 mx-auto max-w-3xl px-4 sm:mt-12">
+          <main className="relative mt-16 mx-auto max-w-5xl px-4 sm:mt-12">
             <div className="py-6">
               <Link href="/dashboard">
                 <a className="">
@@ -164,9 +165,18 @@ function SessionDetail({ session }) {
             </div>
             <div className="bg-white shadow overflow-hidden sm:rounded-lg">
               <div className="px-4 py-5 sm:px-6">
-                <h3 className="text-lg leading-6 font-medium text-gray-900">
-                  ルーム詳細
-                </h3>
+                <div className="flex justify-between">
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">
+                    ルーム詳細
+                  </h3>
+                  <span
+                    type="button"
+                    className="text-xs text-red-600 hover:text-red-768768768768700 cursor-default align-bottom"
+                    onClick={(e) => cancelSession(session)}
+                  >
+                    予約を取り消す
+                  </span>
+                </div>
                 {/* <p className="mt-1 max-w-2xl text-sm text-gray-500">Personal details and application.</p> */}
               </div>
               <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
@@ -176,7 +186,7 @@ function SessionDetail({ session }) {
                       ルーム作成者
                     </dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {session.ownerName}
+                      {session?.ownerName}
                     </dd>
                   </div>
                   <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -184,7 +194,7 @@ function SessionDetail({ session }) {
                       開始日時
                     </dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {formatDateTime(session.startDateTime)}
+                      {formatDateTime(session?.startDateTime)}
                     </dd>
                   </div>
                   <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -192,41 +202,30 @@ function SessionDetail({ session }) {
                       所要時間
                     </dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {session.duration} 分
+                      {session?.duration} 分
                     </dd>
                   </div>
                 </dl>
               </div>
-              <div className="pb-6 px-4">
-                <div className="flex justify-end">
-                  <p
-                    type="button"
-                    className="text-xs text-gray-400"
-                    onClick={(e) => cancelSession(session)}
-                  >
-                    予約を取り消す
-                  </p>
-                </div>
-              </div>
               <div className="py-6">
                 <div className="flex justify-center">
                   {enterRoomOpen ? (
-                    <Link href={`/session/${session.sessionId}/join`}>
-                      <p
+                    <Link href={`/session/${session?.sessionId}/join`}>
+                      <span
                         type="button"
-                        className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
+                        className="cursor-pointer inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
                       >
                         ルームに入室する
-                      </p>
+                      </span>
                     </Link>
                   ) : (
                     <div>
-                      <p
+                      <span
                         type="button"
-                        className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-gray-600 opacity-75 bg-gray-400 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600"
+                        className="cursor-not-allowed inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-gray-600 opacity-75 bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600"
                       >
                         ルームに入室する
-                      </p>
+                      </span>
                       <p className="text-center text-sm text-gray-800 mt-2">
                         5分前から入室できます。
                       </p>
@@ -239,7 +238,7 @@ function SessionDetail({ session }) {
         </div>
       </div>
 
-      {/* <Footer /> */}
+      <Footer />
     </div>
   )
 }
