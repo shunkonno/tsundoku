@@ -151,7 +151,7 @@ function SessionDetail({ session }) {
       {/* main content */}
       <div className="relative pb-16 bg-gray-50 overflow-hidden">
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="relative mt-16 mx-auto max-w-5xl px-4 sm:mt-12">
+          <main className="relative mt-16 mx-auto max-w-5xl px-4 sm:mt-20">
             <div className="py-6">
               <Link href="/dashboard">
                 <a className="">
