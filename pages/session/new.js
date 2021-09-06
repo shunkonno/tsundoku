@@ -8,18 +8,18 @@ import useSWR from 'swr'
 import moment from 'moment'
 
 // Components
-import { AppHeader } from '../components/Header'
-import { Footer } from '../components/Footer'
+import { AppHeader } from '../../components/Header'
+import { Footer } from '../../components/Footer'
 import { Listbox, Transition } from '@headlessui/react'
 
 //Assets
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 
 // Functions
-import uselocalesFilter from '../utils/translate'
-import { useAuth } from '../lib/auth'
-import fetcher from '../utils/fetcher'
-import { addSession } from '../lib/db'
+import uselocalesFilter from '../../utils/translate'
+import { useAuth } from '../../lib/auth'
+import fetcher from '../../utils/fetcher'
+import { addSession } from '../../lib/db'
 
 // ============================================================
 // datetime data
@@ -251,7 +251,7 @@ export default function Dashboard() {
 
   // Set locale
   const { locale } = useRouter()
-  const t = uselocalesFilter('newRoom', locale)
+  const t = uselocalesFilter('sessionNew', locale)
 
   // ============================================================
   // Button Handler
