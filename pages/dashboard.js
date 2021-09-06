@@ -405,6 +405,7 @@ export default function Dashboard({ sessions }) {
                                       /> */}
                                       <h3 className="session-card-date">
                                         {formatDateTime(session.startDateTime)}
+                                        &nbsp;〜
                                       </h3>
                                     </div>
                                   </div>
@@ -464,6 +465,7 @@ export default function Dashboard({ sessions }) {
                                     /> */}
                                     <h3 className="session-card-date">
                                       {formatDateTime(session.startDateTime)}
+                                      &nbsp;〜
                                     </h3>
                                   </div>
                                 </div>
