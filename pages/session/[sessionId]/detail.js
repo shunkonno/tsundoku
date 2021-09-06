@@ -91,7 +91,7 @@ export default function SessionDetail({ session }) {
 
   // Format datetime ISOString
   const formatDateTime = (datetimeIsoString) => {
-    return moment(datetimeIsoString).format('M月D日 hh:mm')
+    return moment(datetimeIsoString).format('M月D日 H:mm')
   }
 
   // Calculate current time and determine whether the room should be open or not
