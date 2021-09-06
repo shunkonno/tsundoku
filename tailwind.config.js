@@ -24,7 +24,7 @@ module.exports = {
           main: '#1877F2',
           sub: '#B5DBFF',
           light: '#EEF7FF',
-          dark: '#1A2D45',
+          dark: '#1A2D45'
         },
         brown: {
           main: '#AD7E47',
@@ -35,15 +35,12 @@ module.exports = {
     extend: {
       fontFamily: {
         NotoSerif: ['Noto Serif JP'],
-        NotoSans: ['Noto Sans JP'],
-      },
-    },
+        NotoSans: ['Noto Sans JP']
+      }
+    }
   },
   variants: {
-    extend: {},
+    extend: {}
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/aspect-ratio'),
-  ],
+  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/aspect-ratio')]
 }

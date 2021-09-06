@@ -185,7 +185,7 @@ export default function Dashboard({ sessions }) {
   return (
     <div>
       <Head>
-        <title>DASHBOARD</title>
+        <title>Tsundoku | ダッシュボード</title>
         <meta
           name="description"
           content="一緒に読書してくれる誰かを探すためのマッチングサービス"
@@ -377,8 +377,8 @@ export default function Dashboard({ sessions }) {
             </div>
             {checkResult ? (
               <div className="py-3">
-                <div className="bg-gray-200 rounded-sm px-4 py-2 mb-4">
-                  参加予定のルーム
+                <div className="border-b-2 border-blue-700 py-2 mb-4">
+                  <h2 className="title-section">参加予定のルーム</h2>
                 </div>
                 <ul
                   role="list"
@@ -403,18 +403,21 @@ export default function Dashboard({ sessions }) {
                                         src={session.imageUrl}
                                         alt=""
                                       /> */}
-                                      <h3 className="text-gray-900 text-sm font-medium truncate">
-                                        {session.ownerName}
+                                      <h3 className="session-card-date">
+                                        {formatDateTime(session.startDateTime)}
                                       </h3>
                                     </div>
                                   </div>
-                                  <p className="mt-1 text-gray-500 text-sm truncate">
-                                    開始日時{' '}
-                                    {formatDateTime(session.startDateTime)}
-                                  </p>
-                                  <p className="mt-1 text-gray-500 text-sm truncate">
-                                    予定時間 {session.duration} 分
-                                  </p>
+                                  <div className="mt-1">
+                                    <p className="session-card-duration">
+                                      予定時間：{session.duration} 分間
+                                    </p>
+                                  </div>
+                                  <div className="mt-4">
+                                    <p className="session-card-owner">
+                                      ルーム作成者：{session.ownerName}
+                                    </p>
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -430,9 +433,9 @@ export default function Dashboard({ sessions }) {
             ) : (
               <></>
             )}
-            <div className="py-3">
-              <div className="bg-gray-200 rounded-sm px-4 py-2 mb-4">
-                空きルーム一覧
+            <div className="py-3 mt-4">
+              <div className="border-b-2 border-gray-900 py-2 mb-4">
+                <h2 className="title-section">空きルーム一覧</h2>
               </div>
               <ul
                 role="list"
@@ -446,7 +449,7 @@ export default function Dashboard({ sessions }) {
                     )
                   })
                   .map((session) => (
-                    <Disclosure>
+                    <Disclosure key={session.sessionId}>
                       {({ open }) => (
                         <li key={session.sessionId}>
                           <div className="bg-white rounded-lg shadow divide-y divide-gray-200">
@@ -459,18 +462,21 @@ export default function Dashboard({ sessions }) {
                                       src={session.imageUrl}
                                       alt=""
                                     /> */}
-                                    <h3 className="text-gray-900 text-sm font-medium truncate">
-                                      {session.ownerName}
+                                    <h3 className="session-card-date">
+                                      {formatDateTime(session.startDateTime)}
                                     </h3>
                                   </div>
                                 </div>
-                                <p className="mt-1 text-gray-500 text-sm truncate">
-                                  開始日時{' '}
-                                  {formatDateTime(session.startDateTime)}
-                                </p>
-                                <p className="mt-1 text-gray-500 text-sm truncate">
-                                  予定時間 {session.duration} 分
-                                </p>
+                                <div className="mt-1">
+                                  <p className="session-card-duration">
+                                    予定時間：{session.duration} 分間
+                                  </p>
+                                </div>
+                                <div className="mt-4">
+                                  <p className="session-card-owner">
+                                    開催者：{session.ownerName}
+                                  </p>
+                                </div>
                               </div>
                               {open ? (
                                 <Disclosure.Button className="">

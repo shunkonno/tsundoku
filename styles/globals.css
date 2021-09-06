@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .title-section {
+    @apply text-xl font-medium;
+  }
+
+  .session-card-date {
+    @apply text-gray-900 text-base font-medium truncate;
+  }
+
+  .session-card-duration {
+    @apply text-gray-900 text-sm truncate;
+  }
+
+  .session-card-owner {
+    @apply text-gray-500 text-sm truncate;
+  }
+}

@@ -122,7 +122,9 @@ function SessionDetail({ session }) {
   // ============================================================
 
   // Handle session reservation cancellation
-  const cancelSession = async (session) => {
+  const cancelSession = async () => {
+    e.preventDefault()
+
     // Update guestId to an empty string
     await updateSession(session?.sessionId, { guestId: '' })
 
@@ -138,7 +140,7 @@ function SessionDetail({ session }) {
   return (
     <div>
       <Head>
-        <title>ルーム詳細情報</title>
+        <title>Tsundoku | ルーム詳細</title>
         <meta
           name="description"
           content="一緒に読書してくれる誰かを探すためのマッチングサービス"
@@ -151,15 +153,15 @@ function SessionDetail({ session }) {
       {/* main content */}
       <div className="relative pb-16 bg-gray-50 overflow-hidden">
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="relative mt-16 mx-auto max-w-5xl px-4 sm:mt-20">
+          <main className="relative mt-16 mx-auto max-w-3xl px-4 sm:mt-20">
             <div className="py-6">
               <Link href="/dashboard">
                 <a className="">
                   <ChevronLeftIcon
-                    className="inline-block h-5 w-5 text-gray-400 mr-1"
+                    className="inline-block h-5 w-5 text-gray-900 mr-1"
                     aria-hidden="true"
                   />
-                  <span className="text-sm text-gray-400">戻る</span>
+                  <span className="text-sm text-gray-900">戻る</span>
                 </a>
               </Link>
             </div>
@@ -171,8 +173,8 @@ function SessionDetail({ session }) {
                   </h3>
                   <span
                     type="button"
-                    className="text-xs cursor-pointer text-red-600 hover:text-red-700 align-bottom"
-                    onClick={(e) => cancelSession(session)}
+                    className="text-sm cursor-pointer text-red-600 hover:text-red-700"
+                    onClick={(e) => cancelSession(e)}
                   >
                     予約を取り消す
                   </span>
@@ -182,26 +184,26 @@ function SessionDetail({ session }) {
               <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
                 <dl className="sm:divide-y sm:divide-gray-200">
                   <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-sm font-medium text-gray-500">
+                    <dt className="text-base font-medium text-gray-500">
                       ルーム作成者
                     </dt>
-                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    <dd className="mt-1 text-base text-gray-900 sm:mt-0 sm:col-span-2">
                       {session?.ownerName}
                     </dd>
                   </div>
                   <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-sm font-medium text-gray-500">
+                    <dt className="text-base font-medium text-gray-500">
                       開始日時
                     </dt>
-                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    <dd className="mt-1 text-base text-gray-900 sm:mt-0 sm:col-span-2">
                       {formatDateTime(session?.startDateTime)}
                     </dd>
                   </div>
                   <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-sm font-medium text-gray-500">
+                    <dt className="text-base font-medium text-gray-500">
                       所要時間
                     </dt>
-                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    <dd className="mt-1 text-base text-gray-900 sm:mt-0 sm:col-span-2">
                       {session?.duration} 分
                     </dd>
                   </div>
