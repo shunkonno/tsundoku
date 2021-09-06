@@ -122,7 +122,7 @@ function SessionDetail({ session }) {
   // ============================================================
 
   // Handle session reservation cancellation
-  const cancelSession = async () => {
+  const cancelSession = async (e) => {
     e.preventDefault()
 
     // Update guestId to an empty string
