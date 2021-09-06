@@ -4,6 +4,7 @@
 import { Fragment } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import Image from 'next/image'
 import useSWR from 'swr'
 
 //Assets
@@ -177,7 +178,7 @@ export default function AppHeader() {
                         <Link href="/dashboard">
                           <a>
                             <span className="sr-only">Tsundoku</span>
-                            <picture>
+                            <picture className="flex items-center">
                               <source
                                 className="h-8 w-auto sm:h-10"
                                 srcSet="/img/logos/tsundoku-logo-mark-and-typo.svg"
@@ -188,10 +189,12 @@ export default function AppHeader() {
                                 srcSet="/img/logos/tsundoku-logo-mark-and-typo.svg"
                                 media="(min-width: 640px)"
                               />
-                              <img
+                              <Image
                                 className="h-8 w-auto sm:h-10"
-                                src="/img/logos/tsundoku-logo-mark-only.svg"
-                                alt="tsundoku-logo-mark-only"
+                                src="/img/logos/tsundoku-logo-mark-and-typo.svg"
+                                alt="tsundoku-logo-mark-and-typo"
+                                width={120}
+                                height={32}
                               />
                             </picture>
                           </a>
@@ -231,10 +234,12 @@ export default function AppHeader() {
                         <div>
                           <Link href="/dashboard">
                             <a>
-                              <img
+                              <Image
                                 className="h-8 w-auto sm:h-10"
                                 src="/img/logos/tsundoku-logo-mark-only.svg"
                                 alt="tsundoku-logo-mark-only"
+                                width={32}
+                                height={32}
                               />
                             </a>
                           </Link>

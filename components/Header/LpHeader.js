@@ -195,11 +195,13 @@ export default function LpHeader() {
                           <picture>
                             <source className="h-8 w-auto sm:h-10" srcSet="/img/logos/tsundoku-logo-mark-and-typo.svg" media="(max-width: 639px)"/>
                             <source className="h-8 w-auto sm:h-10" srcSet="/img/logos/tsundoku-logo-mark-and-typo.svg" media="(min-width: 640px)"/>
-                            <img
-                               className="h-8 w-auto sm:h-10"
-                              src="/img/logos/tsundoku-logo-mark-only.svg"
-                              alt="tsundoku-logo-mark-only"
-                            />
+                            <Image
+                                className="h-8 w-auto sm:h-10"
+                                src="/img/logos/tsundoku-logo-mark-and-typo.svg"
+                                alt="tsundoku-logo-mark-and-typo"
+                                width={120}
+                                height={32}
+                              />
                           </picture>
                         </a>
                         </Link>
