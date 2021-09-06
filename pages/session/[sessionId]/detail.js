@@ -50,7 +50,7 @@ export async function getStaticPaths() {
   return { paths, fallback: true }
 }
 
-function SessionDetail({ session }) {
+export default function SessionDetail({ session }) {
   // ============================================================
   // Auth
   // ============================================================
@@ -244,9 +244,3 @@ function SessionDetail({ session }) {
     </div>
   )
 }
-
-SessionDetail.propTypes = {
-  session: PropTypes.object.isRequired
-}
-
-export default SessionDetail
