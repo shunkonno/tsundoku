@@ -114,7 +114,7 @@ export default function Dashboard({ sessions }) {
 
   // Function
   const formatDateTime = (datetimeIsoString) => {
-    return moment(datetimeIsoString).format('M月D日 hh:mm')
+    return moment(datetimeIsoString).format('M月D日 H:mm')
   }
 
   // Set locale
