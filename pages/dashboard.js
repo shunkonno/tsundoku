@@ -93,22 +93,22 @@ export default function Dashboard({ sessions }) {
       setCreateRoomAlertOpen(true)
       setTimeout(() => {
         setCreateRoomAlertOpen(false)
-      }, 3000)
+      }, 10000)
     } else if (router.query.successReserveRoom == 'true') {
       setReserveRoomAlertOpen(true)
       setTimeout(() => {
         setReserveRoomAlertOpen(false)
-      }, 3000)
+      }, 10000)
     } else if (router.query.successReserveRoom == 'false') {
       setFailedReserveRoomAlertOpen(true)
       setTimeout(() => {
         setFailedReserveRoomAlertOpen(false)
-      }, 3000)
+      }, 10000)
     } else if (router.query.successCancelRoom == 'true') {
       setCancelRoomAlertOpen(true)
       setTimeout(() => {
         setCancelRoomAlertOpen(false)
-      }, 3000)
+      }, 10000)
     }
   }, [])
 
