@@ -272,9 +272,7 @@ export default function Dashboard() {
     ).toISOString()
 
     const hideDateTime = moment(
-      `${year}-${month}-${day} ${hours}:${(
-        Number(minutes) + Number(durationMinutes)
-      ).toString()}`
+      `${year}-${month}-${day} ${hours}:${(Number(minutes) + 10).toString()}`
     ).toISOString()
 
     // Create Daily Room
