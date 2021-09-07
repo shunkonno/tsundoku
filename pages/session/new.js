@@ -265,15 +265,17 @@ export default function Dashboard() {
     const hours = hoursAndMinutes[0]
     const minutes = hoursAndMinutes[1]
 
+    const durationMinutes = duration.replace('分', '')
+
     const startDateTime = moment(
       `${year}-${month}-${day} ${hours}:${minutes}`
     ).toISOString()
 
     const hideDateTime = moment(
-      `${year}-${month}-${day} ${hours}:${(Number(minutes) + 10).toString()}`
+      `${year}-${month}-${day} ${hours}:${(
+        Number(minutes) + Number(durationMinutes)
+      ).toString()}`
     ).toISOString()
-
-    const durationAmount = duration.replace('分', '')
 
     // Create Daily Room
     const url = 'https://api.daily.co/v1/rooms'
@@ -295,7 +297,7 @@ export default function Dashboard() {
           ownerName: userInfo.name,
           startDateTime,
           hideDateTime,
-          duration: durationAmount
+          duration: durationMinutes
         })
 
         router.push({
