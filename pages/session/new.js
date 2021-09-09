@@ -260,20 +260,34 @@ export default function Dashboard() {
   const createSession = async (e) => {
     e.preventDefault()
 
-    // Get datetime
-    const hoursAndMinutes = startTime.split(':')
-    const hours = hoursAndMinutes[0]
-    const minutes = hoursAndMinutes[1]
+    // Get hour and minute values from form input
+    const hourAndMinute = startTime.split(':')
+    const hour = hourAndMinute[0]
+    const minute = hourAndMinute[1]
 
-    const durationMinutes = duration.replace('分', '')
+    // Get duration from form, in minutes
+    const durationValue = duration.replace('分', '')
 
-    const startDateTime = moment(
-      `${year}-${month}-${day} ${hours}:${minutes}`
-    ).toISOString()
+    // Set startDateTime for session
+    var startDateTime = moment({
+      year: Number(year),
+      month: Number(month),
+      day: Number(day),
+      hour: Number(hour),
+      minute: Number(minute)
+    }).toISOString()
 
-    const hideDateTime = moment(
-      `${year}-${month}-${day} ${hours}:${(Number(minutes) + 10).toString()}`
-    ).toISOString()
+    // Set hideDateTime for session
+    // This adds the duration to startDateTime, to calculate expected end
+    var endDateTime = moment({
+      year: Number(year),
+      month: Number(month),
+      day: Number(day),
+      hour: Number(hour),
+      minute: Number(minute)
+    })
+      .add(Number(durationValue), 'minutes')
+      .toISOString()
 
     // Create Daily Room
     const url = 'https://api.daily.co/v1/rooms'
@@ -294,8 +308,8 @@ export default function Dashboard() {
           ownerId: user.uid,
           ownerName: userInfo.name,
           startDateTime,
-          hideDateTime,
-          duration: durationMinutes
+          endDateTime,
+          duration: durationValue
         })
 
         router.push({
