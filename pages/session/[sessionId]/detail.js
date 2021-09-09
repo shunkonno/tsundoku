@@ -134,6 +134,18 @@ export default function SessionDetail({ session }) {
     })
   }
 
+  const deleteSession = async (e) => {
+    e.preventDefault()
+
+    // Delete guestId to an empty string
+    await deleteSession(session?.sessionId)
+
+    await router.push({
+      pathname: '/dashboard',
+      query: { successDeleteRoom: true }
+    })
+  }
+
   // ============================================================
   // Return Page
   // ============================================================
