@@ -205,7 +205,7 @@ export default function Footer() {
             </Listbox>
           </div>
         </div> */}
-        <div className="mt-8 mb-10 border-t border-blueGray-700 pt-8 md:flex md:items-center md:justify-between">
+        <div className="mt-8 border-t border-blueGray-700 md:flex md:items-center md:justify-between">
           <div className="flex space-x-6 md:order-2">
             {navigation.social.map((item) => (
               <a

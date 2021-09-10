@@ -55,7 +55,7 @@ export default function Home() {
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
           <main className="mx-auto max-w-7xl sm:mt-4">
             <div className="px-4 text-center md:text-left py-4 sm:py-12 md:flex">
-              <div className="md:w-3/5 md:px-4 lg:px-24 xl:px-32 md:py-12">
+              <div className="md:w-3/5 md:py-12">
                 <h1 className="text-4xl leading-normal tracking-tight font-bold text-gray-900 sm:text-5xl md:text-6xl">
                   <span className="inline">読書に</span>
                   <span className="text-tsundoku-blue-main inline">没頭</span>
@@ -94,7 +94,7 @@ export default function Home() {
             <div className="mt-10">
               <div className="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
-                  <div className="col-span-1 lg:col-span-3 py-20 px-4 sm:px-6 lg:px-8 sm:rounded-md bg-gray-200">
+                  <div className="col-span-1 lg:col-span-3 py-10 px-4 sm:px-6 lg:px-8 sm:rounded-md">
                     <div className="mb-2">
                       <h2 className="text-gray-900 font-bold text-2xl lg:text-3xl leading-relaxed">
                         没頭する時間を取り戻す
@@ -102,19 +102,19 @@ export default function Home() {
                     </div>
                     <div className="space-y-4">
                       <div>
-                        <p className="text-gray-900 text-base leading-relaxed">
+                        <p className="text-gray-900 text-lg leading-relaxed">
                           落ち着いて、じっくりと読書できないのは、現代人の悩みのひとつです。スマホの通知が鳴るときも、ふと家事を思い出したときにも、集中力が途切れてしまいがちです。
                         </p>
                       </div>
                       <div>
-                        <p className="text-gray-900 text-base leading-relaxed">
+                        <p className="text-gray-900 text-lg leading-relaxed">
                           没頭して読書する時間を取り戻したい。積ん読してる本を、Tsundoku
                           で消化しませんか。
                         </p>
                       </div>
                     </div>
                   </div>
-                  <div className="col-span-1 lg:col-span-3 py-20 px-4 sm:px-6 lg:px-8">
+                  <div className="col-span-1 lg:col-span-3 py-10 px-4 sm:px-6 lg:px-8">
                     <div>
                       <p className="font-NotoSerif text-4xl text-gray-400">
                         ｢書物の新しいページを1ページ、1ページ読むごとに、私はより豊かに、より強く、より高くなっていく。｣
@@ -318,22 +318,20 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mb-24">
-            <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 md:py-24 md:px-8 md:flex md:items-center md:justify-between">
-              <h2 className="font-sans font-bold tracking-tight md:text-4xl">
-                <p className="block text-gray-900 text-3xl sm:text-4xl tracking-wider leading-normal mb-2">
-                  ペア読書で没頭しましょう
-                </p>
-              </h2>
-              <div className="mt-8 flex md:mt-0 md:flex-shrink-0">
-                <div className="inline-flex rounded-md shadow">
-                  <a
-                    href="#"
-                    className="font-sans inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-tsundoku-blue-main hover:bg-tsundoku-blue-main"
-                  >
-                    無料で始める
-                  </a>
-                </div>
+          <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 md:py-10 md:px-8 md:flex md:items-center md:justify-between">
+            <h2 className="font-sans font-bold tracking-tight md:text-4xl">
+              <p className="block text-gray-900 text-3xl sm:text-4xl tracking-wider leading-normal mb-2">
+                Tsundoku を使って、ペア読書
+              </p>
+            </h2>
+            <div className="mt-8 flex md:mt-0 md:flex-shrink-0">
+              <div className="inline-flex rounded-md shadow">
+                <a
+                  href="#"
+                  className="font-sans inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-tsundoku-blue-main hover:bg-tsundoku-blue-main"
+                >
+                  無料で始める
+                </a>
               </div>
             </div>
           </div>
