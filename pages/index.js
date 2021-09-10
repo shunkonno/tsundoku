@@ -302,7 +302,7 @@ export default function Home() {
             </div> */}
           </main>
 
-          <div className="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+          {/* <div className="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
             <div className="py-20">
               <div>
                 <p className="font-NotoSerif text-3xl text-gray-400">
@@ -311,7 +311,7 @@ export default function Home() {
                 </p>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 md:py-10 md:px-8 md:flex md:items-center md:justify-between">
             <h2 className="font-sans font-bold tracking-tight md:text-4xl">
