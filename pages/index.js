@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 // Components
 import { LpHeader } from '../components/Header'
-import { Footer } from '../components/Footer'
+import { LpFooter } from '../components/Footer'
 
 // Funtions
 import { useAuth } from '../lib/auth'
@@ -386,7 +386,7 @@ export default function Home() {
       </div>
       {/* END main content */}
 
-      <Footer />
+      <LpFooter />
     </div>
   )
 }

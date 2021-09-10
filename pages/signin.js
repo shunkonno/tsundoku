@@ -6,6 +6,7 @@ import Image from 'next/image'
 
 // Components
 import { LpHeader } from '../components/Header'
+import { LpFooter } from '../components/Footer'
 
 // Funtions
 import { useAuth } from '../lib/auth'
@@ -88,6 +89,8 @@ export default function SignIn() {
           </div>
         </main>
       </div>
+
+      <LpFooter />
     </div>
   )
 }

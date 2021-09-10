@@ -330,7 +330,7 @@ export default function Dashboard() {
   return (
     <div>
       <Head>
-        <title>Create New Room</title>
+        <title>Tsundoku | ルーム新規作成</title>
         <meta
           name="description"
           content="一緒に読書してくれる誰かを探すためのマッチングサービス"

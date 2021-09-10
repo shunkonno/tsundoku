@@ -43,30 +43,17 @@ export default function AppHeader() {
   const { locale, pathname } = router
   const t = uselocalesFilter('header', locale)
 
-  //Function
-  const handleLogout = () => {
-    auth.signout()
-    router.push('/')
-  }
-
+  // ============================================================
+  // Render Function
+  // ============================================================
   const renderHeaderButton = () => {
     //ログインしているかどうか確認
     if (user) {
-      //ログインしていれば、ログアウトボタンを表示
       return (
-        <div className="hidden md:flex md:items-center">
-          <div className="text-right ml-8">
-            <button
-              className="text-gray-400 text-sm"
-              onClick={(e) => handleLogout()}
-            >
-              {t.LOGOUT}
-            </button>
-          </div>
-        </div>
+        <></>
       )
     }
-    //ログインしていなければ、ログインボタンを表示(ログインしていなければ/index.jsに飛ばされるので本来必要ない)
+    //ログインしていなければ、ログインボタンを表示(ログインしていなければ/index.jsに飛ばされるので本来必要ないが念の為)
     else {
       return (
         <div className="hidden md:flex">
@@ -86,7 +73,7 @@ export default function AppHeader() {
     if (user) {
       if (pathname == '/dashboard') {
         return (
-          <div className="my-4 ml-4">
+          <div className="my-4 ml-5">
             <button
               className="text-gray-400 text-sm"
               onClick={(e) => handleLogout()}
@@ -98,7 +85,7 @@ export default function AppHeader() {
       } else {
         return (
           <>
-            <div className="text-right my-4 mr-2">
+            <div className="my-4 ml-5">
               <button
                 className="text-gray-400 text-sm"
                 onClick={(e) => handleLogout()}
@@ -161,6 +148,9 @@ export default function AppHeader() {
     }
   }
 
+  // ============================================================
+  // Return Component
+  // ============================================================
   return (
     <>
       <div className="relative bg-gray-50">

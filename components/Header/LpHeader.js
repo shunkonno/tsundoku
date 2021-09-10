@@ -55,7 +55,6 @@ export default function LpHeader() {
 
   const renderHeaderButton = () => {
     //ログインしているかどうか確認
-    //ログインしていれば、ログアウトボタンを表示
     if (user) {
       return (
         <div className="flex">
@@ -66,14 +65,6 @@ export default function LpHeader() {
               </a>
             </Link>
           </span>
-          <div className="text-right ml-8">
-            <button
-              className="inline-flex leading-6 items-center pl-4 py-2 text-sm font-medium text-gray-400 hover:text-gray-500"
-              onClick={(e) => handleLogout()}
-            >
-              {t.LOGOUT}
-            </button>
-          </div>
         </div>
       )
     }

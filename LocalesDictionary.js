@@ -71,7 +71,7 @@ export const dict = [
       },
       TODASHBOARD: {
         en: 'Dashboard',
-        ja: 'マイページ'
+        ja: 'ダッシュボード'
       },
       LOGOUT: {
         en: 'LOGOUT',
@@ -85,9 +85,9 @@ export const dict = [
         en: 'Current language setting is English',
         ja: '現在設定されている言語は日本語です。'
       },
-      TranslateTest2: {
-        en: 'This is English Test2',
-        ja: 'これは日本語のテスト2です'
+      LOGOUT: {
+        en: 'LOGOUT',
+        ja: 'ログアウト'
       }
     }
   }
