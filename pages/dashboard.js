@@ -22,6 +22,7 @@ import { useAuth } from '../lib/auth'
 import fetcher from '../utils/fetcher'
 import { updateSession } from '../lib/db'
 import { fetchAllSessions } from '../lib/db-admin'
+import classNames from '../utils/classNames'
 
 // ============================================================
 // Fetch static data
@@ -43,11 +44,8 @@ export default function Dashboard({ sessions }) {
   // ============================================================
 
   //Initial State
-  const [createRoomAlertOpen, setCreateRoomAlertOpen] = useState(false)
-  const [reserveRoomAlertOpen, setReserveRoomAlertOpen] = useState(false)
-  const [cancelRoomAlertOpen, setCancelRoomAlertOpen] = useState(false)
-  const [failedReserveRoomAlertOpen, setFailedReserveRoomAlertOpen] =
-    useState(false)
+  const [alertOpen, setAlertOpen] = useState(false)
+  const [alertAssort, setAlertAssort] = useState('') // create, reserve, cancel, failed
 
   // Auth
   const auth = useAuth()
@@ -64,10 +62,6 @@ export default function Dashboard({ sessions }) {
       }
     }
   )
-
-  const filtered = sessions.filter((session) => {
-    return !(session.ownerId == userInfo?.uid)
-  })
 
   // Routing
   const router = useRouter()
@@ -88,27 +82,27 @@ export default function Dashboard({ sessions }) {
     }
   })
 
+  // Function
+  const alertControl = async(alertAssort) => {
+    await setAlertOpen(true)
+    await setAlertAssort(alertAssort)
+    setTimeout(async() => {
+      await setAlertOpen(false)
+    }, 5000)
+  }
+
+  //alertControl by parameter
   useEffect(() => {
     if (router.query.successCreateRoom == 'true') {
-      setCreateRoomAlertOpen(true)
-      setTimeout(() => {
-        setCreateRoomAlertOpen(false)
-      }, 10000)
+      alertControl('create')
     } else if (router.query.successReserveRoom == 'true') {
-      setReserveRoomAlertOpen(true)
-      setTimeout(() => {
-        setReserveRoomAlertOpen(false)
-      }, 10000)
+      alertControl('reserve')
     } else if (router.query.successReserveRoom == 'false') {
-      setFailedReserveRoomAlertOpen(true)
-      setTimeout(() => {
-        setFailedReserveRoomAlertOpen(false)
-      }, 10000)
+      alertControl('failed')
     } else if (router.query.successCancelRoom == 'true') {
-      setCancelRoomAlertOpen(true)
-      setTimeout(() => {
-        setCancelRoomAlertOpen(false)
-      }, 10000)
+      alertControl('cancel')
+    } else {
+      setAlertAssort('')
     }
   }, [])
 
@@ -148,6 +142,96 @@ export default function Dashboard({ sessions }) {
       )
     }
   }
+
+  const renderAlert = (alertAssort) => (
+      <div className="relative w-full flex justify-center">
+        <Transition
+          show={alertOpen}
+          as={Fragment}
+          enter="transition duration-75"
+          enterFrom="transform -translate-y-1/4 opacity-0"
+          enterTo="transform -translate-y-0 opacity-95"
+          leave="transition-opacity duration-150"
+          leaveFrom="opacity-95"
+          leaveTo="opacity-0"
+        >
+          <div className="absolute z-10 w-full sm:w-1/3 px-4">
+            <div className="opacity-95">
+              <div className={classNames(
+                alertAssort == 'create' || alertAssort == 'reserve' &&
+                  'bg-green-50',
+                alertAssort == 'cancel' &&
+                  'bg-gray-200',
+                alertAssort == 'failed' &&
+                  'bg-yellow-50 border-yellow-400 border-l-4',
+                'rounded-b-md p-4'
+              )}
+              >
+                <div className="flex">
+                  <div className="flex-shrink-0">
+                    <CheckCircleIcon
+                      className={classNames(
+                        alertAssort == 'create' || alertAssort == 'reserve' &&
+                        'text-green-400',
+                        alertAssort == 'cancel' &&
+                          'text-gray-400',
+                        alertAssort == 'failed' &&
+                          'text-yellow-400',
+                        'h-5 w-5',
+                      )}
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <div className="ml-3">
+                    <p 
+                      className={classNames(
+                        alertAssort == 'create' || alertAssort == 'reserve' &&
+                        'text-green-800',
+                        alertAssort == 'cancel' &&
+                          'text-gray-800',
+                        alertAssort == 'failed' &&
+                          'text-yellow-800',
+                        'text-sm font-medium',
+                      )}
+                    >
+                      {alertAssort == 'create' || alertAssort == 'reserve' &&
+                          'ルームの予約が完了しました。'
+                      }
+                      {alertAssort == 'cancel' &&
+                          'ルームの予約を取り消しました。'
+                      }
+                      {alertAssort == 'failed' &&  
+                        '選択したルームは満員のため予約できませんでした。申し訳ございません。'
+                      }
+                    </p>
+                  </div>
+                  <div className="ml-auto pl-3">
+                    <div className="-mx-1.5 -my-1.5">
+                      <button
+                        type="button"
+                        className={classNames(
+                          alertAssort == 'create' || alertAssort == 'reserve' &&
+                          'bg-green-50  text-green-500 hover:bg-green-100 focus:ring-offset-green-50 focus:ring-green-600',
+                          alertAssort == 'cancel' &&
+                            'bg-gray-200 text-gray-500 hover:bg-gray-100 focus:ring-offset-gray-50 focus:ring-gray-600',
+                          alertAssort == 'failed' &&
+                            'bg-yellow-50 text-yellow-500 hover:bg-yellow-100 focus:ring-offset-green-50 focus:ring-yellow-600',
+                          'inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2',
+                        )}
+                        onClick={() => setAlertOpen(false)}
+                      >
+                        <span className="sr-only">Dismiss</span>
+                        <XIcon className="h-5 w-5" aria-hidden="true" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Transition>
+      </div>
+  )
 
   // ============================================================
   // Button Handler
@@ -193,177 +277,14 @@ export default function Dashboard({ sessions }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      {renderAlert(alertAssort)}
+
       <AppHeader />
 
       {/* main content */}
       <div className="relative pb-16 bg-gray-50 overflow-hidden">
-        {
-          /* Alert */
-          <>
-            <Transition
-              show={createRoomAlertOpen}
-              as={Fragment}
-              enter="transition duration-75"
-              enterFrom="transform -translate-y-1/4 opacity-0"
-              enterTo="transform -translate-y-0 opacity-100"
-              leave="transition-opacity duration-150"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <div className="absolute w-full px-4">
-                <div className="mt-4 rounded-md bg-green-50 p-4">
-                  <div className="flex">
-                    <div className="flex-shrink-0">
-                      <CheckCircleIcon
-                        className="h-5 w-5 text-green-400"
-                        aria-hidden="true"
-                      />
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-green-800">
-                        新しいルームを作成しました。
-                      </p>
-                    </div>
-                    <div className="ml-auto pl-3">
-                      <div className="-mx-1.5 -my-1.5">
-                        <button
-                          type="button"
-                          className="inline-flex bg-green-50 rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"
-                          onClick={() => setCreateRoomAlertOpen(false)}
-                        >
-                          <span className="sr-only">Dismiss</span>
-                          <XIcon className="h-5 w-5" aria-hidden="true" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Transition>
-            <Transition
-              show={reserveRoomAlertOpen}
-              as={Fragment}
-              enter="transition duration-75"
-              enterFrom="transform -translate-y-1/4 opacity-0"
-              enterTo="transform -translate-y-0 opacity-100"
-              leave="transition-opacity duration-150"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <div className="absolute w-full px-4">
-                <div className="mt-4 rounded-md bg-green-50 p-4">
-                  <div className="flex">
-                    <div className="flex-shrink-0">
-                      <CheckCircleIcon
-                        className="h-5 w-5 text-green-400"
-                        aria-hidden="true"
-                      />
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-green-800">
-                        ルームの参加を予約しました。
-                      </p>
-                    </div>
-                    <div className="ml-auto pl-3">
-                      <div className="-mx-1.5 -my-1.5">
-                        <button
-                          type="button"
-                          className="inline-flex bg-green-50 rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"
-                          onClick={() => setReserveRoomAlertOpen(false)}
-                        >
-                          <span className="sr-only">Dismiss</span>
-                          <XIcon className="h-5 w-5" aria-hidden="true" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Transition>
-            <Transition
-              show={failedReserveRoomAlertOpen}
-              as={Fragment}
-              enter="transition duration-75"
-              enterFrom="transform -translate-y-1/4 opacity-0"
-              enterTo="transform -translate-y-0 opacity-100"
-              leave="transition-opacity duration-150"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <div className="absolute w-full px-4">
-                <div className="mt-4 rounded-md bg-yellow-50 border-yellow-400 border-l-4 p-4">
-                  <div className="flex">
-                    <div className="flex-shrink-0">
-                      <ExclamationIcon
-                        className="h-5 w-5 text-yellow-400"
-                        aria-hidden="true"
-                      />
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-yellow-800">
-                        申し訳ございません。このルームはすでに満員となっております。
-                      </p>
-                    </div>
-                    <div className="ml-auto pl-3">
-                      <div className="-mx-1.5 -my-1.5">
-                        <button
-                          type="button"
-                          className="inline-flex bg-yellow-50 rounded-md p-1.5 text-yellow-500 hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-yellow-600"
-                          onClick={() => setFailedReserveRoomAlertOpen(false)}
-                        >
-                          <span className="sr-only">Dismiss</span>
-                          <XIcon className="h-5 w-5" aria-hidden="true" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Transition>
-            <Transition
-              show={cancelRoomAlertOpen}
-              as={Fragment}
-              enter="transition duration-75"
-              enterFrom="transform -translate-y-1/4 opacity-0"
-              enterTo="transform -translate-y-0 opacity-100"
-              leave="transition-opacity duration-150"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <div className="absolute w-full px-4">
-                <div className="mt-4 rounded-md bg-gray-200 p-4">
-                  <div className="flex">
-                    <div className="flex-shrink-0">
-                      <CheckCircleIcon
-                        className="h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-gray-800">
-                        ルームの予約を取り消しました。
-                      </p>
-                    </div>
-                    <div className="ml-auto pl-3">
-                      <div className="-mx-1.5 -my-1.5">
-                        <button
-                          type="button"
-                          className="inline-flex bg-gray-200 rounded-md p-1.5 text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-600"
-                          onClick={() => setReserveRoomAlertOpen(false)}
-                        >
-                          <span className="sr-only">Dismiss</span>
-                          <XIcon className="h-5 w-5" aria-hidden="true" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Transition>
-          </>
-        }
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="relative mt-16 mx-auto max-w-5xl px-4 sm:mt-20">
+          <main className="relative mx-auto max-w-5xl px-4 sm:py-8">
             <div className="w-full fixed z-10 -mx-4 sm:mx-0 bottom-0 shadow-lg sm:shadow-none sm:static">
               <div className="bg-white sm:bg-gray-50 px-6 sm:px-0 py-4 sm:py-0">
                 <div className="flex justify-center sm:justify-end">

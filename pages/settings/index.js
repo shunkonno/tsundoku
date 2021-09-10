@@ -44,6 +44,16 @@ export default function UserSettings() {
   // Initialize
   // ============================================================
 
+  //Initial State
+  const [userName, setUserName] = useState("")
+  const [genderSelected, setGenderSelected] = useState()
+  const [genderOfMatchSelected, setGenderOfMatchSelected] = useState(
+    genderOfMatchSettings[0]
+  )
+
+  const [alertOpen, setAlertOpen] = useState(false)
+  const [alertAssort, setAlertAssort] = useState('') // update
+
   // Auth
   const auth = useAuth()
   const user = auth.user
@@ -63,15 +73,6 @@ export default function UserSettings() {
   // Routing
   const router = useRouter()
 
-  // InitialState
-  const [userName, setUserName] = useState("")
-  const [genderSelected, setGenderSelected] = useState()
-  const [genderOfMatchSelected, setGenderOfMatchSelected] = useState(
-    genderOfMatchSettings[0]
-  )
-
-  const [updateUserSettingsAlertOpen, setUpdateUserSettingsAlertOpen] = useState(false)
-
   useEffect(() => {
     if (user === false) {
       // If the access isn't authenticated, redirect to index page
@@ -86,13 +87,20 @@ export default function UserSettings() {
     }
   },[userInfo])
 
+  // Function
+  const alertControl = async(alertAssort) => {
+    await setAlertOpen(true)
+    await setAlertAssort(alertAssort)
+    setTimeout(async() => {
+      await setAlertOpen(false)
+    }, 5000)
+  }
+
+  //alertControl by parameter
   useEffect(() => {
     if (router.query.successUpdateUserSettings == 'true') {
-      setUpdateUserSettingsAlertOpen(true)
-      setTimeout(() => {
-        setUpdateUserSettingsAlertOpen(false)
-      }, 3000)
-    } 
+      alertControl('update')
+    }
   }, [])
 
   // Translate
@@ -117,6 +125,56 @@ export default function UserSettings() {
   }
 
   // ============================================================
+  // Render Function
+  // ============================================================
+  const renderAlert = (alertAssort) => (
+    <div className="relative w-full flex justify-center">
+      <Transition
+        show={alertOpen}
+        as={Fragment}
+        enter="transition duration-75"
+        enterFrom="transform -translate-y-1/4 opacity-0"
+        enterTo="transform -translate-y-0 opacity-95"
+        leave="transition-opacity duration-150"
+        leaveFrom="opacity-95"
+        leaveTo="opacity-0"
+      >
+        <div className="absolute z-10 w-full sm:w-1/3 px-4">
+          <div className="opacity-95">
+            <div className="rounded-b-md p-4 bg-green-50">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <CheckCircleIcon
+                    className="h-5 w-5 text-green-400"
+                    aria-hidden="true"
+                  />
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm font-medium text-green-800">
+                    ユーザー設定を更新しました。
+                  </p>
+                </div>
+                <div className="ml-auto pl-3">
+                  <div className="-mx-1.5 -my-1.5">
+                    <button
+                      type="button"
+                      className="inline-flex bg-green-50 rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"
+                      onClick={() => setUpdateUserSettingsAlertOpen(false)}
+                    >
+                      <span className="sr-only">Dismiss</span>
+                      <XIcon className="h-5 w-5" aria-hidden="true" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </div>
+  )
+
+  // ============================================================
   // Return Page
   // ===========================================================
   return (
@@ -130,55 +188,14 @@ export default function UserSettings() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      {renderAlert(alertAssort)}
+
       <AppHeader />
 
       {/* main content */}
       <div className="pb-16 bg-gray-50 overflow-hidden">
-      {
-        /* Alert */
-          <Transition
-            show={updateUserSettingsAlertOpen}
-            as={Fragment}
-            enter="transition duration-75"
-            enterFrom="transform -translate-y-1/4 opacity-0"
-            enterTo="transform -translate-y-0 opacity-100"
-            leave="transition-opacity duration-150"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="absolute w-full px-4">
-              <div className="mt-4 rounded-md bg-green-50 p-4">
-                <div className="flex">
-                  <div className="flex-shrink-0">
-                    <CheckCircleIcon
-                      className="h-5 w-5 text-green-400"
-                      aria-hidden="true"
-                    />
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-sm font-medium text-green-800">
-                      ユーザー設定を更新しました。
-                    </p>
-                  </div>
-                  <div className="ml-auto pl-3">
-                    <div className="-mx-1.5 -my-1.5">
-                      <button
-                        type="button"
-                        className="inline-flex bg-green-50 rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"
-                        onClick={() => setUpdateUserSettingsAlertOpen(false)}
-                      >
-                        <span className="sr-only">Dismiss</span>
-                        <XIcon className="h-5 w-5" aria-hidden="true" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Transition>
-        }
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="mt-16 mx-auto max-w-xl px-4 sm:mt-20">
+          <main className="mx-auto max-w-xl px-4 sm:py-8">
             <div className="py-3">
               <h1 className="text-2xl font-bold">ユーザー設定</h1>
             </div>
