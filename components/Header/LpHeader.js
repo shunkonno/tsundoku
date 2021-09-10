@@ -23,7 +23,6 @@ const navigation = [
 ]
 
 export default function LpHeader() {
-
   // ============================================================
   // Initialize
   // ============================================================
@@ -52,19 +51,17 @@ export default function LpHeader() {
   const handleLogout = () => {
     auth.signout()
     router.push('/')
-  } 
+  }
 
   const renderHeaderButton = () => {
     //ログインしているかどうか確認
     //ログインしていれば、ログアウトボタンを表示
-    if(user) {
+    if (user) {
       return (
         <div className="flex">
           <span className="inline-flex items-center rounded-md shadow">
             <Link href="/dashboard">
-              <a
-                className="inline-flex leading-6 items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-tsundoku-blue-main bg-white hover:bg-gray-50"
-              >
+              <a className="inline-flex leading-6 items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-tsundoku-blue-main bg-white hover:bg-gray-50">
                 {t.TODASHBOARD}
               </a>
             </Link>
@@ -82,17 +79,14 @@ export default function LpHeader() {
     }
     //ログインしていなければ、ログインボタンを表示(/signinページ以外)
     else {
-      if(pathname == '/signin') {
+      if (pathname == '/signin') {
         return
-      }
-      else {
+      } else {
         return (
           <div className="items-center justify-end">
             <span className="inline-flex rounded-md shadow">
               <Link href="/signin">
-                <a
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-tsundoku-blue-main bg-white hover:bg-gray-50"
-                >
+                <a className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-tsundoku-blue-main bg-white hover:bg-gray-50">
                   {t.LOGIN}
                 </a>
               </Link>
@@ -182,7 +176,7 @@ export default function LpHeader() {
           <Popover>
             {({ open }) => (
               <>
-                <div className="max-w-7xl mx-auto px-4 sm:px-6">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                   <nav
                     className="relative flex w-full items-center justify-between"
                     aria-label="Global"
@@ -190,20 +184,28 @@ export default function LpHeader() {
                     <div className="flex items-center">
                       <div className="flex items-center justify-between md:w-auto">
                         <Link href="/">
-                        <a>
-                          <span className="sr-only">Tsundoku</span>
-                          <picture>
-                            <source className="h-8 w-auto sm:h-10" srcSet="/img/logos/tsundoku-logo-mark-and-typo.svg" media="(max-width: 639px)"/>
-                            <source className="h-8 w-auto sm:h-10" srcSet="/img/logos/tsundoku-logo-mark-and-typo.svg" media="(min-width: 640px)"/>
-                            <Image
+                          <a>
+                            <span className="sr-only">Tsundoku</span>
+                            <picture>
+                              <source
+                                className="h-8 w-auto sm:h-10"
+                                srcSet="/img/logos/tsundoku-logo-mark-and-typo.svg"
+                                media="(max-width: 639px)"
+                              />
+                              <source
+                                className="h-8 w-auto sm:h-10"
+                                srcSet="/img/logos/tsundoku-logo-mark-and-typo.svg"
+                                media="(min-width: 640px)"
+                              />
+                              <Image
                                 className="h-8 w-auto sm:h-10"
                                 src="/img/logos/tsundoku-logo-mark-and-typo.svg"
                                 alt="tsundoku-logo-mark-and-typo"
                                 width={120}
                                 height={32}
                               />
-                          </picture>
-                        </a>
+                            </picture>
+                          </a>
                         </Link>
                       </div>
                     </div>

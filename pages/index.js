@@ -54,7 +54,7 @@ export default function Home() {
       <div className="relative bg-gray-50 overflow-hidden font-NotoSansSerif">
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
           <main className="mx-auto max-w-7xl sm:mt-4">
-            <div className="px-4 text-center md:text-left py-4 sm:py-12 md:flex">
+            <div className="px-4 sm:px-6 lg:px-8 text-center md:text-left py-4 sm:py-12 md:flex">
               <div className="md:w-3/5 md:py-12">
                 <h1 className="text-4xl leading-normal tracking-tight font-bold text-gray-900 sm:text-5xl md:text-6xl">
                   <span className="inline">読書に</span>
@@ -63,10 +63,7 @@ export default function Home() {
                   <span className="block sm:mt-2">時間をつくる</span>
                 </h1>
                 <p className="font-sans mt-5 max-w-md mx-auto text-sm text-gray-500 sm:text-lg md:mt-12 md:text-xl md:max-w-3xl">
-                  誰かとゆるくつながるカフェのような環境で、
-                </p>
-                <p className="font-sans mt-2 max-w-md mx-auto text-sm text-gray-500 sm:text-lg md:mt-2 md:text-xl md:max-w-3xl">
-                  読書に集中する。
+                  誰かとゆるくつながるカフェのような環境で、 読書に集中
                 </p>
                 <div className="mt-6 sm:mt-12 max-w-md sm:flex sm:justify-start">
                   <div className="rounded-md shadow">
@@ -94,7 +91,7 @@ export default function Home() {
             <div className="mt-10">
               <div className="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
-                  <div className="col-span-1 lg:col-span-3 py-10 px-4 sm:px-6 lg:px-8 sm:rounded-md">
+                  <div className="col-span-1 lg:col-span-3 py-10">
                     <div className="mb-2">
                       <h2 className="text-gray-900 font-bold text-2xl lg:text-3xl leading-relaxed">
                         没頭する時間を取り戻す
@@ -114,9 +111,9 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                  <div className="col-span-1 lg:col-span-3 py-10 px-4 sm:px-6 lg:px-8">
+                  <div className="col-span-1 lg:col-span-3 py-10 lg:ml-8">
                     <div>
-                      <p className="font-NotoSerif text-4xl text-gray-400">
+                      <p className="font-NotoSerif text-3xl text-gray-400">
                         ｢書物の新しいページを1ページ、1ページ読むごとに、私はより豊かに、より強く、より高くなっていく。｣
                         (アントン・チェーホフ)
                       </p>
@@ -141,22 +138,21 @@ export default function Home() {
                   <div className="max-w-7xl mx-auto">
                     <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
                       {/* STEP 1 -- START */}
-                      <div className="col-span-1 lg:col-span-2 py-20 px-4 sm:px-6 lg:px-8 sm:rounded-md bg-gray-200">
+                      <div className="col-span-1 lg:col-span-2 py-10 px-4 sm:px-6 lg:px-8 sm:rounded-md border-double border-4 border-yellow-600">
                         <div className="mb-2">
-                          <h2 className="text-gray-900 font-bold text-2xl lg:text-3xl leading-relaxed">
-                            没頭する時間を取り戻す
+                          <h2 className="text-gray-900 font-bold text-2xl leading-relaxed">
+                            1 - ルームを予約
                           </h2>
                         </div>
                         <div className="space-y-4">
                           <div>
-                            <p className="text-gray-900 text-base leading-relaxed">
-                              落ち着いて、じっくりと読書できないのは、現代人の悩みのひとつです。スマホの通知が鳴るときも、ふと家事を思い出したときにも、集中力が途切れてしまいがちです。
+                            <p className="text-gray-900 text-lg leading-relaxed">
+                              まずは、都合の良い時間帯に開催されるペア読書を予約しましょう。各回は30分~90分の長さです。
                             </p>
                           </div>
                           <div>
-                            <p className="text-gray-900 text-base leading-relaxed">
-                              没頭して読書する時間を取り戻したい。積ん読してる本を、Tsundoku
-                              で消化しませんか。
+                            <p className="text-gray-900 text-lg leading-relaxed">
+                              ご希望の時間帯に開催されていない場合、ルームを作成することもできます。
                             </p>
                           </div>
                         </div>
@@ -164,22 +160,22 @@ export default function Home() {
                       {/* STEP 1 -- END */}
 
                       {/* STEP 2 -- START */}
-                      <div className="col-span-1 lg:col-span-2 py-20 px-4 sm:px-6 lg:px-8 sm:rounded-md bg-gray-200">
+                      <div className="col-span-1 lg:col-span-2 py-10 px-4 sm:px-6 lg:px-8 sm:rounded-md border-double border-4 border-yellow-600">
                         <div className="mb-2">
-                          <h2 className="text-gray-900 font-bold text-2xl lg:text-3xl leading-relaxed">
-                            没頭する時間を取り戻す
+                          <h2 className="text-gray-900 font-bold text-2xl leading-relaxed">
+                            2 - 時間になったら、参加
                           </h2>
                         </div>
                         <div className="space-y-4">
                           <div>
-                            <p className="text-gray-900 text-base leading-relaxed">
-                              落ち着いて、じっくりと読書できないのは、現代人の悩みのひとつです。スマホの通知が鳴るときも、ふと家事を思い出したときにも、集中力が途切れてしまいがちです。
+                            <p className="text-gray-900 text-lg leading-relaxed">
+                              ルームに参加すると、もう1人の参加者とつながります。軽く挨拶を済ませたら、じっくり読書しましょう。
                             </p>
                           </div>
                           <div>
-                            <p className="text-gray-900 text-base leading-relaxed">
-                              没頭して読書する時間を取り戻したい。積ん読してる本を、Tsundoku
-                              で消化しませんか。
+                            <p className="text-gray-900 text-lg leading-relaxed">
+                              「映像オフ」の設定も、もちろん可能。また、マッチ対象となる性別の設定もできます。
+                              <span className="text-sm">(開発中)</span>
                             </p>
                           </div>
                         </div>
@@ -187,22 +183,21 @@ export default function Home() {
                       {/* STEP 2 -- END */}
 
                       {/* STEP 3 -- START */}
-                      <div className="col-span-1 lg:col-span-2 py-20 px-4 sm:px-6 lg:px-8 sm:rounded-md bg-gray-200">
+                      <div className="col-span-1 lg:col-span-2 py-10 px-4 sm:px-6 lg:px-8 sm:rounded-md border-double border-4 border-yellow-600">
                         <div className="mb-2">
-                          <h2 className="text-gray-900 font-bold text-2xl lg:text-3xl leading-relaxed">
-                            没頭する時間を取り戻す
+                          <h2 className="text-gray-900 font-bold text-2xl leading-relaxed">
+                            3 - 没頭する時間
                           </h2>
                         </div>
                         <div className="space-y-4">
                           <div>
-                            <p className="text-gray-900 text-base leading-relaxed">
-                              落ち着いて、じっくりと読書できないのは、現代人の悩みのひとつです。スマホの通知が鳴るときも、ふと家事を思い出したときにも、集中力が途切れてしまいがちです。
+                            <p className="text-gray-900 text-lg leading-relaxed">
+                              没頭する時間を過ごしたら、ルームを退室しましょう。
                             </p>
                           </div>
                           <div>
-                            <p className="text-gray-900 text-base leading-relaxed">
-                              没頭して読書する時間を取り戻したい。積ん読してる本を、Tsundoku
-                              で消化しませんか。
+                            <p className="text-gray-900 text-lg leading-relaxed">
+                              人の集中力が続くのは最大でも90分と言われています。集中したら、休んだり、他のことをしましょう。
                             </p>
                           </div>
                         </div>
@@ -310,7 +305,7 @@ export default function Home() {
           <div className="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
             <div className="py-20">
               <div>
-                <p className="font-NotoSerif text-4xl text-gray-400">
+                <p className="font-NotoSerif text-3xl text-gray-400">
                   ｢宝島の海賊たちが盗んだ財宝よりも、本には多くの宝が眠っている。そして何よりも、宝を毎日味わうことができる。｣
                   (ウォルト・ディズニー)
                 </p>
