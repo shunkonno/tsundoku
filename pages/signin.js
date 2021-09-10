@@ -37,13 +37,15 @@ export default function SignIn() {
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-0">
         <main>
           <div className="sm:mx-auto sm:w-full sm:max-w-md">
-            <Image
-                className="h-8 w-auto sm:h-10"
-                src="/img/logos/tsundoku-logo-mark-only.svg"
-                alt="tsundoku-logo-mark-only"
-                width={32}
-                height={32}
-              />
+            <div className="flex justify-center">
+              <Image
+                  src="/img/logos/tsundoku-logo-mark-only.svg"
+                  alt="tsundoku-logo-mark-only"
+                  width={32}
+                  height={32}
+                  layout='fixed'
+                />
+            </div>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
               サインイン
             </h2>
