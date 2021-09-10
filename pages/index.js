@@ -19,7 +19,7 @@ export default function Home() {
   const t = uselocalesFilter('LP', locale)
 
   //handleButton
-  const handleSignin = async(e) => {
+  const handleSignin = async (e) => {
     e.preventDefault()
 
     await auth.signInWithGoogle()
@@ -33,7 +33,7 @@ export default function Home() {
         <title>Tsundoku</title>
         <meta
           name="description"
-          content="一緒に読書してくれる誰かを探すためのマッチングサービス"
+          content="Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。"
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -51,12 +51,12 @@ export default function Home() {
       <LpHeader />
 
       {/* main content */}
-      <div className="relative bg-gray-50 overflow-hidden font-NotoSerif">
+      <div className="relative bg-gray-50 overflow-hidden font-NotoSansSerif">
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
           <main className="mx-auto max-w-7xl sm:mt-4">
             <div className="px-4 text-center md:text-left py-4 sm:py-12 md:flex">
               <div className="md:w-3/5 md:px-4 lg:px-24 xl:px-32 md:py-12">
-                <h1 className="text-4xl leading-normal tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+                <h1 className="text-4xl leading-normal tracking-tight font-bold text-gray-900 sm:text-5xl md:text-6xl">
                   <span className="inline">読書に</span>
                   <span className="text-tsundoku-blue-main inline">没頭</span>
                   <span className="inline">する</span>
@@ -68,15 +68,15 @@ export default function Home() {
                 <p className="font-sans mt-2 max-w-md mx-auto text-sm text-gray-500 sm:text-lg md:mt-2 md:text-xl md:max-w-3xl">
                   読書に集中する。
                 </p>
-                <div className="mt-6 sm:mt-12 max-w-md mx-auto sm:flex sm:justify-center">
+                <div className="mt-6 sm:mt-12 max-w-md sm:flex sm:justify-start">
                   <div className="rounded-md shadow">
                     <button
-                      className="font-sans w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-tsundoku-blue-main hover:bg-blue-600 md:py-4 md:text-lg md:px-10"
+                      className="font-sans w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-bold rounded-md text-white bg-tsundoku-blue-main hover:bg-blue-600 md:py-4 md:text-lg md:px-10"
                       onClick={(e) => {
                         handleSignin(e)
                       }}
                     >
-                      Googleアカウントで無料ではじめる
+                      無料で始める
                     </button>
                   </div>
                 </div>
@@ -90,23 +90,129 @@ export default function Home() {
                 />
               </div>
             </div>
+
+            <div className="mt-10">
+              <div className="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+                <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
+                  <div className="col-span-1 lg:col-span-3 py-20 px-4 sm:px-6 lg:px-8 sm:rounded-md bg-gray-200">
+                    <div className="mb-2">
+                      <h2 className="text-gray-900 font-bold text-2xl lg:text-3xl leading-relaxed">
+                        没頭する時間を取り戻す
+                      </h2>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <p className="text-gray-900 text-base leading-relaxed">
+                          落ち着いて、じっくりと読書できないのは、現代人の悩みのひとつです。スマホの通知が鳴るときも、ふと家事を思い出したときにも、集中力が途切れてしまいがちです。
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-gray-900 text-base leading-relaxed">
+                          没頭して読書する時間を取り戻したい。積ん読してる本を、Tsundoku
+                          で消化しませんか。
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-span-1 lg:col-span-3 py-20 px-4 sm:px-6 lg:px-8">
+                    <div>
+                      <p className="font-NotoSerif text-4xl text-gray-400">
+                        ｢書物の新しいページを1ページ、1ページ読むごとに、私はより豊かに、より強く、より高くなっていく。｣
+                        (アントン・チェーホフ)
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div className="py-4 sm:py-12 bg-gray-50">
               <div className="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                 <div className="lg:text-center">
-                  <h2 className="text-base sm:text-xl text-tsundoku-brown-main font-semibold tracking-wide uppercase">
-                    得られるメリット
+                  <h2 className="text-base sm:text-xl text-tsundoku-brown-main font-semibold tracking-wide">
+                    Tsundoku とは
                   </h2>
                   <span className="block sm:inline mt-2 text-3xl leading-normal font-extrabold tracking-tight text-gray-900 lg:text-5xl">
-                    高いモチベーションを
+                    ビデオ通話でつながる、ペア読書
                   </span>
-                  <span className="block sm:inline text-3xl leading-normal font-extrabold tracking-tight text-gray-900 lg:text-5xl">
-                    維持する
-                  </span>
-                  <p className="font-sans mt-4 max-w-2xl text-base sm:text-lg text-gray-500 lg:mx-auto">
-                    自宅にいてもカフェにいるときの集中力を
-                  </p>
                 </div>
-                <dl className="mt-10 mb-12 sm:mb-24">
+
+                <div className="mt-10">
+                  <div className="max-w-7xl mx-auto">
+                    <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
+                      {/* STEP 1 -- START */}
+                      <div className="col-span-1 lg:col-span-2 py-20 px-4 sm:px-6 lg:px-8 sm:rounded-md bg-gray-200">
+                        <div className="mb-2">
+                          <h2 className="text-gray-900 font-bold text-2xl lg:text-3xl leading-relaxed">
+                            没頭する時間を取り戻す
+                          </h2>
+                        </div>
+                        <div className="space-y-4">
+                          <div>
+                            <p className="text-gray-900 text-base leading-relaxed">
+                              落ち着いて、じっくりと読書できないのは、現代人の悩みのひとつです。スマホの通知が鳴るときも、ふと家事を思い出したときにも、集中力が途切れてしまいがちです。
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-gray-900 text-base leading-relaxed">
+                              没頭して読書する時間を取り戻したい。積ん読してる本を、Tsundoku
+                              で消化しませんか。
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      {/* STEP 1 -- END */}
+
+                      {/* STEP 2 -- START */}
+                      <div className="col-span-1 lg:col-span-2 py-20 px-4 sm:px-6 lg:px-8 sm:rounded-md bg-gray-200">
+                        <div className="mb-2">
+                          <h2 className="text-gray-900 font-bold text-2xl lg:text-3xl leading-relaxed">
+                            没頭する時間を取り戻す
+                          </h2>
+                        </div>
+                        <div className="space-y-4">
+                          <div>
+                            <p className="text-gray-900 text-base leading-relaxed">
+                              落ち着いて、じっくりと読書できないのは、現代人の悩みのひとつです。スマホの通知が鳴るときも、ふと家事を思い出したときにも、集中力が途切れてしまいがちです。
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-gray-900 text-base leading-relaxed">
+                              没頭して読書する時間を取り戻したい。積ん読してる本を、Tsundoku
+                              で消化しませんか。
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      {/* STEP 2 -- END */}
+
+                      {/* STEP 3 -- START */}
+                      <div className="col-span-1 lg:col-span-2 py-20 px-4 sm:px-6 lg:px-8 sm:rounded-md bg-gray-200">
+                        <div className="mb-2">
+                          <h2 className="text-gray-900 font-bold text-2xl lg:text-3xl leading-relaxed">
+                            没頭する時間を取り戻す
+                          </h2>
+                        </div>
+                        <div className="space-y-4">
+                          <div>
+                            <p className="text-gray-900 text-base leading-relaxed">
+                              落ち着いて、じっくりと読書できないのは、現代人の悩みのひとつです。スマホの通知が鳴るときも、ふと家事を思い出したときにも、集中力が途切れてしまいがちです。
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-gray-900 text-base leading-relaxed">
+                              没頭して読書する時間を取り戻したい。積ん読してる本を、Tsundoku
+                              で消化しませんか。
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      {/* STEP 3 -- END */}
+                    </div>
+                  </div>
+                </div>
+
+                {/* <dl className="mt-10 mb-12 sm:mb-24">
                   <div>
                     <dt>
                       <p className="mt-12 sm:mt-24 text-lg lg:text-3xl leading-normal font-medium text-gray-900">
@@ -141,7 +247,7 @@ export default function Home() {
                       黙々と読書に取り組んでいる間は、ときに孤独なもの。一緒に同じことをしている誰かがいるという安心感は、メンタルのケアにも役立ちます。
                     </dd>
                   </div>
-                </dl>
+                </dl> */}
               </div>
             </div>
             {/* 特徴：ソーシャル */}
@@ -201,26 +307,31 @@ export default function Home() {
             </div> */}
           </main>
 
-          <div className="bg-tsundoku-brown-sub mb-24">
+          <div className="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+            <div className="py-20">
+              <div>
+                <p className="font-NotoSerif text-4xl text-gray-400">
+                  ｢宝島の海賊たちが盗んだ財宝よりも、本には多くの宝が眠っている。そして何よりも、宝を毎日味わうことができる。｣
+                  (ウォルト・ディズニー)
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mb-24">
             <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 md:py-24 md:px-8 md:flex md:items-center md:justify-between">
               <h2 className="font-sans font-bold tracking-tight md:text-4xl">
-                <p className="block text-tsundoku-brown-main text-3xl sm:text-4xl tracking-wider leading-normal mb-2">
-                  1分で準備完了。
-                </p>
-                <p className="block text-white text-xl leading-normal">
-                  複雑な設定はありません。
-                </p>
-                <p className="block text-white text-xl leading-normal">
-                  気軽に始めてみてください。
+                <p className="block text-gray-900 text-3xl sm:text-4xl tracking-wider leading-normal mb-2">
+                  ペア読書で没頭しましょう
                 </p>
               </h2>
               <div className="mt-8 flex md:mt-0 md:flex-shrink-0">
                 <div className="inline-flex rounded-md shadow">
                   <a
                     href="#"
-                    className="font-sans inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-tsundoku-brown-main hover:bg-tsundoku-brown-main"
+                    className="font-sans inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-tsundoku-blue-main hover:bg-tsundoku-blue-main"
                   >
-                    Googleアカウントで無料ではじめる
+                    無料で始める
                   </a>
                 </div>
               </div>
