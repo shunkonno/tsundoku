@@ -1,6 +1,7 @@
 import router, { useRouter } from 'next/router'
 import Head from 'next/head'
 import Image from 'next/image'
+import Link from 'next/link'
 
 // Components
 import { LpHeader } from '../components/Header'
@@ -17,15 +18,6 @@ export default function Home() {
   const { locale } = useRouter()
 
   const t = uselocalesFilter('LP', locale)
-
-  //handleButton
-  const handleSignin = async (e) => {
-    e.preventDefault()
-
-    await auth.signInWithGoogle()
-
-    await router.push('/dashboard')
-  }
 
   return (
     <div>
@@ -67,14 +59,13 @@ export default function Home() {
                 </p>
                 <div className="mt-6 sm:mt-12 max-w-md sm:flex sm:justify-start">
                   <div className="rounded-md shadow">
-                    <button
-                      className="font-sans w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-bold rounded-md text-white bg-tsundoku-blue-main hover:bg-blue-600 md:py-4 md:text-lg md:px-10"
-                      onClick={(e) => {
-                        handleSignin(e)
-                      }}
-                    >
-                      無料で始める
-                    </button>
+                    <Link href='/signin'>
+                      <button
+                        className="font-sans w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-bold rounded-md text-white bg-tsundoku-blue-main hover:bg-blue-600 md:py-4 md:text-lg md:px-10"
+                      >
+                        無料で始める
+                      </button>
+                    </Link>
                   </div>
                 </div>
               </div>
