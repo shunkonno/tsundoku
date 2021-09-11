@@ -56,8 +56,6 @@ export default function Dashboard() {
     }
   })
 
-  console.log(sessions)
-
   // Routing
   const router = useRouter()
 
