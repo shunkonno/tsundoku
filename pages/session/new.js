@@ -173,7 +173,7 @@ const timeData = [
   '23:45'
 ]
 
-const durationData = ['15分', '30分', '45分', '60分', '90分']
+const durationData = ['30分', '45分', '60分', '90分']
 
 // ============================================================
 // Helper Functions
@@ -269,9 +269,10 @@ export default function Dashboard() {
     const durationValue = duration.replace('分', '')
 
     // Set startDateTime for session
+    // NOTE: Months are 0 indexed, so input should be decreased by 1
     var startDateTime = moment({
       year: Number(year),
-      month: Number(month),
+      month: Number(month) - 1,
       day: Number(day),
       hour: Number(hour),
       minute: Number(minute)
@@ -281,7 +282,7 @@ export default function Dashboard() {
     // This adds the duration to startDateTime, to calculate expected end
     var endDateTime = moment({
       year: Number(year),
-      month: Number(month),
+      month: Number(month) - 1,
       day: Number(day),
       hour: Number(hour),
       minute: Number(minute)
