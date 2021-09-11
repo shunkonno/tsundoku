@@ -17,24 +17,30 @@ import { Disclosure, Transition } from '@headlessui/react'
 import { CheckCircleIcon, ExclamationIcon, XIcon } from '@heroicons/react/solid'
 
 // Functions
-import uselocalesFilter from '../utils/translate'
 import { useAuth } from '../lib/auth'
-import fetcher from '../utils/fetcher'
 import { updateSession } from '../lib/db'
+import fetcher from '../utils/fetcher'
 import classNames from '../utils/classNames'
+import uselocalesFilter from '../utils/translate'
 
 export default function Dashboard() {
   // ============================================================
-  // Initialize
+  // States
   // ============================================================
 
-  //Initial State
   const [alertOpen, setAlertOpen] = useState(false)
   const [alertAssort, setAlertAssort] = useState('') // create, reserve, cancel, failed
 
+  // ============================================================
   // Auth
+  // ============================================================
+
   const auth = useAuth()
   const user = auth.user
+
+  // ============================================================
+  // Fetch Data
+  // ============================================================
 
   // Fetch logged user info on client side
   const { data: userInfo } = useSWR(
@@ -56,7 +62,10 @@ export default function Dashboard() {
     }
   })
 
+  // ============================================================
   // Routing
+  // ============================================================
+
   const router = useRouter()
 
   useEffect(() => {
@@ -75,7 +84,30 @@ export default function Dashboard() {
     }
   })
 
-  // Function
+  // Set locale
+  const { locale } = router
+  const t = uselocalesFilter('dashboard', locale)
+
+  // ============================================================
+  // User-related States
+  // ============================================================
+
+  // Check if the user is an owner or guest of any upcoming sessions
+  var userIsOwnerOrGuest
+
+  if (sessions) {
+    userIsOwnerOrGuest = sessions.some((session) => {
+      return (
+        userInfo?.uid == session.guestId || userInfo?.uid == session.ownerId
+      )
+    })
+  }
+
+  // ============================================================
+  // Alert Handlers
+  // ============================================================
+
+  // Hanldle alert display
   const alertControl = async (alertAssort) => {
     await setAlertOpen(true)
     await setAlertAssort(alertAssort)
@@ -84,7 +116,7 @@ export default function Dashboard() {
     }, 5000)
   }
 
-  //alertControl by parameter
+  // Hanldle alert state
   useEffect(() => {
     if (router.query.successCreateRoom == 'true') {
       alertControl('create')
@@ -97,25 +129,19 @@ export default function Dashboard() {
     } else {
       setAlertAssort('')
     }
-  }, [])
+  }, [
+    router.query.successCancelRoom,
+    router.query.successCreateRoom,
+    router.query.successReserveRoom
+  ])
 
-  // Function
+  // ============================================================
+  // Helper Functions
+  // ============================================================
+
+  // dateTimeISOString formatter
   const formatDateTime = (datetimeIsoString) => {
     return moment(datetimeIsoString).format('M月D日 H:mm')
-  }
-
-  // Set locale
-  const { locale } = router
-  const t = uselocalesFilter('dashboard', locale)
-
-  //checkJoinRoomExist すべてのセッションのguestIdからログイン中のguestIdが1つでも一致していればtrue。1つもなければfalse。
-  let checkResult
-  if (sessions) {
-    checkResult = sessions.some((session) => {
-      return (
-        userInfo?.uid == session.guestId || userInfo?.uid == session.ownerId
-      )
-    })
   }
 
   // ============================================================
@@ -222,7 +248,7 @@ export default function Dashboard() {
   )
 
   // ============================================================
-  // Button Handler
+  // Button Handlers
   // ============================================================
 
   // Handle session reservation
@@ -284,7 +310,7 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-            {checkResult ? (
+            {userIsOwnerOrGuest ? (
               <div className="py-3">
                 <div className="border-b-2 border-blue-700 py-2 mb-4">
                   <h2 className="title-section">参加予定のルーム</h2>
