@@ -21,24 +21,9 @@ import uselocalesFilter from '../utils/translate'
 import { useAuth } from '../lib/auth'
 import fetcher from '../utils/fetcher'
 import { updateSession } from '../lib/db'
-import { fetchAllSessions } from '../lib/db-admin'
 import classNames from '../utils/classNames'
 
-// ============================================================
-// Fetch static data
-// ============================================================
-export async function getStaticProps(context) {
-  // Fetch all sessions
-  const sessions = await fetchAllSessions()
-
-  return {
-    props: {
-      sessions
-    }
-  }
-}
-
-export default function Dashboard({ sessions }) {
+export default function Dashboard() {
   // ============================================================
   // Initialize
   // ============================================================
@@ -63,6 +48,16 @@ export default function Dashboard({ sessions }) {
     }
   )
 
+  // Fetch all sessions
+  const { data: sessions } = useSWR(user ? '/api/session' : null, fetcher, {
+    onErrorRetry: ({ retryCount }) => {
+      // Retry up to 10 times
+      if (retryCount >= 10) return
+    }
+  })
+
+  console.log(sessions)
+
   // Routing
   const router = useRouter()
 
@@ -83,10 +78,10 @@ export default function Dashboard({ sessions }) {
   })
 
   // Function
-  const alertControl = async(alertAssort) => {
+  const alertControl = async (alertAssort) => {
     await setAlertOpen(true)
     await setAlertAssort(alertAssort)
-    setTimeout(async() => {
+    setTimeout(async () => {
       await setAlertOpen(false)
     }, 5000)
   }
@@ -144,93 +139,88 @@ export default function Dashboard({ sessions }) {
   }
 
   const renderAlert = (alertAssort) => (
-      <div className="relative w-full flex justify-center">
-        <Transition
-          show={alertOpen}
-          as={Fragment}
-          enter="transition duration-75"
-          enterFrom="transform -translate-y-1/4 opacity-0"
-          enterTo="transform -translate-y-0 opacity-95"
-          leave="transition-opacity duration-150"
-          leaveFrom="opacity-95"
-          leaveTo="opacity-0"
-        >
-          <div className="absolute z-10 w-full sm:w-1/3 px-4">
-            <div className="opacity-95">
-              <div className={classNames(
-                alertAssort == 'create' || alertAssort == 'reserve' &&
-                  'bg-green-50',
-                alertAssort == 'cancel' &&
-                  'bg-gray-200',
+    <div className="relative w-full flex justify-center">
+      <Transition
+        show={alertOpen}
+        as={Fragment}
+        enter="transition duration-75"
+        enterFrom="transform -translate-y-1/4 opacity-0"
+        enterTo="transform -translate-y-0 opacity-95"
+        leave="transition-opacity duration-150"
+        leaveFrom="opacity-95"
+        leaveTo="opacity-0"
+      >
+        <div className="absolute z-10 w-full sm:w-1/3 px-4">
+          <div className="opacity-95">
+            <div
+              className={classNames(
+                alertAssort == 'create' ||
+                  (alertAssort == 'reserve' && 'bg-green-50'),
+                alertAssort == 'cancel' && 'bg-gray-200',
                 alertAssort == 'failed' &&
                   'bg-yellow-50 border-yellow-400 border-l-4',
                 'rounded-b-md p-4'
               )}
-              >
-                <div className="flex">
-                  <div className="flex-shrink-0">
-                    <CheckCircleIcon
+            >
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <CheckCircleIcon
+                    className={classNames(
+                      alertAssort == 'create' ||
+                        (alertAssort == 'reserve' && 'text-green-400'),
+                      alertAssort == 'cancel' && 'text-gray-400',
+                      alertAssort == 'failed' && 'text-yellow-400',
+                      'h-5 w-5'
+                    )}
+                    aria-hidden="true"
+                  />
+                </div>
+                <div className="ml-3">
+                  <p
+                    className={classNames(
+                      alertAssort == 'create' ||
+                        (alertAssort == 'reserve' && 'text-green-800'),
+                      alertAssort == 'cancel' && 'text-gray-800',
+                      alertAssort == 'failed' && 'text-yellow-800',
+                      'text-sm font-medium'
+                    )}
+                  >
+                    {alertAssort == 'create' ||
+                      (alertAssort == 'reserve' &&
+                        'ルームの予約が完了しました。')}
+                    {alertAssort == 'cancel' &&
+                      'ルームの予約を取り消しました。'}
+                    {alertAssort == 'failed' &&
+                      '選択したルームは満員のため予約できませんでした。申し訳ございません。'}
+                  </p>
+                </div>
+                <div className="ml-auto pl-3">
+                  <div className="-mx-1.5 -my-1.5">
+                    <button
+                      type="button"
                       className={classNames(
-                        alertAssort == 'create' || alertAssort == 'reserve' &&
-                        'text-green-400',
+                        alertAssort == 'create' ||
+                          (alertAssort == 'reserve' &&
+                            'bg-green-50  text-green-500 hover:bg-green-100 focus:ring-offset-green-50 focus:ring-green-600'),
                         alertAssort == 'cancel' &&
-                          'text-gray-400',
+                          'bg-gray-200 text-gray-500 hover:bg-gray-100 focus:ring-offset-gray-50 focus:ring-gray-600',
                         alertAssort == 'failed' &&
-                          'text-yellow-400',
-                        'h-5 w-5',
+                          'bg-yellow-50 text-yellow-500 hover:bg-yellow-100 focus:ring-offset-green-50 focus:ring-yellow-600',
+                        'inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2'
                       )}
-                      aria-hidden="true"
-                    />
-                  </div>
-                  <div className="ml-3">
-                    <p 
-                      className={classNames(
-                        alertAssort == 'create' || alertAssort == 'reserve' &&
-                        'text-green-800',
-                        alertAssort == 'cancel' &&
-                          'text-gray-800',
-                        alertAssort == 'failed' &&
-                          'text-yellow-800',
-                        'text-sm font-medium',
-                      )}
+                      onClick={() => setAlertOpen(false)}
                     >
-                      {alertAssort == 'create' || alertAssort == 'reserve' &&
-                          'ルームの予約が完了しました。'
-                      }
-                      {alertAssort == 'cancel' &&
-                          'ルームの予約を取り消しました。'
-                      }
-                      {alertAssort == 'failed' &&  
-                        '選択したルームは満員のため予約できませんでした。申し訳ございません。'
-                      }
-                    </p>
-                  </div>
-                  <div className="ml-auto pl-3">
-                    <div className="-mx-1.5 -my-1.5">
-                      <button
-                        type="button"
-                        className={classNames(
-                          alertAssort == 'create' || alertAssort == 'reserve' &&
-                          'bg-green-50  text-green-500 hover:bg-green-100 focus:ring-offset-green-50 focus:ring-green-600',
-                          alertAssort == 'cancel' &&
-                            'bg-gray-200 text-gray-500 hover:bg-gray-100 focus:ring-offset-gray-50 focus:ring-gray-600',
-                          alertAssort == 'failed' &&
-                            'bg-yellow-50 text-yellow-500 hover:bg-yellow-100 focus:ring-offset-green-50 focus:ring-yellow-600',
-                          'inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2',
-                        )}
-                        onClick={() => setAlertOpen(false)}
-                      >
-                        <span className="sr-only">Dismiss</span>
-                        <XIcon className="h-5 w-5" aria-hidden="true" />
-                      </button>
-                    </div>
+                      <span className="sr-only">Dismiss</span>
+                      <XIcon className="h-5 w-5" aria-hidden="true" />
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </Transition>
-      </div>
+        </div>
+      </Transition>
+    </div>
   )
 
   // ============================================================
@@ -262,7 +252,7 @@ export default function Dashboard({ sessions }) {
   // ============================================================
   // Return Page
   // ============================================================
-  if (user === null || !userInfo) {
+  if (user === null || !userInfo || !sessions) {
     return <div>Waiting..</div>
   }
 
