@@ -107,7 +107,7 @@ export default function Dashboard() {
   // Alert Handlers
   // ============================================================
 
-  // Hanldle alert display
+  // Handle alert display
   const alertControl = async (alertAssort) => {
     await setAlertOpen(true)
     await setAlertAssort(alertAssort)

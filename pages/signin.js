@@ -13,14 +13,15 @@ import { useAuth } from '../lib/auth'
 
 export default function SignIn() {
   // ============================================================
-  // Initialize
+  // Auth
   // ============================================================
 
-  // Auth
   const auth = useAuth()
   const user = auth.user
 
+  // ============================================================
   // Routing
+  // ============================================================
   const router = useRouter()
 
   if (user) {
@@ -28,7 +29,7 @@ export default function SignIn() {
   }
 
   // ============================================================
-  // Return Page
+  // Return
   // ============================================================
 
   return (
@@ -40,12 +41,12 @@ export default function SignIn() {
           <div className="sm:mx-auto sm:w-full sm:max-w-md">
             <div className="flex justify-center">
               <Image
-                  src="/img/logos/tsundoku-logo-mark-only.svg"
-                  alt="tsundoku-logo-mark-only"
-                  width={32}
-                  height={32}
-                  layout='fixed'
-                />
+                src="/img/logos/tsundoku-logo-mark-only.svg"
+                alt="tsundoku-logo-mark-only"
+                width={32}
+                height={32}
+                layout="fixed"
+              />
             </div>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
               サインイン

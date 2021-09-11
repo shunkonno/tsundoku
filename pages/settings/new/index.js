@@ -1,9 +1,8 @@
 // ============================================================
 // Import
 // ============================================================
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 import Head from 'next/head'
 
 // Components
@@ -32,33 +31,41 @@ const genderOfMatchSettings = [{ name: '制限なし' }, { name: '女性のみ' 
 // ============================================================
 // Helper Functions
 // ============================================================
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function NewUserSettings() {
   // ============================================================
-  // Initialize
+  // State
   // ============================================================
 
-  // Auth
-  const auth = useAuth()
-  const user = auth.user
-
-  // Routing
-  const router = useRouter()
-
-  // InitialState
   const [userName, setUserName] = useState('')
   const [genderSelected, setGenderSelected] = useState()
   const [genderOfMatchSelected, setGenderOfMatchSelected] = useState(
     genderOfMatchSettings[0]
   )
 
-  // Translate
+  // ============================================================
+  // Auth
+  // ============================================================
+
+  const auth = useAuth()
+  const user = auth.user
+
+  // ============================================================
+  // Routing
+  // ============================================================
+  const router = useRouter()
+
+  // Set locale
   const t = uselocalesFilter('Onboarding', router.locale)
 
-  // Handle form submit
+  // ============================================================
+  // Handle Form Submit
+  // ============================================================
+
   const handleSubmit = (e) => {
     e.preventDefault()
 
@@ -70,8 +77,9 @@ export default function NewUserSettings() {
   }
 
   // ============================================================
-  // Return Page
-  // ===========================================================
+  // Return
+  // ============================================================
+
   return (
     <div>
       <Head>

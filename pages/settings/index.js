@@ -41,10 +41,9 @@ function classNames(...classes) {
 
 export default function UserSettings() {
   // ============================================================
-  // Initialize
+  // State
   // ============================================================
 
-  //Initial State
   const [userName, setUserName] = useState('')
   const [genderSelected, setGenderSelected] = useState()
   const [genderOfMatchSelected, setGenderOfMatchSelected] = useState(
@@ -54,9 +53,16 @@ export default function UserSettings() {
   const [alertOpen, setAlertOpen] = useState(false)
   const [alertAssort, setAlertAssort] = useState('') // update
 
+  // ============================================================
   // Auth
+  // ============================================================
+
   const auth = useAuth()
   const user = auth.user
+
+  // ============================================================
+  // Fetch Data
+  // ============================================================
 
   // Fetch logged user info on client side
   const { data: userInfo } = useSWR(
@@ -70,7 +76,10 @@ export default function UserSettings() {
     }
   )
 
+  // ============================================================
   // Routing
+  // ============================================================
+
   const router = useRouter()
 
   useEffect(() => {
@@ -82,9 +91,16 @@ export default function UserSettings() {
 
       setGenderSelected(userInfo?.gender)
     }
-  }, [userInfo])
+  }, [router, user, userInfo])
 
-  // Function
+  // Set locale
+  const t = uselocalesFilter('userSettings', router.locale)
+
+  // ============================================================
+  // Alert Handlers
+  // ============================================================
+
+  // Handle alert display
   const alertControl = async (alertAssort) => {
     await setAlertOpen(true)
     await setAlertAssort(alertAssort)
@@ -93,17 +109,17 @@ export default function UserSettings() {
     }, 5000)
   }
 
-  //alertControl by parameter
+  // Hanldle alert state
   useEffect(() => {
     if (router.query.successUpdateUserSettings == 'true') {
       alertControl('update')
     }
-  }, [])
+  }, [router.query.successUpdateUserSettings])
 
-  // Translate
-  const t = uselocalesFilter('userSettings', router.locale)
+  // ============================================================
+  // Handle Form Submit
+  // ============================================================
 
-  // Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -115,6 +131,7 @@ export default function UserSettings() {
     await router.push({
       pathname: '/empty'
     })
+
     await router.push({
       pathname: '/settings',
       query: { successUpdateUserSettings: true }
@@ -172,7 +189,7 @@ export default function UserSettings() {
   )
 
   // ============================================================
-  // Return Page
+  // Return
   // ===========================================================
   return (
     <div>
