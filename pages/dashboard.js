@@ -274,7 +274,7 @@ export default function Dashboard() {
   }
 
   // ============================================================
-  // Return Page
+  // Return
   // ============================================================
   if (user === null || !userInfo || !sessions) {
     return <div>Waiting..</div>

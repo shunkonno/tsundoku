@@ -12,8 +12,8 @@ import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 
 // Functions
-import uselocalesFilter from '../../utils/translate'
 import { useAuth } from '../../lib/auth'
+import uselocalesFilter from '../../utils/translate'
 import fetcher from '../../utils/fetcher'
 
 const navigation = [
@@ -24,11 +24,22 @@ const navigation = [
 
 export default function LpHeader() {
   // ============================================================
-  // Initialize
-  // ============================================================
   // Auth
+  // ============================================================
   const auth = useAuth()
   const user = auth.user
+
+  // ============================================================
+  // Routing
+  // ============================================================
+
+  const router = useRouter()
+  const { locale, pathname } = router
+  const t = uselocalesFilter('header', locale)
+
+  // ============================================================
+  // Fetch Data
+  // ============================================================
 
   // Fetch logged user info on client side
   const { data: userInfo } = useSWR(
@@ -41,17 +52,20 @@ export default function LpHeader() {
       }
     }
   )
-  console.log(userInfo)
 
-  const router = useRouter()
-  const { locale, pathname } = router
-  const t = uselocalesFilter('header', locale)
+  // ============================================================
+  // Button Handlers
+  // ============================================================
 
-  //Function
+  // Logout Button
   const handleLogout = () => {
     auth.signout()
     router.push('/')
   }
+
+  // ============================================================
+  // Button Rendering
+  // ============================================================
 
   const renderHeaderButton = () => {
     //ログインしているかどうか確認
@@ -160,6 +174,9 @@ export default function LpHeader() {
   //   )
   // }
 
+  // ============================================================
+  // Return
+  // ============================================================
   return (
     <>
       <div className="relative bg-gray-50">

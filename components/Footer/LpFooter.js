@@ -62,14 +62,15 @@ function FindLocaleByLocaleCode(localeCode) {
 
 export default function LpFooter() {
   // ============================================================
-  // Initialize
+  // Auth
   // ============================================================
 
-  // Auth
   const auth = useAuth()
   const user = auth.user
 
+  // ============================================================
   // Routing
+  // ============================================================
   const router = useRouter()
 
   // Set locale
@@ -88,16 +89,17 @@ export default function LpFooter() {
   const t = uselocalesFilter('footer', router.locale)
 
   // ============================================================
-  // Button Handler
+  // Button Handlers
   // ============================================================
 
+  // Logout Button
   const handleLogout = () => {
     auth.signout()
     router.push('/')
   }
 
   // ============================================================
-  // Return Component
+  // Return
   // ===========================================================
   return (
     <footer
@@ -231,16 +233,16 @@ export default function LpFooter() {
             &copy; 2021 Tsundoku All rights reserved.
           </p>
           <div className="hidden sm:block my-4 ml-4">
-            {user ?
-            <button
-              className="text-gray-400 text-sm"
-              onClick={(e) => handleLogout()}
-            >
-              {t.LOGOUT}
-            </button>
-            :
-            <></>
-            }
+            {user ? (
+              <button
+                className="text-gray-400 text-sm"
+                onClick={(e) => handleLogout()}
+              >
+                {t.LOGOUT}
+              </button>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       </div>
