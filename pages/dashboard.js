@@ -139,9 +139,13 @@ export default function Dashboard() {
   // Helper Functions
   // ============================================================
 
-  // dateTimeISOString formatter
-  const formatDateTime = (datetimeIsoString) => {
+  // dateTimeISOString to datetime formatter
+  const formatISOStringToDateTime = (datetimeIsoString) => {
     return moment(datetimeIsoString).format('M月D日 H:mm')
+  }
+  // dateTimeISOString to date formatter
+  const formatISOStringToDate = (datetimeIsoString) => {
+    return moment(datetimeIsoString).format('M月D日')
   }
 
   // ============================================================
@@ -188,30 +192,37 @@ export default function Dashboard() {
             >
               <div className="flex">
                 <div className="flex-shrink-0">
-                  <CheckCircleIcon
-                    className={classNames(
-                      alertAssort == 'create' ||
-                        (alertAssort == 'reserve' && 'text-green-400'),
-                      alertAssort == 'cancel' && 'text-gray-400',
-                      alertAssort == 'failed' && 'text-yellow-400',
-                      'h-5 w-5'
-                    )}
-                    aria-hidden="true"
-                  />
+                  {
+                    (alertAssort == 'create' || alertAssort == 'reserve') &&
+                      <CheckCircleIcon
+                        className='h-5 w-5 text-green-400'
+                        aria-hidden="true"
+                      />,
+                    (alertAssort == 'cancel') &&
+                      <CheckCircleIcon
+                        className='h-5 w-5 text-gray-400'
+                        aria-hidden="true"
+                      />,
+                    (alertAssort == 'failed') &&
+                      <ExclamationIcon
+                        className='h-5 w-5 text-yellow-400'
+                        aria-hidden="true"
+                      />
+                  }
                 </div>
                 <div className="ml-3">
                   <p
                     className={classNames(
-                      alertAssort == 'create' ||
-                        (alertAssort == 'reserve' && 'text-green-800'),
+                      (alertAssort == 'create' || alertAssort == 'reserve') && 'text-green-800',
                       alertAssort == 'cancel' && 'text-gray-800',
                       alertAssort == 'failed' && 'text-yellow-800',
                       'text-sm font-medium'
                     )}
                   >
-                    {alertAssort == 'create' ||
-                      (alertAssort == 'reserve' &&
-                        'ルームの予約が完了しました。')}
+                    {alertAssort == 'create' &&
+                      'ルームを作成しました。' }
+                    {alertAssort == 'reserve' &&
+                        'ルームの予約が完了しました。'}
                     {alertAssort == 'cancel' &&
                       'ルームの予約を取り消しました。'}
                     {alertAssort == 'failed' &&
@@ -223,9 +234,8 @@ export default function Dashboard() {
                     <button
                       type="button"
                       className={classNames(
-                        alertAssort == 'create' ||
-                          (alertAssort == 'reserve' &&
-                            'bg-green-50  text-green-500 hover:bg-green-100 focus:ring-offset-green-50 focus:ring-green-600'),
+                        (alertAssort == 'create' || alertAssort == 'reserve') &&
+                            'bg-green-50  text-green-500 hover:bg-green-100 focus:ring-offset-green-50 focus:ring-green-600',
                         alertAssort == 'cancel' &&
                           'bg-gray-200 text-gray-500 hover:bg-gray-100 focus:ring-offset-gray-50 focus:ring-gray-600',
                         alertAssort == 'failed' &&
@@ -246,6 +256,115 @@ export default function Dashboard() {
       </Transition>
     </div>
   )
+
+  const renderSessionsGrid = (sessions) => {
+    const startDates = sessions.filter((session) => {
+      return !(
+        session.ownerId == userInfo?.uid ||
+        session.guestId == userInfo?.uid
+      )
+    })
+    .map((session) => {
+      return moment(session.startDateTime).format('M月D日')
+    })
+
+    const duplicateDeletedStartDates = [...new Set(startDates)]
+
+    return (
+      duplicateDeletedStartDates.map((startDate) => (
+        <div key={startDate} className="relative">
+          <div className="z-10 sticky top-0 border rounded-full border-gray-500 bg-gray-50 mt-4 px-6 py-0.5 text-base font-bold text-gray-600">
+            <h3>{startDate}</h3>
+          </div>
+          <ul
+            role="list"
+            className="grid py-4 grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            {sessions
+              .filter((session) => {
+                return !(
+                  session.ownerId == userInfo?.uid ||
+                  session.guestId == userInfo?.uid
+                ) && startDate == formatISOStringToDate(session.startDateTime)
+              })
+              .map((session) => (
+                <Disclosure key={session.sessionId}>
+                  {({ open }) => (
+                    <li key={session.sessionId}>
+                      <div className="bg-white rounded-lg shadow divide-y divide-gray-200">
+                        <div className="w-full flex items-center justify-between p-6 space-x-6">
+                          <div className="flex-1 truncate">
+                            <div className="flex items-center space-x-3">
+                              <div className="flex items-center">
+                                <h3 className="session-card-date">
+                                  {formatISOStringToDateTime(session.startDateTime)}
+                                  &nbsp;〜
+                                </h3>
+                              </div>
+                            </div>
+                            <div className="mt-1">
+                              <p className="session-card-duration">
+                                予定時間：{session.duration} 分間
+                              </p>
+                            </div>
+                            <div className="mt-4">
+                              <p className="session-card-owner">
+                                開催者：{session.ownerName}
+                              </p>
+                            </div>
+                          </div>
+                          {open ? (
+                            <Disclosure.Button className="">
+                              <p className="text-gray-500">閉じる</p>
+                            </Disclosure.Button>
+                          ) : (
+                            <Disclosure.Button className="">
+                              <p className="text-blue-500">予約する</p>
+                            </Disclosure.Button>
+                          )}
+                        </div>
+                        {open && (
+                          <div>
+                            <Transition
+                              enter="transition duration-100 ease-out"
+                              enterFrom="transform scale-95 opacity-0"
+                              enterTo="transform scale-100 opacity-100"
+                              leave="transition duration-75 ease-out"
+                              leaveFrom="transform scale-100 opacity-100"
+                              leaveTo="transform scale-95 opacity-0"
+                            >
+                              <Disclosure.Panel className="text-gray-500">
+                                <div className="-mt-px p-3 flex justify-center divide-x divide-gray-200">
+                                  <div className="-ml-px flex flex-col items-center">
+                                    <p className="text-sm">
+                                      このルームを予約しますか？
+                                    </p>
+                                    <div
+                                      className="relative mt-3 border border-transparent rounded-br-lg hover:text-gray-500"
+                                      onClick={() =>
+                                        reserveSession(session)
+                                      }
+                                    >
+                                      <span className="inline-block bg-blue-500 rounded-sm px-16 py-3 text-sm text-white font-medium">
+                                        確定
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </Disclosure.Panel>
+                            </Transition>
+                          </div>
+                        )}
+                      </div>
+                    </li>
+                  )}
+                </Disclosure>
+              ))}
+          </ul>
+        </div>
+      )
+    ))
+  }
 
   // ============================================================
   // Button Handlers
@@ -299,7 +418,7 @@ export default function Dashboard() {
       <div className="relative pb-16 bg-gray-50 overflow-hidden">
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
           <main className="relative mx-auto max-w-5xl px-4 sm:py-8">
-            <div className="w-full fixed z-10 -mx-4 sm:mx-0 bottom-0 shadow-lg sm:shadow-none sm:static">
+            <div className="w-full fixed z-50 -mx-4 sm:mx-0 bottom-0 shadow-lg sm:shadow-none sm:static">
               <div className="bg-white sm:bg-gray-50 px-6 sm:px-0 py-4 sm:py-0">
                 <div className="flex justify-center sm:justify-end">
                   <Link href="/session/new">
@@ -339,7 +458,7 @@ export default function Dashboard() {
                                         alt=""
                                       /> */}
                                       <h3 className="session-card-date">
-                                        {formatDateTime(session.startDateTime)}
+                                        {formatISOStringToDateTime(session.startDateTime)}
                                         &nbsp;〜
                                       </h3>
                                     </div>
@@ -373,114 +492,13 @@ export default function Dashboard() {
               <div className="border-b-2 border-gray-900 py-2 mb-4">
                 <h2 className="title-section">空きルーム一覧</h2>
               </div>
-              <ul
-                role="list"
-                className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
-              >
-                {sessions
-                  .filter((session) => {
-                    return !(
-                      session.ownerId == userInfo?.uid ||
-                      session.guestId == userInfo?.uid
-                    )
-                  })
-                  .map((session) => (
-                    <Disclosure key={session.sessionId}>
-                      {({ open }) => (
-                        <li key={session.sessionId}>
-                          <div className="bg-white rounded-lg shadow divide-y divide-gray-200">
-                            <div className="w-full flex items-center justify-between p-6 space-x-6">
-                              <div className="flex-1 truncate">
-                                <div className="flex items-center space-x-3">
-                                  <div className="flex items-center">
-                                    {/* <img
-                                      className="w-10 h-10 mr-4 mb-2 bg-gray-300 rounded-full flex-shrink-0"
-                                      src={session.imageUrl}
-                                      alt=""
-                                    /> */}
-                                    <h3 className="session-card-date">
-                                      {formatDateTime(session.startDateTime)}
-                                      &nbsp;〜
-                                    </h3>
-                                  </div>
-                                </div>
-                                <div className="mt-1">
-                                  <p className="session-card-duration">
-                                    予定時間：{session.duration} 分間
-                                  </p>
-                                </div>
-                                <div className="mt-4">
-                                  <p className="session-card-owner">
-                                    開催者：{session.ownerName}
-                                  </p>
-                                </div>
-                              </div>
-                              {open ? (
-                                <Disclosure.Button className="">
-                                  <p className="text-gray-500">閉じる</p>
-                                </Disclosure.Button>
-                              ) : (
-                                <Disclosure.Button className="">
-                                  <p className="text-blue-500">予約する</p>
-                                </Disclosure.Button>
-                              )}
-                            </div>
-                            {open && (
-                              <div>
-                                <Transition
-                                  enter="transition duration-100 ease-out"
-                                  enterFrom="transform scale-95 opacity-0"
-                                  enterTo="transform scale-100 opacity-100"
-                                  leave="transition duration-75 ease-out"
-                                  leaveFrom="transform scale-100 opacity-100"
-                                  leaveTo="transform scale-95 opacity-0"
-                                >
-                                  <Disclosure.Panel className="text-gray-500">
-                                    <div className="-mt-px p-3 flex justify-center divide-x divide-gray-200">
-                                      <div className="-ml-px flex flex-col items-center">
-                                        <p className="text-sm">
-                                          このルームを予約しますか？
-                                        </p>
-                                        <div
-                                          className="relative mt-3 border border-transparent rounded-br-lg hover:text-gray-500"
-                                          onClick={() =>
-                                            reserveSession(session)
-                                          }
-                                        >
-                                          <span className="inline-block bg-blue-500 rounded-sm px-16 py-3 text-sm text-white font-medium">
-                                            確定
-                                          </span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </Disclosure.Panel>
-                                </Transition>
-                              </div>
-                            )}
-                          </div>
-                        </li>
-                      )}
-                    </Disclosure>
-                  ))}
-              </ul>
+              
               {renderNoRoomStatement(sessions)}
+              <nav className="h-full overflow-y-auto" aria-label="Directory">
+                {renderSessionsGrid(sessions)}
+              </nav>
             </div>
           </main>
-          {/* FixedCreateRoomButton */}
-          {/* <div
-            className="sm:hidden z-10 w-full fixed bottom-0 shadow-lg"
-            style={{ boxShadow: '0 -2px 4px 0 rgba(0, 0, 0, 0.06)' }}
-          >
-            <div className="bg-white px-6 py-4">
-              <div className="flex justify-center">
-                <Link href="/session/new">
-                  <a className="block w-full px-6 py-2 border border-transparent text-base text-center font-bold rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main">
-                    ルームを作成する
-                  </a>
-                </Link>
-              </div>
-            </div>
-          </div> */}
         </div>
       </div>
 
