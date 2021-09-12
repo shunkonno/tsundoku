@@ -22,7 +22,7 @@ import fetcher from '../../utils/fetcher'
 import { addSession } from '../../lib/db'
 
 // ============================================================
-// datetime data
+// Settings
 // ============================================================
 const yearData = ['2021', '2022']
 
@@ -184,19 +184,25 @@ function classNames(...classes) {
 
 export default function Dashboard() {
   // ============================================================
-  // Initialize
+  // State
   // ============================================================
 
-  //State
   const [year, setYear] = useState('')
   const [month, setMonth] = useState('')
   const [day, setDay] = useState('')
   const [startTime, setStartTime] = useState('')
   const [duration, setDuration] = useState(durationData[3])
 
+  // ============================================================
   // Auth
+  // ============================================================
+
   const auth = useAuth()
   const user = auth.user
+
+  // ============================================================
+  // Fetch Data
+  // ============================================================
 
   // Fetch logged user info on client side
   const { data: userInfo } = useSWR(
@@ -210,7 +216,10 @@ export default function Dashboard() {
     }
   )
 
+  // ============================================================
   // Routing
+  // ============================================================
+
   const router = useRouter()
 
   useEffect(() => {
@@ -219,6 +228,14 @@ export default function Dashboard() {
       router.push('/')
     }
   })
+
+  // Set locale
+  const { locale } = useRouter()
+  const t = uselocalesFilter('sessionNew', locale)
+
+  // ============================================================
+  // Set current date and time
+  // ============================================================
 
   useEffect(() => {
     const now = new Date()
@@ -249,12 +266,8 @@ export default function Dashboard() {
     setStartTime(initialTime)
   }, [])
 
-  // Set locale
-  const { locale } = useRouter()
-  const t = uselocalesFilter('sessionNew', locale)
-
   // ============================================================
-  // Button Handler
+  // Button Handlers
   // ============================================================
 
   const createSession = async (e) => {
@@ -322,7 +335,7 @@ export default function Dashboard() {
   }
 
   // ============================================================
-  // Return Page
+  // Return
   // ============================================================
   if (user === null || !userInfo) {
     return <div>Waiting..</div>
