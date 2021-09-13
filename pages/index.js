@@ -383,9 +383,8 @@ export default function Home() {
               <div className="inline-flex rounded-md shadow">
                 <Link
                   href="/signin"
-                  className="font-sans inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-tsundoku-blue-main hover:bg-tsundoku-blue-main"
                 >
-                  <a>
+                  <a className="font-sans inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-tsundoku-blue-main hover:bg-tsundoku-blue-main">
                     無料で始める
                   </a>
                 </Link>
