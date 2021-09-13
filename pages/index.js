@@ -102,7 +102,9 @@ export default function Home() {
                           落ち着いて、じっくりと読書できないのは、現代人の悩みのひとつです。スマホの通知が鳴るときも、ふと家事を思い出したときにも、集中力が途切れてしまいがちです。
                         </p> */}
                         <p className="text-gray-700 text-lg leading-relaxed">
-                          落ち着いてじっくりと読書できないのは、現代人の悩みのひとつです。{`　`}スマホの通知が鳴るときも、ふと家事を思い出したときにも、集中力が途切れてしまいがちです。
+                          落ち着いてじっくりと読書できないのは、現代人の悩みのひとつです。
+                          {`　`}
+                          スマホの通知が鳴るときも、ふと家事を思い出したときにも、集中力が途切れてしまいがちです。
                         </p>
                       </div>
                       <div>
@@ -117,8 +119,10 @@ export default function Home() {
                       <p className="font-NotoSerif italic text-base sm:text-xl text-gray-400">
                         ｢書物の新しいページを1ページ、1ページ読むごとに、私はより豊かに、より強く、より高くなっていく。｣
                       </p>
-                        
-                      <p className="mt-0 sm:mt-2 font-NotoSerif italic text-right text-base sm:text-xl text-gray-400">(アントン・チェーホフ)</p>
+
+                      <p className="mt-0 sm:mt-2 font-NotoSerif italic text-right text-base sm:text-xl text-gray-400">
+                        (アントン・チェーホフ)
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -142,7 +146,12 @@ export default function Home() {
                       <div className="col-span-1 lg:col-span-3 sm:py-10  flex flex-col justify-center">
                         <div className="col-span-1 lg:col-span-3 sm:py-10 lg:ml-8 sm:hidden">
                           <div>
-                            <Image src='/img/video-matching.png' width={400} height={400} className="" />
+                            <Image
+                              src="/img/video-matching.png"
+                              width={400}
+                              height={400}
+                              className=""
+                            />
                           </div>
                         </div>
                         <div className="space-y-4 mt-10 sm:mt-0">
@@ -153,27 +162,35 @@ export default function Home() {
                           </div>
                           <div>
                             <p className="text-gray-700 text-lg leading-relaxed">
-                              そうすることで、誰かがいることで生まれるちょうど良い強制力(<span className="text-tsundoku-blue-main">ソーシャルプレッシャー</span>)によって、カフェにいるときのような集中力を発揮することができます。
+                              そうすることで、誰かがいることで生まれるちょうど良い強制力(
+                              <span className="text-tsundoku-blue-main">
+                                ソーシャルプレッシャー
+                              </span>
+                              )によって、カフェにいるときのような集中力を発揮することができます。
                             </p>
                           </div>
                         </div>
                       </div>
                       <div className="hidden col-span-1 lg:col-span-3 py-10 lg:ml-8 sm:flex sm:flex-col sm:justify-center sm:items-end">
                         <div>
-                          <Image src='/img/video-matching.png' width={400} height={400} className="" />
+                          <Image
+                            src="/img/video-matching.png"
+                            width={400}
+                            height={400}
+                            className=""
+                          />
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-
               </div>
             </div>
             <div className="mt-10 sm:mt-0 py-4 sm:py-12 bg-gray-50">
               <div className="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                 <div className="lg:text-center">
-                  <h2 className="text-base sm:text-xl text-tsundoku-brown-main font-semibold tracking-wide">
-                    Tsundokuの使い方
+                  <h2 className="text-gray-900 font-bold text-3xl lg:text-4xl leading-relaxed">
+                    ー Tsundokuの使い方 ー
                   </h2>
                 </div>
 
