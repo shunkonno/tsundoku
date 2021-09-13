@@ -241,6 +241,7 @@ export default function LpFooter() {
                   href={item.href}
                   className="text-gray-400 hover:text-gray-300"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <span className="sr-only">{item.name}</span>
                   
