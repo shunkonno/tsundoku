@@ -364,12 +364,14 @@ export default function Home() {
             </h2>
             <div className="mt-8 flex md:mt-0 md:flex-shrink-0">
               <div className="inline-flex rounded-md shadow">
-                <a
-                  href="#"
+                <Link
+                  href="/signin"
                   className="font-sans inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-tsundoku-blue-main hover:bg-tsundoku-blue-main"
                 >
-                  無料で始める
-                </a>
+                  <a>
+                    無料で始める
+                  </a>
+                </Link>
               </div>
             </div>
           </div>
