@@ -92,45 +92,89 @@ export default function Home() {
                 <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
                   <div className="col-span-1 lg:col-span-3 py-10">
                     <div className="mb-2">
-                      <h2 className="text-gray-900 font-bold text-2xl lg:text-3xl leading-relaxed">
+                      <h2 className="text-gray-900 font-bold text-3xl lg:text-4xl leading-relaxed">
                         没頭する時間を取り戻す
                       </h2>
                     </div>
                     <div className="space-y-4">
-                      <div>
-                        <p className="text-gray-900 text-lg leading-relaxed">
+                      <div className="mt-6">
+                        {/* <p className="text-gray-900 text-lg leading-relaxed">
                           落ち着いて、じっくりと読書できないのは、現代人の悩みのひとつです。スマホの通知が鳴るときも、ふと家事を思い出したときにも、集中力が途切れてしまいがちです。
+                        </p> */}
+                        <p className="text-gray-700 text-lg leading-relaxed">
+                          落ち着いてじっくりと読書できないのは、現代人の悩みのひとつです。{`　`}スマホの通知が鳴るときも、ふと家事を思い出したときにも、集中力が途切れてしまいがちです。
                         </p>
                       </div>
                       <div>
-                        <p className="text-gray-900 text-lg leading-relaxed">
-                          没頭して読書する時間を取り戻したい。積ん読してる本を、Tsundoku
-                          で消化しませんか。
+                        <p className="text-gray-700 text-lg leading-relaxed">
+                          Tsundokuは、集中力を途切れさせることなく、より高い充実感のある読書を実現します。
                         </p>
                       </div>
                     </div>
                   </div>
-                  <div className="col-span-1 lg:col-span-3 py-10 lg:ml-8">
+                  <div className="col-span-1 lg:col-span-3 py-10 lg:ml-8 flex flex-col justify-center">
                     <div>
-                      <p className="font-NotoSerif text-3xl text-gray-400">
+                      <p className="font-NotoSerif italic text-base sm:text-xl text-gray-400">
                         ｢書物の新しいページを1ページ、1ページ読むごとに、私はより豊かに、より強く、より高くなっていく。｣
-                        (アントン・チェーホフ)
                       </p>
+                        
+                      <p className="mt-0 sm:mt-2 font-NotoSerif italic text-right text-base sm:text-xl text-gray-400">(アントン・チェーホフ)</p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="py-4 sm:py-12 bg-gray-50">
+            <div className="mt-10 py-4 sm:py-12 bg-gray-50">
               <div className="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                 <div className="lg:text-center">
                   <h2 className="text-base sm:text-xl text-tsundoku-brown-main font-semibold tracking-wide">
                     Tsundoku とは
                   </h2>
-                  <span className="block sm:inline mt-2 text-3xl leading-normal font-extrabold tracking-tight text-gray-900 lg:text-5xl">
+                  <span className="block mt-2 sm:mt-4 text-3xl leading-normal font-extrabold tracking-tight text-gray-900 lg:text-5xl">
                     ビデオ通話でつながる、ペア読書
                   </span>
+                </div>
+
+                <div className="mt-10">
+                  <div className="max-w-7xl mx-auto">
+                    <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
+                      <div className="col-span-1 lg:col-span-3 sm:py-10  flex flex-col justify-center">
+                        <div className="col-span-1 lg:col-span-3 sm:py-10 lg:ml-8 sm:hidden">
+                          <div>
+                            <Image src='/img/video-matching.png' width={400} height={400} className="" />
+                          </div>
+                        </div>
+                        <div className="space-y-4 mt-10 sm:mt-0">
+                          <div>
+                            <p className="text-gray-700 text-lg leading-relaxed">
+                              Tsundokuは、本を読む人同士をマッチングし、ビデオ通話でつながりながら読書をする環境を提供します。
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-gray-700 text-lg leading-relaxed">
+                              そうすることで、誰かがいることで生まれる"ちょうど良い強制力"(<span className="text-tsundoku-blue-main">ソーシャルプレッシャー</span>)によって、カフェにいるときのような集中力を発揮することができます。
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="hidden col-span-1 lg:col-span-3 py-10 lg:ml-8 sm:flex sm:flex-col sm:justify-center sm:items-end">
+                        <div>
+                          <Image src='/img/video-matching.png' width={400} height={400} className="" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div className="mt-10 sm:mt-0 py-4 sm:py-12 bg-gray-50">
+              <div className="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+                <div className="lg:text-center">
+                  <h2 className="text-base sm:text-xl text-tsundoku-brown-main font-semibold tracking-wide">
+                    Tsundokuの使い方
+                  </h2>
                 </div>
 
                 <div className="mt-10">
@@ -312,7 +356,7 @@ export default function Home() {
             </div>
           </div> */}
 
-          <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 md:py-10 md:px-8 md:flex md:items-center md:justify-between">
+          <div className="sm:my-10 max-w-7xl mx-auto py-8 px-4 sm:px-6 md:py-10 md:px-8 md:flex md:items-center md:justify-between">
             <h2 className="font-sans font-bold tracking-tight md:text-4xl">
               <p className="block text-gray-900 text-3xl sm:text-4xl tracking-wider leading-normal mb-2">
                 Tsundoku を使って、ペア読書

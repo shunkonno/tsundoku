@@ -70,8 +70,8 @@ export const dict = [
         ja: 'ログイン'
       },
       TODASHBOARD: {
-        en: 'Dashboard',
-        ja: 'ダッシュボード'
+        en: 'Home',
+        ja: 'マイページ'
       },
       LOGOUT: {
         en: 'LOGOUT',
