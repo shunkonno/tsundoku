@@ -265,10 +265,10 @@ export default function UserSettings() {
                             ? 'rounded-bl-md rounded-br-md'
                             : '',
                           checked
-                            ? 'bg-tsundoku-brown-sub border-tsundoku-brown-main z-10'
+                            ? 'bg-tsundoku-brown-sub z-10'
                             : 'border-gray-200',
                           gender.label == genderSelected
-                            ? 'bg-tsundoku-brown-sub border-tsundoku-brown-main z-10'
+                            ? 'bg-tsundoku-brown-sub z-10'
                             : 'border-gray-200',
                           'relative border p-4 flex cursor-pointer focus:outline-none'
                         )
