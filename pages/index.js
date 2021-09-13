@@ -153,7 +153,7 @@ export default function Home() {
                           </div>
                           <div>
                             <p className="text-gray-700 text-lg leading-relaxed">
-                              そうすることで、誰かがいることで生まれる"ちょうど良い強制力"(<span className="text-tsundoku-blue-main">ソーシャルプレッシャー</span>)によって、カフェにいるときのような集中力を発揮することができます。
+                              そうすることで、誰かがいることで生まれるちょうど良い強制力(<span className="text-tsundoku-blue-main">ソーシャルプレッシャー</span>)によって、カフェにいるときのような集中力を発揮することができます。
                             </p>
                           </div>
                         </div>
