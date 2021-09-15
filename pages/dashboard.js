@@ -1,12 +1,15 @@
 // ============================================================
 // Imports
 // ============================================================
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Link from 'next/link'
 import useSWR from 'swr'
 import moment from 'moment'
+
+//Context
+import { AppContext } from '../context/state'
 
 // Components
 import { AppHeader } from '../components/Header'
@@ -27,9 +30,7 @@ export default function Dashboard() {
   // ============================================================
   // States
   // ============================================================
-
-  const [alertOpen, setAlertOpen] = useState(false)
-  const [alertAssort, setAlertAssort] = useState('') // create, reserve, cancel, failed
+  const {alertOpen, setAlertOpen, alertAssort, setAlertAssort} = useContext(AppContext);
 
   // ============================================================
   // Auth
@@ -98,7 +99,7 @@ export default function Dashboard() {
   if (sessions) {
     userIsOwnerOrGuest = sessions.some((session) => {
       return (
-        userInfo?.uid == session.guestId || userInfo?.uid == session.ownerId
+        userInfo?.uid == session?.guestId || userInfo?.uid == session?.ownerId
       )
     })
   }
@@ -155,7 +156,7 @@ export default function Dashboard() {
   const renderNoRoomStatement = (sessions) => {
     const filteredList = sessions.filter((session) => {
       return !(
-        session.ownerId == userInfo?.uid || session.guestId == userInfo?.uid
+        session?.ownerId == userInfo?.uid || session?.guestId == userInfo?.uid
       )
     })
 
@@ -182,8 +183,8 @@ export default function Dashboard() {
           <div className="opacity-95">
             <div
               className={classNames(
-                alertAssort == 'create' ||
-                  (alertAssort == 'reserve' && 'bg-green-50'),
+                (alertAssort == 'create' || alertAssort == 'reserve') && 
+                  'bg-green-50',
                 alertAssort == 'cancel' && 'bg-gray-200',
                 alertAssort == 'failed' &&
                   'bg-yellow-50 border-yellow-400 border-l-4',
@@ -414,7 +415,7 @@ export default function Dashboard() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
+      
       {renderAlert(alertAssort)}
 
       <AppHeader />
@@ -510,6 +511,7 @@ export default function Dashboard() {
       </div>
 
       <Footer />
+      
     </div>
   )
 }

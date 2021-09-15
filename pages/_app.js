@@ -3,10 +3,15 @@ import { AuthProvider } from '../lib/auth'
 import 'tailwindcss/tailwind.css'
 import '../styles/globals.css'
 
+//useContext
+import { AppWrapper } from '../context/state'
+
 function MyApp({ Component, pageProps }) {
   return (
     <AuthProvider>
-      <Component {...pageProps} />
+      <AppWrapper>
+        <Component {...pageProps} />
+      </AppWrapper>
     </AuthProvider>
   )
 }
