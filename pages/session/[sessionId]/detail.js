@@ -15,7 +15,7 @@ import { Footer } from '../../../components/Footer'
 import { Disclosure, Transition } from '@headlessui/react'
 
 //Assets
-import { CheckCircleIcon, XIcon, ChevronLeftIcon } from '@heroicons/react/solid'
+import { TrashIcon, ChevronLeftIcon } from '@heroicons/react/solid'
 
 // Functions
 import uselocalesFilter from '../../../utils/translate'
@@ -56,6 +56,22 @@ export default function SessionDetail({ session }) {
   // ============================================================
   const auth = useAuth()
   const user = auth.user
+
+  // ============================================================
+  // Fetch Data
+  // ============================================================
+
+  // Fetch logged user info on client side
+  const { data: userInfo } = useSWR(
+    user ? ['/api/user', user.token] : null,
+    fetcher,
+    {
+      onErrorRetry: ({ retryCount }) => {
+        // Retry up to 10 times
+        if (retryCount >= 10) return
+      }
+    }
+  )
 
   // ============================================================
   // Routing
@@ -183,13 +199,27 @@ export default function SessionDetail({ session }) {
                   <h3 className="text-lg leading-6 font-medium text-gray-900">
                     ルーム詳細
                   </h3>
-                  <span
-                    type="button"
-                    className="text-sm cursor-pointer text-red-600 hover:text-red-700"
-                    onClick={(e) => cancelSession(e)}
-                  >
-                    予約を取り消す
-                  </span>
+                  {
+                    session.ownerId == userInfo?.uid
+                    ?
+                    <>
+                      <span
+                        type="button"
+                        className="text-sm cursor-pointer text-red-600 hover:text-red-700"
+                        onClick={(e) => deleteSession(e)}
+                      >
+                        ルームを削除する
+                      </span>
+                    </>
+                    :
+                    <span
+                      type="button"
+                      className="text-sm cursor-pointer text-red-600 hover:text-red-700"
+                      onClick={(e) => cancelSession(e)}
+                    >
+                      予約を取り消す
+                    </span>
+                  }
                 </div>
                 {/* <p className="mt-1 max-w-2xl text-sm text-gray-500">Personal details and application.</p> */}
               </div>
@@ -217,6 +247,18 @@ export default function SessionDetail({ session }) {
                     </dt>
                     <dd className="mt-1 text-base text-gray-900 sm:mt-0 sm:col-span-2">
                       {session?.duration} 分
+                    </dd>
+                  </div>
+                  <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt className="text-base font-medium text-gray-500">
+                      参加者
+                    </dt>
+                    <dd className="mt-1 text-base text-gray-900 sm:mt-0 sm:col-span-2">
+                      {session?.guestId ?
+                      <span>{session.guestName}</span>
+                      :
+                    <span className="text-sm text-gray-500">ー</span>
+                    }
                     </dd>
                   </div>
                 </dl>

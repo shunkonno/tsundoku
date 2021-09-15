@@ -383,7 +383,10 @@ export default function Dashboard() {
       })
     } else {
       // Set user's uid to guestId
-      await updateSession(session.sessionId, { guestId: user.uid })
+      await updateSession(session.sessionId, { 
+        guestId: user.uid,
+        guestName: user.name
+      })
       await router.push({
         pathname: '/empty'
       })

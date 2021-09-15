@@ -252,18 +252,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-
-      {/* <div className="mt-12 bg-gray-500">
-            <h2 id="debug">///Debug Area///</h2>
-            <p>{t.TranslateTest}</p>
-            <p>現在ログイン中のユーザーは、<br />[ { user ? user.email : "いません"} ]</p>
-            <button
-              className="text-white p-1 border border-gray-200"
-              onClick={() => console.log(localeSelected)}
-            >
-              show current locale in console
-            </button>
-          </div>  */}
     </footer>
   )
 }
