@@ -200,7 +200,7 @@ export default function SessionDetail({ session }) {
                     ルーム詳細
                   </h3>
                   {
-                    session.ownerId == userInfo?.uid
+                    session?.ownerId == userInfo?.uid
                     ?
                     <>
                       <span
