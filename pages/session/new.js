@@ -1,7 +1,7 @@
 // ============================================================
 // Imports
 // ============================================================
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import useSWR from 'swr'
@@ -11,6 +11,9 @@ import moment from 'moment'
 import { AppHeader } from '../../components/Header'
 import { Footer } from '../../components/Footer'
 import { Listbox, Transition } from '@headlessui/react'
+
+// Context
+import { AppContext } from '../../context/state'
 
 //Assets
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
@@ -194,6 +197,11 @@ export default function Dashboard() {
   const [duration, setDuration] = useState(durationData[3])
 
   // ============================================================
+  // Context
+  // ============================================================
+  const {setAlertAssort} = useContext(AppContext);
+
+  // ============================================================
   // Auth
   // ============================================================
 
@@ -321,14 +329,17 @@ export default function Dashboard() {
           sessionId: sessionInfo.name,
           ownerId: user.uid,
           ownerName: userInfo.name,
+          guestId: '',
+          guestName: '',
           startDateTime,
           endDateTime,
           duration: durationValue
         })
+      
+        setAlertAssort('create')
 
         router.push({
           pathname: '/dashboard',
-          query: { successCreateRoom: true }
         })
       })
       .catch((err) => console.error('error:' + err))

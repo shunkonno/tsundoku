@@ -1,7 +1,7 @@
 // ============================================================
 // Imports
 // ============================================================
-import { Fragment, useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -13,6 +13,9 @@ import PropTypes from 'prop-types'
 import { AppHeader } from '../../../components/Header'
 import { Footer } from '../../../components/Footer'
 import { Disclosure, Transition } from '@headlessui/react'
+
+//Context
+import { AppContext } from '../../../context/state'
 
 //Assets
 import { TrashIcon, ChevronLeftIcon } from '@heroicons/react/solid'
@@ -51,6 +54,11 @@ export async function getStaticPaths() {
 }
 
 export default function SessionDetail({ session }) {
+  // ============================================================
+  // Contexts
+  // ============================================================
+  const {setAlertAssort} = useContext(AppContext);
+
   // ============================================================
   // Auth
   // ============================================================
@@ -95,12 +103,6 @@ export default function SessionDetail({ session }) {
   const [count, setCount] = useState(0)
   const [enterRoomOpen, setEnterRoomOpen] = useState(false)
 
-  // Filter Current session by sessionId
-  // const session = sessions.find((session) => {
-  //   return session.sessionId == sessionId
-
-  // })
-
   // ============================================================
   // Helper Functions
   // ============================================================
@@ -144,9 +146,10 @@ export default function SessionDetail({ session }) {
     // Update guestId to an empty string
     await updateSession(session?.sessionId, { guestId: '' })
 
+    await setAlertAssort('cancel')
+
     await router.push({
       pathname: '/dashboard',
-      query: { successCancelRoom: true }
     })
   }
 
@@ -155,6 +158,8 @@ export default function SessionDetail({ session }) {
 
     // Delete guestId to an empty string
     await deleteSession(session?.sessionId)
+
+    await setAlertAssort('delete')
 
     await router.push({
       pathname: '/dashboard',

@@ -8,13 +8,13 @@ import Link from 'next/link'
 import useSWR from 'swr'
 import moment from 'moment'
 
-//Context
-import { AppContext } from '../context/state'
-
 // Components
 import { AppHeader } from '../components/Header'
 import { Footer } from '../components/Footer'
 import { Disclosure, Transition } from '@headlessui/react'
+
+//Context
+import { AppContext } from '../context/state'
 
 //Assets
 import { CheckCircleIcon, ExclamationIcon, XIcon } from '@heroicons/react/solid'
@@ -28,9 +28,9 @@ import uselocalesFilter from '../utils/translate'
 
 export default function Dashboard() {
   // ============================================================
-  // States
+  // Contexts
   // ============================================================
-  const {alertOpen, setAlertOpen, alertAssort, setAlertAssort} = useContext(AppContext);
+  const {alertOpen, setAlertOpen, alertAssort, setAlertAssort} = useContext(AppContext)
 
   // ============================================================
   // Auth
@@ -118,22 +118,18 @@ export default function Dashboard() {
   }
 
   // Hanldle alert state
-  useEffect(() => {
-    if (router.query.successCreateRoom == 'true') {
-      alertControl('create')
-    } else if (router.query.successReserveRoom == 'true') {
-      alertControl('reserve')
-    } else if (router.query.successReserveRoom == 'false') {
-      alertControl('failed')
-    } else if (router.query.successCancelRoom == 'true') {
-      alertControl('cancel')
+  useEffect(async() => {
+    if (alertAssort) {
+      await setAlertOpen(true)
+      await setTimeout(async () => {
+        await setAlertOpen(false)
+        await setAlertAssort('')
+      }, 5000)
     } else {
-      setAlertAssort('')
+      await setAlertAssort('')
     }
   }, [
-    router.query.successCancelRoom,
-    router.query.successCreateRoom,
-    router.query.successReserveRoom
+    alertAssort
   ])
 
   // ============================================================
@@ -147,6 +143,36 @@ export default function Dashboard() {
   // dateTimeISOString to date formatter
   const formatISOStringToDate = (datetimeIsoString) => {
     return moment(datetimeIsoString).format('M月D日')
+  }
+
+  // ============================================================
+  // Button Handlers
+  // ============================================================
+
+  // Handle session reservation
+  const reserveSession = async (session) => {
+    // If guestId has already been set, the user can't reserve the session
+    // Redirect and show alert banner
+    if (session.guestId) {
+      await router.push({
+        pathname: '/dashboard',
+        query: { successReserveRoom: false }
+      })
+    } else {
+      // Set user's uid to guestId
+      await updateSession(session.sessionId, { 
+        guestId: user.uid,
+        guestName: userInfo.name
+      })
+      await setAlertAssort('reserve')
+      await router.push({
+        pathname: '/empty'
+      })
+      await router.replace({
+        pathname: '/dashboard',
+        query: { successReserveRoom: true }
+      })
+    }
   }
 
   // ============================================================
@@ -245,7 +271,10 @@ export default function Dashboard() {
                           'bg-yellow-50 text-yellow-500 hover:bg-yellow-100 focus:ring-offset-green-50 focus:ring-yellow-600',
                         'inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2'
                       )}
-                      onClick={() => setAlertOpen(false)}
+                      onClick={() => {
+                        setAlertOpen(false)
+                        setAlertAssort('')
+                      }}
                     >
                       <span className="sr-only">Dismiss</span>
                       <XIcon className="h-5 w-5" aria-hidden="true" />
@@ -367,35 +396,6 @@ export default function Dashboard() {
         </ul>
       </div>
     ))
-  }
-
-  // ============================================================
-  // Button Handlers
-  // ============================================================
-
-  // Handle session reservation
-  const reserveSession = async (session) => {
-    // If guestId has already been set, the user can't reserve the session
-    // Redirect and show alert banner
-    if (session.guestId) {
-      await router.push({
-        pathname: '/dashboard',
-        query: { successReserveRoom: false }
-      })
-    } else {
-      // Set user's uid to guestId
-      await updateSession(session.sessionId, { 
-        guestId: user.uid,
-        guestName: user.name
-      })
-      await router.push({
-        pathname: '/empty'
-      })
-      await router.replace({
-        pathname: '/dashboard',
-        query: { successReserveRoom: true }
-      })
-    }
   }
 
   // ============================================================
