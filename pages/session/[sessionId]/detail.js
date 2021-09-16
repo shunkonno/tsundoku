@@ -24,7 +24,7 @@ import { TrashIcon, ChevronLeftIcon } from '@heroicons/react/solid'
 import uselocalesFilter from '../../../utils/translate'
 import { useAuth } from '../../../lib/auth'
 import fetcher from '../../../utils/fetcher'
-import { updateSession } from '../../../lib/db'
+import { updateSession, deleteSession } from '../../../lib/db'
 import { fetchOneSession, fetchAllSessions } from '../../../lib/db-admin'
 
 // ============================================================
@@ -153,7 +153,7 @@ export default function SessionDetail({ session }) {
     })
   }
 
-  const deleteSession = async (e) => {
+  const deleteSessionData = async (e) => {
     e.preventDefault()
 
     // Delete guestId to an empty string
@@ -162,8 +162,7 @@ export default function SessionDetail({ session }) {
     await setAlertAssort('delete')
 
     await router.push({
-      pathname: '/dashboard',
-      query: { successDeleteRoom: true }
+      pathname: '/dashboard'
     })
   }
 
@@ -211,7 +210,7 @@ export default function SessionDetail({ session }) {
                       <span
                         type="button"
                         className="text-sm cursor-pointer text-red-600 hover:text-red-700"
-                        onClick={(e) => deleteSession(e)}
+                        onClick={(e) => deleteSessionData(e)}
                       >
                         ルームを削除する
                       </span>

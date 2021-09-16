@@ -211,7 +211,8 @@ export default function Dashboard() {
               className={classNames(
                 (alertAssort == 'create' || alertAssort == 'reserve') && 
                   'bg-green-50',
-                alertAssort == 'cancel' && 'bg-gray-200',
+                (alertAssort == 'cancel' || alertAssort == 'delete') &&
+                  'bg-gray-200',
                 alertAssort == 'failed' &&
                   'bg-yellow-50 border-yellow-400 border-l-4',
                 'rounded-b-md p-4'
@@ -220,24 +221,26 @@ export default function Dashboard() {
               <div className="flex">
                 <div className="flex-shrink-0">
                   {
-                    ((alertAssort == 'create' || alertAssort == 'reserve') && (
+                    (
+                      (alertAssort == 'create' || alertAssort == 'reserve') && (
                       <CheckCircleIcon
                         className="h-5 w-5 text-green-400"
                         aria-hidden="true"
                       />
-                    ),
-                    alertAssort == 'cancel' && (
-                      <CheckCircleIcon
-                        className="h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                    ),
-                    alertAssort == 'failed' && (
-                      <ExclamationIcon
-                        className="h-5 w-5 text-yellow-400"
-                        aria-hidden="true"
-                      />
-                    ))
+                      ),
+                      (alertAssort == 'cancel' || alertAssort == 'delete') && (
+                        <CheckCircleIcon
+                          className="h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
+                      ),
+                      alertAssort == 'failed' && (
+                        <ExclamationIcon
+                          className="h-5 w-5 text-yellow-400"
+                          aria-hidden="true"
+                        />
+                      )
+                    )
                   }
                 </div>
                 <div className="ml-3">
@@ -245,15 +248,16 @@ export default function Dashboard() {
                     className={classNames(
                       (alertAssort == 'create' || alertAssort == 'reserve') &&
                         'text-green-800',
-                      alertAssort == 'cancel' && 'text-gray-800',
+                      (alertAssort == 'cancel' || alertAssort == 'delete') &&
+                        'text-gray-800',
                       alertAssort == 'failed' && 'text-yellow-800',
                       'text-sm font-medium'
                     )}
                   >
                     {alertAssort == 'create' && 'ルームを作成しました。'}
                     {alertAssort == 'reserve' && 'ルームの予約が完了しました。'}
-                    {alertAssort == 'cancel' &&
-                      'ルームの予約を取り消しました。'}
+                    {alertAssort == 'cancel' && 'ルームの予約を取り消しました。'}
+                    {alertAssort == 'delete' && 'ルームを削除しました。'}
                     {alertAssort == 'failed' &&
                       '選択したルームは満員のため予約できませんでした。申し訳ございません。'}
                   </p>
@@ -265,7 +269,7 @@ export default function Dashboard() {
                       className={classNames(
                         (alertAssort == 'create' || alertAssort == 'reserve') &&
                           'bg-green-50  text-green-500 hover:bg-green-100 focus:ring-offset-green-50 focus:ring-green-600',
-                        alertAssort == 'cancel' &&
+                        (alertAssort == 'cancel' || alertAssort == 'delete')  &&
                           'bg-gray-200 text-gray-500 hover:bg-gray-100 focus:ring-offset-gray-50 focus:ring-gray-600',
                         alertAssort == 'failed' &&
                           'bg-yellow-50 text-yellow-500 hover:bg-yellow-100 focus:ring-offset-green-50 focus:ring-yellow-600',
