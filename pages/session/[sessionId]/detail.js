@@ -199,9 +199,7 @@ export default function SessionDetail({ session }) {
                   <h3 className="text-lg leading-6 font-medium text-gray-900">
                     ルーム詳細
                   </h3>
-                  {
-                    session.ownerId == userInfo?.uid
-                    ?
+                  {session?.ownerId == userInfo?.uid ? (
                     <>
                       <span
                         type="button"
@@ -211,7 +209,7 @@ export default function SessionDetail({ session }) {
                         ルームを削除する
                       </span>
                     </>
-                    :
+                  ) : (
                     <span
                       type="button"
                       className="text-sm cursor-pointer text-red-600 hover:text-red-700"
@@ -219,7 +217,7 @@ export default function SessionDetail({ session }) {
                     >
                       予約を取り消す
                     </span>
-                  }
+                  )}
                 </div>
                 {/* <p className="mt-1 max-w-2xl text-sm text-gray-500">Personal details and application.</p> */}
               </div>
@@ -254,11 +252,11 @@ export default function SessionDetail({ session }) {
                       参加者
                     </dt>
                     <dd className="mt-1 text-base text-gray-900 sm:mt-0 sm:col-span-2">
-                      {session?.guestId ?
-                      <span>{session.guestName}</span>
-                      :
-                    <span className="text-sm text-gray-500">ー</span>
-                    }
+                      {session?.guestId ? (
+                        <span>{session.guestName}</span>
+                      ) : (
+                        <span className="text-sm text-gray-500">ー</span>
+                      )}
                     </dd>
                   </div>
                 </dl>
