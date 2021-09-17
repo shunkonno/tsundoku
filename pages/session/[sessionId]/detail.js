@@ -111,13 +111,16 @@ export default function SessionDetail({ session }) {
   const formatDateTime = (datetimeIsoString) => {
     return moment(datetimeIsoString).format('M月D日 H:mm')
   }
+  const formatTime = (datetimeIsoString) => {
+    return moment(datetimeIsoString).format('H:mm')
+  }
 
-  const formatDateTimeForGoogleCalendar = (datetimeIsoString) => {
+  const formatDateTimeForGoogleCalendarURL = (datetimeIsoString) => {
     return moment(datetimeIsoString).format('YYYYMMDDTHHmm00')
   }
 
-  const startEvent = formatDateTimeForGoogleCalendar(session?.startDateTime)
-  const endEvent = formatDateTimeForGoogleCalendar(session?.endDateTime)
+  const startEvent = formatDateTimeForGoogleCalendarURL(session?.startDateTime)
+  const endEvent = formatDateTimeForGoogleCalendarURL(session?.endDateTime)
 
 
   // Calculate current time and determine whether the room should be open or not
@@ -277,7 +280,7 @@ export default function SessionDetail({ session }) {
                 <div className="mt-4 sm:mt-0 mx-0 sm:mx-6 text-right">
                   <a 
                     className="text-blue-500"
-                    href={`https://www.google.com/calendar/event?action=TEMPLATE&dates=${startEvent}/${endEvent}&text=Tsundoku ${formatDateTime(session?.startDateTime)} 開催&details=https://tsundoku.live/ja/session/${session?.sessionId}/detail`}
+                    href={`https://www.google.com/calendar/event?action=TEMPLATE&dates=${startEvent}/${endEvent}&text=Tsundoku ${formatTime(session?.startDateTime)} 開催&details=https://tsundoku.live/ja/session/${session?.sessionId}/detail`}
                     target="_blank"
                     rel="noreferrer"
                   >
