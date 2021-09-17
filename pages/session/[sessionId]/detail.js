@@ -112,6 +112,14 @@ export default function SessionDetail({ session }) {
     return moment(datetimeIsoString).format('M月D日 H:mm')
   }
 
+  const formatDateTimeForGoogleCalendar = (datetimeIsoString) => {
+    return moment(datetimeIsoString).format('YYYYMMDDTHHmm00')
+  }
+
+  const startEvent = formatDateTimeForGoogleCalendar(session?.startDateTime)
+  const endEvent = formatDateTimeForGoogleCalendar(session?.endDateTime)
+
+
   // Calculate current time and determine whether the room should be open or not
   useEffect(() => {
     const id = setInterval(() => {
@@ -266,6 +274,16 @@ export default function SessionDetail({ session }) {
                     </dd>
                   </div>
                 </dl>
+                <div className="mt-4 sm:mt-0 mx-0 sm:mx-6 text-right">
+                  <a 
+                    className="text-blue-500"
+                    href={`https://www.google.com/calendar/event?action=TEMPLATE&dates=${startEvent}/${endEvent}&text=Tsundoku ${formatDateTime(session?.startDateTime)} 開催`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Googleカレンダーに予定を追加する
+                    </a>
+                </div>
               </div>
               <div className="py-6">
                 <div className="flex justify-center">
