@@ -7,14 +7,16 @@ import Head from 'next/head'
 import Link from 'next/link'
 import useSWR from 'swr'
 import moment from 'moment'
+import { Steps, Hints } from 'intro.js-react'
 
 // Components
 import { AppHeader } from '../components/Header'
 import { Footer } from '../components/Footer'
 import { Disclosure, Transition } from '@headlessui/react'
 
-//Assets
+// Assets
 import { CheckCircleIcon, ExclamationIcon, XIcon } from '@heroicons/react/solid'
+import 'intro.js/introjs.css'
 
 // Functions
 import { useAuth } from '../lib/auth'
@@ -31,6 +33,36 @@ export default function Dashboard() {
   const [alertOpen, setAlertOpen] = useState(false)
   const [alertAssort, setAlertAssort] = useState('') // create, reserve, cancel, failed
 
+  // ============================================================
+  // Onboarding Steps (intro.js)
+  // ============================================================
+  const introjsSteps = [
+    {
+      element: '.onboarding-1',
+      intro: 'この一覧から、参加するルームを予約することができます。'
+    },
+    {
+      element: '.onboarding-2',
+      intro: '都合の合うルームがなかったら、ルームを作成しましょう。'
+    }
+  ]
+
+  const introjsInitialStep = 0
+
+  // stepsEnabled when user finishes initial setup
+  const introjsStepsEnabled = router.query.welcome === 'true' ? true : false
+
+  // intro.js options
+  const introjsOptions = {
+    nextLabel: '次へ',
+    prevLabel: '戻る',
+    doneLabel: '完了',
+    hidePrev: true
+  }
+
+  const introjsOnExit = () => {
+    return
+  }
   // ============================================================
   // Auth
   // ============================================================
@@ -293,7 +325,7 @@ export default function Dashboard() {
             .map((session) => (
               <Disclosure key={session.sessionId}>
                 {({ open }) => (
-                  <li key={session.sessionId}>
+                  <li>
                     <div className="bg-white rounded-lg shadow divide-y divide-gray-200">
                       <div className="w-full flex items-center justify-between p-6 space-x-6">
                         <div className="flex-1 truncate">
@@ -383,7 +415,7 @@ export default function Dashboard() {
       })
     } else {
       // Set user's uid to guestId
-      await updateSession(session.sessionId, { 
+      await updateSession(session.sessionId, {
         guestId: user.uid,
         guestName: user.name
       })
@@ -419,6 +451,15 @@ export default function Dashboard() {
 
       <AppHeader />
 
+      {/* intro.js */}
+      <Steps
+        enabled={introjsStepsEnabled}
+        steps={introjsSteps}
+        options={introjsOptions}
+        initialStep={introjsInitialStep}
+        onExit={introjsOnExit}
+      />
+
       {/* main content */}
       <div className="relative pb-16 bg-gray-50 overflow-hidden">
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
@@ -427,7 +468,7 @@ export default function Dashboard() {
               <div className="bg-white sm:bg-gray-50 px-6 sm:px-0 py-4 sm:py-0">
                 <div className="flex justify-center sm:justify-end">
                   <Link href="/session/new">
-                    <a className="block w-full sm:w-auto px-6 py-2 border border-transparent text-base text-center font-bold rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main">
+                    <a className="onboarding-2 block w-full sm:w-auto px-6 py-2 border border-transparent text-base text-center font-bold rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main">
                       ルームを作成する
                     </a>
                   </Link>
@@ -496,7 +537,7 @@ export default function Dashboard() {
               <></>
             )}
             <div className="py-3 mt-4">
-              <div className="border-b-2 border-gray-900 py-2 mb-4">
+              <div className="onboarding-1 border-b-2 border-gray-900 py-2 mb-4">
                 <h2 className="title-section">空きルーム一覧</h2>
               </div>
 
