@@ -24,10 +24,10 @@ import fetcher from '../../utils/fetcher'
 // Settings
 // ============================================================
 const genderSettings = [
-  { label: 'Male', name: '男性' },
-  { label: 'Female', name: '女性' },
-  { label: 'Other', name: 'その他' },
-  { label: 'No Answer', name: '回答しない' }
+  { label: 'male', name: '男性' },
+  { label: 'female', name: '女性' },
+  { label: 'other', name: 'その他' },
+  { label: 'noAnswer', name: '回答しない' }
 ]
 
 const genderOfMatchSettings = [{ name: '制限なし' }, { name: '女性のみ' }]

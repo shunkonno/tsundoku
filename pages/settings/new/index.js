@@ -21,9 +21,10 @@ import { updateUser } from '../../../lib/db'
 // Settings
 // ============================================================
 const genderSettings = [
-  { label: 'Man', name: '男性' },
-  { label: 'Female', name: '女性' },
-  { label: 'Other', name: 'その他' }
+  { label: 'male', name: '男性' },
+  { label: 'female', name: '女性' },
+  { label: 'other', name: 'その他' },
+  { label: 'noAnswer', name: '回答しない' }
 ]
 
 const genderOfMatchSettings = [{ name: '制限なし' }, { name: '女性のみ' }]
@@ -188,7 +189,7 @@ export default function NewUserSettings() {
               </RadioGroup>
             </div>
             {/* <Transition
-              show={genderSelected?.label == 'Female'}
+              show={genderSelected?.label == 'female'}
               as={Fragment}
               enter="transition duration-300"
               enterFrom="transform -translate-y-1/4 opacity-0"
