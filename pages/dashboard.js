@@ -34,36 +34,6 @@ export default function Dashboard() {
   const [alertAssort, setAlertAssort] = useState('') // create, reserve, cancel, failed
 
   // ============================================================
-  // Onboarding Steps (intro.js)
-  // ============================================================
-  const introjsSteps = [
-    {
-      element: '.onboarding-1',
-      intro: 'この一覧から、参加するルームを予約することができます。'
-    },
-    {
-      element: '.onboarding-2',
-      intro: '都合の合うルームがなかったら、ルームを作成しましょう。'
-    }
-  ]
-
-  const introjsInitialStep = 0
-
-  // stepsEnabled when user finishes initial setup
-  const introjsStepsEnabled = router.query.welcome === 'true' ? true : false
-
-  // intro.js options
-  const introjsOptions = {
-    nextLabel: '次へ',
-    prevLabel: '戻る',
-    doneLabel: '完了',
-    hidePrev: true
-  }
-
-  const introjsOnExit = () => {
-    return
-  }
-  // ============================================================
   // Auth
   // ============================================================
 
@@ -119,6 +89,37 @@ export default function Dashboard() {
   // Set locale
   const { locale } = router
   const t = uselocalesFilter('dashboard', locale)
+
+  // ============================================================
+  // Onboarding Steps (intro.js)
+  // ============================================================
+  const introjsSteps = [
+    {
+      element: '.onboarding-1',
+      intro: 'この一覧から、参加するルームを予約することができます。'
+    },
+    {
+      element: '.onboarding-2',
+      intro: '都合の合うルームがなかったら、ルームを作成しましょう。'
+    }
+  ]
+
+  const introjsInitialStep = 0
+
+  // stepsEnabled when user finishes initial setup
+  const introjsStepsEnabled = router.query.welcome === 'true' ? true : false
+
+  // intro.js options
+  const introjsOptions = {
+    nextLabel: '次へ',
+    prevLabel: '戻る',
+    doneLabel: '完了',
+    hidePrev: true
+  }
+
+  const introjsOnExit = () => {
+    return
+  }
 
   // ============================================================
   // User-related States
