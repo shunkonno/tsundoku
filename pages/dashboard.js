@@ -108,25 +108,16 @@ export default function Dashboard() {
   // Alert Handlers
   // ============================================================
 
-  // Handle alert display
-  const alertControl = async (alertAssort) => {
-    await setAlertOpen(true)
-    await setAlertAssort(alertAssort)
-    setTimeout(async () => {
-      await setAlertOpen(false)
-    }, 5000)
-  }
-
   // Hanldle alert state
-  useEffect(async() => {
+  useEffect(() => {
     if (alertAssort) {
-      await setAlertOpen(true)
-      await setTimeout(async () => {
+      setAlertOpen(true)
+      setTimeout(async () => {
         await setAlertOpen(false)
         await setAlertAssort('')
       }, 5000)
     } else {
-      await setAlertAssort('')
+      setAlertAssort('')
     }
   }, [
     alertAssort
@@ -179,7 +170,13 @@ export default function Dashboard() {
   // Render Function
   // ============================================================
 
-  const renderNoRoomStatement = (sessions) => {
+  const renderNoReserveRoomStatement = (sessions) => {
+      return (
+        <div className="text-center">現在、参加予定のルームはありません。</div>
+      )
+  }
+
+  const renderNoEmptyRoomStatement = (sessions) => {
     const filteredList = sessions.filter((session) => {
       return !(
         session?.ownerId == userInfo?.uid || session?.guestId == userInfo?.uid
@@ -439,15 +436,17 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-            {userIsOwnerOrGuest ? (
+            
               <div className="py-3">
                 <div className="border-b-2 border-blue-700 py-2 mb-4">
                   <h2 className="title-section">参加予定のルーム</h2>
                 </div>
+                {userIsOwnerOrGuest ? (
                 <ul
                   role="list"
                   className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
                 >
+                  
                   {sessions.map((session) =>
                     userInfo.uid == session.guestId ||
                     userInfo.uid == session.ownerId ? (
@@ -462,11 +461,6 @@ export default function Dashboard() {
                                 <div className="flex-1 truncate">
                                   <div className="flex items-center space-x-3">
                                     <div className="flex items-center">
-                                      {/* <img
-                                        className="w-10 h-10 mr-4 mb-2 bg-gray-300 rounded-full flex-shrink-0"
-                                        src={session.imageUrl}
-                                        alt=""
-                                      /> */}
                                       <h3 className="session-card-date">
                                         {formatISOStringToDateTime(
                                           session.startDateTime
@@ -496,16 +490,16 @@ export default function Dashboard() {
                     )
                   )}
                 </ul>
+                ) : (
+                  <div className="text-center">現在、参加予定のルームはありません。</div>
+                )}
               </div>
-            ) : (
-              <></>
-            )}
             <div className="py-3 mt-4">
               <div className="border-b-2 border-gray-900 py-2 mb-4">
                 <h2 className="title-section">空きルーム一覧</h2>
               </div>
 
-              {renderNoRoomStatement(sessions)}
+              {renderNoEmptyRoomStatement(sessions)}
               <nav className="h-full overflow-y-auto" aria-label="Directory">
                 {renderSessionsGrid(sessions)}
               </nav>
