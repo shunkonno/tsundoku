@@ -74,14 +74,9 @@ export default function Dashboard() {
     if (user === false) {
       // If the access isn't authenticated, redirect to index page
       router.push('/')
-    } else if (
-      userInfo &&
-      !('name' in userInfo) &&
-      router.query.welcome !== 'true'
-    ) {
+    } else if (userInfo && !('name' in userInfo)) {
       // If the user signed in for the first time, they won't have a username
-      // Redirect user to onboarding process, as long as the welcome parameter is not set to true
-      // The welcome parameter is set to true when the user submits form in onboarding process
+      // Redirect user to onboarding process
       router.push('/settings/new')
     }
   })
