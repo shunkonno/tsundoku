@@ -427,34 +427,34 @@ export default function Dashboard() {
     ))
   }
 
-  // ============================================================
-  // Button Handlers
-  // ============================================================
+//   // ============================================================
+//   // Button Handlers
+//   // ============================================================
 
-  // Handle session reservation
-  const reserveSession = async (session) => {
-    // If guestId has already been set, the user can't reserve the session
-    // Redirect and show alert banner
-    if (session.guestId) {
-      await router.push({
-        pathname: '/dashboard',
-        query: { successReserveRoom: false }
-      })
-    } else {
-      // Set user's uid to guestId
-      await updateSession(session.sessionId, {
-        guestId: user.uid,
-        guestName: user.name
-      })
-      await router.push({
-        pathname: '/empty'
-      })
-      await router.replace({
-        pathname: '/dashboard',
-        query: { successReserveRoom: true }
-      })
-    }
-  }
+//   // Handle session reservation
+//   const reserveSession = async (session) => {
+//     // If guestId has already been set, the user can't reserve the session
+//     // Redirect and show alert banner
+//     if (session.guestId) {
+//       await router.push({
+//         pathname: '/dashboard',
+//         query: { successReserveRoom: false }
+//       })
+//     } else {
+//       // Set user's uid to guestId
+//       await updateSession(session.sessionId, {
+//         guestId: user.uid,
+//         guestName: user.name
+//       })
+//       await router.push({
+//         pathname: '/empty'
+//       })
+//       await router.replace({
+//         pathname: '/dashboard',
+//         query: { successReserveRoom: true }
+//       })
+//     }
+//   }
 
   // ============================================================
   // Return
