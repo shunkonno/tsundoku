@@ -24,10 +24,10 @@ import fetcher from '../../utils/fetcher'
 // Settings
 // ============================================================
 const genderSettings = [
-  { label: 'Male', name: '男性' },
-  { label: 'Female', name: '女性' },
-  { label: 'Other', name: 'その他' },
-  { label: 'No Answer', name: '回答しない' }
+  { label: 'male', name: '男性' },
+  { label: 'female', name: '女性' },
+  { label: 'other', name: 'その他' },
+  { label: 'noAnswer', name: '回答しない' }
 ]
 
 const genderOfMatchSettings = [{ name: '制限なし' }, { name: '女性のみ' }]
@@ -41,11 +41,9 @@ function classNames(...classes) {
 
 export default function UserSettings() {
   // ============================================================
-  // Initialize
+  // State
   // ============================================================
-
-  //Initial State
-  const [userName, setUserName] = useState("")
+  const [userName, setUserName] = useState('')
   const [genderSelected, setGenderSelected] = useState()
   const [genderOfMatchSelected, setGenderOfMatchSelected] = useState(
     genderOfMatchSettings[0]
@@ -54,10 +52,15 @@ export default function UserSettings() {
   const [alertOpen, setAlertOpen] = useState(false)
   const [alertAssort, setAlertAssort] = useState('') // update
 
+  // ============================================================
   // Auth
+  // ============================================================
   const auth = useAuth()
   const user = auth.user
 
+  // ============================================================
+  // Fetch Data
+  // ============================================================
   // Fetch logged user info on client side
   const { data: userInfo } = useSWR(
     user ? ['/api/user', user.token] : null,
@@ -70,7 +73,10 @@ export default function UserSettings() {
     }
   )
 
+  // ============================================================
   // Routing
+  // ============================================================
+
   const router = useRouter()
 
   useEffect(() => {
@@ -78,20 +84,24 @@ export default function UserSettings() {
       // If the access isn't authenticated, redirect to index page
       router.push('/')
     } else if (userInfo) {
-      userInfo.name ?
-      setUserName(userInfo.name)
-      :
-      setUserName("")
+      userInfo.name ? setUserName(userInfo.name) : setUserName('')
 
       setGenderSelected(userInfo?.gender)
     }
-  },[userInfo])
+  }, [router, user, userInfo])
+
+  // Translate
+  const t = uselocalesFilter('userSettings', router.locale)
+
+  // ============================================================
+  // Handle Alert
+  // ============================================================
 
   // Function
-  const alertControl = async(alertAssort) => {
+  const alertControl = async (alertAssort) => {
     await setAlertOpen(true)
     await setAlertAssort(alertAssort)
-    setTimeout(async() => {
+    setTimeout(async () => {
       await setAlertOpen(false)
     }, 5000)
   }
@@ -101,13 +111,12 @@ export default function UserSettings() {
     if (router.query.successUpdateUserSettings == 'true') {
       alertControl('update')
     }
-  }, [])
+  }, [router.query.successUpdateUserSettings])
 
-  // Translate
-  const t = uselocalesFilter('userSettings', router.locale)
-
-  // Handle form submit
-  const handleSubmit = async(e) => {
+  // ============================================================
+  // Handle Form Submit
+  // ============================================================
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     await updateUser(user.uid, {
@@ -116,7 +125,7 @@ export default function UserSettings() {
     })
 
     await router.push({
-      pathname: '/empty',
+      pathname: '/empty'
     })
     await router.push({
       pathname: '/settings',
@@ -207,18 +216,17 @@ export default function UserSettings() {
                 名前(ニックネーム)
               </label>
               <div className="mt-1">
-                    <input
-                      type="text"
-                      name="name"
-                      id="name"
-                      autoComplete="given-name"
-                      value={userName}
-                      className="p-3 shadow-sm block w-full sm:text-sm border border-gray-300 focus:ring-tsundoku-brown-main focus:border-tsundoku-brown-main rounded-md"
-                      onChange={(e) => {
-                        setUserName(e.target.value)
-                      }}
-                    />
-                
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  autoComplete="given-name"
+                  value={userName}
+                  className="p-3 shadow-sm block w-full sm:text-sm border border-gray-300 focus:ring-tsundoku-brown-main focus:border-tsundoku-brown-main rounded-md"
+                  onChange={(e) => {
+                    setUserName(e.target.value)
+                  }}
+                />
               </div>
             </div>
 
@@ -283,7 +291,9 @@ export default function UserSettings() {
                               as="span"
                               className={classNames(
                                 checked ? 'text-orange-900' : 'text-gray-900',
-                                gender == genderSelected ? 'text-orange-900' : 'text-gray-900',
+                                gender == genderSelected
+                                  ? 'text-orange-900'
+                                  : 'text-gray-900',
                                 'block text-sm font-medium'
                               )}
                             >
@@ -298,7 +308,7 @@ export default function UserSettings() {
               </RadioGroup>
             </div>
             {/* 性別 END */}
-            
+
             {/* <Transition
               show={genderSelected?.label == 'Female'}
               as={Fragment}
