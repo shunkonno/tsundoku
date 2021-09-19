@@ -32,7 +32,8 @@ export default function Dashboard() {
   // ============================================================
   // Contexts
   // ============================================================
-  const {alertOpen, setAlertOpen, alertAssort, setAlertAssort} = useContext(AppContext)
+  const { alertOpen, setAlertOpen, alertAssort, setAlertAssort } =
+    useContext(AppContext)
 
   // ============================================================
   // Auth
@@ -147,9 +148,7 @@ export default function Dashboard() {
     } else {
       setAlertAssort('')
     }
-  }, [
-    alertAssort
-  ])
+  }, [alertAssort])
 
   // ============================================================
   // Helper Functions
@@ -179,7 +178,7 @@ export default function Dashboard() {
       })
     } else {
       // Set user's uid to guestId
-      await updateSession(session.sessionId, { 
+      await updateSession(session.sessionId, {
         guestId: user.uid,
         guestName: userInfo.name
       })
@@ -199,9 +198,9 @@ export default function Dashboard() {
   // ============================================================
 
   const renderNoReserveRoomStatement = (sessions) => {
-      return (
-        <div className="text-center">現在、参加予定のルームはありません。</div>
-      )
+    return (
+      <div className="text-center">現在、参加予定のルームはありません。</div>
+    )
   }
 
   const renderNoEmptyRoomStatement = (sessions) => {
@@ -234,7 +233,7 @@ export default function Dashboard() {
           <div className="opacity-95">
             <div
               className={classNames(
-                (alertAssort == 'create' || alertAssort == 'reserve') && 
+                (alertAssort == 'create' || alertAssort == 'reserve') &&
                   'bg-green-50',
                 (alertAssort == 'cancel' || alertAssort == 'delete') &&
                   'bg-gray-200',
@@ -246,26 +245,24 @@ export default function Dashboard() {
               <div className="flex">
                 <div className="flex-shrink-0">
                   {
-                    (
-                      (alertAssort == 'create' || alertAssort == 'reserve') && (
+                    ((alertAssort == 'create' || alertAssort == 'reserve') && (
                       <CheckCircleIcon
                         className="h-5 w-5 text-green-400"
                         aria-hidden="true"
                       />
-                      ),
-                      (alertAssort == 'cancel' || alertAssort == 'delete') && (
-                        <CheckCircleIcon
-                          className="h-5 w-5 text-gray-400"
-                          aria-hidden="true"
-                        />
-                      ),
-                      alertAssort == 'failed' && (
-                        <ExclamationIcon
-                          className="h-5 w-5 text-yellow-400"
-                          aria-hidden="true"
-                        />
-                      )
-                    )
+                    ),
+                    (alertAssort == 'cancel' || alertAssort == 'delete') && (
+                      <CheckCircleIcon
+                        className="h-5 w-5 text-gray-400"
+                        aria-hidden="true"
+                      />
+                    ),
+                    alertAssort == 'failed' && (
+                      <ExclamationIcon
+                        className="h-5 w-5 text-yellow-400"
+                        aria-hidden="true"
+                      />
+                    ))
                   }
                 </div>
                 <div className="ml-3">
@@ -281,7 +278,8 @@ export default function Dashboard() {
                   >
                     {alertAssort == 'create' && 'ルームを作成しました。'}
                     {alertAssort == 'reserve' && 'ルームの予約が完了しました。'}
-                    {alertAssort == 'cancel' && 'ルームの予約を取り消しました。'}
+                    {alertAssort == 'cancel' &&
+                      'ルームの予約を取り消しました。'}
                     {alertAssort == 'delete' && 'ルームを削除しました。'}
                     {alertAssort == 'failed' &&
                       '選択したルームは満員のため予約できませんでした。申し訳ございません。'}
@@ -294,7 +292,7 @@ export default function Dashboard() {
                       className={classNames(
                         (alertAssort == 'create' || alertAssort == 'reserve') &&
                           'bg-green-50  text-green-500 hover:bg-green-100 focus:ring-offset-green-50 focus:ring-green-600',
-                        (alertAssort == 'cancel' || alertAssort == 'delete')  &&
+                        (alertAssort == 'cancel' || alertAssort == 'delete') &&
                           'bg-gray-200 text-gray-500 hover:bg-gray-100 focus:ring-offset-gray-50 focus:ring-gray-600',
                         alertAssort == 'failed' &&
                           'bg-yellow-50 text-yellow-500 hover:bg-yellow-100 focus:ring-offset-green-50 focus:ring-yellow-600',
@@ -427,35 +425,6 @@ export default function Dashboard() {
     ))
   }
 
-//   // ============================================================
-//   // Button Handlers
-//   // ============================================================
-
-//   // Handle session reservation
-//   const reserveSession = async (session) => {
-//     // If guestId has already been set, the user can't reserve the session
-//     // Redirect and show alert banner
-//     if (session.guestId) {
-//       await router.push({
-//         pathname: '/dashboard',
-//         query: { successReserveRoom: false }
-//       })
-//     } else {
-//       // Set user's uid to guestId
-//       await updateSession(session.sessionId, {
-//         guestId: user.uid,
-//         guestName: user.name
-//       })
-//       await router.push({
-//         pathname: '/empty'
-//       })
-//       await router.replace({
-//         pathname: '/dashboard',
-//         query: { successReserveRoom: true }
-//       })
-//     }
-//   }
-
   // ============================================================
   // Return
   // ============================================================
@@ -473,7 +442,7 @@ export default function Dashboard() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      
+
       {renderAlert(alertAssort)}
 
       <AppHeader />
@@ -502,17 +471,16 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-            
-              <div className="py-3">
-                <div className="border-b-2 border-blue-700 py-2 mb-4">
-                  <h2 className="title-section">参加予定のルーム</h2>
-                </div>
-                {userIsOwnerOrGuest ? (
+
+            <div className="py-3">
+              <div className="border-b-2 border-blue-700 py-2 mb-4">
+                <h2 className="title-section">参加予定のルーム</h2>
+              </div>
+              {userIsOwnerOrGuest ? (
                 <ul
                   role="list"
                   className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
                 >
-                  
                   {sessions.map((session) =>
                     userInfo.uid == session.guestId ||
                     userInfo.uid == session.ownerId ? (
@@ -556,10 +524,12 @@ export default function Dashboard() {
                     )
                   )}
                 </ul>
-                ) : (
-                  <div className="text-center">現在、参加予定のルームはありません。</div>
-                )}
-              </div>
+              ) : (
+                <div className="text-center">
+                  現在、参加予定のルームはありません。
+                </div>
+              )}
+            </div>
             <div className="py-3 mt-4">
               <div className="onboarding-1 border-b-2 border-gray-900 py-2 mb-4">
                 <h2 className="title-section">空きルーム一覧</h2>
@@ -575,7 +545,6 @@ export default function Dashboard() {
       </div>
 
       <Footer />
-      
     </div>
   )
 }
