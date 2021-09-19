@@ -1,7 +1,7 @@
 // ============================================================
 // Imports
 // ============================================================
-import { Fragment, useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -14,6 +14,9 @@ import { AppHeader } from '../../../components/Header'
 import { Footer } from '../../../components/Footer'
 import { Disclosure, Transition } from '@headlessui/react'
 
+//Context
+import { AppContext } from '../../../context/state'
+
 //Assets
 import { TrashIcon, ChevronLeftIcon } from '@heroicons/react/solid'
 
@@ -21,7 +24,7 @@ import { TrashIcon, ChevronLeftIcon } from '@heroicons/react/solid'
 import uselocalesFilter from '../../../utils/translate'
 import { useAuth } from '../../../lib/auth'
 import fetcher from '../../../utils/fetcher'
-import { updateSession } from '../../../lib/db'
+import { updateSession, deleteSession } from '../../../lib/db'
 import { fetchOneSession, fetchAllSessions } from '../../../lib/db-admin'
 
 // ============================================================
@@ -51,6 +54,11 @@ export async function getStaticPaths() {
 }
 
 export default function SessionDetail({ session }) {
+  // ============================================================
+  // Contexts
+  // ============================================================
+  const {setAlertAssort} = useContext(AppContext);
+
   // ============================================================
   // Auth
   // ============================================================
@@ -95,12 +103,6 @@ export default function SessionDetail({ session }) {
   const [count, setCount] = useState(0)
   const [enterRoomOpen, setEnterRoomOpen] = useState(false)
 
-  // Filter Current session by sessionId
-  // const session = sessions.find((session) => {
-  //   return session.sessionId == sessionId
-
-  // })
-
   // ============================================================
   // Helper Functions
   // ============================================================
@@ -109,6 +111,17 @@ export default function SessionDetail({ session }) {
   const formatDateTime = (datetimeIsoString) => {
     return moment(datetimeIsoString).format('M月D日 H:mm')
   }
+  const formatTime = (datetimeIsoString) => {
+    return moment(datetimeIsoString).format('H:mm')
+  }
+
+  const formatDateTimeForGoogleCalendarURL = (datetimeIsoString) => {
+    return moment(datetimeIsoString).format('YYYYMMDDTHHmm00')
+  }
+
+  const startEvent = formatDateTimeForGoogleCalendarURL(session?.startDateTime)
+  const endEvent = formatDateTimeForGoogleCalendarURL(session?.endDateTime)
+
 
   // Calculate current time and determine whether the room should be open or not
   useEffect(() => {
@@ -144,21 +157,23 @@ export default function SessionDetail({ session }) {
     // Update guestId to an empty string
     await updateSession(session?.sessionId, { guestId: '' })
 
+    await setAlertAssort('cancel')
+
     await router.push({
       pathname: '/dashboard',
-      query: { successCancelRoom: true }
     })
   }
 
-  const deleteSession = async (e) => {
+  const deleteSessionData = async (e) => {
     e.preventDefault()
 
     // Delete guestId to an empty string
     await deleteSession(session?.sessionId)
 
+    await setAlertAssort('delete')
+
     await router.push({
-      pathname: '/dashboard',
-      query: { successDeleteRoom: true }
+      pathname: '/dashboard'
     })
   }
 
@@ -204,7 +219,7 @@ export default function SessionDetail({ session }) {
                       <span
                         type="button"
                         className="text-sm cursor-pointer text-red-600 hover:text-red-700"
-                        onClick={(e) => deleteSession(e)}
+                        onClick={(e) => deleteSessionData(e)}
                       >
                         ルームを削除する
                       </span>
@@ -260,6 +275,16 @@ export default function SessionDetail({ session }) {
                     </dd>
                   </div>
                 </dl>
+                <div className="mt-4 sm:mt-0 mx-0 sm:mx-6 text-right">
+                  <a 
+                    className="text-blue-500"
+                    href={`https://www.google.com/calendar/event?action=TEMPLATE&dates=${startEvent}/${endEvent}&text=Tsundoku ${formatTime(session?.startDateTime)} 開催&details=https://tsundoku.live/ja/session/${session?.sessionId}/detail`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Googleカレンダーに予定を追加する
+                    </a>
+                </div>
               </div>
               <div className="py-6">
                 <div className="flex justify-center">
