@@ -69,7 +69,7 @@ export default function Home() {
                 </p>
                 <div className="mt-6 sm:mt-12 max-w-md sm:flex sm:justify-start">
                   <div className="rounded-md shadow">
-                    <Link href="/signin">
+                    <Link href="/signin" passHref>
                       <button className="font-sans w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-bold rounded-md text-white bg-tsundoku-blue-main hover:bg-blue-600 md:py-4 md:text-lg md:px-10">
                         無料で始める
                       </button>
@@ -80,7 +80,7 @@ export default function Home() {
               <div className="sm:max-w-sm md:max-w-none md:w-2/5 mx-auto flex items-center py-12 md:py-0">
                 <Image
                   src="/img/mainvisual_circle_2160x2160.png"
-                  alt="mainvisual"
+                  alt="main visual"
                   width={2160}
                   height={2160}
                 />
@@ -151,6 +151,7 @@ export default function Home() {
                               width={400}
                               height={400}
                               className=""
+                              alt="video matching"
                             />
                           </div>
                         </div>
@@ -178,6 +179,7 @@ export default function Home() {
                             width={400}
                             height={400}
                             className=""
+                            alt="video matching"
                           />
                         </div>
                       </div>
@@ -381,9 +383,7 @@ export default function Home() {
             </h2>
             <div className="mt-8 flex md:mt-0 md:flex-shrink-0">
               <div className="inline-flex rounded-md shadow">
-                <Link
-                  href="/signin"
-                >
+                <Link href="/signin">
                   <a className="font-sans inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-tsundoku-blue-main hover:bg-tsundoku-blue-main">
                     無料で始める
                   </a>

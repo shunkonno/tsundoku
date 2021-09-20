@@ -148,7 +148,7 @@ export default function Dashboard() {
     } else {
       setAlertAssort('')
     }
-  }, [alertAssort])
+  }, [alertAssort, setAlertAssort, setAlertOpen])
 
   // ============================================================
   // Helper Functions
