@@ -57,7 +57,7 @@ export default function SessionDetail({ session }) {
   // ============================================================
   // Contexts
   // ============================================================
-  const {setAlertAssort} = useContext(AppContext);
+  const { setAlertAssort } = useContext(AppContext)
 
   // ============================================================
   // Auth
@@ -122,7 +122,6 @@ export default function SessionDetail({ session }) {
   const startEvent = formatDateTimeForGoogleCalendarURL(session?.startDateTime)
   const endEvent = formatDateTimeForGoogleCalendarURL(session?.endDateTime)
 
-
   // Calculate current time and determine whether the room should be open or not
   useEffect(() => {
     const id = setInterval(() => {
@@ -160,7 +159,7 @@ export default function SessionDetail({ session }) {
     await setAlertAssort('cancel')
 
     await router.push({
-      pathname: '/dashboard',
+      pathname: '/dashboard'
     })
   }
 
@@ -276,14 +275,18 @@ export default function SessionDetail({ session }) {
                   </div>
                 </dl>
                 <div className="mt-4 sm:mt-0 mx-0 sm:mx-6 text-right">
-                  <a 
+                  <a
                     className="text-blue-500"
-                    href={`https://www.google.com/calendar/event?action=TEMPLATE&dates=${startEvent}/${endEvent}&text=Tsundoku ${formatTime(session?.startDateTime)} 開催&details=https://tsundoku.live/ja/session/${session?.sessionId}/detail`}
+                    href={`https://www.google.com/calendar/event?action=TEMPLATE&dates=${startEvent}/${endEvent}&text=Tsundoku ${formatTime(
+                      session?.startDateTime
+                    )} 開催&details=https://tsundoku.live/ja/session/${
+                      session?.sessionId
+                    }/detail`}
                     target="_blank"
                     rel="noreferrer"
                   >
                     Googleカレンダーに予定を追加する
-                    </a>
+                  </a>
                 </div>
               </div>
               <div className="py-6">
