@@ -71,7 +71,7 @@ export default function AppHeader() {
 
   const renderHeaderButtonPopover = () => {
     if (user) {
-      if (pathname == '/dashboard') {
+      if (pathname == '/home') {
         return (
           <div className="my-4 ml-5">
             <button
@@ -93,9 +93,9 @@ export default function AppHeader() {
                 {t.LOGOUT}
               </button>
             </div>
-            <Link href="/dashboard">
+            <Link href="/home">
               <a className="block w-full px-5 py-3 text-center font-medium text-tsundoku-blue-main bg-gray-50 hover:bg-gray-100">
-                {t.TODASHBOARD}
+                {t.TO_HOME}
               </a>
             </Link>
           </>
@@ -165,7 +165,7 @@ export default function AppHeader() {
                   >
                     <div className="flex items-center">
                       <div className="flex items-center justify-between md:w-auto">
-                        <Link href="/dashboard">
+                        <Link href="/home">
                           <a>
                             <span className="sr-only">Tsundoku</span>
                             <picture className="flex items-center">
@@ -222,7 +222,7 @@ export default function AppHeader() {
                     <div className="rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden">
                       <div className="px-5 pt-4 flex items-center justify-between">
                         <div>
-                          <Link href="/dashboard">
+                          <Link href="/home">
                             <a>
                               <Image
                                 className="h-8 w-auto sm:h-10"

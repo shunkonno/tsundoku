@@ -74,7 +74,7 @@ export default function NewUserSettings() {
       name: userName
     })
 
-    router.push({ pathname: '/dashboard', query: { welcome: true } })
+    router.push({ pathname: '/home', query: { welcome: true } })
   }
 
   // ============================================================

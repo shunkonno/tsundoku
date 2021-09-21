@@ -185,7 +185,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Dashboard() {
+export default function NewSession() {
   // ============================================================
   // State
   // ============================================================
@@ -339,7 +339,7 @@ export default function Dashboard() {
         setAlertAssort('create')
 
         router.push({
-          pathname: '/dashboard',
+          pathname: '/home',
         })
       })
       .catch((err) => console.error('error:' + err))

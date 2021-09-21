@@ -57,7 +57,7 @@ export default function SessionDetail({ session }) {
   // ============================================================
   // Contexts
   // ============================================================
-  const { setAlertAssort } = useContext(AppContext)
+  const {setAlertAssort} = useContext(AppContext);
 
   // ============================================================
   // Auth
@@ -122,6 +122,7 @@ export default function SessionDetail({ session }) {
   const startEvent = formatDateTimeForGoogleCalendarURL(session?.startDateTime)
   const endEvent = formatDateTimeForGoogleCalendarURL(session?.endDateTime)
 
+
   // Calculate current time and determine whether the room should be open or not
   useEffect(() => {
     const id = setInterval(() => {
@@ -159,7 +160,7 @@ export default function SessionDetail({ session }) {
     await setAlertAssort('cancel')
 
     await router.push({
-      pathname: '/dashboard'
+      pathname: '/home',
     })
   }
 
@@ -172,7 +173,7 @@ export default function SessionDetail({ session }) {
     await setAlertAssort('delete')
 
     await router.push({
-      pathname: '/dashboard'
+      pathname: '/home'
     })
   }
 
@@ -197,7 +198,7 @@ export default function SessionDetail({ session }) {
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
           <main className="relative mx-auto max-w-3xl px-4 sm:py-8">
             <div className="mb-6">
-              <Link href="/dashboard">
+              <Link href="/home">
                 <a className="">
                   <ChevronLeftIcon
                     className="inline-block h-5 w-5 text-gray-900 mr-1"
@@ -213,7 +214,9 @@ export default function SessionDetail({ session }) {
                   <h3 className="text-lg leading-6 font-medium text-gray-900">
                     ルーム詳細
                   </h3>
-                  {session?.ownerId == userInfo?.uid ? (
+                  {
+                    session?.ownerId == userInfo?.uid
+                    ?
                     <>
                       <span
                         type="button"
@@ -223,7 +226,7 @@ export default function SessionDetail({ session }) {
                         ルームを削除する
                       </span>
                     </>
-                  ) : (
+                    :
                     <span
                       type="button"
                       className="text-sm cursor-pointer text-red-600 hover:text-red-700"
@@ -231,7 +234,7 @@ export default function SessionDetail({ session }) {
                     >
                       予約を取り消す
                     </span>
-                  )}
+                  }
                 </div>
                 {/* <p className="mt-1 max-w-2xl text-sm text-gray-500">Personal details and application.</p> */}
               </div>
@@ -266,27 +269,23 @@ export default function SessionDetail({ session }) {
                       参加者
                     </dt>
                     <dd className="mt-1 text-base text-gray-900 sm:mt-0 sm:col-span-2">
-                      {session?.guestId ? (
-                        <span>{session.guestName}</span>
-                      ) : (
-                        <span className="text-sm text-gray-500">ー</span>
-                      )}
+                      {session?.guestId ?
+                      <span>{session.guestName}</span>
+                      :
+                    <span className="text-sm text-gray-500">ー</span>
+                    }
                     </dd>
                   </div>
                 </dl>
                 <div className="mt-4 sm:mt-0 mx-0 sm:mx-6 text-right">
-                  <a
+                  <a 
                     className="text-blue-500"
-                    href={`https://www.google.com/calendar/event?action=TEMPLATE&dates=${startEvent}/${endEvent}&text=Tsundoku ${formatTime(
-                      session?.startDateTime
-                    )} 開催&details=https://tsundoku.live/ja/session/${
-                      session?.sessionId
-                    }/detail`}
+                    href={`https://www.google.com/calendar/event?action=TEMPLATE&dates=${startEvent}/${endEvent}&text=Tsundoku ${formatTime(session?.startDateTime)} 開催&details=https://tsundoku.live/ja/session/${session?.sessionId}/detail`}
                     target="_blank"
                     rel="noreferrer"
                   >
                     Googleカレンダーに予定を追加する
-                  </a>
+                    </a>
                 </div>
               </div>
               <div className="py-6">

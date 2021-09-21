@@ -73,9 +73,9 @@ export default function LpHeader() {
       return (
         <div className="flex">
           <span className="inline-flex items-center rounded-md shadow">
-            <Link href="/dashboard">
+            <Link href="/home">
               <a className="inline-flex leading-6 items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-tsundoku-blue-main bg-white hover:bg-gray-50">
-                {t.TODASHBOARD}
+                {t.TO_HOME}
               </a>
             </Link>
           </span>
@@ -114,11 +114,11 @@ export default function LpHeader() {
   //             {t.LOGOUT}
   //           </button>
   //         </div>
-  //         <Link href="/dashboard">
+  //         <Link href="/home">
   //           <a
   //             className="block w-full px-5 py-3 text-center font-medium text-tsundoku-blue-main bg-gray-50 hover:bg-gray-100"
   //           >
-  //             {t.TODASHBOARD}
+  //             {t.TO_HOME}
   //           </a>
   //         </Link>
   //       </>

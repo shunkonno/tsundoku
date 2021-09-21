@@ -25,7 +25,7 @@ export default function SignIn() {
   const router = useRouter()
 
   if (user) {
-    router.push('/dashboard')
+    router.push('/home')
   }
 
   // ============================================================
