@@ -13,12 +13,13 @@ import { Steps, Hints } from 'intro.js-react'
 import { AppHeader } from '../components/Header'
 import { Footer } from '../components/Footer'
 import { Disclosure, Transition } from '@headlessui/react'
+import { Navbar } from '../components/Navbar'
 
 //Context
 import { AppContext } from '../context/state'
 
 // Assets
-import { CheckCircleIcon, ExclamationIcon, XIcon } from '@heroicons/react/solid'
+import { PlusIcon, CheckCircleIcon, ExclamationIcon, XIcon, ChevronRightIcon } from '@heroicons/react/solid'
 import 'intro.js/introjs.css'
 
 // Functions
@@ -28,7 +29,7 @@ import fetcher from '../utils/fetcher'
 import classNames from '../utils/classNames'
 import uselocalesFilter from '../utils/translate'
 
-export default function Dashboard() {
+export default function Home() {
   // ============================================================
   // Contexts
   // ============================================================
@@ -83,9 +84,11 @@ export default function Dashboard() {
     }
   })
 
-  // Set locale
+  // ============================================================
+  // Localization
+  // ============================================================
   const { locale } = router
-  const t = uselocalesFilter('dashboard', locale)
+  const t = uselocalesFilter('home', locale)
 
   // ============================================================
   // Onboarding Steps (intro.js)
@@ -173,7 +176,7 @@ export default function Dashboard() {
     // Redirect and show alert banner
     if (session.guestId) {
       await router.push({
-        pathname: '/dashboard',
+        pathname: '/home',
         query: { successReserveRoom: false }
       })
     } else {
@@ -187,7 +190,7 @@ export default function Dashboard() {
         pathname: '/empty'
       })
       await router.replace({
-        pathname: '/dashboard',
+        pathname: '/home',
         query: { successReserveRoom: true }
       })
     }
@@ -331,12 +334,12 @@ export default function Dashboard() {
 
     return duplicateDeletedStartDates.map((startDate) => (
       <div key={startDate} className="relative">
-        <div className="z-10 sticky top-0 border rounded-full border-gray-500 bg-gray-50 mt-4 px-6 py-0.5 text-base font-bold text-gray-600">
+        <div className="z-10 sticky top-0 bg-gray-50 mt-4 py-0.5 text-base font-bold">
           <h3>{startDate}</h3>
         </div>
         <ul
           role="list"
-          className="grid py-4 grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          className="py-2"
         >
           {sessions
             .filter((session) => {
@@ -350,9 +353,9 @@ export default function Dashboard() {
             .map((session) => (
               <Disclosure key={session.sessionId}>
                 {({ open }) => (
-                  <li>
-                    <div className="bg-white rounded-lg shadow divide-y divide-gray-200">
-                      <div className="w-full flex items-center justify-between p-6 space-x-6">
+                  <li key={session.sessionId}>
+                    <div className="w-full mb-5 bg-white rounded-lg border border-black divide-y divide-gray-200">
+                      <div className="flex items-center justify-between p-4 space-x-6">
                         <div className="flex-1 truncate">
                           <div className="flex items-center space-x-3">
                             <div className="flex items-center">
@@ -365,23 +368,18 @@ export default function Dashboard() {
                             </div>
                           </div>
                           <div className="mt-1">
-                            <p className="session-card-duration">
-                              予定時間：{session.duration} 分間
-                            </p>
-                          </div>
-                          <div className="mt-4">
-                            <p className="session-card-owner">
-                              開催者：{session.ownerName}
-                            </p>
+                            <span className="session-card-duration text-gray-500">
+                              {`${session.duration} 分間 / 開催者：${session.ownerName}`} 
+                            </span>
                           </div>
                         </div>
                         {open ? (
                           <Disclosure.Button className="">
-                            <p className="text-gray-500">閉じる</p>
+                            <p className="px-8 py-2 bg-gray-200 text-black rounded-sm">閉じる</p>
                           </Disclosure.Button>
                         ) : (
                           <Disclosure.Button className="">
-                            <p className="text-blue-500">予約する</p>
+                            <p className="text-white text-bold bg-blue-500 py-3 px-6 rounded-sm">予約する</p>
                           </Disclosure.Button>
                         )}
                       </div>
@@ -395,20 +393,22 @@ export default function Dashboard() {
                             leaveFrom="transform scale-100 opacity-100"
                             leaveTo="transform scale-95 opacity-0"
                           >
-                            <Disclosure.Panel className="text-gray-500">
-                              <div className="-mt-px p-3 flex justify-center divide-x divide-gray-200">
-                                <div className="-ml-px flex flex-col items-center">
-                                  <p className="text-sm">
-                                    このルームを予約しますか？
-                                  </p>
-                                  <div
-                                    className="cursor-pointer relative mt-3 border border-transparent rounded-br-lg hover:text-gray-500"
-                                    onClick={() => reserveSession(session)}
-                                  >
-                                    <span className="inline-block bg-blue-500 rounded-sm px-16 py-3 text-sm text-white font-medium">
-                                      確定
-                                    </span>
-                                  </div>
+                            <Disclosure.Panel>
+                              <div className="-mt-px p-3 flex justify-end items-center divide-x divide-gray-200">
+                                <div className="-ml-px flex items-center">
+                                  
+                                    <p className="text-sm text-black mr-4">
+                                      このルームを予約しますか？
+                                    </p>
+                                    <div
+                                      className="cursor-pointer relative border border-transparent rounded-br-lg hover:text-gray-500"
+                                      onClick={() => reserveSession(session)}
+                                    >
+                                      <span className="inline-block px-10 py-2 border border-transparent text-base text-center rounded-sm text-white cursor-pointer bg-tsundoku-blue-main hover:bg-blue-700 focus:outline-none focus:ring-tsundoku-blue-main">
+                                        確定
+                                      </span>
+                                    </div>
+                                  
                                 </div>
                               </div>
                             </Disclosure.Panel>
@@ -459,39 +459,27 @@ export default function Dashboard() {
       {/* main content */}
       <div className="relative pb-16 bg-gray-50 overflow-hidden">
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="relative mx-auto max-w-5xl px-4 sm:py-8">
-            <div className="w-full fixed z-50 -mx-4 sm:mx-0 bottom-0 shadow-lg sm:shadow-none sm:static">
-              <div className="bg-white sm:bg-gray-50 px-6 sm:px-0 py-4 sm:py-0">
-                <div className="flex justify-center sm:justify-end">
-                  <Link href="/session/new">
-                    <a className="onboarding-2 block w-full sm:w-auto px-6 py-2 border border-transparent text-base text-center font-bold rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main">
-                      ルームを作成する
-                    </a>
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            <div className="py-3">
-              <div className="border-b-2 border-blue-700 py-2 mb-4">
-                <h2 className="title-section">参加予定のルーム</h2>
-              </div>
-              {userIsOwnerOrGuest ? (
-                <ul
-                  role="list"
-                  className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
-                >
-                  {sessions.map((session) =>
-                    userInfo.uid == session.guestId ||
-                    userInfo.uid == session.ownerId ? (
-                      <Link
-                        href={`/session/${session.sessionId}/detail`}
-                        key={session.sessionId}
-                      >
-                        <a>
-                          <li>
-                            <div className="bg-white rounded-lg shadow divide-y divide-gray-200">
-                              <div className="w-full flex items-center justify-between p-6 space-x-6">
+          <main className="relative mx-auto max-w-7xl px-4 sm:py-4">
+            <Navbar />
+            <div className="flex mt-12">
+              <div className="max-w-7xl sm:w-full sm:px-12">
+                <div className="py-3">
+                  <div className="py-2 mb-4">
+                    <h2 className="title-section">参加予定のルーム</h2>
+                  </div>
+                  {userIsOwnerOrGuest ? (
+                  <ul
+                    role="list"
+                    className=""
+                  >
+                    
+                    {sessions.map((session) =>
+                      userInfo.uid == session.guestId ||
+                      userInfo.uid == session.ownerId ? (
+                        
+                          <li key={session.sessionId}>
+                            <div className="w-full mb-5 bg-white rounded-lg border border-black divide-y divide-gray-200">
+                              <div className="flex items-center justify-between p-4 space-x-6">
                                 <div className="flex-1 truncate">
                                   <div className="flex items-center space-x-3">
                                     <div className="flex items-center">
@@ -504,41 +492,68 @@ export default function Dashboard() {
                                     </div>
                                   </div>
                                   <div className="mt-1">
-                                    <p className="session-card-duration">
-                                      予定時間：{session.duration} 分間
-                                    </p>
-                                  </div>
-                                  <div className="mt-4">
-                                    <p className="session-card-owner">
-                                      ルーム作成者：{session.ownerName}
-                                    </p>
+                                    <span className="session-card-duration text-gray-500">
+                                      {`${session.duration} 分間 / 開催者：${session.ownerName}`} 
+                                    </span>
                                   </div>
                                 </div>
+                                <Link
+                                  href={`/session/${session.sessionId}/detail`}
+                                  key={session.sessionId}
+                                >
+                                  <a className="flex items-center py-3 px-6 hover:bg-gray-50">
+                                    <p className="text-bold rounded-sm">詳細</p>
+                                    <ChevronRightIcon className="w-6 h-6 " />
+                                  </a>
+                                </Link>
                               </div>
                             </div>
                           </li>
-                        </a>
-                      </Link>
-                    ) : (
-                      <></>
-                    )
+                          
+                      ) : (
+                        <></>
+                      )
+                    )}
+                  </ul>
+                  ) : (
+                    <div className="text-center py-6 bg-gray-200 rounded-md">現在、参加予定のルームはありません。</div>
                   )}
-                </ul>
-              ) : (
-                <div className="text-center">
-                  現在、参加予定のルームはありません。
                 </div>
-              )}
-            </div>
-            <div className="py-3 mt-4">
-              <div className="onboarding-1 border-b-2 border-gray-900 py-2 mb-4">
-                <h2 className="title-section">空きルーム一覧</h2>
-              </div>
+                <div className="py-3 mt-10">
+                  <div className="flex sm:justify-end">
+                    <div className="py-2 mb-4 sm:w-1/3">
+                      <h2 className="title-section">ルーム一覧</h2>
+                    </div>
+                    <div className="w-full fixed z-50 -mx-4 sm:mx-0 bottom-0 shadow-lg sm:shadow-none sm:static">
+                      <div className="bg-white sm:bg-gray-50 px-6 sm:px-0 py-4 sm:py-0">
+                        <div className="flex justify-center sm:justify-end">
+                          <Link href="/session/new">
+                            <div className="block sm:inline-block w-full sm:w-auto px-6 py-2 border border-transparent text-base text-center font-bold rounded-md bg-gray-50 cursor-pointer text-tsundoku-blue-main hover:text-blue-700 focus:outline-none focus:ring-tsundoku-blue-main">
+                              <div className="flex">
+                                <PlusIcon className="w-6 h-6 inline-block mr-2" />
+                                <span>ルームを作成する</span>
+                              </div>
+                            </div>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-              {renderNoEmptyRoomStatement(sessions)}
-              <nav className="h-full overflow-y-auto" aria-label="Directory">
-                {renderSessionsGrid(sessions)}
-              </nav>
+                  {renderNoEmptyRoomStatement(sessions)}
+                  <nav className="h-full overflow-y-auto" aria-label="Directory">
+                    {renderSessionsGrid(sessions)}
+                  </nav>
+                </div>
+              </div>
+              <div className="sm:w-96">
+                  <div className="px-4 py-6 border border-black rounded-md">
+                    <h3>ブックリスト</h3>
+                  </div>
+                  <div className="mt-4 px-4 py-6 border border-black rounded-md">
+                    <h3>みんなのリスト(人気)</h3>
+                  </div>
+              </div>
             </div>
           </main>
         </div>
