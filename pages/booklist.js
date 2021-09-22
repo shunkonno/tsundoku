@@ -85,7 +85,7 @@ export default function BookList() {
   // Button Handlers
   // ===========================================================
 
-  const addBook = (book) => {
+  const addBookToList = (book) => {
     // TODO: books コレクションに書籍情報を追加する
     // 想定：
     // book = {
@@ -95,18 +95,16 @@ export default function BookList() {
     //   image: 'XXX'
     // }
 
+    // Initialize book object
     book.bookListCount = 0
 
+    // Add book to database
     addBook(book)
-  }
 
-  const addBookToList = (isbn13) => {
-    // 書籍をブックリストに追加する
-    userInfo.bookList.push(isbn13)
-  }
+    // Add book ISBN-13 to users' bookList
+    userInfo.bookList.push(book.isbn13)
 
-  const incrementBookListCount = (isbn13) => {
-    // ブックリストへの追加回数カウントを加算する
+    // Increment bookListCount
     incrementBookListCount(isbn13)
   }
 
