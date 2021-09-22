@@ -63,14 +63,14 @@ export default function BookList() {
       var vi = item.volumeInfo
 
       // ISBN13 を抽出
-      var isbn13 = vi.industryIdentifiers.filter(
+      var isbn13 = vi.industryIdentifiers?.filter(
         (identifiers) => identifiers.type === 'ISBN_13'
       )
 
       return {
-        title: vi.title,
-        authors: vi.authors,
-        isbn13: isbn13.length > 0 ? isbn13[0].identifier : '',
+        title: vi.title ? vi.title : '',
+        authors: vi.authors && vi.authors.length > 0 ? vi.authors : '',
+        isbn13: isbn13 && isbn13.length > 0 ? isbn13[0].identifier : '',
         image: vi.imageLinks ? vi.imageLinks.smallThumbnail : ''
       }
     })
