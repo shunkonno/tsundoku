@@ -2,6 +2,7 @@
 // Imports
 // ===========================================================
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import useSWR from 'swr'
 
 // Components
@@ -13,7 +14,6 @@ import { Navbar } from '../components/Navbar'
 import { useAuth } from '../lib/auth'
 import fetcher from '../utils/fetcher'
 import uselocalesFilter from '../utils/translate'
-
 
 export default function Trend() {
   // ============================================================
@@ -39,6 +39,11 @@ export default function Trend() {
     }
   )
   // ============================================================
+  // Routing
+  // ============================================================
+  const router = useRouter()
+
+  // ============================================================
   // Localization
   // ============================================================
   const { locale } = router
@@ -55,10 +60,7 @@ export default function Trend() {
     <div>
       <Head>
         <title>Tsundoku | 人気の本</title>
-        <meta
-          name="description"
-          content=""
-        />
+        <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -69,13 +71,11 @@ export default function Trend() {
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
           <main className="relative mx-auto max-w-7xl px-4 sm:py-4">
             <Navbar />
-            
           </main>
         </div>
       </div>
 
       <Footer />
-      
     </div>
   )
 }

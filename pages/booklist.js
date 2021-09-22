@@ -3,6 +3,7 @@
 // ===========================================================
 import Head from 'next/head'
 import useSWR from 'swr'
+import { useRouter } from 'next/router'
 
 // Components
 import { AppHeader } from '../components/Header'
@@ -37,6 +38,10 @@ export default function BookList() {
       }
     }
   )
+  // ============================================================
+  // Routing
+  // ============================================================
+  const router = useRouter()
 
   // ============================================================
   // Localization
@@ -55,10 +60,7 @@ export default function BookList() {
     <div>
       <Head>
         <title>Tsundoku | ブックリスト</title>
-        <meta
-          name="description"
-          content=""
-        />
+        <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -69,13 +71,11 @@ export default function BookList() {
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
           <main className="relative mx-auto max-w-7xl px-4 sm:py-4">
             <Navbar />
-            
           </main>
         </div>
       </div>
 
       <Footer />
-      
     </div>
   )
 }
