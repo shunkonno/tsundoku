@@ -461,8 +461,8 @@ export default function Home() {
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
           <main className="relative mx-auto max-w-7xl px-4 sm:py-4">
             <Navbar />
-            <div className="flex mt-12">
-              <div className="max-w-7xl sm:w-full sm:px-12">
+            <div className="flex mt-16 gap-14">
+              <div className="max-w-7xl sm:w-2/3">
                 <div className="py-3">
                   <div className="py-2 mb-4">
                     <h2 className="title-section">参加予定のルーム</h2>
@@ -546,7 +546,7 @@ export default function Home() {
                   </nav>
                 </div>
               </div>
-              <div className="sm:w-96">
+              <div className="sm:w-1/3">
                   <div className="px-4 py-6 border border-black rounded-md">
                     <h3>ブックリスト</h3>
                   </div>

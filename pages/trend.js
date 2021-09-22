@@ -52,7 +52,7 @@ export default function Trend() {
   // ============================================================
   // Return
   // ============================================================
-  if (user === null || !userInfo || !sessions) {
+  if (user === null || !userInfo) {
     return <div>Waiting..</div>
   }
 

@@ -158,7 +158,7 @@ export default function AppHeader() {
           <Popover>
             {({ open }) => (
               <>
-                <div className="max-w-5xl mx-auto px-4 sm:px-6">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6">
                   <nav
                     className="relative w-full flex items-center justify-between sm:h-10 "
                     aria-label="Global"
