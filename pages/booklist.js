@@ -18,6 +18,8 @@ import { SearchIcon } from '@heroicons/react/solid'
 import { useAuth } from '../lib/auth'
 import fetcher from '../utils/fetcher'
 import uselocalesFilter from '../utils/translate'
+import { addBook } from '../lib/db'
+import { incrementBookListCount } from '../lib/db-admin'
 
 export default function BookList() {
   // ============================================================
@@ -78,6 +80,35 @@ export default function BookList() {
   }
 
   const searchBooksDebounced = debounce(searchBooks, 300)
+
+  // ============================================================
+  // Button Handlers
+  // ===========================================================
+
+  const addBook = (book) => {
+    // TODO: books コレクションに書籍情報を追加する
+    // 想定：
+    // book = {
+    //   title:'XXX',
+    //   authors: ['X','Y'],
+    //   isbn13: 'XXX',
+    //   image: 'XXX'
+    // }
+
+    book.bookListCount = 0
+
+    addBook(book)
+  }
+
+  const addBookToList = (isbn13) => {
+    // 書籍をブックリストに追加する
+    userInfo.bookList.push(isbn13)
+  }
+
+  const incrementBookListCount = (isbn13) => {
+    // ブックリストへの追加回数カウントを加算する
+    incrementBookListCount(isbn13)
+  }
 
   // ============================================================
   // Routing
