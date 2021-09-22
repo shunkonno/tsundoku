@@ -18,7 +18,7 @@ import { Disclosure, Transition } from '@headlessui/react'
 import { AppContext } from '../../../context/state'
 
 //Assets
-import { TrashIcon, ChevronLeftIcon } from '@heroicons/react/solid'
+import { PlusSmIcon, ChevronLeftIcon } from '@heroicons/react/solid'
 
 // Functions
 import uselocalesFilter from '../../../utils/translate'
@@ -208,67 +208,52 @@ export default function SessionDetail({ session }) {
                 </a>
               </Link>
             </div>
-            <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-              <div className="px-4 py-5 sm:px-6">
-                <div className="flex justify-between">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">
-                    ルーム詳細
-                  </h3>
-                  {
-                    session?.ownerId == userInfo?.uid
-                    ?
-                    <>
-                      <span
-                        type="button"
-                        className="text-sm cursor-pointer text-red-600 hover:text-red-700"
-                        onClick={(e) => deleteSessionData(e)}
-                      >
-                        ルームを削除する
-                      </span>
-                    </>
-                    :
-                    <span
-                      type="button"
-                      className="text-sm cursor-pointer text-red-600 hover:text-red-700"
-                      onClick={(e) => cancelSession(e)}
-                    >
-                      予約を取り消す
-                    </span>
-                  }
-                </div>
-                {/* <p className="mt-1 max-w-2xl text-sm text-gray-500">Personal details and application.</p> */}
+            <div className="flex justify-between py-5">
+              <div>
+                <h3 className="text-xl leading-6 font-medium text-gray-900">
+                  ルーム詳細
+                </h3>
               </div>
+              <div className="flex">
+                <PlusSmIcon className="w-6 h-6 text-blue-500"/>
+                <a 
+                  className="text-blue-500"
+                  href={`https://www.google.com/calendar/event?action=TEMPLATE&dates=${startEvent}/${endEvent}&text=Tsundoku ${formatTime(session?.startDateTime)} 開催&details=https://tsundoku.live/ja/session/${session?.sessionId}/detail`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Googleカレンダーに予定を追加する
+                  </a>
+              </div>
+            </div>
+            <div className="bg-white border border-black overflow-hidden sm:rounded-lg">
+              
               <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
-                <dl className="sm:divide-y sm:divide-gray-200">
-                  <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-base font-medium text-gray-500">
-                      ルーム作成者
-                    </dt>
-                    <dd className="mt-1 text-base text-gray-900 sm:mt-0 sm:col-span-2">
-                      {session?.ownerName}
-                    </dd>
-                  </div>
-                  <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-base font-medium text-gray-500">
+                <dl className="px-8 py-4 sm:px- 8sm:py-5">
+                  <div className="py-3 sm:py-4">
+                    <dt className="text-base font-medium text-black">
                       開始日時
                     </dt>
-                    <dd className="mt-1 text-base text-gray-900 sm:mt-0 sm:col-span-2">
+                    <dd className="mt-1 text-base text-gray-700 sm:mt-0 sm:col-span-2">
                       {formatDateTime(session?.startDateTime)}
                     </dd>
                   </div>
-                  <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-base font-medium text-gray-500">
+                  <div className="py-3 sm:py-4">
+                    <dt className="text-base font-medium text-black">
                       所要時間
                     </dt>
-                    <dd className="mt-1 text-base text-gray-900 sm:mt-0 sm:col-span-2">
+                    <dd className="mt-1 text-base text-gray-700 sm:mt-0 sm:col-span-2">
                       {session?.duration} 分
                     </dd>
                   </div>
-                  <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-base font-medium text-gray-500">
+                  <div className="py-3 sm:py-4">
+                    <dt className="text-base font-medium text-black">
                       参加者
                     </dt>
-                    <dd className="mt-1 text-base text-gray-900 sm:mt-0 sm:col-span-2">
+                    <dd className="mt-1 text-base text-gray-700 sm:mt-1 sm:col-span-2">
+                      {`${session?.ownerName} (開催者)`}
+                    </dd>
+                    <dd className="mt-2 text-base text-gray-700 sm:mt-2 sm:col-span-2">
                       {session?.guestId ?
                       <span>{session.guestName}</span>
                       :
@@ -277,19 +262,10 @@ export default function SessionDetail({ session }) {
                     </dd>
                   </div>
                 </dl>
-                <div className="mt-4 sm:mt-0 mx-0 sm:mx-6 text-right">
-                  <a 
-                    className="text-blue-500"
-                    href={`https://www.google.com/calendar/event?action=TEMPLATE&dates=${startEvent}/${endEvent}&text=Tsundoku ${formatTime(session?.startDateTime)} 開催&details=https://tsundoku.live/ja/session/${session?.sessionId}/detail`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Googleカレンダーに予定を追加する
-                    </a>
-                </div>
               </div>
-              <div className="py-6">
-                <div className="flex justify-center">
+            </div>
+            <div className="flex justify-between py-6">
+                <div className="flex">
                   {enterRoomOpen ? (
                     <a href={`/session/${session?.sessionId}/join`}>
                       <span
@@ -307,14 +283,38 @@ export default function SessionDetail({ session }) {
                       >
                         ルームに入室する
                       </span>
-                      <p className="text-center text-sm text-gray-800 mt-2">
-                        5分前から入室できます。
-                      </p>
+                      <div className="relative">
+                        <p className="text-center text-sm text-gray-800 mt-2">
+                          5分前から入室できます。
+                        </p>
+                      </div>
                     </div>
                   )}
                 </div>
+                {
+                  session?.ownerId == userInfo?.uid
+                  ?
+                  <div className="py-3">
+                    <span
+                      type="button"
+                      className="text-sm cursor-pointer text-red-600 hover:text-red-700"
+                      onClick={(e) => deleteSessionData(e)}
+                    >
+                      ルームを削除する
+                    </span>
+                  </div>
+                  :
+                  <div className="py-3">
+                    <span
+                      type="button"
+                      className="text-sm cursor-pointer text-red-600 hover:text-red-700"
+                      onClick={(e) => cancelSession(e)}
+                    >
+                      予約を取り消す
+                    </span>
+                  </div>
+                }
               </div>
-            </div>
           </main>
         </div>
       </div>
