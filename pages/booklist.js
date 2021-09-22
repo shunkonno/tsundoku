@@ -19,7 +19,7 @@ import { useAuth } from '../lib/auth'
 import fetcher from '../utils/fetcher'
 import uselocalesFilter from '../utils/translate'
 import { addBook } from '../lib/db'
-import { incrementBookListCount } from '../lib/db-admin'
+// import { incrementBookListCount } from '../lib/db-admin'
 
 export default function BookList() {
   // ============================================================
@@ -105,7 +105,7 @@ export default function BookList() {
     userInfo.bookList.push(book.isbn13)
 
     // Increment bookListCount
-    incrementBookListCount(isbn13)
+    // incrementBookListCount(isbn13)
   }
 
   // ============================================================
