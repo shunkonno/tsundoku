@@ -18,7 +18,7 @@ import { SearchIcon } from '@heroicons/react/solid'
 import { useAuth } from '../lib/auth'
 import fetcher from '../utils/fetcher'
 import uselocalesFilter from '../utils/translate'
-import { addBook } from '../lib/db'
+import { updateUser, addBook, checkBookExists } from '../lib/db'
 // import { incrementBookListCount } from '../lib/db-admin'
 
 export default function BookList() {
@@ -85,7 +85,7 @@ export default function BookList() {
   // Button Handlers
   // ===========================================================
 
-  const addBookToList = (book) => {
+  const addBookToList = async (book) => {
     // TODO: books コレクションに書籍情報を追加する
     // 想定：
     // book = {
@@ -95,17 +95,28 @@ export default function BookList() {
     //   image: 'XXX'
     // }
 
-    // Initialize book object
-    book.bookListCount = 0
+    // Check if isbn13 exists in book collection
+    // Add book, and set bookListCount to 0 if it doesn't
+    if (book.isbn13) {
+      const bookExists = await checkBookExists(book.isbn13)
 
-    // Add book to database
-    addBook(book)
+      if (!bookExists) {
+        // Initialize book object
+        book.bookListCount = 1
 
-    // Add book ISBN-13 to users' bookList
-    userInfo.bookList.push(book.isbn13)
+        // Add book to db
+        addBook(book)
+      } else {
+        // Increment bookListCount
+        // incrementBookListCount(isbn13)
+      }
 
-    // Increment bookListCount
-    // incrementBookListCount(isbn13)
+      // Add book ISBN-13 to users' bookList
+      const updatedBookList = userInfo.bookList.push(book.isbn13)
+
+      // Update with new bookList
+      updateUser(user.uid, { bookList: updatedBookList })
+    }
   }
 
   // ============================================================
