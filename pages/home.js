@@ -378,7 +378,7 @@ export default function Home() {
                         </div>
                         {open ? (
                           <Disclosure.Button className="">
-                            <p className="px-8 py-2 bg-gray-200 text-black rounded-sm">
+                            <p className="px-8 py-2 bg-gray-200 text-black rounded-md">
                               閉じる
                             </p>
                           </Disclosure.Button>
@@ -410,7 +410,7 @@ export default function Home() {
                                     className="cursor-pointer relative border border-transparent rounded-br-lg hover:text-gray-500"
                                     onClick={() => reserveSession(session)}
                                   >
-                                    <span className="inline-block px-10 py-2 border border-transparent text-base text-center rounded-sm text-white cursor-pointer bg-tsundoku-blue-main hover:bg-blue-700 focus:outline-none focus:ring-tsundoku-blue-main">
+                                    <span className="inline-block px-10 py-2 border border-transparent text-base text-center rounded-md text-white cursor-pointer bg-tsundoku-blue-main hover:bg-blue-700 focus:outline-none focus:ring-tsundoku-blue-main">
                                       確定
                                     </span>
                                   </div>
@@ -502,7 +502,7 @@ export default function Home() {
                                   key={session.sessionId}
                                 >
                                   <a className="flex items-center py-3 px-6 hover:bg-gray-50">
-                                    <p className="text-bold rounded-sm">詳細</p>
+                                    <p className="text-bold">詳細</p>
                                     <ChevronRightIcon className="w-6 h-6 " />
                                   </a>
                                 </Link>
