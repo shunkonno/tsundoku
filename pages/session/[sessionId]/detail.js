@@ -57,7 +57,7 @@ export default function SessionDetail({ session }) {
   // ============================================================
   // Contexts
   // ============================================================
-  const {setAlertAssort} = useContext(AppContext);
+  const { setAlertAssort } = useContext(AppContext)
 
   // ============================================================
   // Auth
@@ -122,7 +122,6 @@ export default function SessionDetail({ session }) {
   const startEvent = formatDateTimeForGoogleCalendarURL(session?.startDateTime)
   const endEvent = formatDateTimeForGoogleCalendarURL(session?.endDateTime)
 
-
   // Calculate current time and determine whether the room should be open or not
   useEffect(() => {
     const id = setInterval(() => {
@@ -160,7 +159,7 @@ export default function SessionDetail({ session }) {
     await setAlertAssort('cancel')
 
     await router.push({
-      pathname: '/home',
+      pathname: '/home'
     })
   }
 
@@ -196,7 +195,7 @@ export default function SessionDetail({ session }) {
       {/* main content */}
       <div className="relative pb-16 bg-gray-50 overflow-hidden">
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="relative mx-auto max-w-3xl px-4 sm:py-8">
+          <main className="relative mx-auto max-w-3xl p-4 sm:py-8">
             <div className="mb-6">
               <Link href="/home">
                 <a className="">
@@ -204,117 +203,114 @@ export default function SessionDetail({ session }) {
                     className="inline-block h-5 w-5 text-gray-900 mr-1"
                     aria-hidden="true"
                   />
-                  <span className="text-sm text-gray-900">戻る</span>
+                  <span className="text-sm text-gray-900">ホームへ戻る</span>
                 </a>
               </Link>
             </div>
             <div className="flex justify-between py-5">
               <div>
-                <h3 className="text-xl leading-6 font-medium text-gray-900">
-                  ルーム詳細
-                </h3>
+                <h3 className="title-section">ルーム詳細</h3>
               </div>
-              <div className="flex">
-                <PlusSmIcon className="w-6 h-6 text-blue-500"/>
-                <a 
-                  className="text-blue-500"
-                  href={`https://www.google.com/calendar/event?action=TEMPLATE&dates=${startEvent}/${endEvent}&text=Tsundoku ${formatTime(session?.startDateTime)} 開催&details=https://tsundoku.live/ja/session/${session?.sessionId}/detail`}
+              <div className="flex items-center">
+                <PlusSmIcon className="w-6 h-6 text-blue-500" />
+                <a
+                  className="text-blue-500 text-sm"
+                  href={`https://www.google.com/calendar/event?action=TEMPLATE&dates=${startEvent}/${endEvent}&text=Tsundoku ${formatTime(
+                    session?.startDateTime
+                  )} 開催&details=https://tsundoku.live/ja/session/${
+                    session?.sessionId
+                  }/detail`}
                   target="_blank"
                   rel="noreferrer"
                 >
                   Googleカレンダーに予定を追加する
-                  </a>
+                </a>
               </div>
             </div>
             <div className="bg-white border border-black overflow-hidden sm:rounded-lg">
-              
               <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
-                <dl className="px-8 py-4 sm:px- 8sm:py-5">
-                  <div className="py-3 sm:py-4">
-                    <dt className="text-base font-medium text-black">
+                <dl className="p-4">
+                  <div className="py-3">
+                    <dt className="text-sm font-bold text-gray-900">
                       開始日時
                     </dt>
-                    <dd className="mt-1 text-base text-gray-700 sm:mt-0 sm:col-span-2">
+                    <dd className="mt-1 text-base text-gray-900 sm:mt-0 sm:col-span-2">
                       {formatDateTime(session?.startDateTime)}
                     </dd>
                   </div>
-                  <div className="py-3 sm:py-4">
-                    <dt className="text-base font-medium text-black">
+                  <div className="py-3">
+                    <dt className="text-sm font-bold text-gray-900">
                       所要時間
                     </dt>
-                    <dd className="mt-1 text-base text-gray-700 sm:mt-0 sm:col-span-2">
+                    <dd className="mt-1 text-base text-gray-900 sm:mt-0 sm:col-span-2">
                       {session?.duration} 分
                     </dd>
                   </div>
-                  <div className="py-3 sm:py-4">
-                    <dt className="text-base font-medium text-black">
-                      参加者
-                    </dt>
-                    <dd className="mt-1 text-base text-gray-700 sm:mt-1 sm:col-span-2">
+                  <div className="py-3">
+                    <dt className="text-sm font-bold text-gray-900">参加者</dt>
+                    <dd className="mt-1 text-base text-gray-900 sm:mt-1 sm:col-span-2">
                       {`${session?.ownerName} (開催者)`}
                     </dd>
-                    <dd className="mt-2 text-base text-gray-700 sm:mt-2 sm:col-span-2">
-                      {session?.guestId ?
-                      <span>{session.guestName}</span>
-                      :
-                    <span className="text-sm text-gray-500">ー</span>
-                    }
+                    <dd className="mt-1 text-base text-gray-900 sm:mt-1 sm:col-span-2">
+                      {session?.guestId ? (
+                        <span>{session.guestName}</span>
+                      ) : (
+                        <span className="text-sm text-gray-900">ー</span>
+                      )}
                     </dd>
                   </div>
                 </dl>
               </div>
             </div>
-            <div className="flex justify-between py-6">
-                <div className="flex">
-                  {enterRoomOpen ? (
-                    <a href={`/session/${session?.sessionId}/join`}>
-                      <span
-                        type="button"
-                        className="cursor-pointer inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
-                      >
-                        ルームに入室する
-                      </span>
-                    </a>
-                  ) : (
-                    <div>
-                      <span
-                        type="button"
-                        className="cursor-not-allowed inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-gray-600 opacity-75 bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600"
-                      >
-                        ルームに入室する
-                      </span>
-                      <div className="relative">
-                        <p className="text-center text-sm text-gray-800 mt-2">
-                          5分前から入室できます。
-                        </p>
-                      </div>
+            <div className="flex justify-between items-start py-6">
+              <div className="flex">
+                {enterRoomOpen ? (
+                  <a href={`/session/${session?.sessionId}/join`}>
+                    <span
+                      type="button"
+                      className="cursor-pointer inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
+                    >
+                      ルームに入室する
+                    </span>
+                  </a>
+                ) : (
+                  <div>
+                    <span
+                      type="button"
+                      className="cursor-not-allowed inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-gray-600 opacity-75 bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600"
+                    >
+                      ルームに入室する
+                    </span>
+                    <div className="relative">
+                      <p className="text-center text-sm text-gray-800 mt-2">
+                        5分前から入室できます。
+                      </p>
                     </div>
-                  )}
-                </div>
-                {
-                  session?.ownerId == userInfo?.uid
-                  ?
-                  <div className="py-3">
-                    <span
-                      type="button"
-                      className="text-sm cursor-pointer text-red-600 hover:text-red-700"
-                      onClick={(e) => deleteSessionData(e)}
-                    >
-                      ルームを削除する
-                    </span>
                   </div>
-                  :
-                  <div className="py-3">
-                    <span
-                      type="button"
-                      className="text-sm cursor-pointer text-red-600 hover:text-red-700"
-                      onClick={(e) => cancelSession(e)}
-                    >
-                      予約を取り消す
-                    </span>
-                  </div>
-                }
+                )}
               </div>
+              {session?.ownerId == userInfo?.uid ? (
+                <div>
+                  <span
+                    type="button"
+                    className="text-sm cursor-pointer text-red-600 hover:text-red-700"
+                    onClick={(e) => deleteSessionData(e)}
+                  >
+                    ルームを削除する
+                  </span>
+                </div>
+              ) : (
+                <div>
+                  <span
+                    type="button"
+                    className="text-sm cursor-pointer text-red-600 hover:text-red-700"
+                    onClick={(e) => cancelSession(e)}
+                  >
+                    予約を取り消す
+                  </span>
+                </div>
+              )}
+            </div>
           </main>
         </div>
       </div>
