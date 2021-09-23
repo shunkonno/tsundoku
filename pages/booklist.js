@@ -18,8 +18,12 @@ import { SearchIcon } from '@heroicons/react/solid'
 import { useAuth } from '../lib/auth'
 import fetcher from '../utils/fetcher'
 import uselocalesFilter from '../utils/translate'
-import { updateUser, addBook, checkBookExists } from '../lib/db'
-// import { incrementBookListCount } from '../lib/db-admin'
+import {
+  updateUser,
+  addBook,
+  checkBookExists,
+  incrementBookListCount
+} from '../lib/db'
 
 export default function BookList() {
   // ============================================================
@@ -108,7 +112,7 @@ export default function BookList() {
         addBook(book)
       } else {
         // Increment bookListCount
-        // incrementBookListCount(isbn13)
+        incrementBookListCount(isbn13)
       }
 
       // Add book ISBN-13 to users' bookList
