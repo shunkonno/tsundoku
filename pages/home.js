@@ -19,7 +19,13 @@ import { Navbar } from '../components/Navbar'
 import { AppContext } from '../context/state'
 
 // Assets
-import { PlusIcon, CheckCircleIcon, ExclamationIcon, XIcon, ChevronRightIcon } from '@heroicons/react/solid'
+import {
+  PlusIcon,
+  CheckCircleIcon,
+  ExclamationIcon,
+  XIcon,
+  ChevronRightIcon
+} from '@heroicons/react/solid'
 import 'intro.js/introjs.css'
 
 // Functions
@@ -337,10 +343,7 @@ export default function Home() {
         <div className="z-10 sticky top-0 bg-gray-50 mt-4 py-0.5 text-base font-bold">
           <h3>{startDate}</h3>
         </div>
-        <ul
-          role="list"
-          className="py-2"
-        >
+        <ul role="list" className="py-2">
           {sessions
             .filter((session) => {
               return (
@@ -369,17 +372,21 @@ export default function Home() {
                           </div>
                           <div className="mt-1">
                             <span className="session-card-duration text-gray-500">
-                              {`${session.duration} 分間 / 開催者：${session.ownerName}`} 
+                              {`${session.duration} 分間 / 開催者：${session.ownerName}`}
                             </span>
                           </div>
                         </div>
                         {open ? (
                           <Disclosure.Button className="">
-                            <p className="px-8 py-2 bg-gray-200 text-black rounded-sm">閉じる</p>
+                            <p className="px-8 py-2 bg-gray-200 text-black rounded-sm">
+                              閉じる
+                            </p>
                           </Disclosure.Button>
                         ) : (
                           <Disclosure.Button className="">
-                            <p className="text-white text-bold bg-blue-500 py-3 px-6 rounded-sm">予約する</p>
+                            <p className="text-white text-bold bg-blue-500 py-3 px-6 rounded-sm">
+                              予約する
+                            </p>
                           </Disclosure.Button>
                         )}
                       </div>
@@ -396,19 +403,17 @@ export default function Home() {
                             <Disclosure.Panel>
                               <div className="-mt-px p-3 flex justify-end items-center divide-x divide-gray-200">
                                 <div className="-ml-px flex items-center">
-                                  
-                                    <p className="text-sm text-black mr-4">
-                                      このルームを予約しますか？
-                                    </p>
-                                    <div
-                                      className="cursor-pointer relative border border-transparent rounded-br-lg hover:text-gray-500"
-                                      onClick={() => reserveSession(session)}
-                                    >
-                                      <span className="inline-block px-10 py-2 border border-transparent text-base text-center rounded-sm text-white cursor-pointer bg-tsundoku-blue-main hover:bg-blue-700 focus:outline-none focus:ring-tsundoku-blue-main">
-                                        確定
-                                      </span>
-                                    </div>
-                                  
+                                  <p className="text-sm text-black mr-4">
+                                    このルームを予約しますか？
+                                  </p>
+                                  <div
+                                    className="cursor-pointer relative border border-transparent rounded-br-lg hover:text-gray-500"
+                                    onClick={() => reserveSession(session)}
+                                  >
+                                    <span className="inline-block px-10 py-2 border border-transparent text-base text-center rounded-sm text-white cursor-pointer bg-tsundoku-blue-main hover:bg-blue-700 focus:outline-none focus:ring-tsundoku-blue-main">
+                                      確定
+                                    </span>
+                                  </div>
                                 </div>
                               </div>
                             </Disclosure.Panel>
@@ -468,15 +473,10 @@ export default function Home() {
                     <h2 className="title-section">参加予定のルーム</h2>
                   </div>
                   {userIsOwnerOrGuest ? (
-                  <ul
-                    role="list"
-                    className=""
-                  >
-                    
-                    {sessions.map((session) =>
-                      userInfo.uid == session.guestId ||
-                      userInfo.uid == session.ownerId ? (
-                        
+                    <ul role="list" className="">
+                      {sessions.map((session) =>
+                        userInfo.uid == session.guestId ||
+                        userInfo.uid == session.ownerId ? (
                           <li key={session.sessionId}>
                             <div className="w-full mb-5 bg-white rounded-lg border border-black divide-y divide-gray-200">
                               <div className="flex items-center justify-between p-4 space-x-6">
@@ -493,7 +493,7 @@ export default function Home() {
                                   </div>
                                   <div className="mt-1">
                                     <span className="session-card-duration text-gray-500">
-                                      {`${session.duration} 分間 / 開催者：${session.ownerName}`} 
+                                      {`${session.duration} 分間 / 開催者：${session.ownerName}`}
                                     </span>
                                   </div>
                                 </div>
@@ -509,14 +509,15 @@ export default function Home() {
                               </div>
                             </div>
                           </li>
-                          
-                      ) : (
-                        <></>
-                      )
-                    )}
-                  </ul>
+                        ) : (
+                          <></>
+                        )
+                      )}
+                    </ul>
                   ) : (
-                    <div className="text-center py-6 bg-gray-200 rounded-md">現在、参加予定のルームはありません。</div>
+                    <div className="text-center py-6 bg-gray-200 rounded-md">
+                      現在、参加予定のルームはありません。
+                    </div>
                   )}
                 </div>
                 <div className="py-3 mt-10">
@@ -527,7 +528,7 @@ export default function Home() {
                     <div className="w-full fixed z-50 -mx-4 sm:mx-0 bottom-0 shadow-lg sm:shadow-none sm:static">
                       <div className="bg-white sm:bg-gray-50 px-6 sm:px-0 py-4 sm:py-0">
                         <div className="flex justify-center sm:justify-end">
-                          <Link href="/session/new">
+                          <Link href="/session/new" passHref>
                             <div className="block sm:inline-block w-full sm:w-auto px-6 py-2 border border-transparent text-base text-center font-bold rounded-md bg-gray-50 cursor-pointer text-tsundoku-blue-main hover:text-blue-700 focus:outline-none focus:ring-tsundoku-blue-main">
                               <div className="flex">
                                 <PlusIcon className="w-6 h-6 inline-block mr-2" />
@@ -541,18 +542,21 @@ export default function Home() {
                   </div>
 
                   {renderNoEmptyRoomStatement(sessions)}
-                  <nav className="h-full overflow-y-auto" aria-label="Directory">
+                  <nav
+                    className="h-full overflow-y-auto"
+                    aria-label="Directory"
+                  >
                     {renderSessionsGrid(sessions)}
                   </nav>
                 </div>
               </div>
               <div className="sm:w-1/3">
-                  <div className="px-4 py-6 border border-black rounded-md">
-                    <h3>ブックリスト</h3>
-                  </div>
-                  <div className="mt-4 px-4 py-6 border border-black rounded-md">
-                    <h3>みんなのリスト(人気)</h3>
-                  </div>
+                <div className="px-4 py-6 border border-black rounded-md">
+                  <h3>ブックリスト</h3>
+                </div>
+                <div className="mt-4 px-4 py-6 border border-black rounded-md">
+                  <h3>みんなのリスト(人気)</h3>
+                </div>
               </div>
             </div>
           </main>
