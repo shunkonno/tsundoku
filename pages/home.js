@@ -357,7 +357,7 @@ export default function Home() {
               <Disclosure key={session.sessionId}>
                 {({ open }) => (
                   <li key={session.sessionId}>
-                    <div className="w-full mb-5 bg-white rounded-lg border border-black divide-y divide-gray-200">
+                    <div className="w-full mb-5 bg-white rounded-md border border-gray-400 divide-y divide-gray-200">
                       <div className="flex items-center justify-between p-4 space-x-6">
                         <div className="flex-1 truncate">
                           <div className="flex items-center space-x-3">
@@ -384,7 +384,7 @@ export default function Home() {
                           </Disclosure.Button>
                         ) : (
                           <Disclosure.Button className="">
-                            <p className="text-white text-bold bg-blue-500 py-3 px-6 rounded-sm">
+                            <p className="text-white text-bold bg-blue-500 py-3 px-6 rounded-md">
                               予約する
                             </p>
                           </Disclosure.Button>
@@ -468,8 +468,8 @@ export default function Home() {
             <Navbar />
             <div className="flex mt-16 gap-14">
               <div className="max-w-7xl sm:w-2/3">
-                <div className="py-3">
-                  <div className="py-2 mb-4">
+                <div className="pb-3">
+                  <div className="pb-2 mb-4">
                     <h2 className="title-section">参加予定のルーム</h2>
                   </div>
                   {userIsOwnerOrGuest ? (
@@ -478,7 +478,7 @@ export default function Home() {
                         userInfo.uid == session.guestId ||
                         userInfo.uid == session.ownerId ? (
                           <li key={session.sessionId}>
-                            <div className="w-full mb-5 bg-white rounded-lg border border-black divide-y divide-gray-200">
+                            <div className="w-full mb-5 bg-white rounded-md border border-gray-400 divide-y divide-gray-200">
                               <div className="flex items-center justify-between p-4 space-x-6">
                                 <div className="flex-1 truncate">
                                   <div className="flex items-center space-x-3">
@@ -522,14 +522,14 @@ export default function Home() {
                 </div>
                 <div className="py-3 mt-10">
                   <div className="flex sm:justify-end">
-                    <div className="py-2 mb-4 sm:w-1/3">
+                    <div className="pb-2 mb-4 sm:w-1/3">
                       <h2 className="title-section">ルーム一覧</h2>
                     </div>
                     <div className="w-full fixed z-50 -mx-4 sm:mx-0 bottom-0 shadow-lg sm:shadow-none sm:static">
                       <div className="bg-white sm:bg-gray-50 px-6 sm:px-0 py-4 sm:py-0">
                         <div className="flex justify-center sm:justify-end">
                           <Link href="/session/new" passHref>
-                            <div className="block sm:inline-block w-full sm:w-auto px-6 py-2 border border-transparent text-base text-center font-bold rounded-md bg-gray-50 cursor-pointer text-tsundoku-blue-main hover:text-blue-700 focus:outline-none focus:ring-tsundoku-blue-main">
+                            <div className="block sm:inline-block w-full sm:w-auto py-2 border border-transparent text-base text-center font-bold rounded-md bg-gray-50 cursor-pointer text-tsundoku-blue-main hover:text-blue-700 focus:outline-none focus:ring-tsundoku-blue-main">
                               <div className="flex">
                                 <PlusIcon className="w-6 h-6 inline-block mr-2" />
                                 <span>ルームを作成する</span>
@@ -551,11 +551,11 @@ export default function Home() {
                 </div>
               </div>
               <div className="sm:w-1/3">
-                <div className="px-4 py-6 border border-black rounded-md">
-                  <h3>ブックリスト</h3>
+                <div className="px-4 py-6 border border-gray-400 bg-gray-100 rounded-md">
+                  <h3 className="subtitle-section">ブックリスト</h3>
                 </div>
-                <div className="mt-4 px-4 py-6 border border-black rounded-md">
-                  <h3>みんなのリスト(人気)</h3>
+                <div className="mt-4 px-4 py-6 border border-gray-400 bg-gray-100 rounded-md">
+                  <h3 className="subtitle-section">みんなのリスト(人気)</h3>
                 </div>
               </div>
             </div>

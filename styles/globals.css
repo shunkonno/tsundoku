@@ -4,7 +4,11 @@
 
 @layer utilities {
   .title-section {
-    @apply text-xl font-medium;
+    @apply text-2xl font-bold;
+  }
+
+  .subtitle-section {
+    @apply text-lg font-bold;
   }
 
   .session-card-date {
