@@ -501,7 +501,7 @@ export default function Home() {
                                   href={`/session/${session.sessionId}/detail`}
                                   key={session.sessionId}
                                 >
-                                  <a className="flex items-center py-3 px-6 hover:bg-gray-50">
+                                  <a className="flex items-center py-3 hover:bg-gray-50">
                                     <p className="text-bold">詳細</p>
                                     <ChevronRightIcon className="w-6 h-6 " />
                                   </a>
