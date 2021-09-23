@@ -1,6 +1,6 @@
 import { fetchAllSessions } from '../../../lib/db-admin'
 
-const allSessions = async (req, res) => {
+const sessionApiHandler = async (req, res) => {
   try {
     const sessions = await fetchAllSessions()
     res.status(200).json(sessions)
@@ -9,4 +9,4 @@ const allSessions = async (req, res) => {
   }
 }
 
-export default allSessions
+export default sessionApiHandler

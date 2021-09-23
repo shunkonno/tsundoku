@@ -1,7 +1,7 @@
 import { fetchUser } from '../../../lib/db-admin'
 import { authAdmin } from '../../../lib/firebase-admin'
 
-const user = async (req, res) => {
+const userApiHandler = async (req, res) => {
   try {
     const { uid } = await authAdmin.verifyIdToken(req.headers.token)
     const user = await fetchUser(uid)
@@ -11,4 +11,4 @@ const user = async (req, res) => {
   }
 }
 
-export default user
+export default userApiHandler
