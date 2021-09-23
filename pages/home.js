@@ -183,7 +183,6 @@ export default function Home() {
     if (session.guestId) {
       await router.push({
         pathname: '/home',
-        query: { successReserveRoom: false }
       })
     } else {
       // Set user's uid to guestId
@@ -197,7 +196,6 @@ export default function Home() {
       })
       await router.replace({
         pathname: '/home',
-        query: { successReserveRoom: true }
       })
     }
   }

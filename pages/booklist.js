@@ -1,9 +1,11 @@
 // ============================================================
 // Imports
 // ===========================================================
+import { Fragment, useEffect, useState } from 'react'
 import Head from 'next/head'
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
+import Image from 'next/image'
 import debounce from 'lodash/debounce'
 
 // Components
@@ -12,7 +14,8 @@ import { Footer } from '../components/Footer'
 import { Navbar } from '../components/Navbar'
 
 // Assets
-import { SearchIcon } from '@heroicons/react/solid'
+import { Dialog, Transition } from '@headlessui/react'
+import { PlusSmIcon,  SearchIcon, XIcon } from '@heroicons/react/solid'
 
 // Functions
 import { useAuth } from '../lib/auth'
@@ -25,7 +28,22 @@ import {
   incrementBookListCount
 } from '../lib/db'
 
+
+//dummy
+const books = [
+  {title: 'ふああ', authors: ['稲船','松延'], isbn: '', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'},
+  {title: 'かかか', authors: ['棚川'], isbn: '', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'},
+  {title: 'かかか', authors: '', isbn: '', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'}
+]
+
+
 export default function BookList() {
+  // ============================================================
+  // Initial State
+  // ============================================================
+  const [searchedBooks, setSearchedBooks]= useState([])
+  let [modalOpen, setModalOpen] = useState(false)
+
   // ============================================================
   // Auth
   // ============================================================
@@ -48,6 +66,18 @@ export default function BookList() {
       }
     }
   )
+
+  // ============================================================
+  // Routing
+  // ============================================================
+  const router = useRouter()
+
+  // ============================================================
+  // Localization
+  // ============================================================
+  const { locale } = router
+  const t = uselocalesFilter('booklist', locale)
+
   // ============================================================
   // Google Books API
   // ============================================================
@@ -80,6 +110,8 @@ export default function BookList() {
     })
 
     console.log(items)
+    setSearchedBooks(items)
+
     return items
   }
 
@@ -89,7 +121,7 @@ export default function BookList() {
   // Button Handlers
   // ===========================================================
 
-  const addBookToList = async (book) => {
+  const addBookToList = async (e, book) => {
     // TODO: books コレクションに書籍情報を追加する
     // 想定：
     // book = {
@@ -98,6 +130,9 @@ export default function BookList() {
     //   isbn13: 'XXX',
     //   image: 'XXX'
     // }
+
+    console.log(book)
+    console.log(book.title)
 
     // Check if isbn13 exists in book collection
     // Add book, and set bookListCount to 0 if it doesn't
@@ -119,20 +154,49 @@ export default function BookList() {
       const updatedBookList = userInfo.bookList.push(book.isbn13)
 
       // Update with new bookList
-      updateUser(user.uid, { bookList: updatedBookList })
+      await updateUser(user.uid, { bookList: updatedBookList })
+
+      await router.push('/empty')
+      await router.replace('/booklist')
     }
   }
 
   // ============================================================
-  // Routing
+  // Render Function
   // ============================================================
-  const router = useRouter()
 
-  // ============================================================
-  // Localization
-  // ============================================================
-  const { locale } = router
-  const t = uselocalesFilter('booklist', locale)
+  const renderSearchedBooks = (books) => {
+    return (
+      <div className="flow-root mt-6">
+        <ul role="list" className="-my-5 divide-y divide-gray-200">
+          {books.map((book) => (
+            <li className="py-4">
+              <div className="flex items-center space-x-4">
+                <div className="flex-shrink-0">
+                  <Image className="w-12 h-16" width={90} height={120} src={book.image ? book.image : '/img/placeholder/noimage_480x640.jpg'} alt={book.title} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 truncate">{book.title}</p>
+                  
+                </div>
+                <div>
+                  <button
+                    value={book}
+                    className="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50"
+                    onClick={(e)=> {
+                      addBookToList(e, book)
+                    }}
+                  >
+                    追加
+                  </button>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
 
   // ============================================================
   // Return
@@ -148,35 +212,151 @@ export default function BookList() {
         <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      
+      {/* Modal -- START */}
+      <>
+        <Transition appear show={modalOpen} as={Fragment}>
+          <Dialog
+            as="div"
+            className="fixed inset-0 z-10 overflow-y-scroll"
+            onClose={()=> setModalOpen(false)}
+          >
+            <div className="min-h-screen sm:px-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <Dialog.Overlay className="fixed inset-0 bg-gray-400 bg-opacity-50 transition-opacity" />
+              </Transition.Child>
 
+              
+              <span
+                className="inline-block h-screen align-middle"
+                aria-hidden="true"
+              >
+                &#8203;
+              </span>
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <div className="relative inline-block w-full max-w-4xl h-80v p-6 text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                  <div className="h-1/6">
+                    <div className="flex justify-end h-1/5">
+                      <XIcon 
+                        className="w-8 h-8 text-gray-500 hover:text-gray-600"
+                        onClick={()=> setModalOpen(false)}
+                      />
+                    </div>
+                    <div className="flex flex-col justify-center h-4/5">
+                      <div>
+                        <Dialog.Title
+                          as="h3"
+                          className="text-xl font-medium leading-6 text-gray-900"
+                        >
+                          タイトル・著者名で検索
+                        </Dialog.Title>
+                        <div className="mt-2 ">
+                            {/* book search component -- START */}
+                            <div className="mt-1 relative rounded-md shadow-sm">
+                              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <SearchIcon
+                                  className="h-5 w-5 text-gray-400"
+                                  aria-hidden="true"
+                                />
+                              </div>
+                              <input
+                                type="text"
+                                className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                                placeholder="ここに入力"
+                                onInput={(input) =>
+                                  input.target.value.length > 1
+                                    ? searchBooksDebounced(input.target.value)
+                                    : null
+                                }
+                              />
+                            </div>
+                            {/* book search component -- END */}
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div className="h-5/6 overflow-y-auto">
+                    {renderSearchedBooks(searchedBooks)}
+                  </div>
+                </div>
+              </Transition.Child>
+            </div>
+          </Dialog>
+        </Transition>
+      </>
+      {/* Modal -- END */}
+      
       <AppHeader />
 
       {/* main content */}
       <div className="relative pb-16 bg-gray-50 overflow-hidden">
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
           <main className="relative mx-auto max-w-7xl px-4 sm:py-4">
+            
             <Navbar />
 
-            {/* book search component */}
-            <div className="mt-1 relative rounded-md shadow-sm">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <SearchIcon
-                  className="h-5 w-5 text-gray-400"
-                  aria-hidden="true"
-                />
+            <div>
+              <div className="flex justify-between mt-12 py-5">
+                <h1 className="title-section">ブックリスト</h1>
+                <button 
+                  className="flex items-center"
+                  onClick={() => setModalOpen(true)}
+                >
+                  <PlusSmIcon className="w-6 h-6 text-blue-500" />
+                  <span
+                    className="text-blue-500 text-sm"
+                    
+                  >
+                    本を追加する
+                  </span>
+                </button>
               </div>
-              <input
-                type="text"
-                className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
-                placeholder="ここに入力"
-                onInput={(input) =>
-                  input.target.value.length > 1
-                    ? searchBooksDebounced(input.target.value)
-                    : null
+              
+              <div>
+                {
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                      {books.map((book) => (
+                        <div
+                          className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                        >
+                          <div className="flex-shrink-0">
+                            <Image className="h-10 w-10 rounded-full" width={90} height={120} src={book.image} alt="" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <a href="#" className="focus:outline-none">
+                              <span className="absolute inset-0" aria-hidden="true" />
+                              <p className="text-sm font-medium text-gray-900">{book.title}</p>
+                              <div>著者</div>
+                              {
+                                Array.isArray(book.authors) &&
+                                  book.authors.map(author => {
+                                    return <p className="text-sm text-gray-500 truncate">{author}</p>
+                                  })
+                              }
+                            </a>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                 }
-              />
+              </div>
             </div>
-
             {/* END - book search component */}
           </main>
         </div>
