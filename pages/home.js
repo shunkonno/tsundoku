@@ -53,7 +53,7 @@ export default function Home() {
   // Fetch Data
   // ============================================================
 
-  // Fetch logged user info on client side
+  // ユーザー情報
   const { data: userInfo } = useSWR(
     user ? ['/api/user', user.token] : null,
     fetcher,
@@ -65,7 +65,7 @@ export default function Home() {
     }
   )
 
-  // Fetch all sessions
+  // セッション情報
   const { data: sessions } = useSWR(user ? '/api/session' : null, fetcher, {
     onErrorRetry: ({ retryCount }) => {
       // Retry up to 10 times
@@ -81,11 +81,13 @@ export default function Home() {
 
   useEffect(() => {
     if (user === false) {
-      // If the access isn't authenticated, redirect to index page
+      // 認証されていないユーザーは、index へリダイレクト
       router.push('/')
     } else if (userInfo && !('name' in userInfo)) {
-      // If the user signed in for the first time, they won't have a username
-      // Redirect user to onboarding process
+      // 想定
+      // ・ はじめてログインしたユーザーは、name をもっていない
+
+      // はじめてログインしたユーザーを設定画面へリダイレクト
       router.push('/settings/new')
     }
   })
@@ -112,10 +114,10 @@ export default function Home() {
 
   const introjsInitialStep = 0
 
-  // stepsEnabled when user finishes initial setup
+  // 初期設定が完了し、home に ?welcome=true でリダイレクトされたときに、イントロダクションを起動する
   const introjsStepsEnabled = router.query.welcome === 'true' ? true : false
 
-  // intro.js options
+  // intro.js 設定
   const introjsOptions = {
     nextLabel: '次へ',
     prevLabel: '戻る',
@@ -131,7 +133,7 @@ export default function Home() {
   // User-related States
   // ============================================================
 
-  // Check if the user is an owner or guest of any upcoming sessions
+  // ログインしているユーザーが、セッションのオーナー・ゲストか判定する
   var userIsOwnerOrGuest
 
   if (sessions) {
@@ -146,7 +148,7 @@ export default function Home() {
   // Alert Handlers
   // ============================================================
 
-  // Hanldle alert state
+  // アラート
   useEffect(() => {
     if (alertAssort) {
       setAlertOpen(true)
@@ -163,11 +165,11 @@ export default function Home() {
   // Helper Functions
   // ============================================================
 
-  // dateTimeISOString to datetime formatter
+  // dateTimeISOString を datetime に変換
   const formatISOStringToDateTime = (datetimeIsoString) => {
     return moment(datetimeIsoString).format('M月D日 H:mm')
   }
-  // dateTimeISOString to date formatter
+  // dateTimeISOString を date に変換
   const formatISOStringToDate = (datetimeIsoString) => {
     return moment(datetimeIsoString).format('M月D日')
   }
@@ -176,26 +178,32 @@ export default function Home() {
   // Button Handlers
   // ============================================================
 
-  // Handle session reservation
+  // セッション予約ボタン
   const reserveSession = async (session) => {
-    // If guestId has already been set, the user can't reserve the session
-    // Redirect and show alert banner
     if (session.guestId) {
+      // guestId がすでに設定されている場合、予約することができない
+
       await router.push({
-        pathname: '/home',
+        pathname: '/home'
       })
     } else {
-      // Set user's uid to guestId
+      // guestId 未設定であれば、当ユーザーをIDを設定する
+
+      // セッション情報の更新
       await updateSession(session.sessionId, {
         guestId: user.uid,
         guestName: userInfo.name
       })
+
+      // アラートの設定
       await setAlertAssort('reserve')
+
+      // ページのリフレッシュ
       await router.push({
         pathname: '/empty'
       })
       await router.replace({
-        pathname: '/home',
+        pathname: '/home'
       })
     }
   }
@@ -438,10 +446,10 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Tsundoku | ダッシュボード</title>
+        <title>Tsundoku | ホーム</title>
         <meta
           name="description"
-          content="一緒に読書してくれる誰かを探すためのマッチングサービス"
+          content="Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。集中した読書は自己研鑽だけでなく、リラックス効果もあります。"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>

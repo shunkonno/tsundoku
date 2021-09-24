@@ -71,13 +71,13 @@ export default function BookList() {
   // Fetch Data
   // ============================================================
 
-  // Fetch logged user info on client side
+  // ユーザー情報
   const { data: userInfo } = useSWR(
     user ? ['/api/user', user.token] : null,
     fetcher,
     {
       onErrorRetry: ({ retryCount }) => {
-        // Retry up to 10 times
+        // エラー時には、10回まではリトライする
         if (retryCount >= 10) return
       }
     }
@@ -138,8 +138,10 @@ export default function BookList() {
   // ===========================================================
 
   const addBookToList = async (e, book) => {
-    // TODO: books コレクションに書籍情報を追加する
-    // 想定：
+    // 想定
+    // ・ ISBNコードが存在する本のみ、追加することができる
+    // ・ ISBN-13で本を管理することを想定している
+
     // book = {
     //   title:'XXX',
     //   authors: ['X','Y'],
@@ -150,26 +152,26 @@ export default function BookList() {
     console.log(book)
     console.log(book.title)
 
-    // Check if isbn13 exists in book collection
-    // Add book, and set bookListCount to 0 if it doesn't
+    // ISBN-13があるならば、追加処理
     if (book.isbn13) {
       const bookExists = await checkBookExists(book.isbn13)
 
+      // 本が book collection に未登録ならば、bookListCount を 1 にしたうえで、追加する
       if (!bookExists) {
-        // Initialize book object
+        // はじめて追加されるので、1 を設定する
         book.bookListCount = 1
 
-        // Add book to db
+        // DB に追加する
         addBook(book)
       } else {
-        // Increment bookListCount
+        // すでにDBに存在する場合には、bookListCount に 1 を加算するのみ
         incrementBookListCount(isbn13)
       }
 
-      // Add book ISBN-13 to users' bookList
+      // user collection の bookList array に、ISBN-13 を追加する
       const updatedBookList = userInfo.bookList.push(book.isbn13)
 
-      // Update with new bookList
+      // bookList を更新する
       await updateUser(user.uid, { bookList: updatedBookList })
 
       await router.push('/empty')
@@ -236,7 +238,10 @@ export default function BookList() {
     <div>
       <Head>
         <title>Tsundoku | ブックリスト</title>
-        <meta name="description" content="" />
+        <meta
+          name="description"
+          content="Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。集中した読書は自己研鑽だけでなく、リラックス効果もあります。"
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

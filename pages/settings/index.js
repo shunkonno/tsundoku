@@ -61,7 +61,8 @@ export default function UserSettings() {
   // ============================================================
   // Fetch Data
   // ============================================================
-  // Fetch logged user info on client side
+
+  // ユーザー情報
   const { data: userInfo } = useSWR(
     user ? ['/api/user', user.token] : null,
     fetcher,
@@ -81,11 +82,11 @@ export default function UserSettings() {
 
   useEffect(() => {
     if (user === false) {
-      // If the access isn't authenticated, redirect to index page
+      // 認証されていないユーザーは、index へリダイレクト
       router.push('/')
     } else if (userInfo) {
+      // 認証されているなら、ユーザー情報を state に反映
       userInfo.name ? setUserName(userInfo.name) : setUserName('')
-
       setGenderSelected(userInfo?.gender)
     }
   }, [router, user, userInfo])
@@ -97,7 +98,7 @@ export default function UserSettings() {
   // Handle Alert
   // ============================================================
 
-  // Function
+  // アラート
   const alertControl = async (alertAssort) => {
     await setAlertOpen(true)
     await setAlertAssort(alertAssort)
@@ -106,7 +107,7 @@ export default function UserSettings() {
     }, 5000)
   }
 
-  //alertControl by parameter
+  // パラメータによるアラート制御
   useEffect(() => {
     if (router.query.successUpdateUserSettings == 'true') {
       alertControl('update')
@@ -116,6 +117,8 @@ export default function UserSettings() {
   // ============================================================
   // Handle Form Submit
   // ============================================================
+
+  // 設定更新ボタン
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -127,6 +130,7 @@ export default function UserSettings() {
     await router.push({
       pathname: '/empty'
     })
+
     await router.push({
       pathname: '/settings',
       query: { successUpdateUserSettings: true }
@@ -189,10 +193,10 @@ export default function UserSettings() {
   return (
     <div>
       <Head>
-        <title>Settings</title>
+        <title>Tsundoku | 設定</title>
         <meta
           name="description"
-          content="一緒に読書してくれる誰かを探すためのマッチングサービス"
+          content="Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。集中した読書は自己研鑽だけでなく、リラックス効果もあります。"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
