@@ -174,10 +174,11 @@ export default function BookList() {
 
       // bookList を更新する
       await updateUser(user.uid, { bookList: updatedBookList })
-      
-      await router.push('/empty')
-      await router.replace('/booklist')
+
     }
+
+    await router.push('/empty')
+    await router.replace('/booklist')
   }
 
   // ============================================================
