@@ -35,7 +35,7 @@ export default function Home() {
         <title>Tsundoku</title>
         <meta
           name="description"
-          content="Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。"
+          content="Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。集中した読書は自己研鑽だけでなく、リラックス効果もあります。"
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
