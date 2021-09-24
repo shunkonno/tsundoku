@@ -15,7 +15,7 @@ import { Navbar } from '../components/Navbar'
 
 // Assets
 import { Dialog, Transition } from '@headlessui/react'
-import { PlusSmIcon,  SearchIcon, XIcon } from '@heroicons/react/solid'
+import { PlusSmIcon, SearchIcon, XIcon } from '@heroicons/react/solid'
 
 // Functions
 import { useAuth } from '../lib/auth'
@@ -28,20 +28,36 @@ import {
   incrementBookListCount
 } from '../lib/db'
 
-
 //dummy
 const books = [
-  {title: 'ふああ', authors: ['稲船','松延'], isbn: '', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'},
-  {title: 'かかか', authors: ['棚川'], isbn: '', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'},
-  {title: 'かかか', authors: '', isbn: '', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'}
+  {
+    title: 'ふああ',
+    authors: ['稲船', '松延'],
+    isbn: '',
+    image:
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+  },
+  {
+    title: 'かかか',
+    authors: ['棚川'],
+    isbn: '',
+    image:
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+  },
+  {
+    title: 'かかか',
+    authors: '',
+    isbn: '',
+    image:
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+  }
 ]
-
 
 export default function BookList() {
   // ============================================================
   // Initial State
   // ============================================================
-  const [searchedBooks, setSearchedBooks]= useState([])
+  const [searchedBooks, setSearchedBooks] = useState([])
   let [modalOpen, setModalOpen] = useState(false)
 
   // ============================================================
@@ -170,20 +186,31 @@ export default function BookList() {
       <div className="flow-root mt-6">
         <ul role="list" className="-my-5 divide-y divide-gray-200">
           {books.map((book) => (
-            <li className="py-4">
+            <li className="py-4" key={book.isbn13}>
               <div className="flex items-center space-x-4">
                 <div className="flex-shrink-0">
-                  <Image className="w-12 h-16" width={90} height={120} src={book.image ? book.image : '/img/placeholder/noimage_480x640.jpg'} alt={book.title} />
+                  <Image
+                    className="w-12 h-16"
+                    width={90}
+                    height={120}
+                    src={
+                      book.image
+                        ? book.image
+                        : '/img/placeholder/noimage_480x640.jpg'
+                    }
+                    alt={book.title}
+                  />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">{book.title}</p>
-                  
+                  <p className="text-sm font-medium text-gray-900 truncate">
+                    {book.title}
+                  </p>
                 </div>
                 <div>
                   <button
                     value={book}
                     className="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50"
-                    onClick={(e)=> {
+                    onClick={(e) => {
                       addBookToList(e, book)
                     }}
                   >
@@ -212,14 +239,14 @@ export default function BookList() {
         <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      
+
       {/* Modal -- START */}
       <>
         <Transition appear show={modalOpen} as={Fragment}>
           <Dialog
             as="div"
             className="fixed inset-0 z-10 overflow-y-scroll"
-            onClose={()=> setModalOpen(false)}
+            onClose={() => setModalOpen(false)}
           >
             <div className="min-h-screen sm:px-4 text-center">
               <Transition.Child
@@ -234,7 +261,6 @@ export default function BookList() {
                 <Dialog.Overlay className="fixed inset-0 bg-gray-400 bg-opacity-50 transition-opacity" />
               </Transition.Child>
 
-              
               <span
                 className="inline-block h-screen align-middle"
                 aria-hidden="true"
@@ -253,9 +279,9 @@ export default function BookList() {
                 <div className="relative inline-block w-full max-w-4xl h-80v p-6 text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
                   <div className="h-1/6">
                     <div className="flex justify-end h-1/5">
-                      <XIcon 
+                      <XIcon
                         className="w-8 h-8 text-gray-500 hover:text-gray-600"
-                        onClick={()=> setModalOpen(false)}
+                        onClick={() => setModalOpen(false)}
                       />
                     </div>
                     <div className="flex flex-col justify-center h-4/5">
@@ -267,28 +293,28 @@ export default function BookList() {
                           タイトル・著者名で検索
                         </Dialog.Title>
                         <div className="mt-2 ">
-                            {/* book search component -- START */}
-                            <div className="mt-1 relative rounded-md shadow-sm">
-                              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <SearchIcon
-                                  className="h-5 w-5 text-gray-400"
-                                  aria-hidden="true"
-                                />
-                              </div>
-                              <input
-                                type="text"
-                                className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
-                                placeholder="ここに入力"
-                                onInput={(input) =>
-                                  input.target.value.length > 1
-                                    ? searchBooksDebounced(input.target.value)
-                                    : null
-                                }
+                          {/* book search component -- START */}
+                          <div className="mt-1 relative rounded-md shadow-sm">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                              <SearchIcon
+                                className="h-5 w-5 text-gray-400"
+                                aria-hidden="true"
                               />
                             </div>
-                            {/* book search component -- END */}
+                            <input
+                              type="text"
+                              className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                              placeholder="ここに入力"
+                              onInput={(input) =>
+                                input.target.value.length > 1
+                                  ? searchBooksDebounced(input.target.value)
+                                  : null
+                              }
+                            />
                           </div>
+                          {/* book search component -- END */}
                         </div>
+                      </div>
                     </div>
                   </div>
                   <div className="h-5/6 overflow-y-auto">
@@ -301,59 +327,70 @@ export default function BookList() {
         </Transition>
       </>
       {/* Modal -- END */}
-      
+
       <AppHeader />
 
       {/* main content */}
       <div className="relative pb-16 bg-gray-50 overflow-hidden">
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
           <main className="relative mx-auto max-w-7xl px-4 sm:py-4">
-            
             <Navbar />
 
             <div>
               <div className="flex justify-between mt-12 py-5">
                 <h1 className="title-section">ブックリスト</h1>
-                <button 
+                <button
                   className="flex items-center"
                   onClick={() => setModalOpen(true)}
                 >
                   <PlusSmIcon className="w-6 h-6 text-blue-500" />
-                  <span
-                    className="text-blue-500 text-sm"
-                    
-                  >
-                    本を追加する
-                  </span>
+                  <span className="text-blue-500 text-sm">本を追加する</span>
                 </button>
               </div>
-              
+
               <div>
                 {
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                      {books.map((book) => (
-                        <div
-                          className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                        >
-                          <div className="flex-shrink-0">
-                            <Image className="h-10 w-10 rounded-full" width={90} height={120} src={book.image} alt="" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <a href="#" className="focus:outline-none">
-                              <span className="absolute inset-0" aria-hidden="true" />
-                              <p className="text-sm font-medium text-gray-900">{book.title}</p>
-                              <div>著者</div>
-                              {
-                                Array.isArray(book.authors) &&
-                                  book.authors.map(author => {
-                                    return <p className="text-sm text-gray-500 truncate">{author}</p>
-                                  })
-                              }
-                            </a>
-                          </div>
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    {books.map((book) => (
+                      <div
+                        className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                        key={book.isbn13}
+                      >
+                        <div className="flex-shrink-0">
+                          <Image
+                            className="h-10 w-10 rounded-full"
+                            width={90}
+                            height={120}
+                            src={book.image}
+                            alt=""
+                          />
                         </div>
-                      ))}
-                    </div>
+                        <div className="flex-1 min-w-0">
+                          <a href="#" className="focus:outline-none">
+                            <span
+                              className="absolute inset-0"
+                              aria-hidden="true"
+                            />
+                            <p className="text-sm font-medium text-gray-900">
+                              {book.title}
+                            </p>
+                            <div>著者</div>
+                            {Array.isArray(book.authors) &&
+                              book.authors.map((author) => {
+                                return (
+                                  <p
+                                    className="text-sm text-gray-500 truncate"
+                                    key={author}
+                                  >
+                                    {author}
+                                  </p>
+                                )
+                              })}
+                          </a>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 }
               </div>
             </div>
