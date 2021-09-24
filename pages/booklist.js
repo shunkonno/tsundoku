@@ -142,6 +142,7 @@ export default function BookList() {
     // ・ ISBNコードが存在する本のみ、追加することができる
     // ・ ISBN-13で本を管理することを想定している
 
+    // 連携データ形式
     // book = {
     //   title:'XXX',
     //   authors: ['X','Y'],
