@@ -7,6 +7,7 @@ import useSWR from 'swr'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import debounce from 'lodash/debounce'
+import { nanoid } from 'nanoid'
 
 // Components
 import { AppHeader } from '../components/Header'
@@ -22,10 +23,11 @@ import { useAuth } from '../lib/auth'
 import fetcher from '../utils/fetcher'
 import uselocalesFilter from '../utils/translate'
 import {
-  updateUser,
+  updateBookList,
   addBook,
-  checkBookExists,
-  incrementBookListCount
+  fetchBookInfo,
+  updateBookListCount,
+  updateBookListWithoutISBN
 } from '../lib/db'
 
 //dummy
@@ -144,6 +146,7 @@ export default function BookList() {
 
     // 連携データ形式
     // book = {
+    //   bid: 'XXX',
     //   title:'XXX',
     //   authors: ['X','Y'],
     //   isbn13: 'XXX',
@@ -151,34 +154,61 @@ export default function BookList() {
     // }
 
     console.log(book)
-    console.log(book.title)
 
     // ISBN-13があるならば、追加処理
     if (book.isbn13.length === 13) {
-      const bookExists = await checkBookExists(book.isbn13)
+      // DB に本がすでに登録されている場合には、登録されている書籍情報が返却される
+      // 未登録の場合には、null が返却される
+      const bookInfo = await fetchBookInfo(book.isbn13)
+
+      console.log(bookInfo)
 
       // 本が book collection に未登録ならば、bookListCount を 1 にしたうえで、追加する
-      if (!bookExists) {
+      if (!bookInfo) {
+        const bid = nanoid(10)
+
+        // はじめて追加されるので、bid を設定する
+        book.bid = bid
+
         // はじめて追加されるので、1 を設定する
         book.bookListCount = 1
 
         // DB に追加する
-        addBook(book)
+        addBook(bid, book)
+
+        // user collection の bookList array に、新たに発行した bid を追加する
+        // TODO: db-admin で arrayUnion() を利用した実装に変更する
+        var updatedBookList = userInfo.bookList
+        updatedBookList[updatedBookList.length] = bid
+
+        // bookList を更新する
+        updateBookList(user.uid, updatedBookList)
       } else {
-        // すでにDBに存在する場合には、bookListCount に 1 を加算するのみ
-        incrementBookListCount(book.isbn13)
+        // すでにDBに存在する場合には、bookListCount に 1 を加算する
+        // TODO: db-admin で increment を利用した実装に変更する
+        var incrementBookListCount = bookInfo.bookListCount
+        incrementBookListCount += 1
+
+        // bookListCount を更新する
+        updateBookListCount(bookInfo.bid, incrementBookListCount)
+
+        // user collection の bookList array に、bid を追加する (bookInfo から取得)
+        var updatedBookList = userInfo.bookList
+        updatedBookList[updatedBookList.length] = bookInfo.bid
+
+        // bookList を更新する
+        updateBookList(user.uid, updatedBookList)
       }
+    } else {
+      // ISBN-13がないなら、books collection には追加せず、user にのみ紐付ける
+      var updatedBookListWithoutISBN = userInfo.bookListWithoutISBN
+      updatedBookListWithoutISBN[updatedBookListWithoutISBN.length] = book
 
-      // user collection の bookList array に、ISBN-13 を追加する
-      var updatedBookList = userInfo.bookList
-      updatedBookList[updatedBookList.length] = book.isbn13
-
-      // bookList を更新する
-      await updateUser(user.uid, { bookList: updatedBookList })
-
-      await router.push('/empty')
-      await router.replace('/booklist')
+      updateBookListWithoutISBN(user.uid, updatedBookListWithoutISBN)
     }
+
+    await router.push('/empty')
+    await router.replace('/booklist')
   }
 
   // ============================================================

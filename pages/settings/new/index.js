@@ -72,7 +72,8 @@ export default function NewUserSettings() {
 
     updateUser(user.uid, {
       name: userName,
-      bookList: []
+      bookList: [],
+      bookListWithoutISBN: []
     })
 
     router.push({ pathname: '/home', query: { welcome: true } })
