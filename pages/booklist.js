@@ -38,14 +38,14 @@ const books = [
       'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
   },
   {
-    title: 'かかか',
+    title: 'わわ',
     authors: ['棚川'],
     isbn: '',
     image:
       'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
   },
   {
-    title: 'かかか',
+    title: 'やや',
     authors: '',
     isbn: '',
     image:
@@ -166,7 +166,7 @@ export default function BookList() {
         addBook(book)
       } else {
         // すでにDBに存在する場合には、bookListCount に 1 を加算するのみ
-        incrementBookListCount(isbn13)
+        incrementBookListCount(book.isbn13)
       }
 
       // user collection の bookList array に、ISBN-13 を追加する
@@ -174,7 +174,7 @@ export default function BookList() {
 
       // bookList を更新する
       await updateUser(user.uid, { bookList: updatedBookList })
-
+      
       await router.push('/empty')
       await router.replace('/booklist')
     }
@@ -189,7 +189,7 @@ export default function BookList() {
       <div className="flow-root mt-6">
         <ul role="list" className="-my-5 divide-y divide-gray-200">
           {books.map((book) => (
-            <li className="py-4" key={book.isbn13}>
+            <li className="py-4">
               <div className="flex items-center space-x-4">
                 <div className="flex-shrink-0">
                   <Image
@@ -360,7 +360,7 @@ export default function BookList() {
                     {books.map((book) => (
                       <div
                         className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                        key={book.isbn13}
+                        // key={book.title}
                       >
                         <div className="flex-shrink-0">
                           <Image
