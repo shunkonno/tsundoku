@@ -154,7 +154,7 @@ export default function BookList() {
     console.log(book.title)
 
     // ISBN-13があるならば、追加処理
-    if (book.isbn13) {
+    if (book.isbn13.length === 13) {
       const bookExists = await checkBookExists(book.isbn13)
 
       // 本が book collection に未登録ならば、bookListCount を 1 にしたうえで、追加する
@@ -166,11 +166,12 @@ export default function BookList() {
         addBook(book)
       } else {
         // すでにDBに存在する場合には、bookListCount に 1 を加算するのみ
-        incrementBookListCount(isbn13)
+        incrementBookListCount(book.isbn13)
       }
 
       // user collection の bookList array に、ISBN-13 を追加する
-      const updatedBookList = userInfo.bookList.push(book.isbn13)
+      var updatedBookList = userInfo.bookList
+      updatedBookList[updatedBookList.length] = book.isbn13
 
       // bookList を更新する
       await updateUser(user.uid, { bookList: updatedBookList })
