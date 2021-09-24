@@ -557,10 +557,10 @@ export default function Home() {
                 </div>
               </div>
               <div className="sm:w-1/3">
-                <div className="px-4 py-6 border border-gray-400 bg-gray-100 rounded-md">
+                <div className="px-4 py-6 border border-gray-400 rounded-md">
                   <h3 className="subtitle-section">ブックリスト</h3>
                 </div>
-                <div className="mt-4 px-4 py-6 border border-gray-400 bg-gray-100 rounded-md">
+                <div className="mt-4 px-4 py-6 border border-gray-400 rounded-md">
                   <h3 className="subtitle-section">みんなのリスト(人気)</h3>
                 </div>
               </div>
