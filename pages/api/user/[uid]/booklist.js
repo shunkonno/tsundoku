@@ -1,5 +1,8 @@
 import { fetchUser, fetchOneBook } from '../../../../lib/db-admin'
 
+// INPUT: uid
+// OUTPUT: ユーザーのブックリストをもとに、各書籍の詳細情報を返却
+
 const booklistApiHandler = async (req, res) => {
   try {
     const userInfo = await fetchUser(req.query.uid)
