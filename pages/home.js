@@ -1,7 +1,7 @@
 // ============================================================
 // Imports
 // ============================================================
-import { Fragment, useState, useEffect, useContext } from 'react'
+import { Fragment, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -14,6 +14,8 @@ import { AppHeader } from '../components/Header'
 import { Footer } from '../components/Footer'
 import { Disclosure, Transition } from '@headlessui/react'
 import { Navbar } from '../components/Navbar'
+import { ReservedRoomCard } from '../components/Card'
+import { ReservableRoomList } from '../components/List'
 
 //Context
 import { AppContext } from '../context/state'
@@ -24,7 +26,6 @@ import {
   CheckCircleIcon,
   ExclamationIcon,
   XIcon,
-  ChevronRightIcon
 } from '@heroicons/react/solid'
 import 'intro.js/introjs.css'
 
@@ -34,6 +35,8 @@ import { updateSession } from '../lib/db'
 import fetcher from '../utils/fetcher'
 import classNames from '../utils/classNames'
 import uselocalesFilter from '../utils/translate'
+import { formatISOStringToDate } from '../utils/formatDateTime'
+
 
 export default function Home() {
   // ============================================================
@@ -162,35 +165,28 @@ export default function Home() {
   }, [alertAssort, setAlertAssort, setAlertOpen])
 
   // ============================================================
-  // Helper Functions
-  // ============================================================
-
-  // dateTimeISOString を datetime に変換
-  const formatISOStringToDateTime = (datetimeIsoString) => {
-    return moment(datetimeIsoString).format('M月D日 H:mm')
-  }
-  // dateTimeISOString を date に変換
-  const formatISOStringToDate = (datetimeIsoString) => {
-    return moment(datetimeIsoString).format('M月D日')
-  }
-
-  // ============================================================
   // Button Handlers
   // ============================================================
 
   // セッション予約ボタン
-  const reserveSession = async (session) => {
-    if (session.guestId) {
+  const reserveSession = async (sessionId, guestId) => {
+    if (guestId) {
       // guestId がすでに設定されている場合、予約することができない
 
+      // アラートの設定
+      await setAlertAssort('failed')
+      // ページのリフレッシュ
       await router.push({
+        pathname: '/empty'
+      })
+      await router.replace({
         pathname: '/home'
       })
     } else {
       // guestId 未設定であれば、当ユーザーをIDを設定する
 
       // セッション情報の更新
-      await updateSession(session.sessionId, {
+      await updateSession(sessionId, {
         guestId: user.uid,
         guestName: userInfo.name
       })
@@ -211,12 +207,6 @@ export default function Home() {
   // ============================================================
   // Render Function
   // ============================================================
-
-  const renderNoReserveRoomStatement = (sessions) => {
-    return (
-      <div className="text-center">現在、参加予定のルームはありません。</div>
-    )
-  }
 
   const renderNoEmptyRoomStatement = (sessions) => {
     const filteredList = sessions.filter((session) => {
@@ -331,111 +321,6 @@ export default function Home() {
     </div>
   )
 
-  const renderSessionsGrid = (sessions) => {
-    const startDates = sessions
-      .filter((session) => {
-        return !(
-          session.ownerId == userInfo?.uid || session.guestId == userInfo?.uid
-        )
-      })
-      .map((session) => {
-        return moment(session.startDateTime).format('M月D日')
-      })
-
-    const duplicateDeletedStartDates = [...new Set(startDates)]
-
-    return duplicateDeletedStartDates.map((startDate) => (
-      <div key={startDate} className="relative">
-        <div className="z-10 sticky top-0 bg-gray-50 mt-4 py-0.5 text-base font-bold">
-          <h3>{startDate}</h3>
-        </div>
-        <ul role="list" className="py-2">
-          {sessions
-            .filter((session) => {
-              return (
-                !(
-                  session.ownerId == userInfo?.uid ||
-                  session.guestId == userInfo?.uid
-                ) && startDate == formatISOStringToDate(session.startDateTime)
-              )
-            })
-            .map((session) => (
-              <Disclosure key={session.sessionId}>
-                {({ open }) => (
-                  <li key={session.sessionId}>
-                    <div className="w-full mb-5 bg-white rounded-md border border-gray-400 divide-y divide-gray-200">
-                      <div className="flex items-center justify-between p-4 space-x-6">
-                        <div className="flex-1 truncate">
-                          <div className="flex items-center space-x-3">
-                            <div className="flex items-center">
-                              <h3 className="session-card-date">
-                                {formatISOStringToDateTime(
-                                  session.startDateTime
-                                )}
-                                &nbsp;〜
-                              </h3>
-                            </div>
-                          </div>
-                          <div className="mt-1">
-                            <span className="session-card-duration text-gray-500">
-                              {`${session.duration} 分間 / 開催者：${session.ownerName}`}
-                            </span>
-                          </div>
-                        </div>
-                        {open ? (
-                          <Disclosure.Button className="">
-                            <p className="px-8 py-2 bg-gray-200 text-black rounded-md">
-                              閉じる
-                            </p>
-                          </Disclosure.Button>
-                        ) : (
-                          <Disclosure.Button className="">
-                            <p className="text-white text-bold bg-blue-500 py-3 px-6 rounded-md">
-                              予約する
-                            </p>
-                          </Disclosure.Button>
-                        )}
-                      </div>
-                      {open && (
-                        <div>
-                          <Transition
-                            enter="transition duration-100 ease-out"
-                            enterFrom="transform scale-95 opacity-0"
-                            enterTo="transform scale-100 opacity-100"
-                            leave="transition duration-75 ease-out"
-                            leaveFrom="transform scale-100 opacity-100"
-                            leaveTo="transform scale-95 opacity-0"
-                          >
-                            <Disclosure.Panel>
-                              <div className="-mt-px p-3 flex justify-end items-center divide-x divide-gray-200">
-                                <div className="-ml-px flex items-center">
-                                  <p className="text-sm text-black mr-4">
-                                    このルームを予約しますか？
-                                  </p>
-                                  <div
-                                    className="cursor-pointer relative border border-transparent rounded-br-lg hover:text-gray-500"
-                                    onClick={() => reserveSession(session)}
-                                  >
-                                    <span className="inline-block px-10 py-2 border border-transparent text-base text-center rounded-md text-white cursor-pointer bg-tsundoku-blue-main hover:bg-blue-700 focus:outline-none focus:ring-tsundoku-blue-main">
-                                      確定
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </Disclosure.Panel>
-                          </Transition>
-                        </div>
-                      )}
-                    </div>
-                  </li>
-                )}
-              </Disclosure>
-            ))}
-        </ul>
-      </div>
-    ))
-  }
-
   // ============================================================
   // Return
   // ============================================================
@@ -473,8 +358,9 @@ export default function Home() {
           <main className="relative mx-auto max-w-7xl px-4 sm:py-4">
             <Navbar />
             <div className="flex mt-16 gap-14">
+              {/* 左カラム -- START */}
               <div className="max-w-7xl sm:w-2/3">
-                <div className="pb-3">
+                <section className="pb-3">
                   <div className="pb-2 mb-4">
                     <h2 className="title-section">参加予定のルーム</h2>
                   </div>
@@ -483,37 +369,8 @@ export default function Home() {
                       {sessions.map((session) =>
                         userInfo.uid == session.guestId ||
                         userInfo.uid == session.ownerId ? (
-                          <li key={session.sessionId}>
-                            <div className="w-full mb-5 bg-white rounded-md border border-gray-400 divide-y divide-gray-200">
-                              <div className="flex items-center justify-between p-4 space-x-6">
-                                <div className="flex-1 truncate">
-                                  <div className="flex items-center space-x-3">
-                                    <div className="flex items-center">
-                                      <h3 className="session-card-date">
-                                        {formatISOStringToDateTime(
-                                          session.startDateTime
-                                        )}
-                                        &nbsp;〜
-                                      </h3>
-                                    </div>
-                                  </div>
-                                  <div className="mt-1">
-                                    <span className="session-card-duration text-gray-500">
-                                      {`${session.duration} 分間 / 開催者：${session.ownerName}`}
-                                    </span>
-                                  </div>
-                                </div>
-                                <Link
-                                  href={`/session/${session.sessionId}/detail`}
-                                  key={session.sessionId}
-                                >
-                                  <a className="flex items-center py-3 hover:bg-gray-50">
-                                    <p className="text-bold">詳細</p>
-                                    <ChevronRightIcon className="w-6 h-6 " />
-                                  </a>
-                                </Link>
-                              </div>
-                            </div>
+                          <li key={session?.sessionId} className="mb-5">
+                            <ReservedRoomCard {...session} />
                           </li>
                         ) : (
                           <></>
@@ -525,8 +382,8 @@ export default function Home() {
                       現在、参加予定のルームはありません。
                     </div>
                   )}
-                </div>
-                <div className="py-3 mt-10">
+                </section>
+                <section className="py-3 mt-10">
                   <div className="flex sm:justify-end">
                     <div className="pb-2 mb-4 sm:w-1/3">
                       <h2 className="title-section">ルーム一覧</h2>
@@ -552,10 +409,13 @@ export default function Home() {
                     className="h-full overflow-y-auto"
                     aria-label="Directory"
                   >
-                    {renderSessionsGrid(sessions)}
+                    <ReservableRoomList reserveSession={reserveSession} sessions={sessions} {...userInfo} />
                   </nav>
-                </div>
+                </section>
               </div>
+              {/* 左カラム -- START */}
+              
+              {/* 右カラム -- START */}
               <div className="sm:w-1/3">
                 <div className="mb-8">
                   <h3 className="subtitle-section">ブックリスト</h3>
@@ -564,6 +424,7 @@ export default function Home() {
                   <h3 className="subtitle-section">みんなのリスト(人気)</h3>
                 </div>
               </div>
+              {/* 右カラム -- START */}
             </div>
           </main>
         </div>
