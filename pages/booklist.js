@@ -85,6 +85,20 @@ export default function BookList() {
     }
   )
 
+  // ブックリスト
+  const { data: bookList } = useSWR(
+    user ? '/api/user/' + user.uid + '/booklist' : null,
+    fetcher,
+    {
+      onErrorRetry: ({ retryCount }) => {
+        // Retry up to 10 times
+        if (retryCount >= 10) return
+      }
+    }
+  )
+
+  console.log(bookList)
+
   // ============================================================
   // Routing
   // ============================================================
