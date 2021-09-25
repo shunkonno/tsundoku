@@ -33,6 +33,7 @@ import {
 //dummy
 const books = [
   {
+    bid: 1,
     title: 'ふああ',
     authors: ['稲船', '松延'],
     isbn: '',
@@ -40,6 +41,7 @@ const books = [
       'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
   },
   {
+    bid: 2,
     title: 'わわ',
     authors: ['棚川'],
     isbn: '',
@@ -47,6 +49,7 @@ const books = [
       'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
   },
   {
+    bid: 3,
     title: 'やや',
     authors: '',
     isbn: '',
@@ -239,7 +242,7 @@ export default function BookList() {
       <div className="flow-root mt-6">
         <ul role="list" className="-my-5 divide-y divide-gray-200">
           {books.map((book) => (
-            <li className="py-4">
+            <li className="py-4" key={book.bid}>
               <div className="flex items-center space-x-4">
                 <div className="flex-shrink-0">
                   <Image
@@ -410,7 +413,7 @@ export default function BookList() {
                     {books.map((book) => (
                       <div
                         className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                        // key={book.title}
+                        key={book.bid}
                       >
                         <div className="flex-shrink-0">
                           <Image
