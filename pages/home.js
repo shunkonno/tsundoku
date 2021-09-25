@@ -6,7 +6,6 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Link from 'next/link'
 import useSWR from 'swr'
-import moment from 'moment'
 import { Steps, Hints } from 'intro.js-react'
 
 // Components
@@ -35,8 +34,6 @@ import { updateSession } from '../lib/db'
 import fetcher from '../utils/fetcher'
 import classNames from '../utils/classNames'
 import uselocalesFilter from '../utils/translate'
-import { formatISOStringToDate } from '../utils/formatDateTime'
-
 
 export default function Home() {
   // ============================================================
@@ -428,7 +425,7 @@ export default function Home() {
                 </section>
               </div>
               {/* 左カラム -- START */}
-              
+
               {/* 右カラム -- START */}
               <div className="sm:w-1/3">
                 <div className="mb-8">
