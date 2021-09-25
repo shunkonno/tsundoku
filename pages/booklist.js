@@ -155,6 +155,8 @@ export default function BookList() {
 
     console.log(book)
 
+    const date = new Date().toISOString()
+
     // ISBN-13があるならば、追加処理
     if (book.isbn13.length === 13) {
       // DB に本がすでに登録されている場合には、登録されている書籍情報が返却される
@@ -179,7 +181,7 @@ export default function BookList() {
         // user collection の bookList array に、新たに発行した bid を追加する
         // TODO: db-admin で arrayUnion() を利用した実装に変更する
         var updatedBookList = userInfo.bookList
-        updatedBookList[updatedBookList.length] = bid
+        updatedBookList[updatedBookList.length] = { bid, date }
 
         // bookList を更新する
         updateBookList(user.uid, updatedBookList)
@@ -194,7 +196,7 @@ export default function BookList() {
 
         // user collection の bookList array に、bid を追加する (bookInfo から取得)
         var updatedBookList = userInfo.bookList
-        updatedBookList[updatedBookList.length] = bookInfo.bid
+        updatedBookList[updatedBookList.length] = { bid: bookInfo.bid, date }
 
         // bookList を更新する
         updateBookList(user.uid, updatedBookList)
@@ -202,7 +204,10 @@ export default function BookList() {
     } else {
       // ISBN-13がないなら、books collection には追加せず、user にのみ紐付ける
       var updatedBookListWithoutISBN = userInfo.bookListWithoutISBN
-      updatedBookListWithoutISBN[updatedBookListWithoutISBN.length] = book
+      updatedBookListWithoutISBN[updatedBookListWithoutISBN.length] = {
+        bookInfo: book,
+        date
+      }
 
       updateBookListWithoutISBN(user.uid, updatedBookListWithoutISBN)
     }
