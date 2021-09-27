@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { HomeIcon, BookOpenIcon, UserGroupIcon } from '@heroicons/react/outline'
+import { HomeIcon, BookOpenIcon, UserGroupIcon, TrendingUpIcon } from '@heroicons/react/outline'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -10,7 +10,7 @@ function classNames(...classes) {
 var tabs = [
   { id:"home", text: 'ホーム', href: '/home', icon: HomeIcon },
   { id:"booklist", text: 'ブックリスト', href: '/booklist', icon: BookOpenIcon },
-  { id:"trend", text: '人気の本', href: '/trend', icon: UserGroupIcon },
+  { id:"trend", text: '人気の本', href: '/trend', icon: TrendingUpIcon },
 ]
 
 export default function Navbar() {
