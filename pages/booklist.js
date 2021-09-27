@@ -139,15 +139,6 @@ export default function BookList() {
     // ・ ISBNコードが存在する本のみ、追加することができる
     // ・ ISBN-13で本を管理することを想定している
 
-    // 連携データ形式
-    // book = {
-    //   bid: 'XXX',
-    //   title:'XXX',
-    //   authors: ['X','Y'],
-    //   isbn13: 'XXX',
-    //   image: 'XXX'
-    // }
-
     const date = new Date().toISOString()
 
     // ISBN-13があるならば、追加処理
@@ -174,7 +165,11 @@ export default function BookList() {
         // user collection の bookList array に、新たに発行した bid を追加する
         // TODO: db-admin で arrayUnion() を利用した実装に変更する
         var updatedBookList = userInfo.bookList
-        updatedBookList[updatedBookList.length] = { bid, date }
+        updatedBookList[updatedBookList.length] = {
+          bid,
+          date,
+          totalReadTime: 0
+        }
 
         // bookList を更新する
         updateBookList(user.uid, updatedBookList)
@@ -189,7 +184,11 @@ export default function BookList() {
 
         // user collection の bookList array に、bid を追加する (bookInfo から取得)
         var updatedBookList = userInfo.bookList
-        updatedBookList[updatedBookList.length] = { bid: bookInfo.bid, date }
+        updatedBookList[updatedBookList.length] = {
+          bid: bookInfo.bid,
+          date,
+          totalReadTime: 0
+        }
 
         // bookList を更新する
         updateBookList(user.uid, updatedBookList)
@@ -207,7 +206,8 @@ export default function BookList() {
       var updatedBookListWithoutISBN = userInfo.bookListWithoutISBN
       updatedBookListWithoutISBN[updatedBookListWithoutISBN.length] = {
         bid,
-        date
+        date,
+        totalReadTime: 0
       }
 
       updateBookListWithoutISBN(user.uid, updatedBookListWithoutISBN)
@@ -585,7 +585,7 @@ export default function BookList() {
       </div>
 
       <Footer />
-      
+
       {/* スマホ時、コンテンツとNavbarが重なるのを防ぐ */}
       <div className="h-16 sm:hidden bg-gray" />
     </div>
