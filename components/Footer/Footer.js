@@ -11,7 +11,7 @@ import {
   SelectorIcon,
   ChevronDownIcon
 } from '@heroicons/react/solid'
-import { SocialAccounts } from '../../accountsInfo'
+import { SocialAccounts } from '../../AccountsInfo'
 
 // Functions
 import { useAuth } from '../../lib/auth'
