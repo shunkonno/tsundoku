@@ -370,9 +370,9 @@ export default function Home() {
         <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
           <main className="relative mx-auto max-w-7xl px-4 sm:py-4">
             <Navbar />
-            <div className="flex mt-16 gap-14">
+            <div className="flex mt-8 sm:mt-16 gap-14">
               {/* 左カラム -- START */}
-              <div className="max-w-7xl sm:w-2/3">
+              <div className="max-w-7xl w-full sm:w-2/3">
                 <section className="pb-3">
                   <div className="pb-2 mb-4">
                     <h2 className="title-section">参加予定のルーム</h2>
@@ -397,23 +397,17 @@ export default function Home() {
                   )}
                 </section>
                 <section className="py-3 mt-10">
-                  <div className="flex sm:justify-end">
-                    <div className="pb-2 mb-4 sm:w-1/3">
+                  <div className="flex justify-between items-center">
+                    <div className="flex-shrink-0">
                       <h2 className="title-section">ルーム一覧</h2>
                     </div>
-                    <div className="w-full fixed z-50 -mx-4 sm:mx-0 bottom-0 shadow-lg sm:shadow-none sm:static">
-                      <div className="bg-white sm:bg-gray-50 px-6 sm:px-0 py-4 sm:py-0">
-                        <div className="flex justify-center sm:justify-end">
-                          <Link href="/session/new" passHref>
-                            <div className="block sm:inline-block w-full sm:w-auto py-2 border border-transparent text-base text-center font-bold rounded-md bg-gray-50 cursor-pointer text-tsundoku-blue-main hover:text-blue-700 focus:outline-none focus:ring-tsundoku-blue-main">
-                              <div className="flex">
-                                <PlusIcon className="w-6 h-6 inline-block mr-2" />
-                                <span>ルームを作成する</span>
-                              </div>
-                            </div>
-                          </Link>
-                        </div>
-                      </div>
+                    <div className="flex-1 flex justify-end">
+                        <Link href="/session/new" passHref>
+                          <a className="group inline-block w-auto py-2 text-base font-bold text-tsundoku-blue-main hover:text-blue-700">
+                            <PlusIcon className="w-6 h-6 inline-block mr-2" />
+                            <span>ルームを作成する</span>
+                          </a>
+                        </Link>
                     </div>
                   </div>
 
@@ -426,10 +420,10 @@ export default function Home() {
                   </nav>
                 </section>
               </div>
-              {/* 左カラム -- START */}
+              {/* 左カラム -- END */}
 
               {/* 右カラム -- START */}
-              <div className="sm:w-1/3">
+              <div className="hidden sm:block sm:w-1/3">
                 <section className="mb-8 bg-white border border-gray-500 px-2 py-3 rounded-lg">
                   <Link href='/booklist'>
                     <a 
@@ -449,7 +443,7 @@ export default function Home() {
                               className="w-5 h-5 mr-2 inline-block bg-tsundoku-blue-main rounded-full"
                               aria-hidden="true"
                             />
-                            <p className="text-gray-500">{bookInfo.title}</p>
+                            <p className="text-gray-500">{bookInfo?.title}</p>
                           </div>
                         </li>
                       )
@@ -476,6 +470,9 @@ export default function Home() {
       </div>
 
       <Footer />
+
+      {/* スマホ時、コンテンツとNavbarが重なるのを防ぐ */}
+      <div className="h-16 sm:hidden bg-gray" />
     </div>
   )
 }
