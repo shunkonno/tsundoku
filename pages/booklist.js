@@ -16,7 +16,8 @@ import { Navbar } from '../components/Navbar'
 
 // Assets
 import { Dialog, Menu, Transition } from '@headlessui/react'
-import { PlusSmIcon, SearchIcon, XIcon, DotsVerticalIcon, TrashIcon } from '@heroicons/react/solid'
+import { PlusSmIcon, SearchIcon, XIcon, DotsVerticalIcon } from '@heroicons/react/solid'
+import { TrashIcon } from '@heroicons/react/outline'
 
 // Functions
 import { useAuth } from '../lib/auth'
@@ -234,7 +235,7 @@ export default function BookList() {
                 <div>
                   <button
                     value={book}
-                    className="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50"
+                    className="inline-flex items-center shadow-sm px-3 py-1 border border-blue-600 text-base leading-5 font-medium rounded-full text-blue-600 bg-white hover:border-blue-500 hover:bg-blue-500 hover:text-white"
                     onClick={(e) => {
                       addBookToList(e, book)
                     }}
@@ -331,7 +332,7 @@ export default function BookList() {
                             </div>
                             <input
                               type="text"
-                              className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                              className="focus:ring-tsundoku-blue-main focus:border-tsundoku-blue-main block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
                               placeholder="ここに入力"
                               onInput={(input) =>
                                 input.target.value.length > 1
@@ -372,7 +373,7 @@ export default function BookList() {
                   onClick={() => setModalOpen(true)}
                 >
                   <PlusSmIcon className="w-6 h-6 text-blue-500" />
-                  <span className="text-blue-500 text-sm">本を追加する</span>
+                  <span className="text-blue-500 text-sm">リストに追加する</span>
                 </button>
               </div>
 
@@ -393,7 +394,7 @@ export default function BookList() {
                             alt=""
                           />
                         </div>
-                        <div className="flex-1">
+                        <div className="flex-1 overflow-hidden">
                           <div className="flex flex-col justify-between h-full">
                             <div className="focus:outline-none">
                               <p className="text-lg font-medium text-gray-900">
@@ -433,7 +434,7 @@ export default function BookList() {
                                 leaveFrom="transform opacity-100 scale-100"
                                 leaveTo="transform opacity-0 scale-95"
                               >
-                                <Menu.Items className="absolute right-0 w-36 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                <Menu.Items className="absolute right-0 w-40 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                   <div className="px-1 py-1">
                                     <Menu.Item>
                                       {({ active }) => (
@@ -446,7 +447,7 @@ export default function BookList() {
                                             className="w-5 h-5 mr-2 text-red-500"
                                             aria-hidden="true"
                                           />
-                                          本を削除する
+                                          リストから削除
                                         </button>
                                       )}
                                     </Menu.Item>
