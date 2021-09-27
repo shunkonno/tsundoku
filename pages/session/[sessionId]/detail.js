@@ -176,14 +176,15 @@ export default function SessionDetail({ session }) {
     })
   }
 
-  const joinSession = async (e) => {
-    e.preventDefault()
+  const joinSession = async () => {
+    // e.preventDefault()
 
     // ユーザーが現在読んでいる本に、読書時間を加算する
     const bid = userInfo?.isReading
 
     if (bid) {
       addReadTime(user?.uid, bid, Number(session?.duration))
+      console.log("Added Book: ", bid)
     }
 
     // await router.push({
@@ -195,6 +196,10 @@ export default function SessionDetail({ session }) {
   // ============================================================
   // Return Page
   // ============================================================
+  if (user === null || !userInfo || !session) {
+    return <div>Waiting..</div>
+  }
+
   return (
     <div>
       <Head>
@@ -281,14 +286,17 @@ export default function SessionDetail({ session }) {
             <div className="flex justify-between items-start py-6">
               <div className="flex">
                 {enterRoomOpen ? (
-                  <a href={`/session/${session?.sessionId}/join`}>
-                    <span
-                      type="button"
-                      className="cursor-pointer inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
+                    <a 
+                      href={`/ja/session/${session?.sessionId}/join`} 
+                      onClick={()=> joinSession()}
                     >
-                      ルームに入室する
-                    </span>
-                  </a>
+                      <span
+                        type="button"
+                        className="cursor-pointer inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
+                      >
+                        ルームに入室する
+                      </span>
+                    </a>
                 ) : (
                   <div>
                     <span
