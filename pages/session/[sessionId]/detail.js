@@ -24,7 +24,7 @@ import { PlusSmIcon, ChevronLeftIcon } from '@heroicons/react/solid'
 import uselocalesFilter from '../../../utils/translate'
 import { useAuth } from '../../../lib/auth'
 import fetcher from '../../../utils/fetcher'
-import { updateSession, deleteSession } from '../../../lib/db'
+import { updateSession, deleteSession, addReadTime } from '../../../lib/db'
 import { fetchOneSession, fetchAllSessions } from '../../../lib/db-admin'
 
 // ============================================================
@@ -176,6 +176,22 @@ export default function SessionDetail({ session }) {
     })
   }
 
+  const joinSession = async (e) => {
+    e.preventDefault()
+
+    // ユーザーが現在読んでいる本に、読書時間を加算する
+    const bid = userInfo?.isReading
+
+    if (bid) {
+      addReadTime(user?.uid, bid, Number(session?.duration))
+    }
+
+    // await router.push({
+    //   pathname: '/session/[sessionId]/join',
+    //   query: { sessionId: session?.sessionId }
+    // })
+  }
+
   // ============================================================
   // Return Page
   // ============================================================
@@ -185,7 +201,7 @@ export default function SessionDetail({ session }) {
         <title>Tsundoku | ルーム詳細</title>
         <meta
           name="description"
-          content="一緒に読書してくれる誰かを探すためのマッチングサービス"
+          content="Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。集中した読書は自己研鑽だけでなく、リラックス効果もあります。"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
