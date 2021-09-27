@@ -4,6 +4,12 @@ import moment from 'moment'
 export const formatISOStringToDateTime = (IsoString) => {
   return moment(IsoString).format('M月D日 H:mm')
 }
+
+// ISOString を 月、日 に変換 (例：10月12日)
+export const formatISOStringToDateTimeWithSlash = (IsoString) => {
+  return moment(IsoString).format('YYYY/M/D H:mm')
+}
+
 // ISOString を 月、日 に変換 (例：10月12日)
 export const formatISOStringToDate = (IsoString) => {
   return moment(IsoString).format('M月D日')
