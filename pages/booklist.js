@@ -413,7 +413,7 @@ export default function BookList() {
                         className={classNames(
                           bookInfo.bid == userInfo.isReading ? "ring-2 ring-tsundoku-blue-main"
                           : "border border-gray-300",
-                          "relative overflow-hidden rounded-lg bg-white px-6 pt-4 pb-4 shadow-sm flex hover:border-gray-400"
+                          "relative h-40 overflow-hidden rounded-lg bg-white px-6 pt-4 pb-4 shadow-sm flex hover:border-gray-400"
                         )}
                         key={bookInfo.bid}
                       >
