@@ -441,7 +441,7 @@ export default function Home() {
                   </Link>
                   <ul className="px-2 mb-4">
                   {
-                    bookList?.map(book => {
+                    bookList?.map(({bookInfo}) => {
                       return (
                         <li className="mb-2">
                           <div className="flex items-center">
@@ -449,7 +449,7 @@ export default function Home() {
                               className="w-5 h-5 mr-2 inline-block bg-tsundoku-blue-main rounded-full"
                               aria-hidden="true"
                             />
-                            <p className="text-gray-500">{book.title}</p>
+                            <p className="text-gray-500">{bookInfo.title}</p>
                           </div>
                         </li>
                       )

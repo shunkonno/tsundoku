@@ -387,17 +387,17 @@ export default function BookList() {
               <div>
                 {
                   <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-                    {bookList?.map((book) => (
+                    {bookList?.map(({bookInfo,date}) => (
                       <div
                         className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex space-x-6 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-tsundoku-blue-main"
-                        key={book.bid}
+                        key={bookInfo.bid}
                       >
                         <div className="flex-shrink-0">
                           <Image
                             className="h-full w-6"
                             width={90}
                             height={120}
-                            src={book.image}
+                            src={bookInfo.image}
                             alt=""
                           />
                         </div>
@@ -405,10 +405,10 @@ export default function BookList() {
                           <div className="flex flex-col justify-between h-full">
                             <div className="focus:outline-none">
                               <p className="text-lg font-medium text-gray-900">
-                                {book.title}
+                                {bookInfo.title}
                               </p>
-                              {Array.isArray(book.authors) &&
-                                book.authors.map((author) => {
+                              {Array.isArray(bookInfo.authors) &&
+                                bookInfo.authors.map((author) => {
                                   return (
                                     <p
                                       className="text-sm text-gray-500 truncate"
@@ -420,7 +420,7 @@ export default function BookList() {
                                 })}
                             </div>
                             <div className="text-sm text-gray-500 truncate">
-                              {formatISOStringToDateTimeWithSlash(book.date)}{' '}
+                              {formatISOStringToDateTimeWithSlash(date)}{' '}
                               追加
                             </div>
                           </div>
