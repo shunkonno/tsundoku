@@ -3,9 +3,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { HomeIcon, BookOpenIcon, UserGroupIcon, TrendingUpIcon } from '@heroicons/react/outline'
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
+import classNames from '../../utils/classNames'
 
 var tabs = [
   { id:"home", text: 'ホーム', href: '/home', icon: HomeIcon },
@@ -29,35 +27,61 @@ export default function Navbar() {
 
   return (
     <div>
-      <div className="hidden sm:block">
-        <div className="">
-          <nav className="-mb-px flex justify-center" aria-label="Tabs">
-            {tabs.map((tab) => (
-              <div key={tab.text} className="group w-1/4">
-                <Link href={tab.href}>
-                  <a
+      <div className="block sm:hidden w-full fixed bottom-0 z-20 -mx-4 bg-white">
+        <nav className="flex">
+          {tabs.map((tab) => (
+            <div key={tab.text} className="group w-1/3 sm:w-1/4">
+              <Link href={tab.href}>
+                <a
+                  className={classNames(
+                    tab.id == currentPage
+                      ? 'border-tsundoku-blue-main text-tsundoku-blue-main'
+                      : 'border-transparent text-gray-500 group-hover:text-gray-700 group-hover:border-gray-300',
+                    'flex flex-col sm:flex-row items-center justify-center py-2 sm:py-4 border-t-2 sm:border-b-2 border-gray-200 font-medium text-sm'
+                  )}
+                  aria-current={tab.current ? 'page' : undefined}
+                >
+                  <tab.icon
                     className={classNames(
-                      tab.id == currentPage
-                        ? 'border-tsundoku-blue-main text-tsundoku-blue-main'
-                        : 'border-transparent text-gray-500 group-hover:text-gray-700 group-hover:border-gray-300',
-                      'flex items-center justify-center py-4  border-b-2 border-gray-200 font-medium text-sm'
+                      tab.id == currentPage ? 'text-tsundoku-blue-main' : 'text-gray-500 group-hover:text-gray-700',
+                      'block sm:inline-block -ml-0.5 sm:mr-2 w-7 h-7 sm:h-5 sm:w-5'
                     )}
-                    aria-current={tab.current ? 'page' : undefined}
-                  >
-                    <tab.icon
-                      className={classNames(
-                        tab.id == currentPage ? 'text-tsundoku-blue-main' : 'text-gray-500 group-hover:text-gray-700',
-                        'inline-block -ml-0.5 mr-2 h-5 w-5'
-                      )}
-                      aria-hidden="true"
-                    />
-                    <span>{tab.text}</span>
-                  </a>
-                </Link>
-                </div>
-            ))}
-          </nav>
-        </div>
+                    aria-hidden="true"
+                  />
+                  <span className="block text-xs">{tab.text}</span>
+                </a>
+              </Link>
+              </div>
+          ))}
+        </nav>
+      </div>
+      <div className="hidden sm:block">
+        <nav className="-mb-px flex justify-center" aria-label="Tabs">
+          {tabs.map((tab) => (
+            <div key={tab.text} className="group w-1/4">
+              <Link href={tab.href}>
+                <a
+                  className={classNames(
+                    tab.id == currentPage
+                      ? 'border-tsundoku-blue-main text-tsundoku-blue-main'
+                      : 'border-transparent text-gray-500 group-hover:text-gray-700 group-hover:border-gray-300',
+                    'flex items-center justify-center py-4  border-b-2 border-gray-200 font-medium text-sm'
+                  )}
+                  aria-current={tab.current ? 'page' : undefined}
+                >
+                  <tab.icon
+                    className={classNames(
+                      tab.id == currentPage ? 'text-tsundoku-blue-main' : 'text-gray-500 group-hover:text-gray-700',
+                      'inline-block -ml-0.5 mr-2 h-5 w-5'
+                    )}
+                    aria-hidden="true"
+                  />
+                  <span>{tab.text}</span>
+                </a>
+              </Link>
+              </div>
+          ))}
+        </nav>
       </div>
     </div>
   )
