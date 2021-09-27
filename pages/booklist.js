@@ -380,7 +380,7 @@ export default function BookList() {
             <Navbar />
 
             <div className="mb-24">
-              <div className="flex justify-between mt-12 py-5">
+              <div className="flex justify-between sm:mt-12 py-5">
                 <h1 className="title-section">ブックリスト</h1>
                 <button
                   className="flex items-center"
@@ -585,6 +585,9 @@ export default function BookList() {
       </div>
 
       <Footer />
+      
+      {/* スマホ時、コンテンツとNavbarが重なるのを防ぐ */}
+      <div className="h-16 sm:hidden bg-gray" />
     </div>
   )
 }

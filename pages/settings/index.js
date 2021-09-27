@@ -1,7 +1,7 @@
 // ============================================================
 // Import
 // ============================================================
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import useSWR from 'swr'
@@ -9,6 +9,9 @@ import useSWR from 'swr'
 // Components
 import { AppHeader } from '../../components/Header'
 import { Footer } from '../../components/Footer'
+
+//Context
+import { AppContext } from '../../context/state'
 
 // Assets
 import { Transition, RadioGroup } from '@headlessui/react'
@@ -49,8 +52,11 @@ export default function UserSettings() {
     genderOfMatchSettings[0]
   )
 
-  const [alertOpen, setAlertOpen] = useState(false)
-  const [alertAssort, setAlertAssort] = useState('') // update
+  // ============================================================
+  // Contexts
+  // ============================================================
+  const { alertOpen, setAlertOpen, alertAssort, setAlertAssort } =
+    useContext(AppContext)
 
   // ============================================================
   // Auth
@@ -87,32 +93,31 @@ export default function UserSettings() {
     } else if (userInfo) {
       // 認証されているなら、ユーザー情報を state に反映
       userInfo.name ? setUserName(userInfo.name) : setUserName('')
-      setGenderSelected(userInfo?.gender)
+      setGenderSelected(userInfo.gender)
     }
   }, [router, user, userInfo])
 
   // Translate
   const t = uselocalesFilter('userSettings', router.locale)
 
+  
   // ============================================================
-  // Handle Alert
+  // Alert Handlers
   // ============================================================
 
   // アラート
-  const alertControl = async (alertAssort) => {
-    await setAlertOpen(true)
-    await setAlertAssort(alertAssort)
-    setTimeout(async () => {
-      await setAlertOpen(false)
-    }, 5000)
-  }
-
-  // パラメータによるアラート制御
   useEffect(() => {
-    if (router.query.successUpdateUserSettings == 'true') {
-      alertControl('update')
+    if (alertAssort) {
+      setAlertOpen(true)
+      setTimeout(async () => {
+        await setAlertOpen(false)
+        await setAlertAssort('')
+      }, 5000)
+    } else {
+      setAlertAssort('')
     }
-  }, [router.query.successUpdateUserSettings])
+  }, [alertAssort, setAlertAssort, setAlertOpen])
+  
 
   // ============================================================
   // Handle Form Submit
@@ -127,13 +132,16 @@ export default function UserSettings() {
       gender: genderSelected
     })
 
+    // アラートの設定
+    await setAlertAssort('updateUserSetting')
+
+  //ページのリフレッシュ
     await router.push({
       pathname: '/empty'
     })
 
-    await router.push({
-      pathname: '/settings',
-      query: { successUpdateUserSettings: true }
+    await router.replace({
+      pathname: '/settings'
     })
   }
 
@@ -172,7 +180,7 @@ export default function UserSettings() {
                     <button
                       type="button"
                       className="inline-flex bg-green-50 rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"
-                      onClick={() => setUpdateUserSettingsAlertOpen(false)}
+                      onClick={() => setAlertOpen(false)}
                     >
                       <span className="sr-only">Dismiss</span>
                       <XIcon className="h-5 w-5" aria-hidden="true" />
