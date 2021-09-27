@@ -11,7 +11,7 @@ import { Steps, Hints } from 'intro.js-react'
 // Components
 import { AppHeader } from '../components/Header'
 import { Footer } from '../components/Footer'
-import { Disclosure, Transition } from '@headlessui/react'
+import { Transition } from '@headlessui/react'
 import { Navbar } from '../components/Navbar'
 import { ReservedRoomCard } from '../components/Card'
 import { ReservableRoomList } from '../components/List'
@@ -85,7 +85,7 @@ export default function Home() {
     }
   )
 
-  console.log(bookList)
+  console.log('bookList: ',bookList)
 
   // ============================================================
   // Routing
