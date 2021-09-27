@@ -16,7 +16,13 @@ import { Navbar } from '../components/Navbar'
 
 // Assets
 import { Dialog, Menu, Transition } from '@headlessui/react'
-import { PlusSmIcon, SearchIcon, XIcon, DotsVerticalIcon, TrashIcon } from '@heroicons/react/solid'
+import {
+  PlusSmIcon,
+  SearchIcon,
+  XIcon,
+  DotsVerticalIcon,
+  TrashIcon
+} from '@heroicons/react/solid'
 
 // Functions
 import { useAuth } from '../lib/auth'
@@ -72,7 +78,7 @@ export default function BookList() {
       }
     }
   )
-  console.log('bookList: ',bookList)
+  console.log('bookList: ', bookList)
 
   // ============================================================
   // Routing
@@ -412,7 +418,8 @@ export default function BookList() {
                                 })}
                             </div>
                             <div className="text-sm text-gray-500 truncate">
-                              {formatISOStringToDateTimeWithSlash(book.date)} 追加
+                              {formatISOStringToDateTimeWithSlash(book.date)}{' '}
+                              追加
                             </div>
                           </div>
                         </div>
@@ -459,7 +466,7 @@ export default function BookList() {
                             <Menu as="div" className="relative inline-block">
                               <div>
                                 <Menu.Button className="inline-flex">
-                                  <div className=" text-blue-500 hover:text-blue-400 text-lg rounded-lg" >
+                                  <div className=" text-blue-500 hover:text-blue-400 text-lg rounded-lg">
                                     進捗
                                   </div>
                                 </Menu.Button>
