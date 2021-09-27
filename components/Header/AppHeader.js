@@ -44,6 +44,15 @@ export default function AppHeader() {
   const t = uselocalesFilter('header', locale)
 
   // ============================================================
+  // Button Handler
+  // ============================================================
+
+  const handleLogout = () => {
+    auth.signout()
+    router.push('/')
+  }
+
+  // ============================================================
   // Render Function
   // ============================================================
   const renderHeaderButton = () => {
