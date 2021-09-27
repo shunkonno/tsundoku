@@ -87,7 +87,7 @@ export default function Home() {
     }
   )
 
-  console.log('bookList: ',bookList)
+  console.log('bookList: ', bookList)
 
   // ============================================================
   // Routing
@@ -99,10 +99,7 @@ export default function Home() {
     if (user === false) {
       // 認証されていないユーザーは、index へリダイレクト
       router.push('/')
-    } else if (userInfo && !('name' in userInfo)) {
-      // 想定
-      // ・ はじめてログインしたユーザーは、name をもっていない
-
+    } else if (userInfo?.isNewUser) {
       // はじめてログインしたユーザーを設定画面へリダイレクト
       router.push('/settings/new')
     }
@@ -124,6 +121,10 @@ export default function Home() {
     },
     {
       element: '.onboarding-2',
+      intro: '予約したルームはここに表示されます。'
+    },
+    {
+      element: '.onboarding-3',
       intro: '都合の合うルームがなかったら、ルームを作成しましょう。'
     }
   ]
@@ -375,7 +376,9 @@ export default function Home() {
               <div className="max-w-7xl w-full sm:w-2/3">
                 <section className="pb-3">
                   <div className="pb-2 mb-4">
-                    <h2 className="title-section">参加予定のルーム</h2>
+                    <h2 className="title-section onboarding-2">
+                      参加予定のルーム
+                    </h2>
                   </div>
                   {userIsOwnerOrGuest ? (
                     <ul role="list" className="">
@@ -399,15 +402,15 @@ export default function Home() {
                 <section className="py-3 mt-10">
                   <div className="flex justify-between items-center">
                     <div className="flex-shrink-0">
-                      <h2 className="title-section">ルーム一覧</h2>
+                      <h2 className="title-section onboarding-1">ルーム一覧</h2>
                     </div>
                     <div className="flex-1 flex justify-end">
-                        <Link href="/session/new" passHref>
-                          <a className="group inline-block w-auto py-2 text-base font-bold text-tsundoku-blue-main hover:text-blue-700">
-                            <PlusIcon className="w-6 h-6 inline-block mr-2" />
-                            <span>ルームを作成する</span>
-                          </a>
-                        </Link>
+                      <Link href="/session/new" passHref>
+                        <a className="group inline-block w-auto py-2 text-base font-bold text-tsundoku-blue-main hover:text-blue-700 onboarding-3">
+                          <PlusIcon className="w-6 h-6 inline-block mr-2" />
+                          <span>ルームを作成する</span>
+                        </a>
+                      </Link>
                     </div>
                   </div>
 
@@ -416,7 +419,11 @@ export default function Home() {
                     className="h-full overflow-y-auto"
                     aria-label="Directory"
                   >
-                    <ReservableRoomList reserveSession={reserveSession} sessions={sessions} {...userInfo} />
+                    <ReservableRoomList
+                      reserveSession={reserveSession}
+                      sessions={sessions}
+                      {...userInfo}
+                    />
                   </nav>
                 </section>
               </div>
@@ -425,17 +432,14 @@ export default function Home() {
               {/* 右カラム -- START */}
               <div className="hidden sm:block sm:w-1/3">
                 <section className="mb-8 bg-white border border-gray-500 px-2 py-3 rounded-lg">
-                  <Link href='/booklist'>
-                    <a 
-                      className="flex justify-between items-center mb-2 px-2 py-2 rounded-lg hover:bg-gray-100"
-                    >
+                  <Link href="/booklist">
+                    <a className="flex justify-between items-center mb-2 px-2 py-2 rounded-lg hover:bg-gray-100">
                       <h3 className="subtitle-section">ブックリスト</h3>
                       <ChevronRightIcon className="w-6 h-6 -mr-1.5" />
                     </a>
                   </Link>
                   <ul className="px-2 mb-4">
-                  {
-                    bookList?.map(({bookInfo}) => {
+                    {bookList?.map(({ bookInfo }) => {
                       return (
                         <li className="mb-2">
                           <div className="flex items-center">
@@ -447,14 +451,15 @@ export default function Home() {
                           </div>
                         </li>
                       )
-                    })
-                  }
+                    })}
                   </ul>
                   <div className="flex justify-end px-2">
                     <Link href="/booklist">
                       <a className="group flex items-center space-x-1">
-                        <PlusCircleIcon className="w-5 h-5 text-gray-700 group-hover:text-gray-600"/>
-                        <span className="text-sm text-gray-500 group-hover:text-gray-400">リストに追加する</span>
+                        <PlusCircleIcon className="w-5 h-5 text-gray-700 group-hover:text-gray-600" />
+                        <span className="text-sm text-gray-500 group-hover:text-gray-400">
+                          リストに追加する
+                        </span>
                       </a>
                     </Link>
                   </div>
