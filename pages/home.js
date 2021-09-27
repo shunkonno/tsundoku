@@ -25,6 +25,7 @@ import {
   CheckCircleIcon,
   ExclamationIcon,
   XIcon,
+  PlusCircleIcon
 } from '@heroicons/react/solid'
 import 'intro.js/introjs.css'
 
@@ -34,6 +35,7 @@ import { updateSession } from '../lib/db'
 import fetcher from '../utils/fetcher'
 import classNames from '../utils/classNames'
 import uselocalesFilter from '../utils/translate'
+import { ChevronRightIcon } from '@heroicons/react/outline'
 
 export default function Home() {
   // ============================================================
@@ -428,12 +430,44 @@ export default function Home() {
 
               {/* 右カラム -- START */}
               <div className="sm:w-1/3">
-                <div className="mb-8">
-                  <h3 className="subtitle-section">ブックリスト</h3>
-                </div>
-                <div className="mb-8">
+                <section className="mb-8 bg-white border border-gray-500 px-2 py-3 rounded-lg">
+                  <Link href='/booklist'>
+                    <a 
+                      className="flex justify-between items-center mb-2 px-2 py-2 rounded-lg hover:bg-gray-100"
+                    >
+                      <h3 className="subtitle-section">ブックリスト</h3>
+                      <ChevronRightIcon className="w-6 h-6 -mr-1.5" />
+                    </a>
+                  </Link>
+                  <ul className="px-2 mb-4">
+                  {
+                    bookList?.map(book => {
+                      return (
+                        <li className="mb-2">
+                          <div className="flex items-center">
+                            <span
+                              className="w-5 h-5 mr-2 inline-block bg-tsundoku-blue-main rounded-full"
+                              aria-hidden="true"
+                            />
+                            <p className="text-gray-500">{book.title}</p>
+                          </div>
+                        </li>
+                      )
+                    })
+                  }
+                  </ul>
+                  <div className="flex justify-end px-2">
+                    <Link href="/booklist">
+                      <a className="group flex items-center space-x-1">
+                        <PlusCircleIcon className="w-5 h-5 text-gray-700 group-hover:text-gray-600"/>
+                        <span className="text-sm text-gray-500 group-hover:text-gray-400">リストに追加する</span>
+                      </a>
+                    </Link>
+                  </div>
+                </section>
+                <section className="mb-8">
                   <h3 className="subtitle-section">みんなのリスト(人気)</h3>
-                </div>
+                </section>
               </div>
               {/* 右カラム -- START */}
             </div>
