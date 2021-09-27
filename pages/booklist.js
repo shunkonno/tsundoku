@@ -22,7 +22,7 @@ import {
   XIcon,
   DotsVerticalIcon
 } from '@heroicons/react/solid'
-import { TrashIcon } from '@heroicons/react/outline'
+import { BookOpenIcon, TrashIcon } from '@heroicons/react/outline'
 
 // Functions
 import { useAuth } from '../lib/auth'
@@ -34,9 +34,11 @@ import {
   addBookWithoutISBN,
   fetchBookInfo,
   updateBookListCount,
-  updateBookListWithoutISBN
+  updateBookListWithoutISBN,
+  updateIsReading
 } from '../lib/db'
 import { formatISOStringToDateTimeWithSlash } from '../utils/formatDateTime'
+import classNames from '../utils/classNames'
 
 export default function BookList() {
   // ============================================================
@@ -215,6 +217,16 @@ export default function BookList() {
 
     await router.push('/empty')
     await router.replace('/booklist')
+  }
+
+  const selectReadingBook = async(e, bid) => {
+    e.preventDefault()
+
+    await updateIsReading (user.uid, bid)
+
+    await router.push('/empty')
+    await router.replace('/booklist')
+
   }
 
   // ============================================================
@@ -398,19 +410,30 @@ export default function BookList() {
                   <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
                     {bookList?.map(({ bookInfo, date }) => (
                       <div
-                        className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex space-x-6 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-tsundoku-blue-main"
+                        className={classNames(
+                          bookInfo.bid == userInfo.isReading ? "ring-2 ring-tsundoku-blue-main"
+                          : "border border-gray-300",
+                          "relative overflow-hidden rounded-lg bg-white px-6 pt-4 pb-4 shadow-sm flex hover:border-gray-400"
+                        )}
                         key={bookInfo.bid}
                       >
-                        <div className="flex-shrink-0">
+                        {bookInfo.bid == userInfo?.isReading &&
+                        <span class="absolute top-0 left-0 inline-flex items-center -mt-px px-2.5 py-1 rounded-br-md text-sm font-medium bg-indigo-100 text-blue-800">
+                          <svg class=" -ml-0.5 mr-1.5 h-2 w-2 text-blue-400" fill="currentColor" viewBox="0 0 8 8">
+                            <circle cx="4" cy="4" r="3" />
+                          </svg>
+                          現在読んでいる本
+                        </span>
+                        }
+                        <div className="flex-shrink-0 mt-4 relative w-20">
                           <Image
-                            className="h-full w-6"
-                            width={90}
-                            height={120}
+                            className=""
+                            layout={"fill"}
                             src={bookInfo.image}
                             alt=""
                           />
                         </div>
-                        <div className="flex-1 overflow-hidden">
+                        <div className="flex-1 overflow-hidden ml-6 mt-4">
                           <div className="flex flex-col justify-between h-full">
                             <div className="focus:outline-none">
                               <p className="text-lg font-medium text-gray-900">
@@ -450,8 +473,24 @@ export default function BookList() {
                                 leaveFrom="transform opacity-100 scale-100"
                                 leaveTo="transform opacity-0 scale-95"
                               >
-                                <Menu.Items className="absolute right-0 w-40 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                <Menu.Items className="absolute z-10 right-0 w-64 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                   <div className="px-1 py-1">
+                                    <Menu.Item>
+                                      {({ active }) => (
+                                        <button
+                                          className={`${
+                                            active ? 'bg-gray-100' : ''
+                                          } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+                                          onClick={(e)=>selectReadingBook(e,bookInfo.bid)}
+                                        >
+                                          <BookOpenIcon
+                                            className="w-5 h-5 mr-2 text-gray-900"
+                                            aria-hidden="true"
+                                          />
+                                          『現在読んでいる本』にする
+                                        </button>
+                                      )}
+                                    </Menu.Item>
                                     <Menu.Item>
                                       {({ active }) => (
                                         <button
