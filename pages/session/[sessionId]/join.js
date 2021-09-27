@@ -81,10 +81,10 @@ export default function Session() {
       />
 
       <Head>
-        <title>JOIN</title>
+        <title>Tsundoku | ルーム</title>
         <meta
           name="description"
-          content="一緒に読書してくれる誰かを探すためのマッチングサービス"
+          content="Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。集中した読書は自己研鑽だけでなく、リラックス効果もあります。"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
