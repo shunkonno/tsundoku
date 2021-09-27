@@ -31,6 +31,7 @@ import uselocalesFilter from '../utils/translate'
 import {
   updateBookList,
   addBook,
+  addBookWithoutISBN,
   fetchBookInfo,
   updateBookListCount,
   updateBookListWithoutISBN
@@ -194,10 +195,18 @@ export default function BookList() {
         updateBookList(user.uid, updatedBookList)
       }
     } else {
-      // ISBN-13がないなら、books collection には追加せず、user にのみ紐付ける
+      // ISBN-13がないなら、books collection には追加しない
+      const bid = nanoid(10)
+
+      // bid を設定する
+      book.bid = bid
+
+      // booksWithoutISBN collection に追加する
+      addBookWithoutISBN(bid, book)
+
       var updatedBookListWithoutISBN = userInfo.bookListWithoutISBN
       updatedBookListWithoutISBN[updatedBookListWithoutISBN.length] = {
-        bookInfo: book,
+        bid,
         date
       }
 
@@ -387,7 +396,7 @@ export default function BookList() {
               <div>
                 {
                   <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-                    {bookList?.map(({bookInfo,date}) => (
+                    {bookList?.map(({ bookInfo, date }) => (
                       <div
                         className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex space-x-6 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-tsundoku-blue-main"
                         key={bookInfo.bid}
@@ -420,8 +429,7 @@ export default function BookList() {
                                 })}
                             </div>
                             <div className="text-sm text-gray-500 truncate">
-                              {formatISOStringToDateTimeWithSlash(date)}{' '}
-                              追加
+                              {formatISOStringToDateTimeWithSlash(date)} 追加
                             </div>
                           </div>
                         </div>

@@ -1,4 +1,8 @@
-import { fetchUser, fetchOneBook } from '../../../../lib/db-admin'
+import {
+  fetchUser,
+  fetchOneBook,
+  fetchOneBookWithoutISBN
+} from '../../../../lib/db-admin'
 
 // INPUT: uid
 // OUTPUT: ユーザーのブックリストをもとに、各書籍の詳細情報を返却
@@ -9,20 +13,26 @@ const booklistApiHandler = async (req, res) => {
     const userInfo = await fetchUser(req.query.uid)
 
     // bookList を抽出
-    var bookList = userInfo.bookList
+    const bookList = userInfo.bookList
+    const bookListWithoutISBN = userInfo.bookListWithoutISBN
 
     // 空のリストを作成
     const bookListDetail = []
 
     // bookList の書籍詳細を取得し、リストに追加
-    for (const item of bookList) {
-      const bookInfo = await fetchOneBook(item.bid)
-      bookListDetail.push({ bookInfo: bookInfo, date: item.date })
+    if (bookList.length > 0) {
+      for (const item of bookList) {
+        const bookInfo = await fetchOneBook(item.bid)
+        bookListDetail.push({ bookInfo: bookInfo, date: item.date })
+      }
     }
 
     // ISBN のない本の情報をリストに追加
-    for (const bookWithoutISBN of userInfo.bookListWithoutISBN) {
-      bookListDetail.push(bookWithoutISBN)
+    if (bookListWithoutISBN.length > 0) {
+      for (const item of bookListWithoutISBN) {
+        const bookInfo = await fetchOneBookWithoutISBN(item.bid)
+        bookListDetail.push({ bookInfo: bookInfo, date: item.date })
+      }
     }
 
     // ISBN の有無を問わず、リスト追加日順に並び替え
