@@ -15,8 +15,8 @@ import { Footer } from '../components/Footer'
 import { Navbar } from '../components/Navbar'
 
 // Assets
-import { Dialog, Transition } from '@headlessui/react'
-import { PlusSmIcon, SearchIcon, XIcon } from '@heroicons/react/solid'
+import { Dialog, Menu, Transition } from '@headlessui/react'
+import { PlusSmIcon, SearchIcon, XIcon, DotsVerticalIcon, TrashIcon } from '@heroicons/react/solid'
 
 // Functions
 import { useAuth } from '../lib/auth'
@@ -29,34 +29,7 @@ import {
   updateBookListCount,
   updateBookListWithoutISBN
 } from '../lib/db'
-
-//dummy
-const books = [
-  {
-    bid: 1,
-    title: 'ふああ',
-    authors: ['稲船', '松延'],
-    isbn: '',
-    image:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-  },
-  {
-    bid: 2,
-    title: 'わわ',
-    authors: ['棚川'],
-    isbn: '',
-    image:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-  },
-  {
-    bid: 3,
-    title: 'やや',
-    authors: '',
-    isbn: '',
-    image:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-  }
-]
+import { formatISOStringToDateTimeWithSlash } from '../utils/formatDateTime'
 
 export default function BookList() {
   // ============================================================
@@ -99,8 +72,7 @@ export default function BookList() {
       }
     }
   )
-
-  console.log(bookList)
+  console.log('bookList: ',bookList)
 
   // ============================================================
   // Routing
@@ -144,7 +116,6 @@ export default function BookList() {
       }
     })
 
-    console.log(items)
     setSearchedBooks(items)
 
     return items
@@ -169,8 +140,6 @@ export default function BookList() {
     //   isbn13: 'XXX',
     //   image: 'XXX'
     // }
-
-    console.log(book)
 
     const date = new Date().toISOString()
 
@@ -395,7 +364,7 @@ export default function BookList() {
           <main className="relative mx-auto max-w-7xl px-4 sm:py-4">
             <Navbar />
 
-            <div>
+            <div className="mb-24">
               <div className="flex justify-between mt-12 py-5">
                 <h1 className="title-section">ブックリスト</h1>
                 <button
@@ -409,43 +378,183 @@ export default function BookList() {
 
               <div>
                 {
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    {books.map((book) => (
+                  <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+                    {bookList?.map((book) => (
                       <div
-                        className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                        className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex space-x-6 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-tsundoku-blue-main"
                         key={book.bid}
                       >
                         <div className="flex-shrink-0">
                           <Image
-                            className="h-10 w-10 rounded-full"
+                            className="h-full w-6"
                             width={90}
                             height={120}
                             src={book.image}
                             alt=""
                           />
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <a href="#" className="focus:outline-none">
-                            <span
-                              className="absolute inset-0"
-                              aria-hidden="true"
-                            />
-                            <p className="text-sm font-medium text-gray-900">
-                              {book.title}
-                            </p>
-                            <div>著者</div>
-                            {Array.isArray(book.authors) &&
-                              book.authors.map((author) => {
-                                return (
-                                  <p
-                                    className="text-sm text-gray-500 truncate"
-                                    key={author}
-                                  >
-                                    {author}
-                                  </p>
-                                )
-                              })}
-                          </a>
+                        <div className="flex-1">
+                          <div className="flex flex-col justify-between h-full">
+                            <div className="focus:outline-none">
+                              <p className="text-lg font-medium text-gray-900">
+                                {book.title}
+                              </p>
+                              {Array.isArray(book.authors) &&
+                                book.authors.map((author) => {
+                                  return (
+                                    <p
+                                      className="text-sm text-gray-500 truncate"
+                                      key={author}
+                                    >
+                                      {author}
+                                    </p>
+                                  )
+                                })}
+                            </div>
+                            <div className="text-sm text-gray-500 truncate">
+                              {formatISOStringToDateTimeWithSlash(book.date)} 追加
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex-shrink-0 flex flex-col justify-between items-end">
+                          <div className="text-rights">
+                            <Menu as="div" className="relative inline-block">
+                              <div>
+                                <Menu.Button className="inline-flex">
+                                  <DotsVerticalIcon className="w-8 h-8 text-gray-500 hover:bg-gray-100 p-1 rounded-full" />
+                                </Menu.Button>
+                              </div>
+                              <Transition
+                                as={Fragment}
+                                enter="transition ease-out duration-100"
+                                enterFrom="transform opacity-0 scale-95"
+                                enterTo="transform opacity-100 scale-100"
+                                leave="transition ease-in duration-75"
+                                leaveFrom="transform opacity-100 scale-100"
+                                leaveTo="transform opacity-0 scale-95"
+                              >
+                                <Menu.Items className="absolute right-0 w-36 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                  <div className="px-1 py-1">
+                                    <Menu.Item>
+                                      {({ active }) => (
+                                        <button
+                                          className={`${
+                                            active ? 'bg-gray-100' : ''
+                                          } group flex rounded-md text-red-500 items-center w-full px-2 py-2 text-sm text-right`}
+                                        >
+                                          <TrashIcon
+                                            className="w-5 h-5 mr-2 text-red-500"
+                                            aria-hidden="true"
+                                          />
+                                          本を削除する
+                                        </button>
+                                      )}
+                                    </Menu.Item>
+                                  </div>
+                                </Menu.Items>
+                              </Transition>
+                            </Menu>
+                          </div>
+                          <div>
+                            <Menu as="div" className="relative inline-block">
+                              <div>
+                                <Menu.Button className="inline-flex">
+                                  <div className=" text-blue-500 hover:text-blue-400 text-lg rounded-lg" >
+                                    進捗
+                                  </div>
+                                </Menu.Button>
+                              </div>
+                              <Transition
+                                as={Fragment}
+                                enter="transition ease-out duration-100"
+                                enterFrom="transform opacity-0 scale-95"
+                                enterTo="transform opacity-100 scale-100"
+                                leave="transition ease-in duration-75"
+                                leaveFrom="transform opacity-100 scale-100"
+                                leaveTo="transform opacity-0 scale-95"
+                              >
+                                <Menu.Items className="absolute right-0 w-48 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-20">
+                                  <div className="px-1 py-1">
+                                    <Menu.Item>
+                                      {({ active }) => (
+                                        <button
+                                          className={`${
+                                            active ? 'bg-gray-100' : ''
+                                          } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+                                        >
+                                          <span
+                                            className="w-5 h-5 mr-2 inline-block bg-tsundoku-blue-main rounded-full"
+                                            aria-hidden="true"
+                                          />
+                                          完全に読んだ
+                                        </button>
+                                      )}
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                      {({ active }) => (
+                                        <button
+                                          className={`${
+                                            active ? 'bg-gray-100' : ''
+                                          } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+                                        >
+                                          <span
+                                            className="w-5 h-5 mr-2 inline-block bg-blue-400 rounded-full"
+                                            aria-hidden="true"
+                                          />
+                                          十分に読んだ
+                                        </button>
+                                      )}
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                      {({ active }) => (
+                                        <button
+                                          className={`${
+                                            active ? 'bg-gray-100' : ''
+                                          } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+                                        >
+                                          <span
+                                            className="w-5 h-5 mr-2 inline-block bg-blue-300 rounded-full"
+                                            aria-hidden="true"
+                                          />
+                                          まあまあ読んだ
+                                        </button>
+                                      )}
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                      {({ active }) => (
+                                        <button
+                                          className={`${
+                                            active ? 'bg-gray-100' : ''
+                                          } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+                                        >
+                                          <span
+                                            className="w-5 h-5 mr-2 inline-block bg-blue-100 rounded-full"
+                                            aria-hidden="true"
+                                          />
+                                          あまり読んでいない
+                                        </button>
+                                      )}
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                      {({ active }) => (
+                                        <button
+                                          className={`${
+                                            active ? 'bg-gray-100' : ''
+                                          } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+                                        >
+                                          <span
+                                            className="w-5 h-5 mr-2 inline-block bg-white border border-gray-200 rounded-full"
+                                            aria-hidden="true"
+                                          />
+                                          全く読んでいない
+                                        </button>
+                                      )}
+                                    </Menu.Item>
+                                  </div>
+                                </Menu.Items>
+                              </Transition>
+                            </Menu>
+                          </div>
                         </div>
                       </div>
                     ))}
