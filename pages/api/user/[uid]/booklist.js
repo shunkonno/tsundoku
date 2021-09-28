@@ -37,7 +37,7 @@ const booklistApiHandler = async (req, res) => {
 
     // ISBN の有無を問わず、リスト追加日順に並び替え
     bookListDetail.sort((a, b) => {
-      return a.date - b.date
+      return new Date(a.date) - new Date(b.date)
     })
 
     res.status(200).json(bookListDetail)
