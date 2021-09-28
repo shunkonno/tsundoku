@@ -74,7 +74,7 @@ export default function LpHeader() {
         <div className="flex">
           <span className="inline-flex items-center rounded-md shadow">
             <Link href="/home">
-              <a className="inline-flex leading-6 items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-tsundoku-blue-main bg-white hover:bg-gray-50">
+              <a className="inline-flex items-center py-2 px-4 text-base font-medium leading-6 bg-white hover:bg-gray-50 rounded-md border border-transparent text-tsundoku-blue-main">
                 {t.TO_HOME}
               </a>
             </Link>
@@ -88,10 +88,10 @@ export default function LpHeader() {
         return
       } else {
         return (
-          <div className="items-center justify-end">
+          <div className="justify-end items-center">
             <span className="inline-flex rounded-md shadow">
               <Link href="/signin">
-                <a className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-tsundoku-blue-main bg-white hover:bg-gray-50">
+                <a className="inline-flex items-center py-2 px-4 text-base font-medium bg-white hover:bg-gray-50 rounded-md border border-transparent text-tsundoku-blue-main">
                   {t.LOGIN}
                 </a>
               </Link>
@@ -184,29 +184,29 @@ export default function LpHeader() {
           <Popover>
             {({ open }) => (
               <>
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
                   <nav
-                    className="relative flex w-full items-center justify-between"
+                    className="flex relative justify-between items-center w-full"
                     aria-label="Global"
                   >
                     <div className="flex items-center">
-                      <div className="flex items-center justify-between md:w-auto">
+                      <div className="flex justify-between items-center md:w-auto">
                         <Link href="/">
                           <a>
                             <span className="sr-only">Tsundoku</span>
                             <picture>
                               <source
-                                className="h-8 w-auto sm:h-10"
+                                className="w-auto h-8 sm:h-10"
                                 srcSet="/img/logos/tsundoku-logo-mark-and-typo.svg"
                                 media="(max-width: 639px)"
                               />
                               <source
-                                className="h-8 w-auto sm:h-10"
+                                className="w-auto h-8 sm:h-10"
                                 srcSet="/img/logos/tsundoku-logo-mark-and-typo.svg"
                                 media="(min-width: 640px)"
                               />
                               <Image
-                                className="h-8 w-auto sm:h-10"
+                                className="w-auto h-8 sm:h-10"
                                 src="/img/logos/tsundoku-logo-mark-and-typo.svg"
                                 alt="tsundoku-logo-mark-and-typo"
                                 width={120}

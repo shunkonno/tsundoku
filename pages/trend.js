@@ -67,9 +67,9 @@ export default function Trend() {
       <AppHeader />
 
       {/* main content */}
-      <div className="relative pb-16 bg-gray-50 overflow-hidden">
-        <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="relative mx-auto max-w-7xl px-4 sm:py-4">
+      <div className="overflow-hidden relative pb-16 bg-gray-50">
+        <div className="sm:block sm:w-full sm:h-full" aria-hidden="true">
+          <main className="relative sm:py-4 px-4 mx-auto max-w-7xl">
             <Navbar />
           </main>
         </div>

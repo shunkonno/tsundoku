@@ -5,8 +5,8 @@ export default function FotterSmall() {
         <h3 id="footer-heading" className="sr-only">
           Footer
         </h3>
-        <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:py-16 lg:px-8">
-          <p className="text-gray-400 text-center">&copy; Tsundoku</p>
+        <div className="py-4 lg:py-16 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
+          <p className="text-center text-gray-400">&copy; Tsundoku</p>
         </div>
       </footer>
     </>

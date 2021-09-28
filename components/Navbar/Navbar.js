@@ -27,7 +27,7 @@ export default function Navbar() {
 
   return (
     <div>
-      <div className="block sm:hidden w-full fixed bottom-0 z-20 -mx-4 bg-white">
+      <div className="block sm:hidden fixed bottom-0 z-20 -mx-4 w-full bg-white">
         <nav className="flex">
           {tabs.map((tab) => (
             <div key={tab.text} className="group w-1/3 sm:w-1/4">
@@ -56,7 +56,7 @@ export default function Navbar() {
         </nav>
       </div>
       <div className="hidden sm:block">
-        <nav className="-mb-px flex justify-center" aria-label="Tabs">
+        <nav className="flex justify-center -mb-px" aria-label="Tabs">
           {tabs.map((tab) => (
             <div key={tab.text} className="group w-1/4">
               <Link href={tab.href}>

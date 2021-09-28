@@ -20,7 +20,7 @@ export default function ReservableRoomList({reserveSession, sessions, uid }) {
 
     return duplicateDeletedStartDates.map((startDate) => (
       <div key={startDate} className="relative">
-        <div className="z-10 sticky top-0 bg-gray-50 mt-4 py-0.5 text-base font-bold">
+        <div className="sticky top-0 z-10 py-0.5 mt-4 text-base font-bold bg-gray-50">
           <h3>{startDate}</h3>
         </div>
         <ul role="list" className="py-2">

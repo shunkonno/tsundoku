@@ -149,7 +149,7 @@ export default function UserSettings() {
   // Render Function
   // ============================================================
   const renderAlert = (alertAssort) => (
-    <div className="relative w-full flex justify-center">
+    <div className="flex relative justify-center w-full">
       <Transition
         show={alertOpen}
         as={Fragment}
@@ -160,13 +160,13 @@ export default function UserSettings() {
         leaveFrom="opacity-95"
         leaveTo="opacity-0"
       >
-        <div className="absolute z-10 w-full sm:w-1/3 px-4">
+        <div className="absolute z-10 px-4 w-full sm:w-1/3">
           <div className="opacity-95">
-            <div className="rounded-b-md p-4 bg-green-50">
+            <div className="p-4 bg-green-50 rounded-b-md">
               <div className="flex">
                 <div className="flex-shrink-0">
                   <CheckCircleIcon
-                    className="h-5 w-5 text-green-400"
+                    className="w-5 h-5 text-green-400"
                     aria-hidden="true"
                   />
                 </div>
@@ -175,15 +175,15 @@ export default function UserSettings() {
                     ユーザー設定を更新しました。
                   </p>
                 </div>
-                <div className="ml-auto pl-3">
-                  <div className="-mx-1.5 -my-1.5">
+                <div className="pl-3 ml-auto">
+                  <div className="-my-1.5 -mx-1.5">
                     <button
                       type="button"
-                      className="inline-flex bg-green-50 rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"
+                      className="inline-flex p-1.5 text-green-500 bg-green-50 hover:bg-green-100 rounded-md focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:ring-offset-green-50 focus:outline-none"
                       onClick={() => setAlertOpen(false)}
                     >
                       <span className="sr-only">Dismiss</span>
-                      <XIcon className="h-5 w-5" aria-hidden="true" />
+                      <XIcon className="w-5 h-5" aria-hidden="true" />
                     </button>
                   </div>
                 </div>
@@ -214,9 +214,9 @@ export default function UserSettings() {
       <AppHeader />
 
       {/* main content */}
-      <div className="pb-16 bg-gray-50 overflow-hidden">
-        <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="mx-auto max-w-xl px-4 sm:py-8">
+      <div className="overflow-hidden pb-16 bg-gray-50">
+        <div className="sm:block sm:w-full sm:h-full" aria-hidden="true">
+          <main className="sm:py-8 px-4 mx-auto max-w-xl">
             <div className="py-3">
               <h1 className="text-2xl font-bold">ユーザー設定</h1>
             </div>
@@ -234,7 +234,7 @@ export default function UserSettings() {
                   id="name"
                   autoComplete="given-name"
                   value={userName}
-                  className="p-3 shadow-sm block w-full sm:text-sm border border-gray-300 focus:ring-tsundoku-brown-main focus:border-tsundoku-brown-main rounded-md"
+                  className="block p-3 w-full sm:text-sm rounded-md border border-gray-300 shadow-sm focus:ring-tsundoku-brown-main focus:border-tsundoku-brown-main"
                   onChange={(e) => {
                     setUserName(e.target.value)
                   }}
@@ -258,7 +258,7 @@ export default function UserSettings() {
                 <RadioGroup.Label className="sr-only">
                   Gender setting
                 </RadioGroup.Label>
-                <div className="bg-white rounded-md -space-y-px">
+                <div className="-space-y-px bg-white rounded-md">
                   {genderSettings.map((gender, genderSettingIdx) => (
                     <RadioGroup.Option
                       key={gender.name}
@@ -296,9 +296,9 @@ export default function UserSettings() {
                             )}
                             aria-hidden="true"
                           >
-                            <span className="rounded-full bg-white w-1.5 h-1.5" />
+                            <span className="w-1.5 h-1.5 bg-white rounded-full" />
                           </span>
-                          <div className="ml-3 flex flex-col">
+                          <div className="flex flex-col ml-3">
                             <RadioGroup.Label
                               as="span"
                               className={classNames(
@@ -415,7 +415,7 @@ export default function UserSettings() {
               <div className="flex justify-end">
                 <span
                   type="button"
-                  className="inline-flex items-center cursor-pointer px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
+                  className="inline-flex items-center py-3 px-6 text-base font-medium text-white hover:bg-blue-600 rounded-md border border-transparent focus:ring-2 focus:ring-offset-2 shadow-sm cursor-pointer focus:outline-none bg-tsundoku-blue-main focus:ring-tsundoku-blue-main"
                   onClick={(e) => handleSubmit(e)}
                 >
                   保存

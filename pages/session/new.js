@@ -368,8 +368,8 @@ export default function NewSession() {
       {/* main content */}
       <div className="relative pb-16 bg-gray-50">
         <div className="sm:block sm:w-full" aria-hidden="true">
-          <main className="mx-auto max-w-xl px-4 sm:py-8">
-            <h1 className="text-xl font-bold py-3">新しいルームを作成する</h1>
+          <main className="sm:py-8 px-4 mx-auto max-w-xl">
+            <h1 className="py-3 text-xl font-bold">新しいルームを作成する</h1>
             <div className="py-3">
               <label className="text-sm font-medium text-gray-700">
                 実施日
@@ -379,12 +379,12 @@ export default function NewSession() {
                 <Listbox value={month} onChange={setMonth}>
                   {({ open }) => (
                     <div className="flex">
-                      <div className="mt-1 relative w-3/4">
-                        <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                      <div className="relative mt-1 w-3/4">
+                        <Listbox.Button className="relative py-2 pr-10 pl-3 w-full sm:text-sm text-left bg-white rounded-md border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-sm cursor-default focus:outline-none">
                           <span className="block truncate">{month}</span>
-                          <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                          <span className="flex absolute inset-y-0 right-0 items-center pr-2 pointer-events-none">
                             <SelectorIcon
-                              className="h-5 w-5 text-gray-400"
+                              className="w-5 h-5 text-gray-400"
                               aria-hidden="true"
                             />
                           </span>
@@ -397,7 +397,7 @@ export default function NewSession() {
                           leaveFrom="opacity-100"
                           leaveTo="opacity-0"
                         >
-                          <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                          <Listbox.Options className="overflow-auto absolute z-10 py-1 mt-1 w-full max-h-60 text-base sm:text-sm bg-white rounded-md ring-1 ring-black ring-opacity-5 shadow-lg focus:outline-none">
                             {monthData.map((monthName) => (
                               <Listbox.Option
                                 key={monthName}
@@ -434,7 +434,7 @@ export default function NewSession() {
                                         )}
                                       >
                                         <CheckIcon
-                                          className="h-5 w-5"
+                                          className="w-5 h-5"
                                           aria-hidden="true"
                                         />
                                       </span>
@@ -460,12 +460,12 @@ export default function NewSession() {
                 <Listbox value={day} onChange={setDay}>
                   {({ open }) => (
                     <div className="flex">
-                      <div className="mt-1 relative w-3/4">
-                        <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                      <div className="relative mt-1 w-3/4">
+                        <Listbox.Button className="relative py-2 pr-10 pl-3 w-full sm:text-sm text-left bg-white rounded-md border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-sm cursor-default focus:outline-none">
                           <span className="block truncate">{day}</span>
-                          <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                          <span className="flex absolute inset-y-0 right-0 items-center pr-2 pointer-events-none">
                             <SelectorIcon
-                              className="h-5 w-5 text-gray-400"
+                              className="w-5 h-5 text-gray-400"
                               aria-hidden="true"
                             />
                           </span>
@@ -478,7 +478,7 @@ export default function NewSession() {
                           leaveFrom="opacity-100"
                           leaveTo="opacity-0"
                         >
-                          <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                          <Listbox.Options className="overflow-auto absolute z-10 py-1 mt-1 w-full max-h-60 text-base sm:text-sm bg-white rounded-md ring-1 ring-black ring-opacity-5 shadow-lg focus:outline-none">
                             {dayData.map((dayName) => (
                               <Listbox.Option
                                 key={dayName}
@@ -515,7 +515,7 @@ export default function NewSession() {
                                         )}
                                       >
                                         <CheckIcon
-                                          className="h-5 w-5"
+                                          className="w-5 h-5"
                                           aria-hidden="true"
                                         />
                                       </span>
@@ -545,12 +545,12 @@ export default function NewSession() {
                   <Listbox.Label className="block text-sm font-medium text-gray-700">
                     開始時刻
                   </Listbox.Label>
-                  <div className="mt-1 relative">
-                    <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                  <div className="relative mt-1">
+                    <Listbox.Button className="relative py-2 pr-10 pl-3 w-full sm:text-sm text-left bg-white rounded-md border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-sm cursor-default focus:outline-none">
                       <span className="block truncate">{startTime}</span>
-                      <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                      <span className="flex absolute inset-y-0 right-0 items-center pr-2 pointer-events-none">
                         <SelectorIcon
-                          className="h-5 w-5 text-gray-400"
+                          className="w-5 h-5 text-gray-400"
                           aria-hidden="true"
                         />
                       </span>
@@ -563,7 +563,7 @@ export default function NewSession() {
                       leaveFrom="opacity-100"
                       leaveTo="opacity-0"
                     >
-                      <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                      <Listbox.Options className="overflow-auto absolute z-10 py-1 mt-1 w-full max-h-60 text-base sm:text-sm bg-white rounded-md ring-1 ring-black ring-opacity-5 shadow-lg focus:outline-none">
                         {timeData.map((selectStartTime) => (
                           <Listbox.Option
                             key={selectStartTime}
@@ -596,7 +596,7 @@ export default function NewSession() {
                                     )}
                                   >
                                     <CheckIcon
-                                      className="h-5 w-5"
+                                      className="w-5 h-5"
                                       aria-hidden="true"
                                     />
                                   </span>
@@ -620,12 +620,12 @@ export default function NewSession() {
                   <Listbox.Label className="block text-sm font-medium text-gray-700">
                     所要時間
                   </Listbox.Label>
-                  <div className="mt-1 relative">
-                    <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                  <div className="relative mt-1">
+                    <Listbox.Button className="relative py-2 pr-10 pl-3 w-full sm:text-sm text-left bg-white rounded-md border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-sm cursor-default focus:outline-none">
                       <span className="block truncate">{duration}</span>
-                      <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                      <span className="flex absolute inset-y-0 right-0 items-center pr-2 pointer-events-none">
                         <SelectorIcon
-                          className="h-5 w-5 text-gray-400"
+                          className="w-5 h-5 text-gray-400"
                           aria-hidden="true"
                         />
                       </span>
@@ -638,7 +638,7 @@ export default function NewSession() {
                       leaveFrom="opacity-100"
                       leaveTo="opacity-0"
                     >
-                      <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                      <Listbox.Options className="overflow-auto absolute z-10 py-1 mt-1 w-full max-h-60 text-base sm:text-sm bg-white rounded-md ring-1 ring-black ring-opacity-5 shadow-lg focus:outline-none">
                         {durationData.map((duration) => (
                           <Listbox.Option
                             key={duration}
@@ -671,7 +671,7 @@ export default function NewSession() {
                                     )}
                                   >
                                     <CheckIcon
-                                      className="h-5 w-5"
+                                      className="w-5 h-5"
                                       aria-hidden="true"
                                     />
                                   </span>
@@ -693,7 +693,7 @@ export default function NewSession() {
               <div className="flex justify-end">
                 <p
                   type="button"
-                  className="inline-flex cursor-pointer items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
+                  className="inline-flex items-center py-3 px-6 text-base font-medium text-white hover:bg-blue-600 rounded-md border border-transparent focus:ring-2 focus:ring-offset-2 shadow-sm cursor-pointer focus:outline-none bg-tsundoku-blue-main focus:ring-tsundoku-blue-main"
                   onClick={(e) => createSession(e)}
                 >
                   作成する

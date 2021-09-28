@@ -237,7 +237,7 @@ export default function Home() {
   }
 
   const renderAlert = (alertAssort) => (
-    <div className="relative w-full flex justify-center">
+    <div className="flex relative justify-center w-full">
       <Transition
         show={alertOpen}
         as={Fragment}
@@ -248,7 +248,7 @@ export default function Home() {
         leaveFrom="opacity-95"
         leaveTo="opacity-0"
       >
-        <div className="absolute z-10 w-full sm:w-1/3 px-4">
+        <div className="absolute z-10 px-4 w-full sm:w-1/3">
           <div className="opacity-95">
             <div
               className={classNames(
@@ -266,19 +266,19 @@ export default function Home() {
                   {
                     ((alertAssort == 'create' || alertAssort == 'reserve') && (
                       <CheckCircleIcon
-                        className="h-5 w-5 text-green-400"
+                        className="w-5 h-5 text-green-400"
                         aria-hidden="true"
                       />
                     ),
                     (alertAssort == 'cancel' || alertAssort == 'delete') && (
                       <CheckCircleIcon
-                        className="h-5 w-5 text-gray-400"
+                        className="w-5 h-5 text-gray-400"
                         aria-hidden="true"
                       />
                     ),
                     alertAssort == 'failed' && (
                       <ExclamationIcon
-                        className="h-5 w-5 text-yellow-400"
+                        className="w-5 h-5 text-yellow-400"
                         aria-hidden="true"
                       />
                     ))
@@ -304,8 +304,8 @@ export default function Home() {
                       '選択したルームは満員のため予約できませんでした。申し訳ございません。'}
                   </p>
                 </div>
-                <div className="ml-auto pl-3">
-                  <div className="-mx-1.5 -my-1.5">
+                <div className="pl-3 ml-auto">
+                  <div className="-my-1.5 -mx-1.5">
                     <button
                       type="button"
                       className={classNames(
@@ -323,7 +323,7 @@ export default function Home() {
                       }}
                     >
                       <span className="sr-only">Dismiss</span>
-                      <XIcon className="h-5 w-5" aria-hidden="true" />
+                      <XIcon className="w-5 h-5" aria-hidden="true" />
                     </button>
                   </div>
                 </div>
@@ -367,13 +367,13 @@ export default function Home() {
       />
 
       {/* main content */}
-      <div className="relative pb-16 bg-gray-50 overflow-hidden">
-        <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="relative mx-auto max-w-7xl px-4 sm:py-4">
+      <div className="overflow-hidden relative pb-16 bg-gray-50">
+        <div className="sm:block sm:w-full sm:h-full" aria-hidden="true">
+          <main className="relative sm:py-4 px-4 mx-auto max-w-7xl">
             <Navbar />
-            <div className="flex mt-8 sm:mt-16 gap-14">
+            <div className="flex gap-14 mt-8 sm:mt-16">
               {/* 左カラム -- START */}
-              <div className="max-w-7xl w-full sm:w-2/3">
+              <div className="w-full sm:w-2/3 max-w-7xl">
                 <section className="pb-3">
                   <div className="pb-2 mb-4">
                     <h2 className="title-section onboarding-2">
@@ -394,7 +394,7 @@ export default function Home() {
                       )}
                     </ul>
                   ) : (
-                    <div className="text-center py-6 bg-gray-200 rounded-md">
+                    <div className="py-6 text-center bg-gray-200 rounded-md">
                       現在、参加予定のルームはありません。
                     </div>
                   )}
@@ -404,10 +404,10 @@ export default function Home() {
                     <div className="flex-shrink-0">
                       <h2 className="title-section onboarding-1">ルーム一覧</h2>
                     </div>
-                    <div className="flex-1 flex justify-end">
+                    <div className="flex flex-1 justify-end">
                       <Link href="/session/new" passHref>
-                        <a className="group inline-block w-auto py-2 text-base font-bold text-tsundoku-blue-main hover:text-blue-700 onboarding-3">
-                          <PlusIcon className="w-6 h-6 inline-block mr-2" />
+                        <a className="group inline-block py-2 w-auto text-base font-bold hover:text-blue-700 text-tsundoku-blue-main onboarding-3">
+                          <PlusIcon className="inline-block mr-2 w-6 h-6" />
                           <span>ルームを作成する</span>
                         </a>
                       </Link>
@@ -416,7 +416,7 @@ export default function Home() {
 
                   {renderNoEmptyRoomStatement(sessions)}
                   <nav
-                    className="h-full overflow-y-auto"
+                    className="overflow-y-auto h-full"
                     aria-label="Directory"
                   >
                     <ReservableRoomList
@@ -431,11 +431,11 @@ export default function Home() {
 
               {/* 右カラム -- START */}
               <div className="hidden sm:block sm:w-1/3">
-                <section className="mb-8 bg-white border border-gray-500 px-2 py-3 rounded-lg">
+                <section className="py-3 px-2 mb-8 bg-white rounded-lg border border-gray-500">
                   <Link href="/booklist">
-                    <a className="flex justify-between items-center mb-2 px-2 py-2 rounded-lg hover:bg-gray-100">
+                    <a className="flex justify-between items-center py-2 px-2 mb-2 hover:bg-gray-100 rounded-lg">
                       <h3 className="subtitle-section">ブックリスト</h3>
-                      <ChevronRightIcon className="w-6 h-6 -mr-1.5" />
+                      <ChevronRightIcon className="-mr-1.5 w-6 h-6" />
                     </a>
                   </Link>
                   <ul className="px-2 mb-4">
@@ -444,7 +444,7 @@ export default function Home() {
                         <li className="mb-2">
                           <div className="flex items-center">
                             <span
-                              className="w-5 h-5 mr-2 inline-block bg-tsundoku-blue-main rounded-full"
+                              className="inline-block mr-2 w-5 h-5 rounded-full bg-tsundoku-blue-main"
                               aria-hidden="true"
                             />
                             <p className="text-gray-500">{bookInfo?.title}</p>
@@ -477,7 +477,7 @@ export default function Home() {
       <Footer />
 
       {/* スマホ時、コンテンツとNavbarが重なるのを防ぐ */}
-      <div className="h-16 sm:hidden bg-gray" />
+      <div className="sm:hidden h-16 bg-gray" />
     </div>
   )
 }

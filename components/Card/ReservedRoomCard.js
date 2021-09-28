@@ -15,7 +15,7 @@ export default function ReservedRoomCard({sessionId, ownerName, startDateTime, e
 
   return (
     <div className="w-full bg-white rounded-md border border-gray-400 divide-y divide-gray-200">
-      <div className="flex items-center justify-between p-4 space-x-6">
+      <div className="flex justify-between items-center p-4 space-x-6">
         <div className="flex-1 truncate">
           <div className="flex items-center space-x-3">
             <div className="flex items-center">
@@ -27,7 +27,7 @@ export default function ReservedRoomCard({sessionId, ownerName, startDateTime, e
             </div>
           </div>
           <div className="mt-1">
-            <span className="session-card-duration text-gray-500">
+            <span className="text-gray-500 session-card-duration">
               {`${duration} 分間 / 開催者：${ownerName}`}
             </span>
           </div>
@@ -38,7 +38,7 @@ export default function ReservedRoomCard({sessionId, ownerName, startDateTime, e
         >
           <a className="flex items-center hover:text-gray-700">
             <p className="text-bold">詳細</p>
-            <ChevronRightIcon className="w-6 h-6 " />
+            <ChevronRightIcon className=" w-6 h-6" />
           </a>
         </Link>
       </div>

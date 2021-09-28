@@ -53,31 +53,31 @@ export default function Home() {
       <LpHeader />
 
       {/* main content */}
-      <div className="relative bg-gray-50 overflow-hidden font-NotoSansSerif">
-        <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="mx-auto max-w-7xl sm:mt-4">
-            <div className="px-4 sm:px-6 lg:px-8 text-center md:text-left py-4 sm:py-12 md:flex">
-              <div className="md:w-3/5 md:py-12">
-                <h1 className="text-4xl leading-normal tracking-tight font-bold text-gray-900 sm:text-5xl md:text-6xl">
+      <div className="overflow-hidden relative bg-gray-50 font-NotoSansSerif">
+        <div className="sm:block sm:w-full sm:h-full" aria-hidden="true">
+          <main className="mx-auto sm:mt-4 max-w-7xl">
+            <div className="md:flex py-4 sm:py-12 px-4 sm:px-6 lg:px-8 text-center md:text-left">
+              <div className="md:py-12 md:w-3/5">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-normal text-gray-900">
                   <span className="inline">読書に</span>
-                  <span className="text-tsundoku-blue-main inline">没頭</span>
+                  <span className="inline text-tsundoku-blue-main">没頭</span>
                   <span className="inline">する</span>
                   <span className="block sm:mt-2">時間をつくる</span>
                 </h1>
-                <p className="font-sans mt-5 max-w-md mx-auto text-sm text-gray-500 sm:text-lg md:mt-12 md:text-xl md:max-w-3xl">
+                <p className="mx-auto mt-5 md:mt-12 max-w-md md:max-w-3xl font-sans text-sm sm:text-lg md:text-xl text-gray-500">
                   誰かとゆるくつながるカフェのような環境で、 読書に集中
                 </p>
-                <div className="mt-6 sm:mt-12 max-w-md sm:flex sm:justify-start">
+                <div className="sm:flex sm:justify-start mt-6 sm:mt-12 max-w-md">
                   <div className="rounded-md shadow">
                     <Link href="/signin" passHref>
-                      <button className="font-sans w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-bold rounded-md text-white bg-tsundoku-blue-main hover:bg-blue-600 md:py-4 md:text-lg md:px-10">
+                      <button className="flex justify-center items-center py-3 md:py-4 px-8 md:px-10 w-full font-sans text-base md:text-lg font-bold text-white hover:bg-blue-600 rounded-md border border-transparent bg-tsundoku-blue-main">
                         無料で始める
                       </button>
                     </Link>
                   </div>
                 </div>
               </div>
-              <div className="sm:max-w-sm md:max-w-none md:w-2/5 mx-auto flex items-center py-12 md:py-0">
+              <div className="flex items-center py-12 md:py-0 mx-auto md:w-2/5 sm:max-w-sm md:max-w-none">
                 <Image
                   src="/img/mainvisual_circle_2160x2160.png"
                   alt="main visual"
@@ -88,11 +88,11 @@ export default function Home() {
             </div>
 
             <div className="mt-10">
-              <div className="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+              <div className="px-4 sm:px-6 lg:px-8 mx-auto max-w-xl lg:max-w-7xl">
                 <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
                   <div className="col-span-1 lg:col-span-3 py-10">
                     <div className="mb-2">
-                      <h2 className="text-gray-900 font-bold text-3xl lg:text-4xl leading-relaxed">
+                      <h2 className="text-3xl lg:text-4xl font-bold leading-relaxed text-gray-900">
                         没頭する時間を取り戻す
                       </h2>
                     </div>
@@ -101,26 +101,26 @@ export default function Home() {
                         {/* <p className="text-gray-900 text-lg leading-relaxed">
                           落ち着いて、じっくりと読書できないのは、現代人の悩みのひとつです。スマホの通知が鳴るときも、ふと家事を思い出したときにも、集中力が途切れてしまいがちです。
                         </p> */}
-                        <p className="text-gray-700 text-lg leading-relaxed">
+                        <p className="text-lg leading-relaxed text-gray-700">
                           落ち着いてじっくりと読書できないのは、現代人の悩みのひとつです。
                           {`　`}
                           スマホの通知が鳴るときも、ふと家事を思い出したときにも、集中力が途切れてしまいがちです。
                         </p>
                       </div>
                       <div>
-                        <p className="text-gray-700 text-lg leading-relaxed">
+                        <p className="text-lg leading-relaxed text-gray-700">
                           Tsundokuは、集中力を途切れさせることなく、より高い充実感のある読書を実現します。
                         </p>
                       </div>
                     </div>
                   </div>
-                  <div className="col-span-1 lg:col-span-3 py-10 lg:ml-8 flex flex-col justify-center">
+                  <div className="flex flex-col col-span-1 lg:col-span-3 justify-center py-10 lg:ml-8">
                     <div>
-                      <p className="font-NotoSerif italic text-base sm:text-xl text-gray-400">
+                      <p className="font-NotoSerif text-base sm:text-xl italic text-gray-400">
                         ｢書物の新しいページを1ページ、1ページ読むごとに、私はより豊かに、より強く、より高くなっていく。｣
                       </p>
 
-                      <p className="mt-0 sm:mt-2 font-NotoSerif italic text-right text-base sm:text-xl text-gray-400">
+                      <p className="mt-0 sm:mt-2 font-NotoSerif text-base sm:text-xl italic text-right text-gray-400">
                         (アントン・チェーホフ)
                       </p>
                     </div>
@@ -129,22 +129,22 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="mt-10 py-4 sm:py-12 bg-gray-50">
-              <div className="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+            <div className="py-4 sm:py-12 mt-10 bg-gray-50">
+              <div className="px-4 sm:px-6 lg:px-8 mx-auto max-w-xl lg:max-w-7xl">
                 <div className="lg:text-center">
-                  <h2 className="text-base sm:text-xl text-tsundoku-brown-main font-semibold tracking-wide">
+                  <h2 className="text-base sm:text-xl font-semibold tracking-wide text-tsundoku-brown-main">
                     Tsundoku とは
                   </h2>
-                  <span className="block mt-2 sm:mt-4 text-3xl leading-normal font-extrabold tracking-tight text-gray-900 lg:text-5xl">
+                  <span className="block mt-2 sm:mt-4 text-3xl lg:text-5xl font-extrabold tracking-tight leading-normal text-gray-900">
                     ビデオ通話でつながる、ペア読書
                   </span>
                 </div>
 
                 <div className="mt-10">
-                  <div className="max-w-7xl mx-auto">
+                  <div className="mx-auto max-w-7xl">
                     <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
-                      <div className="col-span-1 lg:col-span-3 sm:py-10  flex flex-col justify-center">
-                        <div className="col-span-1 lg:col-span-3 sm:py-10 lg:ml-8 sm:hidden">
+                      <div className="flex flex-col col-span-1 lg:col-span-3 justify-center sm:py-10">
+                        <div className="sm:hidden col-span-1 lg:col-span-3 sm:py-10 lg:ml-8">
                           <div>
                             <Image
                               src="/img/video-matching.png"
@@ -155,14 +155,14 @@ export default function Home() {
                             />
                           </div>
                         </div>
-                        <div className="space-y-4 mt-10 sm:mt-0">
+                        <div className="mt-10 sm:mt-0 space-y-4">
                           <div>
-                            <p className="text-gray-700 text-lg leading-relaxed">
+                            <p className="text-lg leading-relaxed text-gray-700">
                               Tsundokuは、本を読む人同士をマッチングし、ビデオ通話でつながりながら読書をする環境を提供します。
                             </p>
                           </div>
                           <div>
-                            <p className="text-gray-700 text-lg leading-relaxed">
+                            <p className="text-lg leading-relaxed text-gray-700">
                               そうすることで、誰かがいることで生まれるちょうど良い強制力(
                               <span className="text-tsundoku-blue-main">
                                 ソーシャルプレッシャー
@@ -172,7 +172,7 @@ export default function Home() {
                           </div>
                         </div>
                       </div>
-                      <div className="hidden col-span-1 lg:col-span-3 py-10 lg:ml-8 sm:flex sm:flex-col sm:justify-center sm:items-end">
+                      <div className="hidden sm:flex sm:flex-col col-span-1 lg:col-span-3 sm:justify-center sm:items-end py-10 lg:ml-8">
                         <div>
                           <Image
                             src="/img/video-matching.png"
@@ -188,32 +188,32 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="mt-10 sm:mt-0 py-4 sm:py-12 bg-gray-50">
-              <div className="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+            <div className="py-4 sm:py-12 mt-10 sm:mt-0 bg-gray-50">
+              <div className="px-4 sm:px-6 lg:px-8 mx-auto max-w-xl lg:max-w-7xl">
                 <div className="lg:text-center">
-                  <h2 className="text-gray-900 font-bold text-3xl lg:text-4xl leading-relaxed">
+                  <h2 className="text-3xl lg:text-4xl font-bold leading-relaxed text-gray-900">
                     ー Tsundokuの使い方 ー
                   </h2>
                 </div>
 
                 <div className="mt-10">
-                  <div className="max-w-7xl mx-auto">
+                  <div className="mx-auto max-w-7xl">
                     <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
                       {/* STEP 1 -- START */}
-                      <div className="col-span-1 lg:col-span-2 py-10 px-4 sm:px-6 lg:px-8 sm:rounded-md border-double border-4 border-yellow-600">
+                      <div className="col-span-1 lg:col-span-2 py-10 px-4 sm:px-6 lg:px-8 sm:rounded-md border-4 border-yellow-600 border-double">
                         <div className="mb-2">
-                          <h2 className="text-gray-900 font-bold text-2xl leading-relaxed">
+                          <h2 className="text-2xl font-bold leading-relaxed text-gray-900">
                             1 - ルームを予約
                           </h2>
                         </div>
                         <div className="space-y-4">
                           <div>
-                            <p className="text-gray-900 text-lg leading-relaxed">
+                            <p className="text-lg leading-relaxed text-gray-900">
                               まずは、都合の良い時間帯に開催されるペア読書を予約しましょう。各回は30分~90分の長さです。
                             </p>
                           </div>
                           <div>
-                            <p className="text-gray-900 text-lg leading-relaxed">
+                            <p className="text-lg leading-relaxed text-gray-900">
                               ご希望の時間帯に開催されていない場合、ルームを作成することもできます。
                             </p>
                           </div>
@@ -222,20 +222,20 @@ export default function Home() {
                       {/* STEP 1 -- END */}
 
                       {/* STEP 2 -- START */}
-                      <div className="col-span-1 lg:col-span-2 py-10 px-4 sm:px-6 lg:px-8 sm:rounded-md border-double border-4 border-yellow-600">
+                      <div className="col-span-1 lg:col-span-2 py-10 px-4 sm:px-6 lg:px-8 sm:rounded-md border-4 border-yellow-600 border-double">
                         <div className="mb-2">
-                          <h2 className="text-gray-900 font-bold text-2xl leading-relaxed">
+                          <h2 className="text-2xl font-bold leading-relaxed text-gray-900">
                             2 - 時間になったら、参加
                           </h2>
                         </div>
                         <div className="space-y-4">
                           <div>
-                            <p className="text-gray-900 text-lg leading-relaxed">
+                            <p className="text-lg leading-relaxed text-gray-900">
                               ルームに参加すると、もう1人の参加者とつながります。軽く挨拶を済ませたら、じっくり読書しましょう。
                             </p>
                           </div>
                           <div>
-                            <p className="text-gray-900 text-lg leading-relaxed">
+                            <p className="text-lg leading-relaxed text-gray-900">
                               「映像オフ」の設定も、もちろん可能。また、マッチ対象となる性別の設定もできます。
                               <span className="text-sm">(開発中)</span>
                             </p>
@@ -245,20 +245,20 @@ export default function Home() {
                       {/* STEP 2 -- END */}
 
                       {/* STEP 3 -- START */}
-                      <div className="col-span-1 lg:col-span-2 py-10 px-4 sm:px-6 lg:px-8 sm:rounded-md border-double border-4 border-yellow-600">
+                      <div className="col-span-1 lg:col-span-2 py-10 px-4 sm:px-6 lg:px-8 sm:rounded-md border-4 border-yellow-600 border-double">
                         <div className="mb-2">
-                          <h2 className="text-gray-900 font-bold text-2xl leading-relaxed">
+                          <h2 className="text-2xl font-bold leading-relaxed text-gray-900">
                             3 - 没頭する時間
                           </h2>
                         </div>
                         <div className="space-y-4">
                           <div>
-                            <p className="text-gray-900 text-lg leading-relaxed">
+                            <p className="text-lg leading-relaxed text-gray-900">
                               没頭する時間を過ごしたら、ルームを退室しましょう。
                             </p>
                           </div>
                           <div>
-                            <p className="text-gray-900 text-lg leading-relaxed">
+                            <p className="text-lg leading-relaxed text-gray-900">
                               人の集中力が続くのは最大でも90分と言われています。集中したら、休んだり、他のことをしましょう。
                             </p>
                           </div>
@@ -375,16 +375,16 @@ export default function Home() {
             </div>
           </div> */}
 
-          <div className="sm:my-10 max-w-7xl mx-auto py-8 px-4 sm:px-6 md:py-10 md:px-8 md:flex md:items-center md:justify-between">
-            <h2 className="font-sans font-bold tracking-tight md:text-4xl">
-              <p className="block text-gray-900 text-3xl sm:text-4xl tracking-wider leading-normal mb-2">
+          <div className="md:flex md:justify-between md:items-center py-8 md:py-10 px-4 sm:px-6 md:px-8 sm:my-10 mx-auto max-w-7xl">
+            <h2 className="font-sans md:text-4xl font-bold tracking-tight">
+              <p className="block mb-2 text-3xl sm:text-4xl tracking-wider leading-normal text-gray-900">
                 Tsundoku を使って、ペア読書
               </p>
             </h2>
-            <div className="mt-8 flex md:mt-0 md:flex-shrink-0">
+            <div className="flex md:flex-shrink-0 mt-8 md:mt-0">
               <div className="inline-flex rounded-md shadow">
                 <Link href="/signin">
-                  <a className="font-sans inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-tsundoku-blue-main hover:bg-tsundoku-blue-main">
+                  <a className="inline-flex justify-center items-center py-3 px-5 font-sans text-base font-medium text-white rounded-md border border-transparent bg-tsundoku-blue-main hover:bg-tsundoku-blue-main">
                     無料で始める
                   </a>
                 </Link>

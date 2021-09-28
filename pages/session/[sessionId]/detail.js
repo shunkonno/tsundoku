@@ -214,14 +214,14 @@ export default function SessionDetail({ session }) {
       <AppHeader />
 
       {/* main content */}
-      <div className="relative pb-16 bg-gray-50 overflow-hidden">
-        <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="relative mx-auto max-w-3xl p-4 sm:py-8">
+      <div className="overflow-hidden relative pb-16 bg-gray-50">
+        <div className="sm:block sm:w-full sm:h-full" aria-hidden="true">
+          <main className="relative p-4 sm:py-8 mx-auto max-w-3xl">
             <div className="mb-6">
               <Link href="/home">
                 <a className="">
                   <ChevronLeftIcon
-                    className="inline-block h-5 w-5 text-gray-900 mr-1"
+                    className="inline-block mr-1 w-5 h-5 text-gray-900"
                     aria-hidden="true"
                   />
                   <span className="text-sm text-gray-900">ホームへ戻る</span>
@@ -235,7 +235,7 @@ export default function SessionDetail({ session }) {
               <div className="flex items-center">
                 <PlusSmIcon className="w-6 h-6 text-blue-500" />
                 <a
-                  className="text-blue-500 text-sm"
+                  className="text-sm text-blue-500"
                   href={`https://www.google.com/calendar/event?action=TEMPLATE&dates=${startEvent}/${endEvent}&text=Tsundoku ${formatTime(
                     session?.startDateTime
                   )} 開催&details=https://tsundoku.live/ja/session/${
@@ -248,14 +248,14 @@ export default function SessionDetail({ session }) {
                 </a>
               </div>
             </div>
-            <div className="bg-white border border-black overflow-hidden sm:rounded-lg">
-              <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
+            <div className="overflow-hidden bg-white sm:rounded-lg border border-black">
+              <div className="sm:p-0 py-5 px-4 border-t border-gray-200">
                 <dl className="p-4">
                   <div className="py-3">
                     <dt className="text-sm font-bold text-gray-900">
                       開始日時
                     </dt>
-                    <dd className="mt-1 text-base text-gray-900 sm:mt-0 sm:col-span-2">
+                    <dd className="sm:col-span-2 mt-1 sm:mt-0 text-base text-gray-900">
                       {formatDateTime(session?.startDateTime)}
                     </dd>
                   </div>
@@ -263,16 +263,16 @@ export default function SessionDetail({ session }) {
                     <dt className="text-sm font-bold text-gray-900">
                       所要時間
                     </dt>
-                    <dd className="mt-1 text-base text-gray-900 sm:mt-0 sm:col-span-2">
+                    <dd className="sm:col-span-2 mt-1 sm:mt-0 text-base text-gray-900">
                       {session?.duration} 分
                     </dd>
                   </div>
                   <div className="py-3">
                     <dt className="text-sm font-bold text-gray-900">参加者</dt>
-                    <dd className="mt-1 text-base text-gray-900 sm:mt-1 sm:col-span-2">
+                    <dd className="sm:col-span-2 mt-1 sm:mt-1 text-base text-gray-900">
                       {`${session?.ownerName} (開催者)`}
                     </dd>
-                    <dd className="mt-1 text-base text-gray-900 sm:mt-1 sm:col-span-2">
+                    <dd className="sm:col-span-2 mt-1 sm:mt-1 text-base text-gray-900">
                       {session?.guestId ? (
                         <span>{session.guestName}</span>
                       ) : (
@@ -292,7 +292,7 @@ export default function SessionDetail({ session }) {
                     >
                       <span
                         type="button"
-                        className="cursor-pointer inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
+                        className="inline-flex items-center py-3 px-6 text-base font-medium text-white hover:bg-blue-600 rounded-md border border-transparent focus:ring-2 focus:ring-offset-2 shadow-sm cursor-pointer focus:outline-none bg-tsundoku-blue-main focus:ring-tsundoku-blue-main"
                       >
                         ルームに入室する
                       </span>
@@ -301,12 +301,12 @@ export default function SessionDetail({ session }) {
                   <div>
                     <span
                       type="button"
-                      className="cursor-not-allowed inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-gray-600 opacity-75 bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600"
+                      className="inline-flex items-center py-3 px-6 text-base font-medium text-gray-600 bg-gray-300 rounded-md border border-transparent focus:ring-2 focus:ring-gray-600 focus:ring-offset-2 shadow-sm opacity-75 cursor-not-allowed focus:outline-none"
                     >
                       ルームに入室する
                     </span>
                     <div className="relative">
-                      <p className="text-center text-sm text-gray-800 mt-2">
+                      <p className="mt-2 text-sm text-center text-gray-800">
                         5分前から入室できます。
                       </p>
                     </div>
@@ -317,7 +317,7 @@ export default function SessionDetail({ session }) {
                 <div>
                   <span
                     type="button"
-                    className="text-sm cursor-pointer text-red-600 hover:text-red-700"
+                    className="text-sm text-red-600 hover:text-red-700 cursor-pointer"
                     onClick={(e) => deleteSessionData(e)}
                   >
                     ルームを削除する
@@ -327,7 +327,7 @@ export default function SessionDetail({ session }) {
                 <div>
                   <span
                     type="button"
-                    className="text-sm cursor-pointer text-red-600 hover:text-red-700"
+                    className="text-sm text-red-600 hover:text-red-700 cursor-pointer"
                     onClick={(e) => cancelSession(e)}
                   >
                     予約を取り消す

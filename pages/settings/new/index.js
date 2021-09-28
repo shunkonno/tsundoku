@@ -98,9 +98,9 @@ export default function NewUserSettings() {
       <AppHeader />
 
       {/* main content */}
-      <div className="pb-16 bg-gray-50 overflow-hidden">
-        <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
+      <div className="overflow-hidden pb-16 bg-gray-50">
+        <div className="sm:block sm:w-full sm:h-full" aria-hidden="true">
+          <main className="px-4 mx-auto mt-16 sm:mt-24 max-w-7xl">
             <div className="py-3">
               <h1 className="text-2xl font-bold">まず最初に教えてください。</h1>
             </div>
@@ -117,7 +117,7 @@ export default function NewUserSettings() {
                   name="name"
                   id="name"
                   autoComplete="given-name"
-                  className="p-3 shadow-sm block w-full sm:text-sm border border-gray-300 focus:ring-tsundoku-brown-main focus:border-tsundoku-brown-main rounded-md"
+                  className="block p-3 w-full sm:text-sm rounded-md border border-gray-300 shadow-sm focus:ring-tsundoku-brown-main focus:border-tsundoku-brown-main"
                   onChange={(e) => {
                     setUserName(e.target.value)
                   }}
@@ -139,7 +139,7 @@ export default function NewUserSettings() {
                 <RadioGroup.Label className="sr-only">
                   Gender setting
                 </RadioGroup.Label>
-                <div className="bg-white rounded-md -space-y-px">
+                <div className="-space-y-px bg-white rounded-md">
                   {genderSettings.map((gender, genderSettingIdx) => (
                     <RadioGroup.Option
                       key={gender.name}
@@ -171,9 +171,9 @@ export default function NewUserSettings() {
                             )}
                             aria-hidden="true"
                           >
-                            <span className="rounded-full bg-white w-1.5 h-1.5" />
+                            <span className="w-1.5 h-1.5 bg-white rounded-full" />
                           </span>
-                          <div className="ml-3 flex flex-col">
+                          <div className="flex flex-col ml-3">
                             <RadioGroup.Label
                               as="span"
                               className={classNames(
@@ -285,7 +285,7 @@ export default function NewUserSettings() {
               <div className="flex justify-end">
                 <p
                   type="button"
-                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
+                  className="inline-flex items-center py-3 px-6 text-base font-medium text-white hover:bg-blue-600 rounded-md border border-transparent focus:ring-2 focus:ring-offset-2 shadow-sm focus:outline-none bg-tsundoku-blue-main focus:ring-tsundoku-blue-main"
                   onClick={(e) => handleSubmit(e)}
                 >
                   完了

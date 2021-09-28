@@ -11,7 +11,7 @@ export default function ReservableRoomCard({reserveSession, sessionId, ownerName
     <Disclosure>
       {({ open }) => (
         <div className="w-full bg-white rounded-md border border-gray-400 divide-y divide-gray-200">
-          <div className="flex items-center justify-between p-4 space-x-6">
+          <div className="flex justify-between items-center p-4 space-x-6">
             <div className="flex-1 truncate">
               <div className="flex items-center space-x-3">
                 <div className="flex items-center">
@@ -27,20 +27,20 @@ export default function ReservableRoomCard({reserveSession, sessionId, ownerName
                 </div>
               </div>
               <div className="mt-1">
-                <span className="session-card-duration text-gray-500">
+                <span className="text-gray-500 session-card-duration">
                   {`${duration} 分間 / 開催者：${ownerName}`}
                 </span>
               </div>
             </div>
             {open ? (
               <Disclosure.Button className="">
-                <p className="px-8 py-2 bg-gray-200 text-black rounded-md">
+                <p className="py-2 px-8 text-black bg-gray-200 rounded-md">
                   閉じる
                 </p>
               </Disclosure.Button>
             ) : (
               <Disclosure.Button className="">
-                <p className="text-white text-bold bg-blue-500 py-3 px-6 rounded-md">
+                <p className="py-3 px-6 text-white bg-blue-500 rounded-md text-bold">
                   予約する
                 </p>
               </Disclosure.Button>
@@ -57,16 +57,16 @@ export default function ReservableRoomCard({reserveSession, sessionId, ownerName
                 leaveTo="transform scale-95 opacity-0"
               >
                 <Disclosure.Panel>
-                  <div className="-mt-px p-3 flex justify-end items-center divide-x divide-gray-200">
-                    <div className="-ml-px flex items-center">
-                      <p className="text-sm text-black mr-4">
+                  <div className="flex justify-end items-center p-3 -mt-px divide-x divide-gray-200">
+                    <div className="flex items-center -ml-px">
+                      <p className="mr-4 text-sm text-black">
                         このルームを予約しますか？
                       </p>
                       <div
-                        className="cursor-pointer relative border border-transparent rounded-br-lg hover:text-gray-500"
+                        className="relative hover:text-gray-500 rounded-br-lg border border-transparent cursor-pointer"
                         onClick={() => reserveSession(sessionId, guestId)}
                       >
-                        <span className="inline-block px-10 py-2 border border-transparent text-base text-center rounded-md text-white cursor-pointer bg-tsundoku-blue-main hover:bg-blue-700 focus:outline-none focus:ring-tsundoku-blue-main">
+                        <span className="inline-block py-2 px-10 text-base text-center text-white hover:bg-blue-700 rounded-md border border-transparent cursor-pointer focus:outline-none bg-tsundoku-blue-main focus:ring-tsundoku-blue-main">
                           確定
                         </span>
                       </div>
