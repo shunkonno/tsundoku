@@ -441,7 +441,7 @@ export default function Home() {
                   <ul className="px-2 mb-4">
                     {bookList?.map(({ bookInfo }) => {
                       return (
-                        <li className="mb-2">
+                        <li className="mb-2" key={bookInfo.bid}>
                           <div className="flex items-center">
                             <span
                               className="inline-block mr-2 w-5 h-5 rounded-full bg-tsundoku-blue-main"
