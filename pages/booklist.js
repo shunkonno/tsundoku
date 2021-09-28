@@ -261,7 +261,7 @@ export default function BookList() {
                 <div>
                   <button
                     value={book}
-                    className="inline-flex items-center shadow-sm px-3 py-1 border border-blue-600 text-base leading-5 font-medium rounded-full text-blue-600 bg-white hover:border-blue-500 hover:bg-blue-500 hover:text-white"
+                    className="inline-flex items-center py-1 px-3 text-base font-medium leading-5 text-blue-600 hover:text-white bg-white hover:bg-blue-500 rounded-full border border-blue-600 hover:border-blue-500 shadow-sm"
                     onClick={(e) => {
                       addBookToList(e, book)
                     }}
@@ -300,10 +300,10 @@ export default function BookList() {
         <Transition appear show={modalOpen} as={Fragment}>
           <Dialog
             as="div"
-            className="fixed inset-0 z-10 overflow-y-scroll"
+            className="overflow-y-scroll fixed inset-0 z-10"
             onClose={() => setModalOpen(false)}
           >
-            <div className="min-h-screen sm:px-4 text-center">
+            <div className="sm:px-4 min-h-screen text-center">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
@@ -331,7 +331,7 @@ export default function BookList() {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <div className="relative inline-block w-full max-w-4xl h-80v p-6 text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                <div className="inline-block relative p-6 w-full max-w-4xl h-80v text-left align-middle bg-white rounded-2xl shadow-xl transition-all transform">
                   <div className="h-1/6">
                     <div className="flex justify-end h-1/5">
                       <XIcon
@@ -347,18 +347,18 @@ export default function BookList() {
                         >
                           タイトル・著者名で検索
                         </Dialog.Title>
-                        <div className="mt-2 ">
+                        <div className=" mt-2">
                           {/* book search component -- START */}
-                          <div className="mt-1 relative rounded-md shadow-sm">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                          <div className="relative mt-1 rounded-md shadow-sm">
+                            <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                               <SearchIcon
-                                className="h-5 w-5 text-gray-400"
+                                className="w-5 h-5 text-gray-400"
                                 aria-hidden="true"
                               />
                             </div>
                             <input
                               type="text"
-                              className="focus:ring-tsundoku-blue-main focus:border-tsundoku-blue-main block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                              className="block pl-10 w-full sm:text-sm rounded-md border-gray-300 focus:ring-tsundoku-blue-main focus:border-tsundoku-blue-main"
                               placeholder="ここに入力"
                               onInput={(input) =>
                                 input.target.value.length > 1
@@ -372,7 +372,7 @@ export default function BookList() {
                       </div>
                     </div>
                   </div>
-                  <div className="h-5/6 overflow-y-auto">
+                  <div className="overflow-y-auto h-5/6">
                     {renderSearchedBooks(searchedBooks)}
                   </div>
                 </div>
@@ -386,20 +386,20 @@ export default function BookList() {
       <AppHeader />
 
       {/* main content */}
-      <div className="relative pb-16 bg-gray-50 overflow-hidden">
-        <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="relative mx-auto max-w-7xl px-4 sm:py-4">
+      <div className="overflow-hidden relative pb-16 bg-gray-50">
+        <div className="sm:block sm:w-full sm:h-full" aria-hidden="true">
+          <main className="relative sm:py-4 px-4 mx-auto max-w-7xl">
             <Navbar />
 
             <div className="mb-24">
-              <div className="flex justify-between sm:mt-12 py-5">
+              <div className="flex justify-between py-5 sm:mt-12">
                 <h1 className="title-section">ブックリスト</h1>
                 <button
                   className="flex items-center"
                   onClick={() => setModalOpen(true)}
                 >
                   <PlusSmIcon className="w-6 h-6 text-blue-500" />
-                  <span className="text-blue-500 text-sm">
+                  <span className="text-sm text-blue-500">
                     リストに追加する
                   </span>
                 </button>
@@ -407,7 +407,7 @@ export default function BookList() {
 
               <div>
                 {
-                  <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                     {bookList?.map(({ bookInfo, date }) => (
                       <div
                         className={classNames(
@@ -419,9 +419,9 @@ export default function BookList() {
                         key={bookInfo.bid}
                       >
                         {bookInfo.bid == userInfo?.isReading && (
-                          <span class="absolute top-0 left-0 inline-flex items-center -mt-px px-2.5 py-1 rounded-br-md text-sm font-medium bg-indigo-100 text-blue-800">
+                          <span className="inline-flex absolute top-0 left-0 items-center py-1 px-2.5 -mt-px text-sm font-medium text-blue-800 bg-indigo-100 rounded-br-md">
                             <svg
-                              class=" -ml-0.5 mr-1.5 h-2 w-2 text-blue-400"
+                              className=" mr-1.5 -ml-0.5 w-2 h-2 text-blue-400"
                               fill="currentColor"
                               viewBox="0 0 8 8"
                             >
@@ -430,7 +430,7 @@ export default function BookList() {
                             現在読んでいる本
                           </span>
                         )}
-                        <div className="flex-shrink-0 mt-4 relative w-20">
+                        <div className="relative flex-shrink-0 mt-4 w-20">
                           <Image
                             className=""
                             layout={'fill'}
@@ -438,7 +438,7 @@ export default function BookList() {
                             alt=""
                           />
                         </div>
-                        <div className="flex-1 overflow-hidden ml-6 mt-4">
+                        <div className="overflow-hidden flex-1 mt-4 ml-6">
                           <div className="flex flex-col justify-between h-full">
                             <div className="focus:outline-none">
                               <p className="text-lg font-medium text-gray-900">
@@ -461,12 +461,12 @@ export default function BookList() {
                             </div>
                           </div>
                         </div>
-                        <div className="flex-shrink-0 flex flex-col justify-between items-end">
+                        <div className="flex flex-col flex-shrink-0 justify-between items-end">
                           <div className="text-rights">
-                            <Menu as="div" className="relative inline-block">
+                            <Menu as="div" className="inline-block relative">
                               <div>
                                 <Menu.Button className="inline-flex">
-                                  <DotsVerticalIcon className="w-8 h-8 text-gray-500 hover:bg-gray-100 p-1 rounded-full" />
+                                  <DotsVerticalIcon className="p-1 w-8 h-8 text-gray-500 hover:bg-gray-100 rounded-full" />
                                 </Menu.Button>
                               </div>
                               <Transition
@@ -478,8 +478,8 @@ export default function BookList() {
                                 leaveFrom="transform opacity-100 scale-100"
                                 leaveTo="transform opacity-0 scale-95"
                               >
-                                <Menu.Items className="absolute z-10 right-0 w-64 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                  <div className="px-1 py-1">
+                                <Menu.Items className="absolute right-0 z-10 w-64 bg-white rounded-md divide-y divide-gray-100 ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none">
+                                  <div className="py-1 px-1">
                                     <Menu.Item>
                                       {({ active }) => (
                                         <button
@@ -491,7 +491,7 @@ export default function BookList() {
                                           }
                                         >
                                           <BookOpenIcon
-                                            className="w-5 h-5 mr-2 text-gray-900"
+                                            className="mr-2 w-5 h-5 text-gray-900"
                                             aria-hidden="true"
                                           />
                                           『現在読んでいる本』にする
@@ -506,7 +506,7 @@ export default function BookList() {
                                           } group flex rounded-md text-red-500 items-center w-full px-2 py-2 text-sm text-right`}
                                         >
                                           <TrashIcon
-                                            className="w-5 h-5 mr-2 text-red-500"
+                                            className="mr-2 w-5 h-5 text-red-500"
                                             aria-hidden="true"
                                           />
                                           リストから削除
@@ -519,10 +519,10 @@ export default function BookList() {
                             </Menu>
                           </div>
                           <div>
-                            <Menu as="div" className="relative inline-block">
+                            <Menu as="div" className="inline-block relative">
                               <div>
                                 <Menu.Button className="inline-flex">
-                                  <div className=" text-blue-500 hover:text-blue-400 text-lg rounded-lg">
+                                  <div className=" text-lg text-blue-500 hover:text-blue-400 rounded-lg">
                                     進捗
                                   </div>
                                 </Menu.Button>
@@ -536,8 +536,8 @@ export default function BookList() {
                                 leaveFrom="transform opacity-100 scale-100"
                                 leaveTo="transform opacity-0 scale-95"
                               >
-                                <Menu.Items className="absolute right-0 w-48 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-20">
-                                  <div className="px-1 py-1">
+                                <Menu.Items className="absolute right-0 z-20 w-48 bg-white rounded-md divide-y divide-gray-100 ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none">
+                                  <div className="py-1 px-1">
                                     <Menu.Item>
                                       {({ active }) => (
                                         <button
@@ -546,7 +546,7 @@ export default function BookList() {
                                           } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
                                         >
                                           <span
-                                            className="w-5 h-5 mr-2 inline-block bg-tsundoku-blue-main rounded-full"
+                                            className="inline-block mr-2 w-5 h-5 rounded-full bg-tsundoku-blue-main"
                                             aria-hidden="true"
                                           />
                                           完全に読んだ
@@ -561,7 +561,7 @@ export default function BookList() {
                                           } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
                                         >
                                           <span
-                                            className="w-5 h-5 mr-2 inline-block bg-blue-400 rounded-full"
+                                            className="inline-block mr-2 w-5 h-5 bg-blue-400 rounded-full"
                                             aria-hidden="true"
                                           />
                                           十分に読んだ
@@ -576,7 +576,7 @@ export default function BookList() {
                                           } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
                                         >
                                           <span
-                                            className="w-5 h-5 mr-2 inline-block bg-blue-300 rounded-full"
+                                            className="inline-block mr-2 w-5 h-5 bg-blue-300 rounded-full"
                                             aria-hidden="true"
                                           />
                                           まあまあ読んだ
@@ -591,7 +591,7 @@ export default function BookList() {
                                           } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
                                         >
                                           <span
-                                            className="w-5 h-5 mr-2 inline-block bg-blue-100 rounded-full"
+                                            className="inline-block mr-2 w-5 h-5 bg-blue-100 rounded-full"
                                             aria-hidden="true"
                                           />
                                           あまり読んでいない
@@ -606,7 +606,7 @@ export default function BookList() {
                                           } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
                                         >
                                           <span
-                                            className="w-5 h-5 mr-2 inline-block bg-white border border-gray-200 rounded-full"
+                                            className="inline-block mr-2 w-5 h-5 bg-white rounded-full border border-gray-200"
                                             aria-hidden="true"
                                           />
                                           全く読んでいない
@@ -633,7 +633,7 @@ export default function BookList() {
       <Footer />
 
       {/* スマホ時、コンテンツとNavbarが重なるのを防ぐ */}
-      <div className="h-16 sm:hidden bg-gray" />
+      <div className="sm:hidden h-16 bg-gray" />
     </div>
   )
 }
