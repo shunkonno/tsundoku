@@ -102,11 +102,6 @@ export default function AppHeader() {
                 {t.LOGOUT}
               </button>
             </div>
-            <Link href="/home">
-              <a className="block py-3 px-5 w-full font-medium text-center bg-gray-50 hover:bg-gray-100 text-tsundoku-blue-main">
-                {t.TO_HOME}
-              </a>
-            </Link>
           </>
         )
       }
