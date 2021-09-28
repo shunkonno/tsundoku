@@ -277,6 +277,55 @@ export default function BookList() {
     )
   }
 
+  const renderAuthors = (authors) => {
+    //3人以上著者がいたら、3人目を省略し、他を付け加えて表示する。
+    if(authors.length > 2){
+      return(
+        <div className="max-h-10 overflow-hidden mt-1 sm:mt-0">
+          {
+            //authorsの配列を2人だけにする
+            authors.slice(0,2).map((author, idx) => {
+              //今の項目が2番目(最後)だったら、inline-blockにする。それ以外ならblockにする。
+              if(idx != 1){
+                return (
+                  <span
+                    className="block text-xs sm:text-sm text-gray-500 truncate leading-4"
+                    key={author}
+                  >
+                    {author}
+                  </span>
+                )
+              }else{
+                return(
+                  <span className="inline-block text-xs sm:text-sm text-gray-500 truncate leading-4">{author}</span>
+                )
+              }
+            })
+          }
+        <span className="inline-block text-xs sm:text-sm text-gray-500 truncate leading-4">・他</span>
+        </div>
+      )
+    }
+    //2人以下なら全員を並べて表示するのみ
+    else {
+      return(
+        authors.map((author) => {
+          return (
+            <div className="max-h-10 overflow-hidden mt-1 sm:mt-0">
+              <p
+                className="text-xs sm:text-sm text-gray-500 truncate"
+                key={author}
+              >
+                {author}
+              </p>
+            </div>
+            
+          )
+        })
+      )
+    }
+  }
+
   // ============================================================
   // Return
   // ============================================================
@@ -414,47 +463,33 @@ export default function BookList() {
                           bookInfo.bid == userInfo.isReading
                             ? 'ring-2 ring-tsundoku-blue-main'
                             : 'border border-gray-300',
-                          'relative h-40 overflow-hidden rounded-lg bg-white px-6 pt-4 pb-4 shadow-sm flex hover:border-gray-400'
+                          'relative rounded-lg bg-white py-4 px-2 sm:px-6 shadow-sm flex hover:border-gray-400'
                         )}
                         key={bookInfo.bid}
                       >
                         {bookInfo.bid == userInfo?.isReading && (
-                          <span className="inline-flex absolute top-0 left-0 items-center py-1 px-2.5 -mt-px text-sm font-medium text-blue-800 bg-indigo-100 rounded-br-md">
-                            <svg
-                              className=" mr-1.5 -ml-0.5 w-2 h-2 text-blue-400"
-                              fill="currentColor"
-                              viewBox="0 0 8 8"
-                            >
-                              <circle cx="4" cy="4" r="3" />
-                            </svg>
-                            現在読んでいる本
-                          </span>
+                          
+                          
+                            <BookOpenIcon className="absolute z-10 bottom-0 left-0 ml-2 mb-2 p-1 w-8 h-8 text-white bg-blue-500 rounded-full" />
+                          
                         )}
-                        <div className="relative flex-shrink-0 mt-4 w-20">
+                        <div className="relative flex-shrink-0 w-16 sm:w-20">
                           <Image
-                            className=""
+                            className="object-contain"
                             layout={'fill'}
                             src={bookInfo.image}
                             alt=""
                           />
                         </div>
-                        <div className="overflow-hidden flex-1 mt-4 ml-6">
+                        <div className="overflow-hidden flex-1 ml-3 sm:ml-6">
                           <div className="flex flex-col justify-between h-full">
                             <div className="focus:outline-none">
-                              <p className="text-lg font-medium text-gray-900">
+                              <p className="max-h-10 overflow-y-hidden overflow-ellipsis text-base sm:text-lg font-medium text-gray-900 leading-5">
                                 {bookInfo.title}
                               </p>
                               {Array.isArray(bookInfo.authors) &&
-                                bookInfo.authors.map((author) => {
-                                  return (
-                                    <p
-                                      className="text-sm text-gray-500 truncate"
-                                      key={author}
-                                    >
-                                      {author}
-                                    </p>
-                                  )
-                                })}
+                                renderAuthors(bookInfo.authors)
+                              }
                             </div>
                             <div className="text-sm text-gray-500 truncate">
                               {formatISOStringToDateTimeWithSlash(date)} 追加
@@ -478,7 +513,7 @@ export default function BookList() {
                                 leaveFrom="transform opacity-100 scale-100"
                                 leaveTo="transform opacity-0 scale-95"
                               >
-                                <Menu.Items className="absolute right-0 z-10 w-64 bg-white rounded-md divide-y divide-gray-100 ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none">
+                                <Menu.Items className="absolute right-0 z-20 w-64 bg-white rounded-md divide-y divide-gray-100 ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none">
                                   <div className="py-1 px-1">
                                     <Menu.Item>
                                       {({ active }) => (
@@ -521,9 +556,46 @@ export default function BookList() {
                           <div>
                             <Menu as="div" className="inline-block relative">
                               <div>
-                                <Menu.Button className="inline-flex">
-                                  <div className=" text-lg text-blue-500 hover:text-blue-400 rounded-lg">
-                                    進捗
+                                <Menu.Button className="">
+                                  <div className="text-left text-xs text-gray-500 hover:text-blue-400 rounded-lg">
+                                    読了度
+                                  </div>
+                                  <div className="flex mt-1">
+                                  <svg
+                                    className=" mr-1.5 w-1.5 h-6 text-blue-100 "
+                                    fill="currentColor"
+                                    viewBox="0 0 5 20"
+                                  >
+                                    <rect x="0" y="0" r="1"  width="5" height="20"/>
+                                  </svg>
+                                  <svg
+                                    className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-200 "
+                                    fill="currentColor"
+                                    viewBox="0 0 5 20"
+                                  >
+                                    <rect x="0" y="0" r="1"  width="5" height="20"/>
+                                  </svg>
+                                  <svg
+                                    className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-300 "
+                                    fill="currentColor"
+                                    viewBox="0 0 5 20"
+                                  >
+                                    <rect x="0" y="0" r="1"  width="5" height="20"/>
+                                  </svg>
+                                  <svg
+                                    className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-400 "
+                                    fill="currentColor"
+                                    viewBox="0 0 5 20"
+                                  >
+                                    <rect x="0" y="0" r="1"  width="5" height="20"/>
+                                  </svg>
+                                  <svg
+                                    className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-500 "
+                                    fill="currentColor"
+                                    viewBox="0 0 5 20"
+                                  >
+                                    <rect x="0" y="0" r="1"  width="5" height="20"/>
+                                  </svg>
                                   </div>
                                 </Menu.Button>
                               </div>
