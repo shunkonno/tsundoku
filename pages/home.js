@@ -27,6 +27,7 @@ import {
   XIcon,
   PlusCircleIcon
 } from '@heroicons/react/solid'
+import { BookOpenIcon } from '@heroicons/react/outline'
 import 'intro.js/introjs.css'
 
 // Functions
@@ -442,12 +443,61 @@ export default function Home() {
                     {bookList?.map(({ bookInfo }) => {
                       return (
                         <li className="mb-2" key={bookInfo.bid}>
-                          <div className="flex items-center">
-                            <span
-                              className="inline-block mr-2 w-5 h-5 rounded-full bg-tsundoku-blue-main"
-                              aria-hidden="true"
-                            />
-                            <p className="text-gray-500">{bookInfo?.title}</p>
+                          <div className="flex items-center space-x-2">
+                            <div className="flex-shrink-0 flex justify-center items-center">
+                            {
+                              bookInfo.bid == userInfo.isReading ?
+                              <BookOpenIcon className="w-6 h-6 text-blue-500"/>
+                            :
+                              <span
+                                className="inline-block w-5 h-5 rounded-full"
+                                aria-hidden="true"
+                              />
+                            }
+                            </div>
+                          
+                            <div className="flex-1 overflow-hidden">
+                              <p className="text-gray-500 truncate">{bookInfo?.title}</p>
+                            </div>
+                            <div className="flex-shrink-0 flex justify-center items-center">
+                              <div className="flex">
+                                <svg
+                                  className=" mr-1.5 w-1.5 h-6 text-blue-100 "
+                                  fill="currentColor"
+                                  viewBox="0 0 5 20"
+                                >
+                                  <rect x="0" y="0" r="1"  width="5" height="20"/>
+                                </svg>
+                                <svg
+                                  className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-200 "
+                                  fill="currentColor"
+                                  viewBox="0 0 5 20"
+                                >
+                                  <rect x="0" y="0" r="1"  width="5" height="20"/>
+                                </svg>
+                                <svg
+                                  className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-300 "
+                                  fill="currentColor"
+                                  viewBox="0 0 5 20"
+                                >
+                                  <rect x="0" y="0" r="1"  width="5" height="20"/>
+                                </svg>
+                                <svg
+                                  className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-400 "
+                                  fill="currentColor"
+                                  viewBox="0 0 5 20"
+                                >
+                                  <rect x="0" y="0" r="1"  width="5" height="20"/>
+                                </svg>
+                                <svg
+                                  className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-500 "
+                                  fill="currentColor"
+                                  viewBox="0 0 5 20"
+                                >
+                                  <rect x="0" y="0" r="1"  width="5" height="20"/>
+                                </svg>
+                              </div>
+                            </div>
                           </div>
                         </li>
                       )
