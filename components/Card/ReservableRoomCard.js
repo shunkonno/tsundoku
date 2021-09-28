@@ -40,7 +40,7 @@ export default function ReservableRoomCard({reserveSession, sessionId, ownerName
               </Disclosure.Button>
             ) : (
               <Disclosure.Button className="">
-                <p className="py-3 px-6 text-white bg-blue-500 rounded-md text-bold">
+                <p className="py-3 px-6 text-white bg-blue-500 rounded-md">
                   予約する
                 </p>
               </Disclosure.Button>

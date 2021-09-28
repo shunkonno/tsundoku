@@ -37,7 +37,7 @@ export default function ReservedRoomCard({sessionId, ownerName, startDateTime, e
           key={sessionId}
         >
           <a className="flex items-center hover:text-gray-700">
-            <p className="text-bold">詳細</p>
+            <p>詳細</p>
             <ChevronRightIcon className=" w-6 h-6" />
           </a>
         </Link>
