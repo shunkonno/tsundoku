@@ -121,7 +121,8 @@ export default function BookList() {
         title: vi.title ? vi.title : '',
         authors: vi.authors && vi.authors.length > 0 ? vi.authors : '',
         isbn13: isbn13 && isbn13.length > 0 ? isbn13[0].identifier : '',
-        image: vi.imageLinks ? vi.imageLinks.smallThumbnail : ''
+        image: vi.imageLinks ? vi.imageLinks.smallThumbnail : '',
+        pageCount: vi.pageCount ? vi.pageCount : ''
       }
     })
 
@@ -219,14 +220,13 @@ export default function BookList() {
     await router.replace('/booklist')
   }
 
-  const selectReadingBook = async(e, bid) => {
+  const selectReadingBook = async (e, bid) => {
     e.preventDefault()
 
-    await updateIsReading (user.uid, bid)
+    await updateIsReading(user.uid, bid)
 
     await router.push('/empty')
     await router.replace('/booklist')
-
   }
 
   // ============================================================
@@ -411,24 +411,29 @@ export default function BookList() {
                     {bookList?.map(({ bookInfo, date }) => (
                       <div
                         className={classNames(
-                          bookInfo.bid == userInfo.isReading ? "ring-2 ring-tsundoku-blue-main"
-                          : "border border-gray-300",
-                          "relative h-40 overflow-hidden rounded-lg bg-white px-6 pt-4 pb-4 shadow-sm flex hover:border-gray-400"
+                          bookInfo.bid == userInfo.isReading
+                            ? 'ring-2 ring-tsundoku-blue-main'
+                            : 'border border-gray-300',
+                          'relative h-40 overflow-hidden rounded-lg bg-white px-6 pt-4 pb-4 shadow-sm flex hover:border-gray-400'
                         )}
                         key={bookInfo.bid}
                       >
-                        {bookInfo.bid == userInfo?.isReading &&
-                        <span class="absolute top-0 left-0 inline-flex items-center -mt-px px-2.5 py-1 rounded-br-md text-sm font-medium bg-indigo-100 text-blue-800">
-                          <svg class=" -ml-0.5 mr-1.5 h-2 w-2 text-blue-400" fill="currentColor" viewBox="0 0 8 8">
-                            <circle cx="4" cy="4" r="3" />
-                          </svg>
-                          現在読んでいる本
-                        </span>
-                        }
+                        {bookInfo.bid == userInfo?.isReading && (
+                          <span class="absolute top-0 left-0 inline-flex items-center -mt-px px-2.5 py-1 rounded-br-md text-sm font-medium bg-indigo-100 text-blue-800">
+                            <svg
+                              class=" -ml-0.5 mr-1.5 h-2 w-2 text-blue-400"
+                              fill="currentColor"
+                              viewBox="0 0 8 8"
+                            >
+                              <circle cx="4" cy="4" r="3" />
+                            </svg>
+                            現在読んでいる本
+                          </span>
+                        )}
                         <div className="flex-shrink-0 mt-4 relative w-20">
                           <Image
                             className=""
-                            layout={"fill"}
+                            layout={'fill'}
                             src={bookInfo.image}
                             alt=""
                           />
@@ -481,7 +486,9 @@ export default function BookList() {
                                           className={`${
                                             active ? 'bg-gray-100' : ''
                                           } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
-                                          onClick={(e)=>selectReadingBook(e,bookInfo.bid)}
+                                          onClick={(e) =>
+                                            selectReadingBook(e, bookInfo.bid)
+                                          }
                                         >
                                           <BookOpenIcon
                                             className="w-5 h-5 mr-2 text-gray-900"
