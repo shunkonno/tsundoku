@@ -281,7 +281,7 @@ export default function BookList() {
     //3人以上著者がいたら、3人目を省略し、他を付け加えて表示する。
     if(authors.length > 2){
       return(
-        <div className="max-h-10 overflow-hidden mt-1 sm:mt-0">
+        <div className="overflow-hidden mt-1 sm:mt-0 max-h-10">
           {
             //authorsの配列を2人だけにする
             authors.slice(0,2).map((author, idx) => {
@@ -289,7 +289,7 @@ export default function BookList() {
               if(idx != 1){
                 return (
                   <span
-                    className="block text-xs sm:text-sm text-gray-500 truncate leading-4"
+                    className="block text-xs sm:text-sm leading-4 text-gray-500 truncate"
                     key={author}
                   >
                     {author}
@@ -297,12 +297,12 @@ export default function BookList() {
                 )
               }else{
                 return(
-                  <span className="inline-block text-xs sm:text-sm text-gray-500 truncate leading-4">{author}</span>
+                  <span className="inline-block text-xs sm:text-sm leading-4 text-gray-500 truncate">{author}</span>
                 )
               }
             })
           }
-        <span className="inline-block text-xs sm:text-sm text-gray-500 truncate leading-4">・他</span>
+        <span className="inline-block text-xs sm:text-sm leading-4 text-gray-500 truncate">・他</span>
         </div>
       )
     }
@@ -311,10 +311,9 @@ export default function BookList() {
       return(
         authors.map((author) => {
           return (
-            <div className="max-h-10 overflow-hidden mt-1 sm:mt-0">
+            <div className="overflow-hidden mt-1 sm:mt-0 max-h-10" key={author}>
               <p
                 className="text-xs sm:text-sm text-gray-500 truncate"
-                key={author}
               >
                 {author}
               </p>
@@ -470,7 +469,7 @@ export default function BookList() {
                         {bookInfo.bid == userInfo?.isReading && (
                           
                           
-                            <BookOpenIcon className="absolute z-10 bottom-0 left-0 ml-2 mb-2 p-1 w-8 h-8 text-white bg-blue-500 rounded-full" />
+                            <BookOpenIcon className="absolute bottom-0 left-0 z-10 p-1 mb-2 ml-2 w-8 h-8 text-white bg-blue-500 rounded-full" />
                           
                         )}
                         <div className="relative flex-shrink-0 w-16 sm:w-20">
@@ -484,7 +483,7 @@ export default function BookList() {
                         <div className="overflow-hidden flex-1 ml-3 sm:ml-6">
                           <div className="flex flex-col justify-between h-full">
                             <div className="focus:outline-none">
-                              <p className="max-h-10 overflow-y-hidden overflow-ellipsis text-base sm:text-lg font-medium text-gray-900 leading-5">
+                              <p className="overflow-y-hidden max-h-10 text-base sm:text-lg font-medium leading-5 text-gray-900 overflow-ellipsis">
                                 {bookInfo.title}
                               </p>
                               {Array.isArray(bookInfo.authors) &&
@@ -557,40 +556,40 @@ export default function BookList() {
                             <Menu as="div" className="inline-block relative">
                               <div>
                                 <Menu.Button className="">
-                                  <div className="text-left text-xs text-gray-500 hover:text-blue-400 rounded-lg">
+                                  <div className="text-xs text-left text-gray-500 hover:text-blue-400 rounded-lg">
                                     読了度
                                   </div>
                                   <div className="flex mt-1">
                                   <svg
-                                    className=" mr-1.5 w-1.5 h-6 text-blue-100 "
+                                    className=" mr-1.5 w-1.5 h-6 text-blue-100"
                                     fill="currentColor"
                                     viewBox="0 0 5 20"
                                   >
                                     <rect x="0" y="0" r="1"  width="5" height="20"/>
                                   </svg>
                                   <svg
-                                    className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-200 "
+                                    className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-200"
                                     fill="currentColor"
                                     viewBox="0 0 5 20"
                                   >
                                     <rect x="0" y="0" r="1"  width="5" height="20"/>
                                   </svg>
                                   <svg
-                                    className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-300 "
+                                    className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-300"
                                     fill="currentColor"
                                     viewBox="0 0 5 20"
                                   >
                                     <rect x="0" y="0" r="1"  width="5" height="20"/>
                                   </svg>
                                   <svg
-                                    className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-400 "
+                                    className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-400"
                                     fill="currentColor"
                                     viewBox="0 0 5 20"
                                   >
                                     <rect x="0" y="0" r="1"  width="5" height="20"/>
                                   </svg>
                                   <svg
-                                    className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-500 "
+                                    className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-500"
                                     fill="currentColor"
                                     viewBox="0 0 5 20"
                                   >

@@ -444,7 +444,7 @@ export default function Home() {
                       return (
                         <li className="mb-2" key={bookInfo.bid}>
                           <div className="flex items-center space-x-2">
-                            <div className="flex-shrink-0 flex justify-center items-center">
+                            <div className="flex flex-shrink-0 justify-center items-center">
                             {
                               bookInfo.bid == userInfo.isReading ?
                               <BookOpenIcon className="w-6 h-6 text-blue-500"/>
@@ -456,41 +456,41 @@ export default function Home() {
                             }
                             </div>
                           
-                            <div className="flex-1 overflow-hidden">
+                            <div className="overflow-hidden flex-1">
                               <p className="text-gray-500 truncate">{bookInfo?.title}</p>
                             </div>
-                            <div className="flex-shrink-0 flex justify-center items-center">
+                            <div className="flex flex-shrink-0 justify-center items-center">
                               <div className="flex">
                                 <svg
-                                  className=" mr-1.5 w-1.5 h-6 text-blue-100 "
+                                  className=" mr-1.5 w-1.5 h-6 text-blue-100"
                                   fill="currentColor"
                                   viewBox="0 0 5 20"
                                 >
                                   <rect x="0" y="0" r="1"  width="5" height="20"/>
                                 </svg>
                                 <svg
-                                  className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-200 "
+                                  className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-200"
                                   fill="currentColor"
                                   viewBox="0 0 5 20"
                                 >
                                   <rect x="0" y="0" r="1"  width="5" height="20"/>
                                 </svg>
                                 <svg
-                                  className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-300 "
+                                  className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-300"
                                   fill="currentColor"
                                   viewBox="0 0 5 20"
                                 >
                                   <rect x="0" y="0" r="1"  width="5" height="20"/>
                                 </svg>
                                 <svg
-                                  className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-400 "
+                                  className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-400"
                                   fill="currentColor"
                                   viewBox="0 0 5 20"
                                 >
                                   <rect x="0" y="0" r="1"  width="5" height="20"/>
                                 </svg>
                                 <svg
-                                  className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-500 "
+                                  className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-500"
                                   fill="currentColor"
                                   viewBox="0 0 5 20"
                                 >
