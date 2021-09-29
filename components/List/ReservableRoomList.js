@@ -4,7 +4,7 @@ import { ReservableRoomCard } from '../Card'
 //Functions
 import { formatISOStringToDate } from '../../utils/formatDateTime'
 
-export default function ReservableRoomList({reserveSession, sessions, uid }) {
+export default function ReservableRoomList({reserveSession, sessions, uid}) {
 
   const startDates = sessions
       .filter((session) => {
