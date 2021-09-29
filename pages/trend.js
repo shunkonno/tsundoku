@@ -27,7 +27,7 @@ export default function Trend() {
   // Fetch Data
   // ============================================================
 
-  // Fetch logged user info on client side
+  // ユーザー情報
   const { data: userInfo } = useSWR(
     user ? ['/api/user', user.token] : null,
     fetcher,
