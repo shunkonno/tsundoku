@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { HomeIcon, BookOpenIcon, UserGroupIcon, TrendingUpIcon } from '@heroicons/react/outline'
+import { HomeIcon, BookOpenIcon, TrendingUpIcon } from '@heroicons/react/outline'
 
 import classNames from '../../utils/classNames'
 
