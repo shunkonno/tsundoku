@@ -3,7 +3,7 @@
 // ===========================================================
 import { Fragment, useEffect, useState } from 'react'
 import Head from 'next/head'
-import useSWR from 'swr'
+import useSWR, { useSWRConfig } from 'swr'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import debounce from 'lodash/debounce'
@@ -13,6 +13,8 @@ import { nanoid } from 'nanoid'
 import { AppHeader } from '../components/Header'
 import { Footer } from '../components/Footer'
 import { Navbar } from '../components/Navbar'
+//Context
+import { AppContext } from '../context/state'
 
 // Assets
 import { Dialog, Menu, Transition } from '@headlessui/react'
@@ -57,6 +59,9 @@ export default function BookList() {
   // ============================================================
   // Fetch Data
   // ============================================================
+
+  //mutateを定義
+  const { mutate } = useSWRConfig()
 
   // ユーザー情報
   const { data: userInfo } = useSWR(
@@ -196,6 +201,8 @@ export default function BookList() {
         // bookList を更新する
         updateBookList(user.uid, updatedBookList)
       }
+      mutate('/api/user/' + user.uid + '/booklist', updateBookList(user.uid, updatedBookList))
+
     } else {
       // ISBN-13がないなら、books collection には追加しない
       const bid = nanoid(10)
@@ -214,10 +221,9 @@ export default function BookList() {
       }
 
       updateBookListWithoutISBN(user.uid, updatedBookListWithoutISBN)
-    }
 
-    await router.push('/empty')
-    await router.replace('/booklist')
+      mutate('/api/user/' + user.uid + '/booklist', updateBookListWithoutISBN(user.uid, updatedBookListWithoutISBN))
+    }
   }
 
   const selectReadingBook = async (e, bid) => {
@@ -225,8 +231,7 @@ export default function BookList() {
 
     await updateIsReading(user.uid, bid)
 
-    await router.push('/empty')
-    await router.replace('/booklist')
+    mutate(['/api/user', user.token])
   }
 
   // ============================================================
@@ -264,6 +269,7 @@ export default function BookList() {
                     className="inline-flex items-center py-1 px-3 text-base font-medium leading-5 text-blue-600 hover:text-white bg-white hover:bg-blue-500 rounded-full border border-blue-600 hover:border-blue-500 shadow-sm"
                     onClick={(e) => {
                       addBookToList(e, book)
+                      setModalOpen(false)
                     }}
                   >
                     追加

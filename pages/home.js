@@ -5,7 +5,7 @@ import { Fragment, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Link from 'next/link'
-import useSWR from 'swr'
+import useSWR, { useSWRConfig } from 'swr'
 import { Steps, Hints } from 'intro.js-react'
 
 // Components
@@ -52,6 +52,8 @@ export default function Home() {
   // ============================================================
   // Fetch Data
   // ============================================================
+
+  const { mutate } = useSWRConfig()
 
   // ユーザー情報
   const { data: userInfo } = useSWR(
@@ -165,18 +167,13 @@ export default function Home() {
 
   // セッション予約ボタン
   const reserveSession = async (sessionId, guestId) => {
+
     if (guestId) {
       // guestId がすでに設定されている場合、予約することができない
 
       // アラートの設定
       await setAlertAssort('failed')
-      // ページのリフレッシュ
-      await router.push({
-        pathname: '/empty'
-      })
-      await router.replace({
-        pathname: '/home'
-      })
+      
     } else {
       // guestId 未設定であれば、当ユーザーをIDを設定する
 
@@ -186,16 +183,14 @@ export default function Home() {
         guestName: userInfo.name
       })
 
+      mutate('/api/session', updateSession(sessionId, {
+        guestId: user.uid,
+        guestName: userInfo.name
+      }))
+
       // アラートの設定
       await setAlertAssort('reserve')
 
-      // ページのリフレッシュ
-      await router.push({
-        pathname: '/empty'
-      })
-      await router.replace({
-        pathname: '/home'
-      })
     }
   }
 

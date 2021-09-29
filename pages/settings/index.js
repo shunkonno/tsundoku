@@ -4,7 +4,7 @@
 import { Fragment, useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-import useSWR from 'swr'
+import useSWR, { useSWRConfig } from 'swr'
 
 // Components
 import { AppHeader } from '../../components/Header'
@@ -68,6 +68,9 @@ export default function UserSettings() {
   // ============================================================
   // Fetch Data
   // ============================================================
+  
+  //mutateを定義
+  const { mutate } = useSWRConfig()
 
   // ユーザー情報
   const { data: userInfo } = useSWR(
@@ -117,14 +120,10 @@ export default function UserSettings() {
     // アラートの設定
     await setAlertAssort('updateUserSetting')
 
-  //ページのリフレッシュ
-    await router.push({
-      pathname: '/empty'
-    })
-
-    await router.replace({
-      pathname: '/settings'
-    })
+    mutate(['/api/user', user.token], updateUser(user.uid, {
+      name: userName,
+      gender: genderSelected
+    }))
   }
 
   // ============================================================
