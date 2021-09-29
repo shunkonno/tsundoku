@@ -1,7 +1,7 @@
 // ============================================================
 // Imports
 // ===========================================================
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useState, useContext } from 'react'
 import Head from 'next/head'
 import useSWR, { useSWRConfig } from 'swr'
 import { useRouter } from 'next/router'
@@ -13,6 +13,8 @@ import { nanoid } from 'nanoid'
 import { AppHeader } from '../components/Header'
 import { Footer } from '../components/Footer'
 import { Navbar } from '../components/Navbar'
+import { GeneralAlert } from '../components/Alert'
+
 //Context
 import { AppContext } from '../context/state'
 
@@ -43,6 +45,12 @@ import { formatISOStringToDateTimeWithSlash } from '../utils/formatDateTime'
 import classNames from '../utils/classNames'
 
 export default function BookList() {
+  // ============================================================
+  // Contexts
+  // ============================================================
+  const { alertOpen, setAlertOpen, alertAssort, setAlertAssort } =
+    useContext(AppContext)
+
   // ============================================================
   // Initial State
   // ============================================================
@@ -87,6 +95,8 @@ export default function BookList() {
     }
   )
   console.log('bookList: ', bookList)
+
+  
 
   // ============================================================
   // Routing
@@ -201,6 +211,7 @@ export default function BookList() {
         // bookList を更新する
         updateBookList(user.uid, updatedBookList)
       }
+      setAlertAssort('updateBookList')
       mutate('/api/user/' + user.uid + '/booklist', updateBookList(user.uid, updatedBookList))
 
     } else {
@@ -222,6 +233,7 @@ export default function BookList() {
 
       updateBookListWithoutISBN(user.uid, updatedBookListWithoutISBN)
 
+      setAlertAssort('updateBookList')
       mutate('/api/user/' + user.uid + '/booklist', updateBookListWithoutISBN(user.uid, updatedBookListWithoutISBN))
     }
   }
@@ -231,6 +243,7 @@ export default function BookList() {
 
     await updateIsReading(user.uid, bid)
 
+    await setAlertAssort('updateIsReading')
     mutate(['/api/user', user.token])
   }
 
@@ -354,6 +367,8 @@ export default function BookList() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <GeneralAlert alertOpen={alertOpen} alertAssort={alertAssort} setAlertOpen={setAlertOpen} setAlertAssort={setAlertAssort} />
 
       {/* Modal -- START */}
       <>
