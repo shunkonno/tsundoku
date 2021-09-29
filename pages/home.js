@@ -11,10 +11,10 @@ import { Steps, Hints } from 'intro.js-react'
 // Components
 import { AppHeader } from '../components/Header'
 import { Footer } from '../components/Footer'
-import { Transition } from '@headlessui/react'
 import { Navbar } from '../components/Navbar'
 import { ReservedRoomCard } from '../components/Card'
 import { ReservableRoomList } from '../components/List'
+import { GeneralAlert } from '../components/Alert'
 
 //Context
 import { AppContext } from '../context/state'
@@ -22,9 +22,6 @@ import { AppContext } from '../context/state'
 // Assets
 import {
   PlusIcon,
-  CheckCircleIcon,
-  ExclamationIcon,
-  XIcon,
   PlusCircleIcon
 } from '@heroicons/react/solid'
 import { BookOpenIcon } from '@heroicons/react/outline'
@@ -163,23 +160,6 @@ export default function Home() {
   }
 
   // ============================================================
-  // Alert Handlers
-  // ============================================================
-
-  // アラート
-  useEffect(() => {
-    if (alertAssort) {
-      setAlertOpen(true)
-      setTimeout(async () => {
-        await setAlertOpen(false)
-        await setAlertAssort('')
-      }, 5000)
-    } else {
-      setAlertAssort('')
-    }
-  }, [alertAssort, setAlertAssort, setAlertOpen])
-
-  // ============================================================
   // Button Handlers
   // ============================================================
 
@@ -237,105 +217,6 @@ export default function Home() {
     }
   }
 
-  const renderAlert = (alertAssort) => (
-    <div className="flex relative justify-center w-full">
-      <Transition
-        show={alertOpen}
-        as={Fragment}
-        enter="transition duration-75"
-        enterFrom="transform -translate-y-1/4 opacity-0"
-        enterTo="transform -translate-y-0 opacity-95"
-        leave="transition-opacity duration-150"
-        leaveFrom="opacity-95"
-        leaveTo="opacity-0"
-      >
-        <div className="absolute z-10 px-4 w-full sm:w-1/3">
-          <div className="opacity-95">
-            <div
-              className={classNames(
-                (alertAssort == 'create' || alertAssort == 'reserve') &&
-                  'bg-green-50',
-                (alertAssort == 'cancel' || alertAssort == 'delete') &&
-                  'bg-gray-200',
-                alertAssort == 'failed' &&
-                  'bg-yellow-50 border-yellow-400 border-l-4',
-                'rounded-b-md p-4'
-              )}
-            >
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  {
-                    ((alertAssort == 'create' || alertAssort == 'reserve') && (
-                      <CheckCircleIcon
-                        className="w-5 h-5 text-green-400"
-                        aria-hidden="true"
-                      />
-                    ),
-                    (alertAssort == 'cancel' || alertAssort == 'delete') && (
-                      <CheckCircleIcon
-                        className="w-5 h-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                    ),
-                    alertAssort == 'failed' && (
-                      <ExclamationIcon
-                        className="w-5 h-5 text-yellow-400"
-                        aria-hidden="true"
-                      />
-                    ))
-                  }
-                </div>
-                <div className="ml-3">
-                  <p
-                    className={classNames(
-                      (alertAssort == 'create' || alertAssort == 'reserve') &&
-                        'text-green-800',
-                      (alertAssort == 'cancel' || alertAssort == 'delete') &&
-                        'text-gray-800',
-                      alertAssort == 'failed' && 'text-yellow-800',
-                      'text-sm font-medium'
-                    )}
-                  >
-                    {alertAssort == 'create' && 'ルームを作成しました。'}
-                    {alertAssort == 'reserve' && 'ルームの予約が完了しました。'}
-                    {alertAssort == 'cancel' &&
-                      'ルームの予約を取り消しました。'}
-                    {alertAssort == 'delete' && 'ルームを削除しました。'}
-                    {alertAssort == 'failed' &&
-                      '選択したルームは満員のため予約できませんでした。申し訳ございません。'}
-                  </p>
-                </div>
-                <div className="pl-3 ml-auto">
-                  <div className="-my-1.5 -mx-1.5">
-                    <button
-                      type="button"
-                      className={classNames(
-                        (alertAssort == 'create' || alertAssort == 'reserve') &&
-                          'bg-green-50  text-green-500 hover:bg-green-100 focus:ring-offset-green-50 focus:ring-green-600',
-                        (alertAssort == 'cancel' || alertAssort == 'delete') &&
-                          'bg-gray-200 text-gray-500 hover:bg-gray-100 focus:ring-offset-gray-50 focus:ring-gray-600',
-                        alertAssort == 'failed' &&
-                          'bg-yellow-50 text-yellow-500 hover:bg-yellow-100 focus:ring-offset-green-50 focus:ring-yellow-600',
-                        'inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2'
-                      )}
-                      onClick={() => {
-                        setAlertOpen(false)
-                        setAlertAssort('')
-                      }}
-                    >
-                      <span className="sr-only">Dismiss</span>
-                      <XIcon className="w-5 h-5" aria-hidden="true" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Transition>
-    </div>
-  )
-
   // ============================================================
   // Return
   // ============================================================
@@ -354,7 +235,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {renderAlert(alertAssort)}
+      <GeneralAlert alertOpen={alertOpen} alertAssort={alertAssort} setAlertOpen={setAlertOpen} setAlertAssort={setAlertAssort} />
 
       <AppHeader />
 

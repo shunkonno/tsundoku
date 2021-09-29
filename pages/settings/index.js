@@ -9,6 +9,7 @@ import useSWR from 'swr'
 // Components
 import { AppHeader } from '../../components/Header'
 import { Footer } from '../../components/Footer'
+import { GeneralAlert } from '../../components/Alert'
 
 //Context
 import { AppContext } from '../../context/state'
@@ -100,25 +101,6 @@ export default function UserSettings() {
   // Translate
   const t = uselocalesFilter('userSettings', router.locale)
 
-  
-  // ============================================================
-  // Alert Handlers
-  // ============================================================
-
-  // アラート
-  useEffect(() => {
-    if (alertAssort) {
-      setAlertOpen(true)
-      setTimeout(async () => {
-        await setAlertOpen(false)
-        await setAlertAssort('')
-      }, 5000)
-    } else {
-      setAlertAssort('')
-    }
-  }, [alertAssort, setAlertAssort, setAlertOpen])
-  
-
   // ============================================================
   // Handle Form Submit
   // ============================================================
@@ -146,56 +128,6 @@ export default function UserSettings() {
   }
 
   // ============================================================
-  // Render Function
-  // ============================================================
-  const renderAlert = (alertAssort) => (
-    <div className="flex relative justify-center w-full">
-      <Transition
-        show={alertOpen}
-        as={Fragment}
-        enter="transition duration-75"
-        enterFrom="transform -translate-y-1/4 opacity-0"
-        enterTo="transform -translate-y-0 opacity-95"
-        leave="transition-opacity duration-150"
-        leaveFrom="opacity-95"
-        leaveTo="opacity-0"
-      >
-        <div className="absolute z-10 px-4 w-full sm:w-1/3">
-          <div className="opacity-95">
-            <div className="p-4 bg-green-50 rounded-b-md">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <CheckCircleIcon
-                    className="w-5 h-5 text-green-400"
-                    aria-hidden="true"
-                  />
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm font-medium text-green-800">
-                    ユーザー設定を更新しました。
-                  </p>
-                </div>
-                <div className="pl-3 ml-auto">
-                  <div className="-my-1.5 -mx-1.5">
-                    <button
-                      type="button"
-                      className="inline-flex p-1.5 text-green-500 bg-green-50 hover:bg-green-100 rounded-md focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:ring-offset-green-50 focus:outline-none"
-                      onClick={() => setAlertOpen(false)}
-                    >
-                      <span className="sr-only">Dismiss</span>
-                      <XIcon className="w-5 h-5" aria-hidden="true" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Transition>
-    </div>
-  )
-
-  // ============================================================
   // Return Page
   // ===========================================================
   return (
@@ -209,7 +141,7 @@ export default function UserSettings() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {renderAlert(alertAssort)}
+      <GeneralAlert alertOpen={alertOpen} alertAssort={alertAssort} setAlertOpen={setAlertOpen} setAlertAssort={setAlertAssort} />
 
       <AppHeader />
 
