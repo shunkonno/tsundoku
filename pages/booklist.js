@@ -488,7 +488,7 @@ export default function BookList() {
                           <Image
                             className="object-contain"
                             layout={'fill'}
-                            src={bookInfo.image}
+                            src={bookInfo.image ? bookInfo.image : '/img/placeholder/noimage_480x640.jpg'}
                             alt=""
                           />
                         </div>
