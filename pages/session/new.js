@@ -199,7 +199,7 @@ export default function NewSession() {
   // ============================================================
   // Context
   // ============================================================
-  const {setAlertAssort} = useContext(AppContext);
+  const { setAlertAssort } = useContext(AppContext)
 
   // ============================================================
   // Auth
@@ -333,13 +333,13 @@ export default function NewSession() {
           guestName: '',
           startDateTime,
           endDateTime,
-          duration: durationValue
+          duration: Number(durationValue)
         })
-      
+
         setAlertAssort('create')
 
         router.push({
-          pathname: '/home',
+          pathname: '/home'
         })
       })
       .catch((err) => console.error('error:' + err))
