@@ -510,7 +510,7 @@ export default function BookList() {
                         <div className="overflow-hidden flex-1 ml-3 sm:ml-6">
                           <div className="flex flex-col justify-between h-full">
                             <div className="focus:outline-none">
-                              <p className="overflow-y-hidden max-h-10 text-base sm:text-lg font-medium leading-5 text-gray-900 overflow-ellipsis">
+                              <p className="overflow-y-hidden max-h-10 sm:max-h-16 line-clamp-2 text-base sm:text-lg font-medium leading-5 text-gray-900 overflow-ellipsis">
                                 {bookInfo.title}
                               </p>
                               {Array.isArray(bookInfo.authors) &&
