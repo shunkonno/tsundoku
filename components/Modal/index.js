@@ -1,3 +1,3 @@
-import Modal from './Modal'
+import AddBookModal from './AddBookModal'
 
-export { Modal }
+export { AddBookModal }
