@@ -37,7 +37,6 @@ export default function AppHeader() {
       }
     }
   )
-  // console.log(userInfo)
 
   const router = useRouter()
   const { locale, pathname } = router
@@ -58,9 +57,7 @@ export default function AppHeader() {
   const renderHeaderButton = () => {
     //ログインしているかどうか確認
     if (user) {
-      return (
-        <></>
-      )
+      return <></>
     }
     //ログインしていなければ、ログインボタンを表示(ログインしていなければ/index.jsに飛ばされるので本来必要ないが念の為)
     else {

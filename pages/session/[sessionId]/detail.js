@@ -24,7 +24,12 @@ import { PlusSmIcon, ChevronLeftIcon } from '@heroicons/react/solid'
 import uselocalesFilter from '../../../utils/translate'
 import { useAuth } from '../../../lib/auth'
 import fetcher from '../../../utils/fetcher'
-import { updateSession, deleteSession, addReadTime } from '../../../lib/db'
+import {
+  updateSession,
+  deleteSession,
+  addReadTime,
+  addReadTimeToUserStats
+} from '../../../lib/db'
 import { fetchOneSession, fetchAllSessions } from '../../../lib/db-admin'
 
 // ============================================================
@@ -183,14 +188,13 @@ export default function SessionDetail({ session }) {
     const bid = userInfo?.isReading
 
     if (bid) {
-      addReadTime(user?.uid, bid, Number(session?.duration))
-      console.log("Added Book: ", bid)
+      // CONSIDER: join ページで退出した際に、加算したほうが精度は高まる
+      addReadTime(user?.uid, bid, session?.duration)
     }
 
-    // await router.push({
-    //   pathname: '/session/[sessionId]/join',
-    //   query: { sessionId: session?.sessionId }
-    // })
+    // userStats の readTime に追加
+    // CONSIDER: join ページで退出した際に、加算したほうが精度は高まる
+    addReadTimeToUserStats(user?.uid, session?.duration)
   }
 
   // ============================================================
@@ -286,17 +290,17 @@ export default function SessionDetail({ session }) {
             <div className="flex justify-between items-start py-6">
               <div className="flex">
                 {enterRoomOpen ? (
-                    <a 
-                      href={`/ja/session/${session?.sessionId}/join`} 
-                      onClick={()=> joinSession()}
+                  <a
+                    href={`/ja/session/${session?.sessionId}/join`}
+                    onClick={() => joinSession()}
+                  >
+                    <span
+                      type="button"
+                      className="inline-flex items-center py-3 px-6 text-base font-medium text-white hover:bg-blue-600 rounded-md border border-transparent focus:ring-2 focus:ring-offset-2 shadow-sm cursor-pointer focus:outline-none bg-tsundoku-blue-main focus:ring-tsundoku-blue-main"
                     >
-                      <span
-                        type="button"
-                        className="inline-flex items-center py-3 px-6 text-base font-medium text-white hover:bg-blue-600 rounded-md border border-transparent focus:ring-2 focus:ring-offset-2 shadow-sm cursor-pointer focus:outline-none bg-tsundoku-blue-main focus:ring-tsundoku-blue-main"
-                      >
-                        ルームに入室する
-                      </span>
-                    </a>
+                      ルームに入室する
+                    </span>
+                  </a>
                 ) : (
                   <div>
                     <span
