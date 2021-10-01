@@ -72,7 +72,7 @@ export default function GeneralAlert({ alertOpen, alertAssort, setAlertOpen, set
   }
 
   return (
-    <div className="fixed z-10 flex justify-center w-full">
+    <div className="flex fixed z-10 justify-center w-full">
       <Transition
         show={alertOpen}
         as={Fragment}
