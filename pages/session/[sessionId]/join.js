@@ -1,22 +1,26 @@
 // ============================================================
 // Imports
 // ============================================================
+import { useState } from 'react'
 import Head from 'next/head'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import Script from 'next/script'
 
 // Components
 import { AppHeader } from '../../../components/Header'
+import Wave from 'react-wavify'
 
 //Assets
-import { MicrophoneIcon,SpeakerphoneIcon } from '@heroicons/react/outline'
+import { MicrophoneIcon, ChevronLeftIcon } from '@heroicons/react/outline'
 
 // Functions
 import { useAuth } from '../../../lib/auth'
 import fetcher from '../../../utils/fetcher'
 import { fetchOneSession, fetchAllSessions } from '../../../lib/db-admin'
 import { formatISOStringToTime } from '../../../utils/formatDateTime'
+import classNames from '../../../utils/classNames'
 
 
 // ============================================================
@@ -48,7 +52,12 @@ export async function getStaticPaths() {
 export default function Session({session}) {
   console.log(session)
   // ============================================================
-  // Initialize
+  // Initial State
+  // ============================================================
+  const [chatMessage, setChatMessage] = useState('')
+  const [isMicrophoneOn, setIsMicrophoneOn] = useState(true)
+  // ============================================================
+  // Routing
   // ============================================================
 
   const router = useRouter()
@@ -78,6 +87,24 @@ export default function Session({session}) {
   )
 
   console.log(userInfo)
+
+  // ブックリスト
+  const { data: bookList } = useSWR(
+    user ? '/api/user/' + user.uid + '/booklist' : null,
+    fetcher,
+    {
+      onErrorRetry: ({ retryCount }) => {
+        // Retry up to 10 times
+        if (retryCount >= 10) return
+      }
+    }
+  )
+
+  const isReadingBook = bookList?.find((book)=>{
+    return book.bookInfo.bid == userInfo.isReading
+  })
+
+  console.log('isReadingBook is: ',isReadingBook)
 
   const dummyUser = [{
     bookList: [],
@@ -213,6 +240,21 @@ export default function Session({session}) {
   }
 
   // ============================================================
+  // Helper Function
+  // ============================================================
+
+  const toggleIsMicrophoneOn = (e) => {
+    e.preventDefault()
+
+    if(isMicrophoneOn) {
+      setIsMicrophoneOn(false)
+    }
+    else {
+      setIsMicrophoneOn(true)
+    }
+  }
+
+  // ============================================================
   // Return Page
   // ============================================================
   return (
@@ -255,44 +297,102 @@ export default function Session({session}) {
           </div>
         </section>
         <div className="flex">
-          <section id="left-column" className="flex flex-shrink-0 items-center w-80 bg-blue-10">
-            <div className="mr-8 w-full h-96 bg-white rounded-tr-lg rounded-br-lg">
-
+          <section id="left-column" className="flex flex-shrink-0 items-center w-72 bg-blue-10">
+            <div className="flex flex-col items-center mr-8 w-full h-80 bg-white rounded-tr-lg rounded-br-lg px-4 py-2">
+              <div className="text-gray-500 font-bold py-2 text-lg flex-shrink-0 w-full">いま読んでいる本</div>
+              <div className="flex flex-col py-4 space-y-4 items-center flex-1">
+                <div className="relative w-24 h-32 shadow-md">
+                  <Image src={isReadingBook ? isReadingBook?.bookInfo.image :'/img/placeholder/noimage_480x640.jpg' } layout={'fill'} />
+                </div>
+                <div className="text-black">{isReadingBook?.bookInfo.title}</div>
+              </div>
+              <div className="flex-shrink-0 w-full flex">
+                <ChevronLeftIcon className="w-5 h-5 text-blue-400" />
+                <button className="text-sm text-blue-400">
+                  本を変更する
+                </button>
+              </div>
             </div>
 
           </section>
           <section id="center-column" className="flex-1 p-8 bg-green-10">
             <div id="main-vc" className="flex items-center mx-auto max-w-screen-2xl h-full bg-orange-10">
               <div className="flex justify-between items-center space-x-8 w-full h-full">
-                <div className="w-1/2">
+                <div className="w-full">
+                  <div className="bg-gradient-to-b to-green-400 from-blue-400 rounded-lg aspect-w-2 aspect-h-1 overflow-hidden">
+                  <Wave fill='url(#gradient)'
+                    paused={false}
+                    options={{
+                      height: 300,
+                      amplitude: 20,
+                      speed: 0.15,
+                      points: 3
+                    }}
+                  >
+                    <defs>
+                      <linearGradient id="gradient" gradientTransform="rotate(90)">
+                        <stop offset="10%"  stopColor="#67E8F9" />
+                        <stop offset="90%" stopColor="#14B8A6" />
+                      </linearGradient>
+                    </defs>
+                  </Wave>
+                  </div>
+                </div>
+                {/* <div className="w-1/2">
                   <div className="bg-white rounded-lg aspect-w-1 aspect-h-1">
 
                   </div>
-                </div>
-                <div className="w-1/2">
-                  <div className="bg-white rounded-lg aspect-w-1 aspect-h-1">
-
-                  </div>
-                </div>
+                </div> */}
               </div>
               
             </div>
           </section>
-          <section id="right-column" className="flex flex-shrink-0 items-center w-80 bg-yellow-10">
-            <div className="ml-8 w-full h-96 bg-white rounded-tl-lg rounded-bl-lg">
+          <section id="right-column" className="flex flex-shrink-0 items-center w-72 bg-yellow-10">
+            <div className="ml-8 w-full h-80 bg-white rounded-tl-lg rounded-bl-lg">
 
             </div>
           </section>
         </div>
         <div id="contorol-interface-area" className=" flex justify-center bg-purple-10">
+          
           <div className="w-1/3 max-w-7xl h-10">
-            
-                <div className="flex items-center space-x-2 h-full pointer-events-none">
+                <div className="flex items-center space-x-2 h-full">
+                
                   <div className="flex justify-center items-center p-2 mr-2 h-full bg-white rounded-lg">
-                    <MicrophoneIcon className=" w-6 h-6 text-green-400"/>
+                    <div 
+                      className="relative" 
+                      onClick={(e)=> {
+                        toggleIsMicrophoneOn(e)
+                        call.setLocalAudio(!call.localAudio())
+                      }}
+                    >
+                      <MicrophoneIcon 
+                        className={classNames(
+                          isMicrophoneOn ?
+                          'text-green-500'
+                          :
+                          'text-red-500',
+                          'w-6 h-6 z-10'
+                        )}
+                        
+                      />
+                      {isMicrophoneOn ? <></> :
+                        <Image src='/img/Icons/DisableSlash.svg' layout={'fill'} />
+                      }
+                    </div>
                   </div>
                   <div className="relative items-center w-full h-full bg-white rounded-lg">
-                    <input type="text" className="absolute inset-y-0 left-0 pl-4 pr-14 z-10 rounded-lg block px-0 w-full h-full sm:text-sm text-black border-none" placeholder="ここにメッセージを入力" />
+                    
+                  <input 
+                      type="text"
+                      name="chat"
+                      id="chat"
+                      value={chatMessage} 
+                      className="absolute inset-y-0 left-0 pl-4 pr-14 z-10 rounded-lg block px-0 w-full h-full sm:text-sm text-black border-none focus:outline-none focus:ring-1 focus:ring-green-400" placeholder="ここにメッセージを入力"
+                      onChange={(e)=> {
+                        setChatMessage(e.target.value)
+                      }}
+                    />
                     <div className="absolute inset-y-0 right-0 pr-4 z-10">
                       <button className="text-blue-500 h-full align-middle">
                         送信
