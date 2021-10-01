@@ -9,11 +9,44 @@ import Script from 'next/script'
 // Components
 import { AppHeader } from '../../../components/Header'
 
+//Assets
+import { MicrophoneIcon,SpeakerphoneIcon } from '@heroicons/react/outline'
+
 // Functions
 import { useAuth } from '../../../lib/auth'
 import fetcher from '../../../utils/fetcher'
+import { fetchOneSession, fetchAllSessions } from '../../../lib/db-admin'
+import { formatISOStringToTime } from '../../../utils/formatDateTime'
 
-export default function Session() {
+
+// ============================================================
+// Fetch static data
+// ============================================================
+export async function getStaticProps(context) {
+  // Fetch session info
+  const session = await fetchOneSession(context.params.sessionId)
+
+  return {
+    props: {
+      session
+    }
+  }
+}
+
+export async function getStaticPaths() {
+  const sessions = await fetchAllSessions()
+
+  const paths = sessions.map((session) => ({
+    params: {
+      sessionId: session.sessionId
+    }
+  }))
+
+  return { paths, fallback: true }
+}
+
+export default function Session({session}) {
+  console.log(session)
   // ============================================================
   // Initialize
   // ============================================================
@@ -45,6 +78,19 @@ export default function Session() {
   )
 
   console.log(userInfo)
+
+  const dummyUser = [{
+    bookList: [],
+    bookListWithoutISBN: [],
+    email: 'inafune@gmail.com',
+    gender: "male",
+    isNewUser: false,
+    isReading: "MkB7wTNguw",
+    name: "inafune",
+    provider: "google.com",
+    uid: "dnanbfkjabsdfjasjdkbflajkb",
+
+  }]
 
   // ============================================================
   // Initialize Video Call
@@ -170,7 +216,7 @@ export default function Session() {
   // Return Page
   // ============================================================
   return (
-    <div>
+    <div className="min-h-screen bg-blueGray-800">
       <Script
         crossOrigin
         src="https://unpkg.com/@daily-co/daily-js"
@@ -188,7 +234,84 @@ export default function Session() {
 
       <AppHeader />
 
-      <main className="relative sm:py-4 px-4 mx-auto max-w-7xl">
+      <main className="relative text-white">
+
+        <section id="time-line" className="py-6 px-8 mx-auto max-w-7xl">
+          <div className="flex">
+            <div className="flex-shrink-0 text-center">
+              <p>開始時刻</p>
+              <p>{formatISOStringToTime(session?.startDateTime)}</p>
+            </div>
+            <div className="flex-1 border-b border-gray-100">
+
+            </div>
+            <div className="flex-shrink-0 text-center">
+              <p>終了時刻</p>
+              <p>{formatISOStringToTime(session?.endDateTime)}</p>
+            </div>
+
+            
+            
+          </div>
+        </section>
+        <div className="flex">
+          <section id="left-column" className="flex flex-shrink-0 items-center w-80 bg-blue-10">
+            <div className="mr-8 w-full h-96 bg-white rounded-tr-lg rounded-br-lg">
+
+            </div>
+
+          </section>
+          <section id="center-column" className="flex-1 p-8 bg-green-10">
+            <div id="main-vc" className="flex items-center mx-auto max-w-screen-2xl h-full bg-orange-10">
+              <div className="flex justify-between items-center space-x-8 w-full h-full">
+                <div className="w-1/2">
+                  <div className="bg-white rounded-lg aspect-w-1 aspect-h-1">
+
+                  </div>
+                </div>
+                <div className="w-1/2">
+                  <div className="bg-white rounded-lg aspect-w-1 aspect-h-1">
+
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </section>
+          <section id="right-column" className="flex flex-shrink-0 items-center w-80 bg-yellow-10">
+            <div className="ml-8 w-full h-96 bg-white rounded-tl-lg rounded-bl-lg">
+
+            </div>
+          </section>
+        </div>
+        <div id="contorol-interface-area" className=" flex justify-center bg-purple-10">
+          <div className="w-1/3 max-w-7xl h-10">
+            
+                <div className="flex items-center space-x-2 h-full pointer-events-none">
+                  <div className="flex justify-center items-center p-2 mr-2 h-full bg-white rounded-lg">
+                    <MicrophoneIcon className=" w-6 h-6 text-green-400"/>
+                  </div>
+                  <div className="relative items-center w-full h-full bg-white rounded-lg">
+                    <input type="text" className="absolute inset-y-0 left-0 pl-4 pr-14 z-10 rounded-lg block px-0 w-full h-full sm:text-sm text-black border-none" placeholder="ここにメッセージを入力" />
+                    <div className="absolute inset-y-0 right-0 pr-4 z-10">
+                      <button className="text-blue-500 h-full align-middle">
+                        送信
+                      </button>
+                    </div>
+                  </div>
+                </div>
+            
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
         <div id="local-controls">
           <div className="py-4">
             <button
