@@ -15,7 +15,7 @@ import { Transition, RadioGroup } from '@headlessui/react'
 // Functions
 import { useAuth } from '../../../lib/auth'
 import uselocalesFilter from '../../../utils/translate'
-import { updateUser } from '../../../lib/db'
+import { initializeUserStats, updateUser } from '../../../lib/db'
 
 // ============================================================
 // Settings
@@ -70,12 +70,17 @@ export default function NewUserSettings() {
   const handleSubmit = (e) => {
     e.preventDefault()
 
+    const currentDateTime = new Date()
+    const currentYear = currentDateTime.getFullYear()
+
     updateUser(user.uid, {
-      name: userName,
       bookList: [],
       bookListWithoutISBN: [],
-      isReading: ''
+      isReading: '',
+      name: userName
     })
+
+    initializeUserStats(user.uid, { readTime: { [currentYear]: {} } })
 
     router.push({ pathname: '/home', query: { welcome: true } })
   }
