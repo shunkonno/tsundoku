@@ -27,7 +27,7 @@ const navigation = {
   social: [
     {
       name: 'Twitter',
-      href: 'https://twitter.com/Tsundoku_tw',
+      href: 'https://twitter.com/TsundokuBook',
       icon: (props) =>
         function TwitterIcon() {
           return (
