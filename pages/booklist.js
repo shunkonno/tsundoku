@@ -95,7 +95,6 @@ export default function BookList() {
       }
     }
   )
-  console.log('bookList: ', bookList)
 
   // ============================================================
   // Routing
@@ -164,8 +163,6 @@ export default function BookList() {
       // 未登録の場合には、null が返却される
       const bookInfo = await fetchBookInfo(book.isbn13)
 
-      console.log(bookInfo)
-
       // 本が book collection に未登録ならば、bookListCount を 1 にしたうえで、追加する
       if (!bookInfo) {
         const bid = nanoid(10)
@@ -211,8 +208,10 @@ export default function BookList() {
         updateBookList(user.uid, updatedBookList)
       }
       setAlertAssort('updateBookList')
-      mutate('/api/user/' + user.uid + '/booklist', updateBookList(user.uid, updatedBookList))
-
+      mutate(
+        '/api/user/' + user.uid + '/booklist',
+        updateBookList(user.uid, updatedBookList)
+      )
     } else {
       // ISBN-13がないなら、books collection には追加しない
       const bid = nanoid(10)
@@ -233,7 +232,10 @@ export default function BookList() {
       updateBookListWithoutISBN(user.uid, updatedBookListWithoutISBN)
 
       setAlertAssort('updateBookList')
-      mutate('/api/user/' + user.uid + '/booklist', updateBookListWithoutISBN(user.uid, updatedBookListWithoutISBN))
+      mutate(
+        '/api/user/' + user.uid + '/booklist',
+        updateBookListWithoutISBN(user.uid, updatedBookListWithoutISBN)
+      )
     }
   }
 
@@ -250,18 +252,16 @@ export default function BookList() {
   // Render Function
   // ============================================================
 
-  
-
   const renderAuthors = (authors) => {
     //3人以上著者がいたら、3人目以降を省略し、"・他"を付け加えて表示する。
-    if(authors.length > 2){
-      return(
+    if (authors.length > 2) {
+      return (
         <div className="overflow-hidden mt-1 sm:mt-0 max-h-10">
           {
             //authorsの配列の3人目以降を削除
-            authors.slice(0,2).map((author, idx) => {
+            authors.slice(0, 2).map((author, idx) => {
               //今の項目が2番目(最後)だったら、inline-blockにする。それ以外ならblockにする。
-              if(idx != 1){
+              if (idx != 1) {
                 return (
                   <span
                     className="block text-xs sm:text-sm leading-4 text-gray-500 truncate"
@@ -270,9 +270,9 @@ export default function BookList() {
                     {author}
                   </span>
                 )
-              }else{
-                return(
-                  <span 
+              } else {
+                return (
+                  <span
                     className="inline-block text-xs sm:text-sm leading-4 text-gray-500 truncate"
                     key={author}
                   >
@@ -282,27 +282,24 @@ export default function BookList() {
               }
             })
           }
-        {/* 2人目の著者の右に "・他" を描画する */}
-        <span className="inline-block text-xs sm:text-sm leading-4 text-gray-500 truncate">・他</span>
+          {/* 2人目の著者の右に "・他" を描画する */}
+          <span className="inline-block text-xs sm:text-sm leading-4 text-gray-500 truncate">
+            ・他
+          </span>
         </div>
       )
     }
     //2人以下なら全員を並べて表示するのみ
     else {
-      return(
-        authors.map((author) => {
-          return (
-            <div className="overflow-hidden mt-1 sm:mt-0 max-h-10" key={author}>
-              <p
-                className="text-xs sm:text-sm text-gray-500 truncate"
-              >
-                {author}
-              </p>
-            </div>
-            
-          )
-        })
-      )
+      return authors.map((author) => {
+        return (
+          <div className="overflow-hidden mt-1 sm:mt-0 max-h-10" key={author}>
+            <p className="text-xs sm:text-sm text-gray-500 truncate">
+              {author}
+            </p>
+          </div>
+        )
+      })
     }
   }
 
@@ -324,11 +321,11 @@ export default function BookList() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <GeneralAlert 
+      <GeneralAlert
         alertOpen={alertOpen}
-        alertAssort={alertAssort} 
-        setAlertOpen={setAlertOpen} 
-        setAlertAssort={setAlertAssort} 
+        alertAssort={alertAssort}
+        setAlertOpen={setAlertOpen}
+        setAlertAssort={setAlertAssort}
       />
 
       <AddBookModal
@@ -375,16 +372,17 @@ export default function BookList() {
                         key={bookInfo.bid}
                       >
                         {bookInfo.bid == userInfo?.isReading && (
-                          
-                          
-                            <BookOpenIcon className="absolute bottom-0 left-0 z-10 p-1 mb-2 ml-2 w-8 h-8 text-white bg-blue-500 rounded-full" />
-                          
+                          <BookOpenIcon className="absolute bottom-0 left-0 z-10 p-1 mb-2 ml-2 w-8 h-8 text-white bg-blue-500 rounded-full" />
                         )}
                         <div className="relative flex-shrink-0 w-16 sm:w-20">
                           <Image
                             className="object-contain"
                             layout={'fill'}
-                            src={bookInfo.image ? bookInfo.image : '/img/placeholder/noimage_480x640.jpg'}
+                            src={
+                              bookInfo.image
+                                ? bookInfo.image
+                                : '/img/placeholder/noimage_480x640.jpg'
+                            }
                             alt=""
                           />
                         </div>
@@ -395,8 +393,7 @@ export default function BookList() {
                                 {bookInfo.title}
                               </p>
                               {Array.isArray(bookInfo.authors) &&
-                                renderAuthors(bookInfo.authors)
-                              }
+                                renderAuthors(bookInfo.authors)}
                             </div>
                             <div className="text-sm text-gray-500 truncate">
                               {formatISOStringToDateTimeWithSlash(date)} 追加
@@ -468,41 +465,71 @@ export default function BookList() {
                                     読了度
                                   </div>
                                   <div className="flex mt-1">
-                                  <svg
-                                    className=" mr-1.5 w-1.5 h-6 text-blue-100"
-                                    fill="currentColor"
-                                    viewBox="0 0 5 20"
-                                  >
-                                    <rect x="0" y="0" r="1"  width="5" height="20"/>
-                                  </svg>
-                                  <svg
-                                    className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-200"
-                                    fill="currentColor"
-                                    viewBox="0 0 5 20"
-                                  >
-                                    <rect x="0" y="0" r="1"  width="5" height="20"/>
-                                  </svg>
-                                  <svg
-                                    className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-300"
-                                    fill="currentColor"
-                                    viewBox="0 0 5 20"
-                                  >
-                                    <rect x="0" y="0" r="1"  width="5" height="20"/>
-                                  </svg>
-                                  <svg
-                                    className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-400"
-                                    fill="currentColor"
-                                    viewBox="0 0 5 20"
-                                  >
-                                    <rect x="0" y="0" r="1"  width="5" height="20"/>
-                                  </svg>
-                                  <svg
-                                    className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-500"
-                                    fill="currentColor"
-                                    viewBox="0 0 5 20"
-                                  >
-                                    <rect x="0" y="0" r="1"  width="5" height="20"/>
-                                  </svg>
+                                    <svg
+                                      className=" mr-1.5 w-1.5 h-6 text-blue-100"
+                                      fill="currentColor"
+                                      viewBox="0 0 5 20"
+                                    >
+                                      <rect
+                                        x="0"
+                                        y="0"
+                                        r="1"
+                                        width="5"
+                                        height="20"
+                                      />
+                                    </svg>
+                                    <svg
+                                      className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-200"
+                                      fill="currentColor"
+                                      viewBox="0 0 5 20"
+                                    >
+                                      <rect
+                                        x="0"
+                                        y="0"
+                                        r="1"
+                                        width="5"
+                                        height="20"
+                                      />
+                                    </svg>
+                                    <svg
+                                      className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-300"
+                                      fill="currentColor"
+                                      viewBox="0 0 5 20"
+                                    >
+                                      <rect
+                                        x="0"
+                                        y="0"
+                                        r="1"
+                                        width="5"
+                                        height="20"
+                                      />
+                                    </svg>
+                                    <svg
+                                      className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-400"
+                                      fill="currentColor"
+                                      viewBox="0 0 5 20"
+                                    >
+                                      <rect
+                                        x="0"
+                                        y="0"
+                                        r="1"
+                                        width="5"
+                                        height="20"
+                                      />
+                                    </svg>
+                                    <svg
+                                      className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-500"
+                                      fill="currentColor"
+                                      viewBox="0 0 5 20"
+                                    >
+                                      <rect
+                                        x="0"
+                                        y="0"
+                                        r="1"
+                                        width="5"
+                                        height="20"
+                                      />
+                                    </svg>
                                   </div>
                                 </Menu.Button>
                               </div>

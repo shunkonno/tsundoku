@@ -20,10 +20,7 @@ import { GeneralAlert } from '../components/Alert'
 import { AppContext } from '../context/state'
 
 // Assets
-import {
-  PlusIcon,
-  PlusCircleIcon
-} from '@heroicons/react/solid'
+import { PlusIcon, PlusCircleIcon } from '@heroicons/react/solid'
 import { BookOpenIcon } from '@heroicons/react/outline'
 import 'intro.js/introjs.css'
 
@@ -86,8 +83,6 @@ export default function Home() {
       }
     }
   )
-
-  console.log('bookList: ', bookList)
 
   // ============================================================
   // Routing
@@ -167,13 +162,11 @@ export default function Home() {
 
   // セッション予約ボタン
   const reserveSession = async (sessionId, guestId) => {
-
     if (guestId) {
       // guestId がすでに設定されている場合、予約することができない
 
       // アラートの設定
       await setAlertAssort('failed')
-      
     } else {
       // guestId 未設定であれば、当ユーザーをIDを設定する
 
@@ -183,14 +176,16 @@ export default function Home() {
         guestName: userInfo.name
       })
 
-      mutate('/api/session', updateSession(sessionId, {
-        guestId: user.uid,
-        guestName: userInfo.name
-      }))
+      mutate(
+        '/api/session',
+        updateSession(sessionId, {
+          guestId: user.uid,
+          guestName: userInfo.name
+        })
+      )
 
       // アラートの設定
       await setAlertAssort('reserve')
-
     }
   }
 
@@ -230,7 +225,12 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <GeneralAlert alertOpen={alertOpen} alertAssort={alertAssort} setAlertOpen={setAlertOpen} setAlertAssort={setAlertAssort} />
+      <GeneralAlert
+        alertOpen={alertOpen}
+        alertAssort={alertAssort}
+        setAlertOpen={setAlertOpen}
+        setAlertAssort={setAlertAssort}
+      />
 
       <AppHeader />
 
@@ -321,19 +321,20 @@ export default function Home() {
                         <li className="mb-2" key={bookInfo.bid}>
                           <div className="flex items-center space-x-2">
                             <div className="flex flex-shrink-0 justify-center items-center">
-                            {
-                              bookInfo.bid == userInfo.isReading ?
-                              <BookOpenIcon className="w-6 h-6 text-blue-500"/>
-                            :
-                              <span
-                                className="inline-block w-5 h-5 rounded-full"
-                                aria-hidden="true"
-                              />
-                            }
+                              {bookInfo.bid == userInfo.isReading ? (
+                                <BookOpenIcon className="w-6 h-6 text-blue-500" />
+                              ) : (
+                                <span
+                                  className="inline-block w-5 h-5 rounded-full"
+                                  aria-hidden="true"
+                                />
+                              )}
                             </div>
-                          
+
                             <div className="overflow-hidden flex-1">
-                              <p className="text-gray-500 truncate">{bookInfo?.title}</p>
+                              <p className="text-gray-500 truncate">
+                                {bookInfo?.title}
+                              </p>
                             </div>
                             <div className="flex flex-shrink-0 justify-center items-center">
                               <div className="flex">
@@ -342,35 +343,65 @@ export default function Home() {
                                   fill="currentColor"
                                   viewBox="0 0 5 20"
                                 >
-                                  <rect x="0" y="0" r="1"  width="5" height="20"/>
+                                  <rect
+                                    x="0"
+                                    y="0"
+                                    r="1"
+                                    width="5"
+                                    height="20"
+                                  />
                                 </svg>
                                 <svg
                                   className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-200"
                                   fill="currentColor"
                                   viewBox="0 0 5 20"
                                 >
-                                  <rect x="0" y="0" r="1"  width="5" height="20"/>
+                                  <rect
+                                    x="0"
+                                    y="0"
+                                    r="1"
+                                    width="5"
+                                    height="20"
+                                  />
                                 </svg>
                                 <svg
                                   className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-300"
                                   fill="currentColor"
                                   viewBox="0 0 5 20"
                                 >
-                                  <rect x="0" y="0" r="1"  width="5" height="20"/>
+                                  <rect
+                                    x="0"
+                                    y="0"
+                                    r="1"
+                                    width="5"
+                                    height="20"
+                                  />
                                 </svg>
                                 <svg
                                   className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-400"
                                   fill="currentColor"
                                   viewBox="0 0 5 20"
                                 >
-                                  <rect x="0" y="0" r="1"  width="5" height="20"/>
+                                  <rect
+                                    x="0"
+                                    y="0"
+                                    r="1"
+                                    width="5"
+                                    height="20"
+                                  />
                                 </svg>
                                 <svg
                                   className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-500"
                                   fill="currentColor"
                                   viewBox="0 0 5 20"
                                 >
-                                  <rect x="0" y="0" r="1"  width="5" height="20"/>
+                                  <rect
+                                    x="0"
+                                    y="0"
+                                    r="1"
+                                    width="5"
+                                    height="20"
+                                  />
                                 </svg>
                               </div>
                             </div>
