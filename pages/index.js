@@ -309,7 +309,7 @@ export default function Home() {
               <div>
                 <dt>
                   <div className="flex justify-center items-center w-12 h-12 text-white bg-blue-500 rounded-md">
-                    <span className="font-bold text-white">2</span>
+                    <span className="font-bold text-white">3</span>
                   </div>
                   <p className="mt-5 text-lg font-bold leading-6 text-gray-900">
                     参加
