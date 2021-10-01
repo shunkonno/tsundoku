@@ -20,11 +20,9 @@ import { AddBookModal } from '../components/Modal'
 import { AppContext } from '../context/state'
 
 // Assets
-import { Dialog, Menu, Transition } from '@headlessui/react'
+import { Menu, Transition } from '@headlessui/react'
 import {
   PlusSmIcon,
-  SearchIcon,
-  XIcon,
   DotsVerticalIcon
 } from '@heroicons/react/solid'
 import { BookOpenIcon, TrashIcon } from '@heroicons/react/outline'
@@ -249,9 +247,6 @@ export default function BookList() {
   // ============================================================
   // Render Function
   // ============================================================
-
-  
-
   const renderAuthors = (authors) => {
     //3人以上著者がいたら、3人目以降を省略し、"・他"を付け加えて表示する。
     if(authors.length > 2){
@@ -391,7 +386,7 @@ export default function BookList() {
                         <div className="overflow-hidden flex-1 ml-3 sm:ml-6">
                           <div className="flex flex-col justify-between h-full">
                             <div className="focus:outline-none">
-                              <p className="overflow-y-hidden max-h-10 sm:max-h-16 line-clamp-2 text-base sm:text-lg font-medium leading-5 text-gray-900 overflow-ellipsis">
+                              <p className="overflow-y-hidden max-h-10 sm:max-h-16 text-base sm:text-lg font-medium leading-5 text-gray-900 overflow-ellipsis line-clamp-2">
                                 {bookInfo.title}
                               </p>
                               {Array.isArray(bookInfo.authors) &&
