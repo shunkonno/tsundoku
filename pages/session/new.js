@@ -194,7 +194,7 @@ export default function NewSession() {
   const [month, setMonth] = useState('')
   const [day, setDay] = useState('')
   const [startTime, setStartTime] = useState('')
-  const [duration, setDuration] = useState(durationData[3])
+  const [duration, setDuration] = useState(durationData[2])
 
   // ============================================================
   // Context
