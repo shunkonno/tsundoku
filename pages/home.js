@@ -84,6 +84,20 @@ export default function Home() {
     }
   )
 
+  // 利用情報
+  const { data: stats } = useSWR(
+    user ? '/api/user/' + user.uid + '/stats' : null,
+    fetcher,
+    {
+      onErrorRetry: ({ retryCount }) => {
+        // Retry up to 10 times
+        if (retryCount >= 10) return
+      }
+    }
+  )
+
+  console.log('stats:', stats)
+
   // ============================================================
   // Routing
   // ============================================================
@@ -155,6 +169,38 @@ export default function Home() {
       )
     })
   }
+
+  // ============================================================
+  // Helper Functions
+  // ===========================================================
+  const monthlyReadTime = () => {
+    const currentDateTime = new Date()
+    const currentYear = currentDateTime.getFullYear()
+    const currentMonth = currentDateTime.getMonth() + 1
+
+    const readTime = stats?.readTime
+
+    if (readTime?.[currentYear]?.[currentMonth]) {
+      // 現在の月のデータが存在する場合
+      var monthlyReadTime = 0
+
+      // 今月分を array に集約
+      const readTimeArray = Object.values(readTime[currentYear][currentMonth])
+
+      // monthlyReadTime に加算
+      readTimeArray.forEach((readTime) => {
+        monthlyReadTime += readTime
+      })
+
+      return monthlyReadTime
+    } else {
+      // 現在の月のデータが存在しない場合 (=今月未利用)
+      const monthlyReadTime = 0
+      return monthlyReadTime
+    }
+  }
+
+  console.log(monthlyReadTime())
 
   // ============================================================
   // Button Handlers
