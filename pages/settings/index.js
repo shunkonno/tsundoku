@@ -23,6 +23,7 @@ import { useAuth } from '../../lib/auth'
 import uselocalesFilter from '../../utils/translate'
 import { updateUser } from '../../lib/db'
 import fetcher from '../../utils/fetcher'
+import { addAvatar } from '../../lib/storage'
 
 // ============================================================
 // Settings
@@ -52,6 +53,7 @@ export default function UserSettings() {
   const [genderOfMatchSelected, setGenderOfMatchSelected] = useState(
     genderOfMatchSettings[0]
   )
+  const [avatarFile, setAvatarFile] = useState(null)
 
   // ============================================================
   // Contexts
@@ -68,7 +70,7 @@ export default function UserSettings() {
   // ============================================================
   // Fetch Data
   // ============================================================
-  
+
   //mutateを定義
   const { mutate } = useSWRConfig()
 
@@ -112,18 +114,36 @@ export default function UserSettings() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    await updateUser(user.uid, {
-      name: userName,
-      gender: genderSelected
-    })
+    // TODO: 項目が選択されていない場合はエラーを返す
+    // 性別を選択せずに保存しようとするとエラーになったため
+
+    if (avatarFile) {
+      // アバター画像が選択された場合は、アップロードする
+      const avatarUrl = await addAvatar(user?.uid, avatarFile)
+
+      await updateUser(user.uid, {
+        name: userName,
+        gender: genderSelected,
+        avatar: avatarUrl
+      })
+    } else {
+      // アバターがアップロードされなかった場合
+      await updateUser(user.uid, {
+        name: userName,
+        gender: genderSelected
+      })
+    }
 
     // アラートの設定
     await setAlertAssort('updateUserSetting')
 
-    mutate(['/api/user', user.token], updateUser(user.uid, {
-      name: userName,
-      gender: genderSelected
-    }))
+    mutate(
+      ['/api/user', user.token],
+      updateUser(user.uid, {
+        name: userName,
+        gender: genderSelected
+      })
+    )
   }
 
   // ============================================================
@@ -140,7 +160,12 @@ export default function UserSettings() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <GeneralAlert alertOpen={alertOpen} alertAssort={alertAssort} setAlertOpen={setAlertOpen} setAlertAssort={setAlertAssort} />
+      <GeneralAlert
+        alertOpen={alertOpen}
+        alertAssort={alertAssort}
+        setAlertOpen={setAlertOpen}
+        setAlertAssort={setAlertAssort}
+      />
 
       <AppHeader />
 
@@ -251,6 +276,19 @@ export default function UserSettings() {
               </RadioGroup>
             </div>
             {/* 性別 END */}
+            {/* アバター画像ファイル */}
+            <div>
+              <input
+                type="file"
+                id="avatar"
+                name="avatar"
+                accept="image/png, image/jpeg"
+                onChange={(e) => {
+                  setAvatarFile(e.target.files[0])
+                }}
+              />
+            </div>
+            {/* アバター画像ファイル - END*/}
 
             {/* <Transition
               show={genderSelected?.label == 'Female'}
