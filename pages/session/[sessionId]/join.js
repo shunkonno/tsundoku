@@ -13,7 +13,12 @@ import { AppHeader } from '../../../components/Header'
 import Wave from 'react-wavify'
 
 //Assets
-import { MicrophoneIcon, ChevronLeftIcon, ChevronRightIcon, LogoutIcon } from '@heroicons/react/outline'
+import {
+  MicrophoneIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  LogoutIcon
+} from '@heroicons/react/outline'
 import colors from 'tailwindcss/colors'
 
 // Functions
@@ -23,36 +28,40 @@ import { fetchOneSession, fetchAllSessions } from '../../../lib/db-admin'
 import { formatISOStringToTime } from '../../../utils/formatDateTime'
 import classNames from '../../../utils/classNames'
 
-
 // DummyData
 const dummyUser = {
-  bookList: [{
-    bid:"NNGXQZD1BV",
-    date:"2021-09-29T09:53:23.493Z",
-    totalReadTime:0
-  }],
+  bookList: [
+    {
+      bid: 'NNGXQZD1BV',
+      date: '2021-09-29T09:53:23.493Z',
+      totalReadTime: 0
+    }
+  ],
   bookListWithoutISBN: [],
   email: 'inafune@gmail.com',
-  gender: "male",
+  gender: 'male',
   isNewUser: false,
-  isReading: "NNGXQZD1BV",
-  name: "inafune",
-  provider: "google.com",
-  uid: "dnanbfkjabsdfjasjdkbflajkb",
-  imageURL: "/img/avatar/inahune.jpg"
+  isReading: 'NNGXQZD1BV',
+  name: 'inafune',
+  provider: 'google.com',
+  uid: 'dnanbfkjabsdfjasjdkbflajkb',
+  imageURL: '/img/avatar/inahune.jpg'
 }
-const dummyBookList = [{
-  bookInfo: {
-    authors: ['稲船敬二'],
-    bid: "NNGXQZD1BV",
-    bookListCount: 3,
-    image: "http://books.google.com/books/content?id=o8jSygAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
-    isbn13: "9784334976606",
-    pageCount: 312,
-    title: "どんな判断や!",
-  },
-  date: "2021-09-29T09:53:23.493Z"
-}]
+const dummyBookList = [
+  {
+    bookInfo: {
+      authors: ['稲船敬二'],
+      bid: 'NNGXQZD1BV',
+      bookListCount: 3,
+      image:
+        'http://books.google.com/books/content?id=o8jSygAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api',
+      isbn13: '9784334976606',
+      pageCount: 312,
+      title: 'どんな判断や!'
+    },
+    date: '2021-09-29T09:53:23.493Z'
+  }
+]
 
 // ============================================================
 // Fetch static data
@@ -80,7 +89,7 @@ export async function getStaticPaths() {
   return { paths, fallback: true }
 }
 
-export default function Session({session}) {
+export default function Session({ session }) {
   console.log(session)
   // ============================================================
   // Initialize
@@ -100,12 +109,12 @@ export default function Session({session}) {
 
   //マッチング相手のユーザーのIDがguestIdかownerIdか識別(現在はdummyUserで表示テスト中)
   var anotherUserId
-  if(dummyUser){
-      anotherUserId = dummyUser.uid
-  }else{
-    if(user?.uid == session?.ownerId) {
+  if (dummyUser) {
+    anotherUserId = dummyUser.uid
+  } else {
+    if (user?.uid == session?.ownerId) {
       anotherUserId = session?.guestId
-    }else {
+    } else {
       anotherUserId = session?.ownerId
     }
   }
@@ -127,21 +136,24 @@ export default function Session({session}) {
   )
   console.log(userInfo)
 
-  //TODO:マッチング相手のユーザー情報の取得
-  const anotherUserInfo = dummyUser
-  // const { data: anotherUserInfo } = useSWR(
-  //   user ? ['/api/user', ??? ] : null,
-  //   fetcher,
-  //   {
-  //     onErrorRetry: ({ retryCount }) => {
-  //       // エラー時には、10回まではリトライする
-  //       if (retryCount >= 10) return
-  //     }
-  //   }
-  // )
+  // マッチング相手のユーザー情報を取得
+  const peerUid =
+    user?.uid === session?.ownerId ? session?.guestId : session?.ownerId
 
+  const { data: peerUserInfo } = useSWR(
+    peerUid ? '/api/user/' + peerUid + '/info' : null,
+    fetcher,
+    {
+      onErrorRetry: ({ retryCount }) => {
+        // エラー時には、10回まではリトライする
+        if (retryCount >= 10) return
+      }
+    }
+  )
 
-  // ログインユーザーのブックリスト取得
+  console.log('peerUserInfo:', peerUserInfo)
+
+  // ユーザーのブックリスト取得
   const { data: bookList } = useSWR(
     user ? '/api/user/' + user.uid + '/booklist' : null,
     fetcher,
@@ -153,30 +165,29 @@ export default function Session({session}) {
     }
   )
 
-  // TODO:マッチング相手のユーザーのブックリスト取得
-  const anotherBookList = dummyBookList
-  // const { data: anotherBookList } = useSWR(
-  //   user ? '/api/user/' + anotherUserId + '/booklist' : null,
-  //   fetcher,
-  //   {
-  //     onErrorRetry: ({ retryCount }) => {
-  //       // Retry up to 10 times
-  //       if (retryCount >= 10) return
-  //     }
-  //   }
-  // )
+  // マッチング相手のブックリスト取得
+  const { data: peerBookList } = useSWR(
+    peerUid ? '/api/user/' + peerUid + '/booklist' : null,
+    fetcher,
+    {
+      onErrorRetry: ({ retryCount }) => {
+        // Retry up to 10 times
+        if (retryCount >= 10) return
+      }
+    }
+  )
 
-  console.log("Another User's BookList: ", anotherBookList)
+  console.log('peerBookList: ', peerBookList)
 
-  const isReadingBook = bookList?.find((book)=>{
+  const isReadingBook = bookList?.find((book) => {
     return book.bookInfo.bid == userInfo.isReading
   })
 
-  const anotherIsReadingBook = anotherBookList?.find((book)=>{
+  const peerIsReadingBook = peerBookList?.find((book) => {
     return book.bookInfo.bid == dummyUser.isReading
   })
 
-  console.log('isReadingBook is: ',isReadingBook)
+  console.log('isReadingBook is: ', isReadingBook)
 
   // ============================================================
   // Initialize Video Call
@@ -305,10 +316,9 @@ export default function Session({session}) {
   const toggleIsMicrophoneOn = (e) => {
     e.preventDefault()
 
-    if(isMicrophoneOn) {
+    if (isMicrophoneOn) {
       setIsMicrophoneOn(false)
-    }
-    else {
+    } else {
       setIsMicrophoneOn(true)
     }
   }
@@ -336,7 +346,6 @@ export default function Session({session}) {
       <AppHeader />
 
       <main className="relative text-white">
-
         <section className="py-6 px-8 ">
           <div className="flex justify-center">
             <div className="flex-shrink-0 w-72">
@@ -356,48 +365,60 @@ export default function Session({session}) {
                 <p>開始時刻</p>
                 <p>{formatISOStringToTime(session?.startDateTime)}</p>
               </div>
-              <div className="flex-1 border-b border-gray-100">
-
-              </div>
+              <div className="flex-1 border-b border-gray-100"></div>
               <div className="flex-shrink-0 text-center">
                 <p>終了時刻</p>
                 <p>{formatISOStringToTime(session?.endDateTime)}</p>
               </div>
-
             </div>
-            <div className="flex-shrink-0  w-72">
-
-            </div>
+            <div className="flex-shrink-0  w-72"></div>
           </div>
         </section>
         <div className="flex">
-          <section id="left-column" className="flex flex-shrink-0 items-center w-72 bg-blue-10">
+          <section
+            id="left-column"
+            className="flex flex-shrink-0 items-center w-72 bg-blue-10"
+          >
             <div className="flex flex-col items-center mr-8 w-full h-80 bg-white px-4 py-2 rounded-tr-lg rounded-br-lg">
-              <div className="text-gray-500 font-bold py-2 text-lg flex-shrink-0 w-full">いま読んでいる本</div>
+              <div className="text-gray-500 font-bold py-2 text-lg flex-shrink-0 w-full">
+                いま読んでいる本
+              </div>
               <div className="flex flex-col py-4 space-y-4 items-center flex-1">
                 <div className="relative w-24 h-32 shadow-md">
-                  <Image src={isReadingBook ? isReadingBook?.bookInfo.image :'/img/placeholder/noimage_480x640.jpg' } layout={'fill'} />
+                  <Image
+                    src={
+                      isReadingBook
+                        ? isReadingBook?.bookInfo.image
+                        : '/img/placeholder/noimage_480x640.jpg'
+                    }
+                    layout={'fill'}
+                  />
                 </div>
-                <div className="text-black">{isReadingBook?.bookInfo.title}</div>
+                <div className="text-black">
+                  {isReadingBook?.bookInfo.title}
+                </div>
               </div>
               <div className="flex-shrink-0 w-full flex">
                 <ChevronLeftIcon className="w-5 h-5 text-blue-400" />
-                <button className="text-sm text-blue-400">
-                  本を変更する
-                </button>
+                <button className="text-sm text-blue-400">本を変更する</button>
               </div>
             </div>
-
           </section>
           <section id="center-column" className="flex-1 p-8 bg-green-10">
-            <div id="main-vc" className="flex items-center mx-auto max-w-screen-2xl h-full bg-orange-10">
+            <div
+              id="main-vc"
+              className="flex items-center mx-auto max-w-screen-2xl h-full bg-orange-10"
+            >
               <div className="flex justify-between items-center space-x-8 w-full h-full">
+
                 <div className="w-1/2 relative rounded-lg overflow-hidden">
                   <div className="bg-gradient-to-b to-green-400 from-blue-400 aspect-w-1 aspect-h-1">
                   </div>
                   <div class="h-1/2 absolute bottom-0 w-full">
                     <Wave fill='url(#gradient-self)'
                       className="h-full"
+
+                
                       paused={false}
                       options={{
                         amplitude: 30,
@@ -406,21 +427,32 @@ export default function Session({session}) {
                       }}
                     >
                       <defs>
-                        <linearGradient id="gradient-self" gradientTransform="rotate(90)">
-                          <stop offset="10%"  stopColor={colors.green["300"]} />
-                          <stop offset="90%" stopColor={colors.cyan["300"]} />
+                        <linearGradient
+                          id="gradient-self"
+                          gradientTransform="rotate(90)"
+                        >
+                          <stop offset="10%" stopColor={colors.green['300']} />
+                          <stop offset="90%" stopColor={colors.cyan['300']} />
                         </linearGradient>
                       </defs>
                     </Wave>
                     </div>
                   <div className="absolute left-1/2 top-1/4 transform -translate-x-1/2 -translate-y-1/2">
-                      <Image className=" rounded-full" src={'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'} width={80} height={80}/>
-                      <p className="text-center text-gray-800">{userInfo?.name}</p>
+                    <Image
+                      className=" rounded-full"
+                      src={
+                        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+                      }
+                      width={80}
+                      height={80}
+                    />
+                    <p className="text-center text-gray-800">
+                      {userInfo?.name}
+                    </p>
                   </div>
                 </div>
                 <div className="w-1/2 relative rounded-lg overflow-hidden">
                   <div className="bg-gradient-to-b to-orange-400 from-yellow-400 rounded-lg aspect-w-1 aspect-h-1">
-                    
                   </div>
                   <div class="h-1/2 absolute bottom-0 w-full">
                     <Wave fill='url(#gradient-other)'
@@ -428,35 +460,58 @@ export default function Session({session}) {
                       paused={false}
                       options={{
                         amplitude: 20,
-                        speed: 0.20,
+                        speed: 0.2,
                         points: 3
                       }}
                     >
                       <defs>
-                        <linearGradient id="gradient-other" gradientTransform="rotate(90)">
-                          <stop offset="10%"  stopColor={colors.orange["300"]} />
-                          <stop offset="90%" stopColor={colors.yellow["300"]} />
+                        <linearGradient
+                          id="gradient-other"
+                          gradientTransform="rotate(90)"
+                        >
+                          <stop offset="10%" stopColor={colors.orange['300']} />
+                          <stop offset="90%" stopColor={colors.yellow['300']} />
                         </linearGradient>
                       </defs>
                     </Wave>
                   </div>
                   <div className="absolute left-1/2 top-1/4 transform -translate-x-1/2 -translate-y-1/2">
-                    <Image className=" rounded-full" src={dummyUser.imageURL} width={80} height={80}/>
-                    <p className="text-center text-gray-800">{dummyUser?.name}</p>
+                    <Image
+                      className=" rounded-full"
+                      src={dummyUser.imageURL}
+                      width={80}
+                      height={80}
+                    />
+                    <p className="text-center text-gray-800">
+                      {dummyUser?.name}
+                    </p>
                   </div>
                 </div>
               </div>
-              
             </div>
           </section>
-          <section id="right-column" className="flex flex-shrink-0 items-center w-72 bg-yellow-10">
+          <section
+            id="right-column"
+            className="flex flex-shrink-0 items-center w-72 bg-yellow-10"
+          >
             <div className="flex flex-col items-center w-full h-80 bg-white ml-8  px-4 py-2 rounded-tl-lg rounded-bl-lg">
-              <div className="text-gray-500 font-bold py-2 text-lg flex-shrink-0 w-full">いま読んでいる本</div>
+              <div className="text-gray-500 font-bold py-2 text-lg flex-shrink-0 w-full">
+                いま読んでいる本
+              </div>
               <div className="flex flex-col py-4 space-y-4 items-center flex-1">
                 <div className="relative w-24 h-32 shadow-md">
-                  <Image src={anotherIsReadingBook ? anotherIsReadingBook?.bookInfo.image :'/img/placeholder/noimage_480x640.jpg' } layout={'fill'} />
+                  <Image
+                    src={
+                      peerIsReadingBook
+                        ? peerIsReadingBook?.bookInfo.image
+                        : '/img/placeholder/noimage_480x640.jpg'
+                    }
+                    layout={'fill'}
+                  />
                 </div>
-                <div className="text-black">{anotherIsReadingBook?.bookInfo.title}</div>
+                <div className="text-black">
+                  {peerIsReadingBook?.bookInfo.title}
+                </div>
               </div>
               <div className="flex-shrink-0 self-end flex text-right">
                 <button className="text-sm text-blue-400">
@@ -467,72 +522,61 @@ export default function Session({session}) {
             </div>
           </section>
         </div>
-        <div id="contorol-interface-area" className=" flex justify-center bg-purple-10">
-          
+        <div
+          id="contorol-interface-area"
+          className=" flex justify-center bg-purple-10"
+        >
           <div className="w-1/3 max-w-7xl h-10">
-                <div className="flex items-center space-x-2 h-full">
-                
-                  <div className="flex relative justify-center items-center p-2 mr-2 h-full bg-white rounded-lg">
-                    <div 
-                      className="relative" 
-                      onClick={(e)=> {
-                        toggleIsMicrophoneOn(e)
-                        call.setLocalAudio(!call.localAudio())
-                      }}
-                    >
-                      
-                      <MicrophoneIcon 
-                        className={classNames(
-                          isMicrophoneOn ?
-                          'text-green-500'
-                          :
-                          'text-red-500',
-                          'w-6 h-6 z-10'
-                        )}
-                      />
-                      {isMicrophoneOn ? <></> :
-                        <Image src='/img/Icons/DisableSlash.svg' layout={'fill'} />
-                      }
-                    </div>
-                    <div className="absolute -bottom-6 whitespace-nowrap text-xs ">
-                      {isMicrophoneOn ? 
-                        <p className="text-blueGray-400">マイクの状態 : オン</p>
-                       :
-                        <p className="text-blueGray-600">マイクの状態 : オフ</p>
-                      }
-                      
-                    </div>
-                  </div>
-                  <div className="relative items-center w-full h-full bg-white rounded-lg">
-                    
-                  <input 
-                      type="text"
-                      name="chat"
-                      id="chat"
-                      value={chatMessage} 
-                      className="absolute inset-y-0 left-0 pl-4 pr-14 z-10 rounded-lg block px-0 w-full h-full sm:text-sm text-black border-none focus:outline-none focus:ring-1 focus:ring-green-400" placeholder="ここにメッセージを入力"
-                      onChange={(e)=> {
-                        setChatMessage(e.target.value)
-                      }}
-                    />
-                    <div className="absolute inset-y-0 right-0 pr-4 z-10">
-                      <button className="text-blue-500 h-full align-middle">
-                        送信
-                      </button>
-                    </div>
-                  </div>
+            <div className="flex items-center space-x-2 h-full">
+              <div className="flex relative justify-center items-center p-2 mr-2 h-full bg-white rounded-lg">
+                <div
+                  className="relative"
+                  onClick={(e) => {
+                    toggleIsMicrophoneOn(e)
+                    call.setLocalAudio(!call.localAudio())
+                  }}
+                >
+                  <MicrophoneIcon
+                    className={classNames(
+                      isMicrophoneOn ? 'text-green-500' : 'text-red-500',
+                      'w-6 h-6 z-10'
+                    )}
+                  />
+                  {isMicrophoneOn ? (
+                    <></>
+                  ) : (
+                    <Image src="/img/Icons/DisableSlash.svg" layout={'fill'} />
+                  )}
                 </div>
-            
+                <div className="absolute -bottom-6 whitespace-nowrap text-xs ">
+                  {isMicrophoneOn ? (
+                    <p className="text-blueGray-400">マイクの状態 : オン</p>
+                  ) : (
+                    <p className="text-blueGray-600">マイクの状態 : オフ</p>
+                  )}
+                </div>
+              </div>
+              <div className="relative items-center w-full h-full bg-white rounded-lg">
+                <input
+                  type="text"
+                  name="chat"
+                  id="chat"
+                  value={chatMessage}
+                  className="absolute inset-y-0 left-0 pl-4 pr-14 z-10 rounded-lg block px-0 w-full h-full sm:text-sm text-black border-none focus:outline-none focus:ring-1 focus:ring-green-400"
+                  placeholder="ここにメッセージを入力"
+                  onChange={(e) => {
+                    setChatMessage(e.target.value)
+                  }}
+                />
+                <div className="absolute inset-y-0 right-0 pr-4 z-10">
+                  <button className="text-blue-500 h-full align-middle">
+                    送信
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-
-
-
-
-
-
-
-
 
         <div id="local-controls">
           <div className="py-4">
