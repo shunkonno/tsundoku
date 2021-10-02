@@ -28,41 +28,6 @@ import { fetchOneSession, fetchAllSessions } from '../../../lib/db-admin'
 import { formatISOStringToTime } from '../../../utils/formatDateTime'
 import classNames from '../../../utils/classNames'
 
-// DummyData
-const dummyUser = {
-  bookList: [
-    {
-      bid: 'NNGXQZD1BV',
-      date: '2021-09-29T09:53:23.493Z',
-      totalReadTime: 0
-    }
-  ],
-  bookListWithoutISBN: [],
-  email: 'inafune@gmail.com',
-  gender: 'male',
-  isNewUser: false,
-  isReading: 'NNGXQZD1BV',
-  name: 'inafune',
-  provider: 'google.com',
-  uid: 'dnanbfkjabsdfjasjdkbflajkb',
-  imageURL: '/img/avatar/inahune.jpg'
-}
-const dummyBookList = [
-  {
-    bookInfo: {
-      authors: ['稲船敬二'],
-      bid: 'NNGXQZD1BV',
-      bookListCount: 3,
-      image:
-        'http://books.google.com/books/content?id=o8jSygAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api',
-      isbn13: '9784334976606',
-      pageCount: 312,
-      title: 'どんな判断や!'
-    },
-    date: '2021-09-29T09:53:23.493Z'
-  }
-]
-
 // ============================================================
 // Fetch static data
 // ============================================================
@@ -107,18 +72,6 @@ export default function Session({ session }) {
   const auth = useAuth()
   const user = auth.user
 
-  //マッチング相手のユーザーのIDがguestIdかownerIdか識別(現在はdummyUserで表示テスト中)
-  var anotherUserId
-  if (dummyUser) {
-    anotherUserId = dummyUser.uid
-  } else {
-    if (user?.uid == session?.ownerId) {
-      anotherUserId = session?.guestId
-    } else {
-      anotherUserId = session?.ownerId
-    }
-  }
-
   // ============================================================
   // Fetch Data
   // ============================================================
@@ -137,8 +90,12 @@ export default function Session({ session }) {
   console.log(userInfo)
 
   // マッチング相手のユーザー情報を取得
-  const peerUid =
-    user?.uid === session?.ownerId ? session?.guestId : session?.ownerId
+  // マッチング相手のユーザーのIDがguestIdかownerIdか識別
+   const  peerUid = 
+      user?.uid === session?.ownerId ? session?.guestId : session?.ownerId
+
+  console.log('PeerUid is : ', peerUid)
+  
 
   const { data: peerUserInfo } = useSWR(
     peerUid ? '/api/user/' + peerUid + '/info' : null,
@@ -184,7 +141,7 @@ export default function Session({ session }) {
   })
 
   const peerIsReadingBook = peerBookList?.find((book) => {
-    return book.bookInfo.bid == dummyUser.isReading
+    return book.bookInfo.bid == peerUserInfo?.isReading
   })
 
   console.log('isReadingBook is: ', isReadingBook)
@@ -478,12 +435,12 @@ export default function Session({ session }) {
                   <div className="absolute left-1/2 top-1/4 transform -translate-x-1/2 -translate-y-1/2">
                     <Image
                       className=" rounded-full"
-                      src={dummyUser.imageURL}
+                      src={peerUserInfo?.image ? peerUserInfo.image : '/img/placeholder/noimage_480x640.jpg'}
                       width={80}
                       height={80}
                     />
                     <p className="text-center text-gray-800">
-                      {dummyUser?.name}
+                      {peerUserInfo?.name}
                     </p>
                   </div>
                 </div>
