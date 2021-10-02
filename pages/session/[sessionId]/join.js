@@ -392,12 +392,14 @@ export default function Session({session}) {
           <section id="center-column" className="flex-1 p-8 bg-green-10">
             <div id="main-vc" className="flex items-center mx-auto max-w-screen-2xl h-full bg-orange-10">
               <div className="flex justify-between items-center space-x-8 w-full h-full">
-                <div className="w-1/2 relative">
-                  <div className="bg-gradient-to-b to-green-400 from-blue-400 rounded-lg aspect-w-1 aspect-h-1 overflow-hidden">
+                <div className="w-1/2 relative rounded-lg overflow-hidden">
+                  <div className="bg-gradient-to-b to-green-400 from-blue-400 aspect-w-1 aspect-h-1">
+                  </div>
+                  <div class="h-1/2 absolute bottom-0 w-full">
                     <Wave fill='url(#gradient-self)'
+                      className="h-full"
                       paused={false}
                       options={{
-                        height: 300,
                         amplitude: 30,
                         speed: 0.15,
                         points: 3
@@ -410,18 +412,21 @@ export default function Session({session}) {
                         </linearGradient>
                       </defs>
                     </Wave>
-                  </div>
+                    </div>
                   <div className="absolute left-1/2 top-1/4 transform -translate-x-1/2 -translate-y-1/2">
                       <Image className=" rounded-full" src={'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'} width={80} height={80}/>
                       <p className="text-center text-gray-800">{userInfo?.name}</p>
                   </div>
                 </div>
-                <div className="w-1/2 relative">
+                <div className="w-1/2 relative rounded-lg overflow-hidden">
                   <div className="bg-gradient-to-b to-orange-400 from-yellow-400 rounded-lg aspect-w-1 aspect-h-1">
+                    
+                  </div>
+                  <div class="h-1/2 absolute bottom-0 w-full">
                     <Wave fill='url(#gradient-other)'
+                      className="h-full"
                       paused={false}
                       options={{
-                        height: 300,
                         amplitude: 20,
                         speed: 0.20,
                         points: 3
