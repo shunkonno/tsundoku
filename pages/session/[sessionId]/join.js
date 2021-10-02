@@ -13,7 +13,8 @@ import { AppHeader } from '../../../components/Header'
 import Wave from 'react-wavify'
 
 //Assets
-import { MicrophoneIcon, ChevronLeftIcon } from '@heroicons/react/outline'
+import { MicrophoneIcon, ChevronLeftIcon, ChevronRightIcon, LogoutIcon } from '@heroicons/react/outline'
+import colors from 'tailwindcss/colors'
 
 // Functions
 import { useAuth } from '../../../lib/auth'
@@ -22,6 +23,36 @@ import { fetchOneSession, fetchAllSessions } from '../../../lib/db-admin'
 import { formatISOStringToTime } from '../../../utils/formatDateTime'
 import classNames from '../../../utils/classNames'
 
+
+// DummyData
+const dummyUser = {
+  bookList: [{
+    bid:"NNGXQZD1BV",
+    date:"2021-09-29T09:53:23.493Z",
+    totalReadTime:0
+  }],
+  bookListWithoutISBN: [],
+  email: 'inafune@gmail.com',
+  gender: "male",
+  isNewUser: false,
+  isReading: "NNGXQZD1BV",
+  name: "inafune",
+  provider: "google.com",
+  uid: "dnanbfkjabsdfjasjdkbflajkb",
+  imageURL: "/img/avatar/inahune.jpg"
+}
+const dummyBookList = [{
+  bookInfo: {
+    authors: ['稲船敬二'],
+    bid: "NNGXQZD1BV",
+    bookListCount: 3,
+    image: "http://books.google.com/books/content?id=o8jSygAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+    isbn13: "9784334976606",
+    pageCount: 312,
+    title: "どんな判断や!",
+  },
+  date: "2021-09-29T09:53:23.493Z"
+}]
 
 // ============================================================
 // Fetch static data
@@ -52,23 +83,32 @@ export async function getStaticPaths() {
 export default function Session({session}) {
   console.log(session)
   // ============================================================
-  // Initial State
-  // ============================================================
-  const [chatMessage, setChatMessage] = useState('')
-  const [isMicrophoneOn, setIsMicrophoneOn] = useState(true)
-  // ============================================================
-  // Routing
+  // Initialize
   // ============================================================
 
+  // State
+  const [chatMessage, setChatMessage] = useState('')
+  const [isMicrophoneOn, setIsMicrophoneOn] = useState(true)
+
+  // Routing
   const router = useRouter()
   const { sessionId } = router.query
 
-  // ============================================================
-  // Auth
-  // ============================================================
-
+  // auth
   const auth = useAuth()
   const user = auth.user
+
+  //マッチング相手のユーザーのIDがguestIdかownerIdか識別(現在はdummyUserで表示テスト中)
+  var anotherUserId
+  if(dummyUser){
+      anotherUserId = dummyUser.uid
+  }else{
+    if(user?.uid == session?.ownerId) {
+      anotherUserId = session?.guestId
+    }else {
+      anotherUserId = session?.ownerId
+    }
+  }
 
   // ============================================================
   // Fetch Data
@@ -85,10 +125,23 @@ export default function Session({session}) {
       }
     }
   )
-
   console.log(userInfo)
 
-  // ブックリスト
+  //TODO:マッチング相手のユーザー情報の取得
+  const anotherUserInfo = dummyUser
+  // const { data: anotherUserInfo } = useSWR(
+  //   user ? ['/api/user', ??? ] : null,
+  //   fetcher,
+  //   {
+  //     onErrorRetry: ({ retryCount }) => {
+  //       // エラー時には、10回まではリトライする
+  //       if (retryCount >= 10) return
+  //     }
+  //   }
+  // )
+
+
+  // ログインユーザーのブックリスト取得
   const { data: bookList } = useSWR(
     user ? '/api/user/' + user.uid + '/booklist' : null,
     fetcher,
@@ -100,24 +153,30 @@ export default function Session({session}) {
     }
   )
 
+  // TODO:マッチング相手のユーザーのブックリスト取得
+  const anotherBookList = dummyBookList
+  // const { data: anotherBookList } = useSWR(
+  //   user ? '/api/user/' + anotherUserId + '/booklist' : null,
+  //   fetcher,
+  //   {
+  //     onErrorRetry: ({ retryCount }) => {
+  //       // Retry up to 10 times
+  //       if (retryCount >= 10) return
+  //     }
+  //   }
+  // )
+
+  console.log("Another User's BookList: ", anotherBookList)
+
   const isReadingBook = bookList?.find((book)=>{
     return book.bookInfo.bid == userInfo.isReading
   })
 
+  const anotherIsReadingBook = anotherBookList?.find((book)=>{
+    return book.bookInfo.bid == dummyUser.isReading
+  })
+
   console.log('isReadingBook is: ',isReadingBook)
-
-  const dummyUser = [{
-    bookList: [],
-    bookListWithoutISBN: [],
-    email: 'inafune@gmail.com',
-    gender: "male",
-    isNewUser: false,
-    isReading: "MkB7wTNguw",
-    name: "inafune",
-    provider: "google.com",
-    uid: "dnanbfkjabsdfjasjdkbflajkb",
-
-  }]
 
   // ============================================================
   // Initialize Video Call
@@ -278,27 +337,42 @@ export default function Session({session}) {
 
       <main className="relative text-white">
 
-        <section id="time-line" className="py-6 px-8 mx-auto max-w-7xl">
-          <div className="flex">
-            <div className="flex-shrink-0 text-center">
-              <p>開始時刻</p>
-              <p>{formatISOStringToTime(session?.startDateTime)}</p>
+        <section className="py-6 px-8 ">
+          <div className="flex justify-center">
+            <div className="flex-shrink-0 w-72">
+              <div className="py-4">
+                <button
+                  id="leave"
+                  className="flex space-x-2 items-center py-3 px-6 text-base font-medium text-white bg-red-600 opacity-90 rounded-md"
+                  onClick={leaveRoom}
+                >
+                  <LogoutIcon className="w-6 h-6 opacity-100 transform rotate-180" />
+                  <span>退出する</span>
+                </button>
+              </div>
             </div>
-            <div className="flex-1 border-b border-gray-100">
+            <div className="flex w-full max-w-7xl">
+              <div className="flex-shrink-0 text-center">
+                <p>開始時刻</p>
+                <p>{formatISOStringToTime(session?.startDateTime)}</p>
+              </div>
+              <div className="flex-1 border-b border-gray-100">
+
+              </div>
+              <div className="flex-shrink-0 text-center">
+                <p>終了時刻</p>
+                <p>{formatISOStringToTime(session?.endDateTime)}</p>
+              </div>
 
             </div>
-            <div className="flex-shrink-0 text-center">
-              <p>終了時刻</p>
-              <p>{formatISOStringToTime(session?.endDateTime)}</p>
-            </div>
+            <div className="flex-shrink-0  w-72">
 
-            
-            
+            </div>
           </div>
         </section>
         <div className="flex">
           <section id="left-column" className="flex flex-shrink-0 items-center w-72 bg-blue-10">
-            <div className="flex flex-col items-center mr-8 w-full h-80 bg-white rounded-tr-lg rounded-br-lg px-4 py-2">
+            <div className="flex flex-col items-center mr-8 w-full h-80 bg-white px-4 py-2 rounded-tr-lg rounded-br-lg">
               <div className="text-gray-500 font-bold py-2 text-lg flex-shrink-0 w-full">いま読んでいる本</div>
               <div className="flex flex-col py-4 space-y-4 items-center flex-1">
                 <div className="relative w-24 h-32 shadow-md">
@@ -318,38 +392,73 @@ export default function Session({session}) {
           <section id="center-column" className="flex-1 p-8 bg-green-10">
             <div id="main-vc" className="flex items-center mx-auto max-w-screen-2xl h-full bg-orange-10">
               <div className="flex justify-between items-center space-x-8 w-full h-full">
-                <div className="w-full">
-                  <div className="bg-gradient-to-b to-green-400 from-blue-400 rounded-lg aspect-w-2 aspect-h-1 overflow-hidden">
-                  <Wave fill='url(#gradient)'
-                    paused={false}
-                    options={{
-                      height: 300,
-                      amplitude: 20,
-                      speed: 0.15,
-                      points: 3
-                    }}
-                  >
-                    <defs>
-                      <linearGradient id="gradient" gradientTransform="rotate(90)">
-                        <stop offset="10%"  stopColor="#67E8F9" />
-                        <stop offset="90%" stopColor="#14B8A6" />
-                      </linearGradient>
-                    </defs>
-                  </Wave>
+                <div className="w-1/2 relative">
+                  <div className="bg-gradient-to-b to-green-400 from-blue-400 rounded-lg aspect-w-1 aspect-h-1 overflow-hidden">
+                    <Wave fill='url(#gradient-self)'
+                      paused={false}
+                      options={{
+                        height: 300,
+                        amplitude: 30,
+                        speed: 0.15,
+                        points: 3
+                      }}
+                    >
+                      <defs>
+                        <linearGradient id="gradient-self" gradientTransform="rotate(90)">
+                          <stop offset="10%"  stopColor={colors.green["300"]} />
+                          <stop offset="90%" stopColor={colors.cyan["300"]} />
+                        </linearGradient>
+                      </defs>
+                    </Wave>
+                  </div>
+                  <div className="absolute left-1/2 top-1/4 transform -translate-x-1/2 -translate-y-1/2">
+                      <Image className=" rounded-full" src={'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'} width={80} height={80}/>
+                      <p className="text-center text-gray-800">{userInfo?.name}</p>
                   </div>
                 </div>
-                {/* <div className="w-1/2">
-                  <div className="bg-white rounded-lg aspect-w-1 aspect-h-1">
-
+                <div className="w-1/2 relative">
+                  <div className="bg-gradient-to-b to-orange-400 from-yellow-400 rounded-lg aspect-w-1 aspect-h-1">
+                    <Wave fill='url(#gradient-other)'
+                      paused={false}
+                      options={{
+                        height: 300,
+                        amplitude: 20,
+                        speed: 0.20,
+                        points: 3
+                      }}
+                    >
+                      <defs>
+                        <linearGradient id="gradient-other" gradientTransform="rotate(90)">
+                          <stop offset="10%"  stopColor={colors.orange["300"]} />
+                          <stop offset="90%" stopColor={colors.yellow["300"]} />
+                        </linearGradient>
+                      </defs>
+                    </Wave>
                   </div>
-                </div> */}
+                  <div className="absolute left-1/2 top-1/4 transform -translate-x-1/2 -translate-y-1/2">
+                    <Image className=" rounded-full" src={dummyUser.imageURL} width={80} height={80}/>
+                    <p className="text-center text-gray-800">{dummyUser?.name}</p>
+                  </div>
+                </div>
               </div>
               
             </div>
           </section>
           <section id="right-column" className="flex flex-shrink-0 items-center w-72 bg-yellow-10">
-            <div className="ml-8 w-full h-80 bg-white rounded-tl-lg rounded-bl-lg">
-
+            <div className="flex flex-col items-center w-full h-80 bg-white ml-8  px-4 py-2 rounded-tl-lg rounded-bl-lg">
+              <div className="text-gray-500 font-bold py-2 text-lg flex-shrink-0 w-full">いま読んでいる本</div>
+              <div className="flex flex-col py-4 space-y-4 items-center flex-1">
+                <div className="relative w-24 h-32 shadow-md">
+                  <Image src={anotherIsReadingBook ? anotherIsReadingBook?.bookInfo.image :'/img/placeholder/noimage_480x640.jpg' } layout={'fill'} />
+                </div>
+                <div className="text-black">{anotherIsReadingBook?.bookInfo.title}</div>
+              </div>
+              <div className="flex-shrink-0 self-end flex text-right">
+                <button className="text-sm text-blue-400">
+                  ブックリストを見る
+                </button>
+                <ChevronRightIcon className="w-5 h-5 text-blue-400" />
+              </div>
             </div>
           </section>
         </div>
@@ -384,7 +493,7 @@ export default function Session({session}) {
                       {isMicrophoneOn ? 
                         <p className="text-blueGray-400">マイクの状態 : オン</p>
                        :
-                       <p className="text-blueGray-600">マイクの状態 : オフ</p>
+                        <p className="text-blueGray-600">マイクの状態 : オフ</p>
                       }
                       
                     </div>
@@ -428,26 +537,6 @@ export default function Session({session}) {
               onClick={joinRoom}
             >
               ルームに参加する
-            </button>
-          </div>
-
-          <div className="py-4">
-            <button
-              id="leave"
-              className="items-center py-3 px-6 text-base font-medium text-white bg-red-500"
-              onClick={leaveRoom}
-            >
-              退出する
-            </button>
-          </div>
-          <div className="py-4">
-            <button
-              id="toggle-mic"
-              onClick={() => {
-                call.setLocalAudio(!call.localAudio())
-              }}
-            >
-              toggle mic state
             </button>
           </div>
           <div id="participants"></div>
