@@ -16,6 +16,7 @@ import { Transition, RadioGroup } from '@headlessui/react'
 import { useAuth } from '../../../lib/auth'
 import uselocalesFilter from '../../../utils/translate'
 import { initializeUserStats, updateUser } from '../../../lib/db'
+import { addAvatar } from '../../../lib/storage'
 
 // ============================================================
 // Settings
@@ -47,6 +48,7 @@ export default function NewUserSettings() {
   const [genderOfMatchSelected, setGenderOfMatchSelected] = useState(
     genderOfMatchSettings[0]
   )
+  const [avatarFile, setAvatarFile] = useState(null)
 
   // ============================================================
   // Auth
@@ -67,18 +69,33 @@ export default function NewUserSettings() {
   // Handle Form Submit
   // ============================================================
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     const currentDateTime = new Date()
     const currentYear = currentDateTime.getFullYear()
 
-    updateUser(user.uid, {
-      bookList: [],
-      bookListWithoutISBN: [],
-      isReading: '',
-      name: userName
-    })
+    if (avatarFile) {
+      // アバター画像が選択された場合は、アップロードする
+      const avatarUrl = await addAvatar(user?.uid, avatarFile)
+
+      updateUser(user.uid, {
+        avatar: avatarUrl,
+        bookList: [],
+        bookListWithoutISBN: [],
+        isReading: '',
+        name: userName
+      })
+    } else {
+      // アバターがアップロードされなかった場合
+      updateUser(user.uid, {
+        avatar: '',
+        bookList: [],
+        bookListWithoutISBN: [],
+        isReading: '',
+        name: userName
+      })
+    }
 
     initializeUserStats(user.uid, { readTime: { [currentYear]: {} } })
 
@@ -196,6 +213,20 @@ export default function NewUserSettings() {
                 </div>
               </RadioGroup>
             </div>
+            {/* アバター画像ファイル */}
+            <div>
+              <input
+                type="file"
+                id="avatar"
+                name="avatar"
+                accept="image/png, image/jpeg"
+                onChange={(e) => {
+                  setAvatarFile(e.target.files[0])
+                }}
+              />
+            </div>
+            {/* アバター画像ファイル - END*/}
+
             {/* <Transition
               show={genderSelected?.label == 'female'}
               as={Fragment}
