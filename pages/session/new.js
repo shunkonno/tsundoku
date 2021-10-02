@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 import useSWR from 'swr'
 import moment from 'moment'
+import DayPicker from 'react-day-picker'
 
 // Components
 import { AppHeader } from '../../components/Header'
@@ -17,6 +18,7 @@ import { AppContext } from '../../context/state'
 
 //Assets
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
+import 'react-day-picker/lib/style.css'
 
 // Functions
 import uselocalesFilter from '../../utils/translate'
@@ -25,100 +27,49 @@ import fetcher from '../../utils/fetcher'
 import { addSession } from '../../lib/db'
 
 // ============================================================
-// Settings
+// Constants
 // ============================================================
-const yearData = ['2021', '2022']
-
-const monthData = [
-  '1',
-  '2',
-  '3',
-  '4',
-  '5',
-  '6',
-  '7',
-  '8',
-  '9',
-  '10',
-  '11',
-  '12'
-]
-
-const dayData = [
-  '1',
-  '2',
-  '3',
-  '4',
-  '5',
-  '6',
-  '7',
-  '8',
-  '9',
-  '10',
-  '11',
-  '12',
-  '13',
-  '14',
-  '15',
-  '16',
-  '17',
-  '18',
-  '19',
-  '20',
-  '21',
-  '22',
-  '23',
-  '24',
-  '25',
-  '26',
-  '27',
-  '28',
-  '29',
-  '30',
-  '31'
-]
-
 const timeData = [
-  '0:00',
-  '0:15',
-  '0:30',
-  '0:45',
-  '1:00',
-  '1:15',
-  '1:30',
-  '1:45',
-  '2:00',
-  '2:15',
-  '2:30',
-  '2:45',
-  '3:00',
-  '3:15',
-  '3:30',
-  '3:45',
-  '4:00',
-  '4:15',
-  '4:30',
-  '4:45',
-  '5:00',
-  '5:15',
-  '5:30',
-  '5:45',
-  '6:00',
-  '6:15',
-  '6:30',
-  '6:45',
-  '7:00',
-  '7:15',
-  '7:30',
-  '7:45',
-  '8:00',
-  '8:15',
-  '8:30',
-  '8:45',
-  '9:00',
-  '9:15',
-  '9:30',
-  '9:45',
+  '00:00',
+  '00:15',
+  '00:30',
+  '00:45',
+  '01:00',
+  '01:15',
+  '01:30',
+  '01:45',
+  '02:00',
+  '02:15',
+  '02:30',
+  '02:45',
+  '03:00',
+  '03:15',
+  '03:30',
+  '03:45',
+  '04:00',
+  '04:15',
+  '04:30',
+  '04:45',
+  '05:00',
+  '05:15',
+  '05:30',
+  '05:45',
+  '06:00',
+  '06:15',
+  '06:30',
+  '06:45',
+  '07:00',
+  '07:15',
+  '07:30',
+  '07:45',
+  '08:00',
+  '08:15',
+  '08:30',
+  '08:45',
+  '09:00',
+  '09:15',
+  '09:30',
+  '09:45',
   '10:00',
   '10:15',
   '10:30',
@@ -179,21 +130,22 @@ const timeData = [
 
 const durationData = ['30分', '45分', '60分', '90分']
 
-// ============================================================
-// Helper Functions
-// ============================================================
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
-
 export default function NewSession() {
+  // ============================================================
+  // Helper Functions
+  // ============================================================
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(' ')
+  }
+
   // ============================================================
   // State
   // ============================================================
 
-  const [year, setYear] = useState('')
-  const [month, setMonth] = useState('')
-  const [day, setDay] = useState('')
+  const [selectedDay, setSelectedDay] = useState(new Date())
+  const [selectedYear, setSelectedYear] = useState('')
+  const [selectedMonth, setSelectedMonth] = useState('')
+  const [selectedDate, setSelectedDate] = useState('')
   const [startTime, setStartTime] = useState('')
   const [duration, setDuration] = useState(durationData[2])
 
@@ -243,18 +195,18 @@ export default function NewSession() {
   const t = uselocalesFilter('sessionNew', locale)
 
   // ============================================================
-  // Set current date and time
+  // Manage DateTime Form
   // ============================================================
 
   useEffect(() => {
+    // デフォルトの開始時刻を設定する
     const now = new Date()
-    const Y = moment(now).format('YYYY')
-    const M = moment(now).format('M')
-    const D = moment(now).format('D')
-    const h = moment(now).format('H')
+
+    const h = moment(now).format('HH')
     const m = Number(moment(now).format('m'))
 
     let everyFifteenMinutes
+
     if ((45 <= m) & (m <= 59)) {
       everyFifteenMinutes = '00'
     } else if (0 <= m && m < 15) {
@@ -269,11 +221,52 @@ export default function NewSession() {
 
     const initialTime = `${h}:${everyFifteenMinutes}`
 
-    setYear(Y)
-    setMonth(M)
-    setDay(D)
+    // デフォルトの開始時刻に現在時刻に近い値をセット
     setStartTime(initialTime)
-  }, [])
+
+    // フォームで選択された日付を state にセット
+    const dt = moment(selectedDay.toDateString(), 'ddd MMM DD YYYY')
+
+    const Y = dt.year()
+    const M = dt.month() + 1
+    const D = dt.date()
+
+    setSelectedYear(Y)
+    setSelectedMonth(M)
+    setSelectedDate(D)
+  }, [selectedDay])
+
+  // ============================================================
+  // React-Day-Picker Settings
+  // ============================================================
+
+  const WEEKDAYS_SHORT = {
+    ja: ['日', '月', '火', '水', '木', '金', '土']
+  }
+
+  const WEEKDAYS_LONG = {
+    ja: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日']
+  }
+  const MONTHS = {
+    ja: [
+      '1月',
+      '2月',
+      '3月',
+      '4月',
+      '5月',
+      '6月',
+      '7月',
+      '8月',
+      '9月',
+      '10月',
+      '11月',
+      '12月'
+    ]
+  }
+
+  const LABELS = {
+    ja: { nextMonth: '来月', previousMonth: '先月' }
+  }
 
   // ============================================================
   // Button Handlers
@@ -293,9 +286,9 @@ export default function NewSession() {
     // Set startDateTime for session
     // NOTE: Months are 0 indexed, so input should be decreased by 1
     var startDateTime = moment({
-      year: Number(year),
-      month: Number(month) - 1,
-      day: Number(day),
+      year: Number(selectedYear),
+      month: Number(selectedMonth) - 1,
+      day: Number(selectedDate),
       hour: Number(hour),
       minute: Number(minute)
     }).toISOString()
@@ -303,9 +296,9 @@ export default function NewSession() {
     // Set hideDateTime for session
     // This adds the duration to startDateTime, to calculate expected end
     var endDateTime = moment({
-      year: Number(year),
-      month: Number(month) - 1,
-      day: Number(day),
+      year: Number(selectedYear),
+      month: Number(selectedMonth) - 1,
+      day: Number(selectedDate),
       hour: Number(hour),
       minute: Number(minute)
     })
@@ -359,30 +352,45 @@ export default function NewSession() {
         <title>Tsundoku | ルーム新規作成</title>
         <meta
           name="description"
-          content="一緒に読書してくれる誰かを探すためのマッチングサービス"
+          content="Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。集中した読書は自己研鑽だけでなく、リラックス効果もあります。"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <AppHeader />
 
-      {/* main content */}
-      <div className="relative pb-16 bg-gray-50">
-        <div className="sm:block sm:w-full" aria-hidden="true">
-          <main className="sm:py-8 px-4 mx-auto max-w-xl">
-            <h1 className="py-3 text-xl font-bold">新しいルームを作成する</h1>
-            <div className="py-3">
-              <label className="text-sm font-medium text-gray-700">
-                実施日
-              </label>
-              <div className="grid grid-cols-2">
-                {/* 月 */}
-                <Listbox value={month} onChange={setMonth}>
+      <div className="overflow-hidden relative pb-16 bg-gray-50">
+        <div className="sm:block sm:w-full sm:h-full" aria-hidden="true">
+          <main className="relative sm:py-4 px-4 mx-auto max-w-2xl">
+            <div className="pb-2 mb-4">
+              <h1 className="title-section">ルームを作成する</h1>
+            </div>
+            <div className="flex flex-row flex-wrap mt-8 sm:mt-8">
+              <div className="w-full sm:w-1/2">
+                {/* 日付選択 */}
+                <DayPicker
+                  selectedDays={selectedDay}
+                  onDayClick={(e) => setSelectedDay(e)}
+                  locale={locale}
+                  months={MONTHS[locale]}
+                  weekdaysLong={WEEKDAYS_LONG[locale]}
+                  weekdaysShort={WEEKDAYS_SHORT[locale]}
+                  labels={LABELS[locale]}
+                  className="w-full bg-white rounded-md border"
+                />
+                {/* 日付選択 - END */}
+              </div>
+              <div className="sm:pl-8 w-full sm:w-1/2">
+                {/* 開始時刻 */}
+                <Listbox value={startTime} onChange={setStartTime}>
                   {({ open }) => (
-                    <div className="flex">
-                      <div className="relative mt-1 w-3/4">
-                        <Listbox.Button className="relative py-2 pr-10 pl-3 w-full sm:text-sm text-left bg-white rounded-md border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-sm cursor-default focus:outline-none">
-                          <span className="block truncate">{month}</span>
+                    <div className="pb-3 mt-8 sm:mt-0">
+                      <Listbox.Label className="block text-sm font-bold text-gray-900">
+                        開始時刻
+                      </Listbox.Label>
+                      <div className="relative mt-1">
+                        <Listbox.Button className="relative py-2 pr-10 pl-3 w-full sm:text-sm text-left bg-white rounded-md border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 shadow-sm cursor-default focus:outline-none">
+                          <span className="block truncate">{startTime}</span>
                           <span className="flex absolute inset-y-0 right-0 items-center pr-2 pointer-events-none">
                             <SelectorIcon
                               className="w-5 h-5 text-gray-400"
@@ -399,18 +407,18 @@ export default function NewSession() {
                           leaveTo="opacity-0"
                         >
                           <Listbox.Options className="overflow-auto absolute z-10 py-1 mt-1 w-full max-h-60 text-base sm:text-sm bg-white rounded-md ring-1 ring-black ring-opacity-5 shadow-lg focus:outline-none">
-                            {monthData.map((monthName) => (
+                            {timeData.map((selectStartTime) => (
                               <Listbox.Option
-                                key={monthName}
+                                key={selectStartTime}
                                 className={({ active }) =>
                                   classNames(
                                     active
-                                      ? 'text-white bg-indigo-600'
+                                      ? 'text-white bg-blue-500'
                                       : 'text-gray-900',
                                     'cursor-default select-none relative py-2 pl-8 pr-4'
                                   )
                                 }
-                                value={monthName}
+                                value={selectStartTime}
                               >
                                 {({ selected, active }) => (
                                   <>
@@ -422,7 +430,7 @@ export default function NewSession() {
                                         'block truncate'
                                       )}
                                     >
-                                      {monthName}
+                                      {selectStartTime}
                                     </span>
 
                                     {selected ? (
@@ -430,7 +438,7 @@ export default function NewSession() {
                                         className={classNames(
                                           active
                                             ? 'text-white'
-                                            : 'text-indigo-600',
+                                            : 'text-blue-500',
                                           'absolute inset-y-0 left-0 flex items-center pl-1.5'
                                         )}
                                       >
@@ -447,23 +455,21 @@ export default function NewSession() {
                           </Listbox.Options>
                         </Transition>
                       </div>
-                      <div className="flex justify-center items-center w-1/4">
-                        <Listbox.Label className="text-base font-medium text-gray-700">
-                          月
-                        </Listbox.Label>
-                      </div>
                     </div>
                   )}
                 </Listbox>
-                {/* 月 END */}
+                {/* 開始時刻 END */}
 
-                {/* 日 */}
-                <Listbox value={day} onChange={setDay}>
+                {/* 予定時間 */}
+                <Listbox value={duration} onChange={setDuration}>
                   {({ open }) => (
-                    <div className="flex">
-                      <div className="relative mt-1 w-3/4">
-                        <Listbox.Button className="relative py-2 pr-10 pl-3 w-full sm:text-sm text-left bg-white rounded-md border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-sm cursor-default focus:outline-none">
-                          <span className="block truncate">{day}</span>
+                    <div className="py-3">
+                      <Listbox.Label className="block text-sm font-bold text-gray-900">
+                        所要時間
+                      </Listbox.Label>
+                      <div className="relative mt-1">
+                        <Listbox.Button className="relative py-2 pr-10 pl-3 w-full sm:text-sm text-left bg-white rounded-md border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 shadow-sm cursor-default focus:outline-none">
+                          <span className="block truncate">{duration}</span>
                           <span className="flex absolute inset-y-0 right-0 items-center pr-2 pointer-events-none">
                             <SelectorIcon
                               className="w-5 h-5 text-gray-400"
@@ -480,18 +486,18 @@ export default function NewSession() {
                           leaveTo="opacity-0"
                         >
                           <Listbox.Options className="overflow-auto absolute z-10 py-1 mt-1 w-full max-h-60 text-base sm:text-sm bg-white rounded-md ring-1 ring-black ring-opacity-5 shadow-lg focus:outline-none">
-                            {dayData.map((dayName) => (
+                            {durationData.map((duration) => (
                               <Listbox.Option
-                                key={dayName}
+                                key={duration}
                                 className={({ active }) =>
                                   classNames(
                                     active
-                                      ? 'text-white bg-indigo-600'
+                                      ? 'text-white bg-blue-500'
                                       : 'text-gray-900',
                                     'cursor-default select-none relative py-2 pl-8 pr-4'
                                   )
                                 }
-                                value={dayName}
+                                value={duration}
                               >
                                 {({ selected, active }) => (
                                   <>
@@ -503,7 +509,7 @@ export default function NewSession() {
                                         'block truncate'
                                       )}
                                     >
-                                      {dayName}
+                                      {duration}
                                     </span>
 
                                     {selected ? (
@@ -511,7 +517,7 @@ export default function NewSession() {
                                         className={classNames(
                                           active
                                             ? 'text-white'
-                                            : 'text-indigo-600',
+                                            : 'text-blue-500',
                                           'absolute inset-y-0 left-0 flex items-center pl-1.5'
                                         )}
                                       >
@@ -528,178 +534,48 @@ export default function NewSession() {
                           </Listbox.Options>
                         </Transition>
                       </div>
-                      <div className="flex justify-center items-center w-1/4">
-                        <Listbox.Label className="text-base font-medium text-gray-700">
-                          日
-                        </Listbox.Label>
-                      </div>
                     </div>
                   )}
                 </Listbox>
-                {/* 日 END */}
+                {/* 予定時間 - END */}
               </div>
             </div>
-            {/* 開始時刻 */}
-            <Listbox value={startTime} onChange={setStartTime}>
-              {({ open }) => (
-                <div className="py-3">
-                  <Listbox.Label className="block text-sm font-medium text-gray-700">
-                    開始時刻
-                  </Listbox.Label>
-                  <div className="relative mt-1">
-                    <Listbox.Button className="relative py-2 pr-10 pl-3 w-full sm:text-sm text-left bg-white rounded-md border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-sm cursor-default focus:outline-none">
-                      <span className="block truncate">{startTime}</span>
-                      <span className="flex absolute inset-y-0 right-0 items-center pr-2 pointer-events-none">
-                        <SelectorIcon
-                          className="w-5 h-5 text-gray-400"
-                          aria-hidden="true"
-                        />
-                      </span>
-                    </Listbox.Button>
-
-                    <Transition
-                      show={open}
-                      as={Fragment}
-                      leave="transition ease-in duration-100"
-                      leaveFrom="opacity-100"
-                      leaveTo="opacity-0"
-                    >
-                      <Listbox.Options className="overflow-auto absolute z-10 py-1 mt-1 w-full max-h-60 text-base sm:text-sm bg-white rounded-md ring-1 ring-black ring-opacity-5 shadow-lg focus:outline-none">
-                        {timeData.map((selectStartTime) => (
-                          <Listbox.Option
-                            key={selectStartTime}
-                            className={({ active }) =>
-                              classNames(
-                                active
-                                  ? 'text-white bg-indigo-600'
-                                  : 'text-gray-900',
-                                'cursor-default select-none relative py-2 pl-8 pr-4'
-                              )
-                            }
-                            value={selectStartTime}
-                          >
-                            {({ selected, active }) => (
-                              <>
-                                <span
-                                  className={classNames(
-                                    selected ? 'font-semibold' : 'font-normal',
-                                    'block truncate'
-                                  )}
-                                >
-                                  {selectStartTime}
-                                </span>
-
-                                {selected ? (
-                                  <span
-                                    className={classNames(
-                                      active ? 'text-white' : 'text-indigo-600',
-                                      'absolute inset-y-0 left-0 flex items-center pl-1.5'
-                                    )}
-                                  >
-                                    <CheckIcon
-                                      className="w-5 h-5"
-                                      aria-hidden="true"
-                                    />
-                                  </span>
-                                ) : null}
-                              </>
-                            )}
-                          </Listbox.Option>
-                        ))}
-                      </Listbox.Options>
-                    </Transition>
-                  </div>
+            <div>
+              {/* 選択された日程 */}
+              <div className="mt-8">
+                <div>
+                  <h2 className="subtitle-section">選択された日程</h2>
                 </div>
-              )}
-            </Listbox>
-            {/* 開始時刻 END */}
-
-            {/* 終了時刻 */}
-            <Listbox value={duration} onChange={setDuration}>
-              {({ open }) => (
-                <div className="py-3">
-                  <Listbox.Label className="block text-sm font-medium text-gray-700">
-                    所要時間
-                  </Listbox.Label>
-                  <div className="relative mt-1">
-                    <Listbox.Button className="relative py-2 pr-10 pl-3 w-full sm:text-sm text-left bg-white rounded-md border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-sm cursor-default focus:outline-none">
-                      <span className="block truncate">{duration}</span>
-                      <span className="flex absolute inset-y-0 right-0 items-center pr-2 pointer-events-none">
-                        <SelectorIcon
-                          className="w-5 h-5 text-gray-400"
-                          aria-hidden="true"
-                        />
-                      </span>
-                    </Listbox.Button>
-
-                    <Transition
-                      show={open}
-                      as={Fragment}
-                      leave="transition ease-in duration-100"
-                      leaveFrom="opacity-100"
-                      leaveTo="opacity-0"
-                    >
-                      <Listbox.Options className="overflow-auto absolute z-10 py-1 mt-1 w-full max-h-60 text-base sm:text-sm bg-white rounded-md ring-1 ring-black ring-opacity-5 shadow-lg focus:outline-none">
-                        {durationData.map((duration) => (
-                          <Listbox.Option
-                            key={duration}
-                            className={({ active }) =>
-                              classNames(
-                                active
-                                  ? 'text-white bg-indigo-600'
-                                  : 'text-gray-900',
-                                'cursor-default select-none relative py-2 pl-8 pr-4'
-                              )
-                            }
-                            value={duration}
-                          >
-                            {({ selected, active }) => (
-                              <>
-                                <span
-                                  className={classNames(
-                                    selected ? 'font-semibold' : 'font-normal',
-                                    'block truncate'
-                                  )}
-                                >
-                                  {duration}
-                                </span>
-
-                                {selected ? (
-                                  <span
-                                    className={classNames(
-                                      active ? 'text-white' : 'text-indigo-600',
-                                      'absolute inset-y-0 left-0 flex items-center pl-1.5'
-                                    )}
-                                  >
-                                    <CheckIcon
-                                      className="w-5 h-5"
-                                      aria-hidden="true"
-                                    />
-                                  </span>
-                                ) : null}
-                              </>
-                            )}
-                          </Listbox.Option>
-                        ))}
-                      </Listbox.Options>
-                    </Transition>
-                  </div>
+                <div className="mt-1">
+                  <span className="text-lg">
+                    {selectedYear +
+                      '年 ' +
+                      selectedMonth +
+                      '月 ' +
+                      selectedDate +
+                      '日 ' +
+                      startTime +
+                      ' から ' +
+                      duration +
+                      '間'}
+                  </span>
                 </div>
-              )}
-            </Listbox>
-            {/* 終了時刻 END */}
-
-            {/* 作成ボタン */}
-            <div className="py-6">
-              <div className="flex justify-end">
-                <p
-                  type="button"
-                  className="inline-flex items-center py-3 px-6 text-base font-medium text-white hover:bg-blue-600 rounded-md border border-transparent focus:ring-2 focus:ring-offset-2 shadow-sm cursor-pointer focus:outline-none bg-tsundoku-blue-main focus:ring-tsundoku-blue-main"
-                  onClick={(e) => createSession(e)}
-                >
-                  作成する
-                </p>
               </div>
+              {/* 選択された日程 - END */}
+
+              {/* 作成ボタン */}
+              <div className="py-8">
+                <div className="flex justify-end">
+                  <span
+                    type="button"
+                    className="inline-flex items-center py-3 px-6 text-base font-medium text-white hover:bg-blue-600 rounded-md border border-transparent focus:ring-2 focus:ring-offset-2 shadow-sm cursor-pointer focus:outline-none bg-tsundoku-blue-main focus:ring-tsundoku-blue-main"
+                    onClick={(e) => createSession(e)}
+                  >
+                    作成する
+                  </span>
+                </div>
+              </div>
+              {/* 作成ボタン - END */}
             </div>
           </main>
         </div>
