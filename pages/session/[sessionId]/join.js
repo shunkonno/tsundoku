@@ -358,7 +358,7 @@ export default function Session({session}) {
           <div className="w-1/3 max-w-7xl h-10">
                 <div className="flex items-center space-x-2 h-full">
                 
-                  <div className="flex justify-center items-center p-2 mr-2 h-full bg-white rounded-lg">
+                  <div className="flex relative justify-center items-center p-2 mr-2 h-full bg-white rounded-lg">
                     <div 
                       className="relative" 
                       onClick={(e)=> {
@@ -366,6 +366,7 @@ export default function Session({session}) {
                         call.setLocalAudio(!call.localAudio())
                       }}
                     >
+                      
                       <MicrophoneIcon 
                         className={classNames(
                           isMicrophoneOn ?
@@ -374,11 +375,18 @@ export default function Session({session}) {
                           'text-red-500',
                           'w-6 h-6 z-10'
                         )}
-                        
                       />
                       {isMicrophoneOn ? <></> :
                         <Image src='/img/Icons/DisableSlash.svg' layout={'fill'} />
                       }
+                    </div>
+                    <div className="absolute -bottom-6 whitespace-nowrap text-xs ">
+                      {isMicrophoneOn ? 
+                        <p className="text-blueGray-400">マイクの状態 : オン</p>
+                       :
+                       <p className="text-blueGray-600">マイクの状態 : オフ</p>
+                      }
+                      
                     </div>
                   </div>
                   <div className="relative items-center w-full h-full bg-white rounded-lg">
