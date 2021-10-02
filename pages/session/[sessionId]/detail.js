@@ -174,6 +174,20 @@ export default function SessionDetail({ session }) {
     // Delete guestId to an empty string
     await deleteSession(session?.sessionId)
 
+    // Daily で作成されたルームを削除する
+    const url = 'https://api.daily.co/v1/rooms/' + session?.sessionId
+    const options = {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_DAILY_API_KEY
+      }
+    }
+
+    await fetch(url, options)
+      .then((res) => res.json())
+      .catch((err) => console.error('error:' + err))
+
     await setAlertAssort('delete')
 
     await router.push({
