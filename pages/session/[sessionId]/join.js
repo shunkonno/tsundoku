@@ -5,7 +5,7 @@ import { Fragment, useState } from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import useSWR, {useSWRConfig} from 'swr'
+import useSWR, { useSWRConfig } from 'swr'
 import Script from 'next/script'
 
 // Components
@@ -19,7 +19,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   LogoutIcon,
-  XIcon,
+  XIcon
 } from '@heroicons/react/outline'
 import colors from 'tailwindcss/colors'
 
@@ -28,7 +28,10 @@ import { useAuth } from '../../../lib/auth'
 import fetcher from '../../../utils/fetcher'
 import { fetchOneSession, fetchAllSessions } from '../../../lib/db-admin'
 import { updateIsReading } from '../../../lib/db'
-import { formatISOStringToTime,formatISOStringToDateTimeWithSlash } from '../../../utils/formatDateTime'
+import {
+  formatISOStringToTime,
+  formatISOStringToDateTimeWithSlash
+} from '../../../utils/formatDateTime'
 import classNames from '../../../utils/classNames'
 
 // ============================================================
@@ -99,11 +102,10 @@ export default function Session({ session }) {
 
   // マッチング相手のユーザー情報を取得
   // マッチング相手のユーザーのIDがguestIdかownerIdか識別
-   const  peerUid = 
-      user?.uid === session?.ownerId ? session?.guestId : session?.ownerId
+  const peerUid =
+    user?.uid === session?.ownerId ? session?.guestId : session?.ownerId
 
   console.log('PeerUid is : ', peerUid)
-  
 
   const { data: peerUserInfo } = useSWR(
     peerUid ? '/api/user/' + peerUid + '/info' : null,
@@ -322,13 +324,13 @@ export default function Session({ session }) {
       <AppHeader />
 
       <main className="relative text-white">
-        <section className="py-6 px-8 ">
+        <section className=" py-6 px-8">
           <div className="flex justify-center">
             <div className="flex-shrink-0 w-72">
               <div className="py-4">
                 <button
                   id="leave"
-                  className="flex space-x-2 items-center py-3 px-6 text-base font-medium text-white bg-red-600 opacity-90 rounded-md"
+                  className="flex items-center py-3 px-6 space-x-2 text-base font-medium text-white bg-red-600 rounded-md opacity-90"
                   onClick={leaveRoom}
                 >
                   <LogoutIcon className="w-6 h-6 opacity-100 transform rotate-180" />
@@ -347,7 +349,7 @@ export default function Session({ session }) {
                 <p>{formatISOStringToTime(session?.endDateTime)}</p>
               </div>
             </div>
-            <div className="flex-shrink-0  w-72"></div>
+            <div className="flex-shrink-0 w-72"></div>
           </div>
         </section>
         <div className="flex">
@@ -366,10 +368,10 @@ export default function Session({ session }) {
               leaveTo="-translate-x-full"
             >
               <div className="flex flex-col items-center mr-8 w-full h-80 bg-white px-4 py-2 rounded-tr-lg rounded-br-lg">
-                <div className="text-gray-500 font-bold py-2 text-lg flex-shrink-0 w-full">
+                <div className="flex-shrink-0 py-2 w-full text-lg font-bold text-gray-500">
                   いま読んでいる本
                 </div>
-                <div className="flex flex-col py-4 space-y-4 items-center flex-1">
+                <div className="flex flex-col flex-1 items-center py-4 space-y-4">
                   <div className="relative w-24 h-32 shadow-md">
                     <Image
                       src={
@@ -378,19 +380,22 @@ export default function Session({ session }) {
                           : '/img/placeholder/noimage_480x640.jpg'
                       }
                       layout={'fill'}
+                      alt="Book cover"
                     />
                   </div>
                   <div className="text-black">
                     {isReadingBook?.bookInfo.title}
                   </div>
                 </div>
-                <div className="flex-shrink-0 w-full"> 
-                  <div 
+                <div className="flex-shrink-0 w-full">
+                  <div
                     className="inline-flex items-center"
-                    onClick={()=>setLeftSlideOpen(true)}
+                    onClick={() => setLeftSlideOpen(true)}
                   >
                     <ChevronLeftIcon className="w-5 h-5 text-blue-400" />
-                    <button className="text-sm text-blue-400">本を変更する</button>
+                    <button className="text-sm text-blue-400">
+                      本を変更する
+                    </button>
                   </div>
                 </div>
               </div>
@@ -405,65 +410,64 @@ export default function Session({ session }) {
               leaveFrom="translate-x-0"
               leaveTo="-translate-x-full"
             >
-              <div className="fixed w-80 rounded-tr-lg rounded-br-lg bg-gray-50 inset-y-0">
-                <div className="h-12 flex justify-end p-2">
-                    <XIcon 
-                      className="w-9 h-9 text-gray-500" 
-                      onClick={()=> setLeftSlideOpen(false)}
-                    />
+              <div className="fixed inset-y-0 w-80 bg-gray-50 rounded-tr-lg rounded-br-lg">
+                <div className="flex justify-end p-2 h-12">
+                  <XIcon
+                    className="w-9 h-9 text-gray-500"
+                    onClick={() => setLeftSlideOpen(false)}
+                  />
                 </div>
-                  {bookList?.map(({ bookInfo, date }) => (
-                        <div
-                          className={classNames(
-                            bookInfo.bid == userInfo.isReading
-                              ? 'ring-2 ring-tsundoku-blue-main'
-                              : 'border border-gray-300',
-                            'relative rounded-lg bg-white py-2 mb-2 mx-2 px-2 h-28 sm:px-3 shadow-sm flex hover:border-gray-400'
-                          )}
-                          key={bookInfo.bid}
-                        >
-                          {bookInfo.bid == userInfo?.isReading && (
-                            <span className="absolute bottom-0 left-0 z-10 py-1 px-2 mb-2 ml-2 text-white bg-blue-500 rounded-full text-xs">
-                              選択中
-                            </span>
-                          )}
-                          <div className="relative flex-shrink-0 w-10 sm:w-16">
-                            <Image
-                              className="object-contain"
-                              layout={'fill'}
-                              src={
-                                bookInfo.image
-                                  ? bookInfo.image
-                                  : '/img/placeholder/noimage_480x640.jpg'
-                              }
-                              alt=""
-                            />
-                          </div>
-                          <div className="overflow-hidden flex-1 ml-3">
-                            <div className="flex flex-col justify-between h-full">
-                              <div className="focus:outline-none">
-                                <p className="overflow-y-hidden max-h-10 sm:max-h-16 text-base sm:text-sm font-medium leading-5 text-gray-900 overflow-ellipsis line-clamp-2">
-                                  {bookInfo.title}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex-shrink-0 flex items-center justify-center">
-                            <div>
-                              <button 
-                                className="inline-flex items-center py-1 px-3 text-sm font-medium leading-5 text-blue-600 hover:text-white bg-white hover:bg-blue-500 rounded-full border border-blue-600 hover:border-blue-500 shadow-sm"
-                                onClick={async(e)=>{
-                                  await selectReadingBook(e, bookInfo.bid)
-                                  await setLeftSlideOpen(false)
-                                }}
-                              >
-                                選択
-                              </button>
-                            </div>
-                          </div>
+                {bookList?.map(({ bookInfo, date }) => (
+                  <div
+                    className={classNames(
+                      bookInfo.bid == userInfo.isReading
+                        ? 'ring-2 ring-tsundoku-blue-main'
+                        : 'border border-gray-300',
+                      'relative rounded-lg bg-white py-2 mb-2 mx-2 px-2 h-28 sm:px-3 shadow-sm flex hover:border-gray-400'
+                    )}
+                    key={bookInfo.bid}
+                  >
+                    {bookInfo.bid == userInfo?.isReading && (
+                      <span className="absolute bottom-0 left-0 z-10 py-1 px-2 mb-2 ml-2 text-xs text-white bg-blue-500 rounded-full">
+                        選択中
+                      </span>
+                    )}
+                    <div className="relative flex-shrink-0 w-10 sm:w-16">
+                      <Image
+                        className="object-contain"
+                        layout={'fill'}
+                        src={
+                          bookInfo.image
+                            ? bookInfo.image
+                            : '/img/placeholder/noimage_480x640.jpg'
+                        }
+                        alt=""
+                      />
+                    </div>
+                    <div className="overflow-hidden flex-1 ml-3">
+                      <div className="flex flex-col justify-between h-full">
+                        <div className="focus:outline-none">
+                          <p className="overflow-y-hidden max-h-10 sm:max-h-16 text-base sm:text-sm font-medium leading-5 text-gray-900 overflow-ellipsis line-clamp-2">
+                            {bookInfo.title}
+                          </p>
                         </div>
-                      ))
-                  }
+                      </div>
+                    </div>
+                    <div className="flex flex-shrink-0 justify-center items-center">
+                      <div>
+                        <button
+                          className="inline-flex items-center py-1 px-3 text-sm font-medium leading-5 text-blue-600 hover:text-white bg-white hover:bg-blue-500 rounded-full border border-blue-600 hover:border-blue-500 shadow-sm"
+                          onClick={async (e) => {
+                            await selectReadingBook(e, bookInfo.bid)
+                            await setLeftSlideOpen(false)
+                          }}
+                        >
+                          選択
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </Transition>
           </section>
@@ -473,15 +477,12 @@ export default function Session({ session }) {
               className="flex items-center mx-auto max-w-screen-2xl h-full bg-orange-10"
             >
               <div className="flex justify-between items-center space-x-8 w-full h-full">
-
-                <div className="w-1/2 relative rounded-lg overflow-hidden">
-                  <div className="bg-gradient-to-b to-green-400 from-blue-400 aspect-w-1 aspect-h-1">
-                  </div>
-                  <div class="h-1/2 absolute bottom-0 w-full">
-                    <Wave fill='url(#gradient-self)'
+                <div className="overflow-hidden relative w-1/2 rounded-lg">
+                  <div className="bg-gradient-to-b from-blue-400 to-green-400 aspect-w-1 aspect-h-1"></div>
+                  <div className="absolute bottom-0 w-full h-1/2">
+                    <Wave
+                      fill="url(#gradient-self)"
                       className="h-full"
-
-                
                       paused={false}
                       options={{
                         amplitude: 30,
@@ -499,8 +500,8 @@ export default function Session({ session }) {
                         </linearGradient>
                       </defs>
                     </Wave>
-                    </div>
-                  <div className="absolute left-1/2 top-1/4 transform -translate-x-1/2 -translate-y-1/2">
+                  </div>
+                  <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                     <Image
                       className=" rounded-full"
                       src={
@@ -508,17 +509,18 @@ export default function Session({ session }) {
                       }
                       width={80}
                       height={80}
+                      alt="Avatar"
                     />
                     <p className="text-center text-gray-800">
                       {userInfo?.name}
                     </p>
                   </div>
                 </div>
-                <div className="w-1/2 relative rounded-lg overflow-hidden">
-                  <div className="bg-gradient-to-b to-orange-400 from-yellow-400 rounded-lg aspect-w-1 aspect-h-1">
-                  </div>
-                  <div class="h-1/2 absolute bottom-0 w-full">
-                    <Wave fill='url(#gradient-other)'
+                <div className="overflow-hidden relative w-1/2 rounded-lg">
+                  <div className="bg-gradient-to-b from-yellow-400 to-orange-400 rounded-lg aspect-w-1 aspect-h-1"></div>
+                  <div className="absolute bottom-0 w-full h-1/2">
+                    <Wave
+                      fill="url(#gradient-other)"
                       className="h-full"
                       paused={false}
                       options={{
@@ -538,12 +540,17 @@ export default function Session({ session }) {
                       </defs>
                     </Wave>
                   </div>
-                  <div className="absolute left-1/2 top-1/4 transform -translate-x-1/2 -translate-y-1/2">
+                  <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                     <Image
                       className=" rounded-full"
-                      src={peerUserInfo?.image ? peerUserInfo.image : '/img/placeholder/noimage_480x640.jpg'}
+                      src={
+                        peerUserInfo?.image
+                          ? peerUserInfo.image
+                          : '/img/placeholder/noimage_480x640.jpg'
+                      }
                       width={80}
                       height={80}
+                      alt="Avatar"
                     />
                     <p className="text-center text-gray-800">
                       {peerUserInfo?.name}
@@ -557,11 +564,11 @@ export default function Session({ session }) {
             id="right-column"
             className="flex flex-shrink-0 items-center w-72 bg-yellow-10"
           >
-            <div className="flex flex-col items-center w-full h-80 bg-white ml-8  px-4 py-2 rounded-tl-lg rounded-bl-lg">
-              <div className="text-gray-500 font-bold py-2 text-lg flex-shrink-0 w-full">
+            <div className="flex flex-col items-center py-2 px-4 ml-8 w-full h-80 bg-white rounded-tl-lg rounded-bl-lg">
+              <div className="flex-shrink-0 py-2 w-full text-lg font-bold text-gray-500">
                 いま読んでいる本
               </div>
-              <div className="flex flex-col py-4 space-y-4 items-center flex-1">
+              <div className="flex flex-col flex-1 items-center py-4 space-y-4">
                 <div className="relative w-24 h-32 shadow-md">
                   <Image
                     src={
@@ -570,13 +577,14 @@ export default function Session({ session }) {
                         : '/img/placeholder/noimage_480x640.jpg'
                     }
                     layout={'fill'}
+                    alt="Book cover"
                   />
                 </div>
                 <div className="text-black">
                   {peerIsReadingBook?.bookInfo.title}
                 </div>
               </div>
-              <div className="flex-shrink-0 self-end flex text-right">
+              <div className="flex flex-shrink-0 self-end text-right">
                 <button className="text-sm text-blue-400">
                   ブックリストを見る
                 </button>
@@ -608,10 +616,14 @@ export default function Session({ session }) {
                   {isMicrophoneOn ? (
                     <></>
                   ) : (
-                    <Image src="/img/Icons/DisableSlash.svg" layout={'fill'} />
+                    <Image
+                      src="/img/Icons/DisableSlash.svg"
+                      layout={'fill'}
+                      alt="Disable slash"
+                    />
                   )}
                 </div>
-                <div className="absolute -bottom-6 whitespace-nowrap text-xs ">
+                <div className=" absolute -bottom-6 text-xs whitespace-nowrap">
                   {isMicrophoneOn ? (
                     <p className="text-blueGray-400">マイクの状態 : オン</p>
                   ) : (
@@ -625,14 +637,14 @@ export default function Session({ session }) {
                   name="chat"
                   id="chat"
                   value={chatMessage}
-                  className="absolute inset-y-0 left-0 pl-4 pr-14 z-10 rounded-lg block px-0 w-full h-full sm:text-sm text-black border-none focus:outline-none focus:ring-1 focus:ring-green-400"
+                  className="block absolute inset-y-0 left-0 z-10 px-0 pr-14 pl-4 w-full h-full sm:text-sm text-black rounded-lg border-none focus:ring-1 focus:ring-green-400 focus:outline-none"
                   placeholder="ここにメッセージを入力"
                   onChange={(e) => {
                     setChatMessage(e.target.value)
                   }}
                 />
-                <div className="absolute inset-y-0 right-0 pr-4 z-10">
-                  <button className="text-blue-500 h-full align-middle">
+                <div className="absolute inset-y-0 right-0 z-10 pr-4">
+                  <button className="h-full text-blue-500 align-middle">
                     送信
                   </button>
                 </div>
