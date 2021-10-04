@@ -222,13 +222,8 @@ export default function Home() {
         guestName: userInfo.name
       })
 
-      mutate(
-        '/api/session',
-        updateSession(sessionId, {
-          guestId: user.uid,
-          guestName: userInfo.name
-        })
-      )
+      // 画面をリフレッシュ
+      mutate('/api/session')
 
       // アラートの設定
       await setAlertAssort('reserve')

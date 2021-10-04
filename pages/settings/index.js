@@ -137,13 +137,10 @@ export default function UserSettings() {
     // アラートの設定
     await setAlertAssort('updateUserSetting')
 
-    mutate(
-      ['/api/user', user.token],
-      updateUser(user.uid, {
-        name: userName,
-        gender: genderSelected
-      })
-    )
+    // リダイレクト
+    router.push({
+      pathname: '/home'
+    })
   }
 
   // ============================================================
