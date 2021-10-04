@@ -369,8 +369,9 @@ export default function Session({ session }) {
                   いま読んでいる本
                 </div>
                 <div className="flex flex-col flex-1 items-center py-4 space-y-4">
-                  <div className="relative w-24 h-32 shadow-md">
+                  <div className="relative w-24 h-32">
                     <Image
+                      className="object-contain shadow-md"
                       src={
                         isReadingBook?.bookInfo?.image
                           ? isReadingBook?.bookInfo.image
