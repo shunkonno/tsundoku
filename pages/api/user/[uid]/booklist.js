@@ -27,7 +27,8 @@ const booklistApiHandler = async (req, res) => {
           bookInfo: bookInfo,
           date: item.date,
           totalReadTime: item.totalReadTime,
-          autoProgress: item.autoProgress
+          autoProgress: item.autoProgress,
+          manualProgress: item.manualProgress
         })
       }
     }
@@ -40,7 +41,8 @@ const booklistApiHandler = async (req, res) => {
           bookInfo: bookInfo,
           date: item.date,
           totalReadTime: item.totalReadTime,
-          autoProgress: item.autoProgress
+          autoProgress: item.autoProgress,
+          manualProgress: item.manualProgress
         })
       }
     }

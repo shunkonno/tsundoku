@@ -33,6 +33,7 @@ import {
   addBook,
   addBookWithoutISBN,
   fetchBookInfo,
+  updateManualProgress,
   updateBookListCount,
   updateBookListWithoutISBN,
   updateIsReading
@@ -64,7 +65,7 @@ export default function BookList() {
   // Fetch Data
   // ============================================================
 
-  //mutateを定義
+  // mutateを定義
   const { mutate } = useSWRConfig()
 
   // ユーザー情報
@@ -184,7 +185,7 @@ export default function BookList() {
         }
 
         // bookList を更新する
-        updateBookList(user.uid, updatedBookList)
+        await updateBookList(user.uid, updatedBookList)
       } else {
         // すでにDBに存在する場合には、bookListCount に 1 を加算する
         // TODO: db-admin で increment を利用した実装に変更する
@@ -204,13 +205,13 @@ export default function BookList() {
         }
 
         // bookList を更新する
-        updateBookList(user.uid, updatedBookList)
+        await updateBookList(user.uid, updatedBookList)
       }
+
       setAlertAssort('updateBookList')
-      mutate(
-        '/api/user/' + user.uid + '/booklist',
-        updateBookList(user.uid, updatedBookList)
-      )
+
+      // 画面をリフレッシュ
+      mutate('/api/user/' + user.uid + '/booklist')
     } else {
       // ISBN-13がないなら、books collection には追加しない
       const bid = nanoid(10)
@@ -229,13 +230,13 @@ export default function BookList() {
         autoProgress: true
       }
 
-      updateBookListWithoutISBN(user.uid, updatedBookListWithoutISBN)
+      // bookListWithoutISBN を更新する
+      await updateBookListWithoutISBN(user.uid, updatedBookListWithoutISBN)
 
       setAlertAssort('updateBookList')
-      mutate(
-        '/api/user/' + user.uid + '/booklist',
-        updateBookListWithoutISBN(user.uid, updatedBookListWithoutISBN)
-      )
+
+      // 画面をリフレッシュ
+      mutate('/api/user/' + user.uid + '/booklist')
     }
   }
 
@@ -245,7 +246,16 @@ export default function BookList() {
     await updateIsReading(user.uid, bid)
 
     await setAlertAssort('updateIsReading')
+
     mutate(['/api/user', user.token])
+  }
+
+  const selectManualProgress = async (e, bid, manualProgress) => {
+    e.preventDefault()
+
+    await updateManualProgress(user.uid, bid, manualProgress)
+
+    mutate('/api/user/' + user.uid + '/booklist')
   }
 
   // ============================================================
@@ -338,67 +348,12 @@ export default function BookList() {
           >
             <rect x="0" y="0" r="1" width="5" height="20" />
           </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
         </div>
       )
-    } else if (progress < 0.2) {
-      // 進捗度が20%未満
+    } else if (progress < 0.5) {
+      // 進捗度が50%未満
       return (
         <div className="flex mt-1">
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-        </div>
-      )
-    } else if (progress < 0.4) {
-      // 進捗度が20%以上、40%未満
-      return (
-        <div className="flex mt-1">
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
           <svg
             className=" mr-1.5 w-1.5 h-6 text-blue-200"
             fill="currentColor"
@@ -429,17 +384,10 @@ export default function BookList() {
           </svg>
         </div>
       )
-    } else if (progress < 0.6) {
-      // 進捗度が40%以上、60%未満
+    } else if (progress < 0.75) {
+      // 進捗度が50%以上、75%未満
       return (
         <div className="flex mt-1">
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
           <svg
             className=" mr-1.5 w-1.5 h-6 text-blue-200"
             fill="currentColor"
@@ -470,18 +418,10 @@ export default function BookList() {
           </svg>
         </div>
       )
-    } else {
-      // 進捗度が60%以上
-      // 進捗度が100%だった場合でも、自動表示は100%に至らない
+    } else if (progress < 1) {
+      // 進捗度が75%以上、100%未満
       return (
         <div className="flex mt-1">
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
           <svg
             className=" mr-1.5 w-1.5 h-6 text-blue-200"
             fill="currentColor"
@@ -505,6 +445,214 @@ export default function BookList() {
           </svg>
           <svg
             className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+        </div>
+      )
+    } else {
+      // 進捗度が100%の場合でも、自動表示は100%に至らない
+      return (
+        <div className="flex mt-1">
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-200"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-300"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-400"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+        </div>
+      )
+    }
+  }
+
+  const renderManualProgress = (manualProgess) => {
+    if (manualProgess === 0) {
+      // 進捗度が0%
+      return (
+        <div className="flex mt-1">
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+        </div>
+      )
+    } else if (manualProgess === 0.25) {
+      // 進捗度が20%
+      return (
+        <div className="flex mt-1">
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-200"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+        </div>
+      )
+    } else if (manualProgess === 0.5) {
+      // 進捗度が40%
+      return (
+        <div className="flex mt-1">
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-200"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-300"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+        </div>
+      )
+    } else if (manualProgess === 0.75) {
+      // 進捗度が60%
+      return (
+        <div className="flex mt-1">
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-200"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-300"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-400"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+        </div>
+      )
+    } else if (manualProgess === 1) {
+      // 進捗度が100%
+      return (
+        <div className="flex mt-1">
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-200"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-300"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-400"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-500"
             fill="currentColor"
             viewBox="0 0 5 20"
           >
@@ -574,7 +722,13 @@ export default function BookList() {
                 {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                     {bookList?.map(
-                      ({ bookInfo, date, totalReadTime, autoProgress }) => (
+                      ({
+                        bookInfo,
+                        date,
+                        totalReadTime,
+                        autoProgress,
+                        manualProgress
+                      }) => (
                         <div
                           className={classNames(
                             bookInfo.bid == userInfo.isReading
@@ -686,79 +840,20 @@ export default function BookList() {
                                         bookInfo.pageCount
                                       )}
 
-                                    {/* autoProgress=false かつ pageCount が存在する場合、ユーザーが登録した進捗を表示する */}
-                                    {/* TODO: 処理の追加 renderManualProgress() */}
+                                    {/* autoProgress=true かつ pageCount が存在しない場合 */}
+                                    {autoProgress &&
+                                      !bookInfo.pageCount &&
+                                      renderManualProgress(0)}
 
-                                    {/* pageCount が存在しない場合、進捗表示は手動のみ */}
-                                    {!bookInfo.pageCount && (
-                                      <div className="flex mt-1">
-                                        <svg
-                                          className=" mr-1.5 w-1.5 h-6 text-blue-100"
-                                          fill="currentColor"
-                                          viewBox="0 0 5 20"
-                                        >
-                                          <rect
-                                            x="0"
-                                            y="0"
-                                            r="1"
-                                            width="5"
-                                            height="20"
-                                          />
-                                        </svg>
-                                        <svg
-                                          className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-200"
-                                          fill="currentColor"
-                                          viewBox="0 0 5 20"
-                                        >
-                                          <rect
-                                            x="0"
-                                            y="0"
-                                            r="1"
-                                            width="5"
-                                            height="20"
-                                          />
-                                        </svg>
-                                        <svg
-                                          className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-300"
-                                          fill="currentColor"
-                                          viewBox="0 0 5 20"
-                                        >
-                                          <rect
-                                            x="0"
-                                            y="0"
-                                            r="1"
-                                            width="5"
-                                            height="20"
-                                          />
-                                        </svg>
-                                        <svg
-                                          className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-400"
-                                          fill="currentColor"
-                                          viewBox="0 0 5 20"
-                                        >
-                                          <rect
-                                            x="0"
-                                            y="0"
-                                            r="1"
-                                            width="5"
-                                            height="20"
-                                          />
-                                        </svg>
-                                        <svg
-                                          className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-500"
-                                          fill="currentColor"
-                                          viewBox="0 0 5 20"
-                                        >
-                                          <rect
-                                            x="0"
-                                            y="0"
-                                            r="1"
-                                            width="5"
-                                            height="20"
-                                          />
-                                        </svg>
-                                      </div>
-                                    )}
+                                    {/* autoProgress=false かつ pageCount が存在する場合、ユーザーが登録した進捗を表示する */}
+                                    {!autoProgress &&
+                                      bookInfo.pageCount &&
+                                      renderManualProgress(manualProgress)}
+
+                                    {/* autoProgress=false かつ pageCount が存在しない場合、進捗表示は手動のみ */}
+                                    {!autoProgress &&
+                                      !bookInfo.pageCount &&
+                                      renderManualProgress(manualProgress)}
                                   </Menu.Button>
                                 </div>
                                 <Transition
@@ -778,6 +873,13 @@ export default function BookList() {
                                             className={`${
                                               active ? 'bg-gray-100' : ''
                                             } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+                                            onClick={(e) => {
+                                              selectManualProgress(
+                                                e,
+                                                bookInfo.bid,
+                                                1
+                                              )
+                                            }}
                                           >
                                             <span
                                               className="inline-block mr-2 w-5 h-5 rounded-full bg-tsundoku-blue-main"
@@ -793,6 +895,13 @@ export default function BookList() {
                                             className={`${
                                               active ? 'bg-gray-100' : ''
                                             } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+                                            onClick={(e) => {
+                                              selectManualProgress(
+                                                e,
+                                                bookInfo.bid,
+                                                0.75
+                                              )
+                                            }}
                                           >
                                             <span
                                               className="inline-block mr-2 w-5 h-5 bg-blue-400 rounded-full"
@@ -808,6 +917,13 @@ export default function BookList() {
                                             className={`${
                                               active ? 'bg-gray-100' : ''
                                             } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+                                            onClick={(e) => {
+                                              selectManualProgress(
+                                                e,
+                                                bookInfo.bid,
+                                                0.5
+                                              )
+                                            }}
                                           >
                                             <span
                                               className="inline-block mr-2 w-5 h-5 bg-blue-300 rounded-full"
@@ -823,27 +939,19 @@ export default function BookList() {
                                             className={`${
                                               active ? 'bg-gray-100' : ''
                                             } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+                                            onClick={(e) => {
+                                              selectManualProgress(
+                                                e,
+                                                bookInfo.bid,
+                                                0.25
+                                              )
+                                            }}
                                           >
                                             <span
                                               className="inline-block mr-2 w-5 h-5 bg-blue-100 rounded-full"
                                               aria-hidden="true"
                                             />
                                             あまり読んでいない
-                                          </button>
-                                        )}
-                                      </Menu.Item>
-                                      <Menu.Item>
-                                        {({ active }) => (
-                                          <button
-                                            className={`${
-                                              active ? 'bg-gray-100' : ''
-                                            } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
-                                          >
-                                            <span
-                                              className="inline-block mr-2 w-5 h-5 bg-white rounded-full border border-gray-200"
-                                              aria-hidden="true"
-                                            />
-                                            全く読んでいない
                                           </button>
                                         )}
                                       </Menu.Item>
