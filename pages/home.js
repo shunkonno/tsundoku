@@ -366,7 +366,7 @@ export default function Home() {
                                 <BookOpenIcon className="w-6 h-6 text-blue-500" />
                               ) : (
                                 <span
-                                  className="inline-block w-5 h-5 rounded-full"
+                                  className="inline-block w-6 h-6"
                                   aria-hidden="true"
                                 />
                               )}
@@ -377,7 +377,7 @@ export default function Home() {
                                 {bookInfo?.title}
                               </p>
                             </div>
-                            <div className="flex flex-shrink-0 justify-center items-center">
+                            {/* <div className="flex flex-shrink-0 justify-center items-center">
                               <div className="flex">
                                 <svg
                                   className=" mr-1.5 w-1.5 h-6 text-blue-100"
@@ -445,13 +445,13 @@ export default function Home() {
                                   />
                                 </svg>
                               </div>
-                            </div>
+                            </div> */}
                           </div>
                         </li>
                       )
                     })}
                   </ul>
-                  <div className="flex justify-end px-2">
+                  {/* <div className="flex justify-end px-2">
                     <Link href="/booklist">
                       <a className="group flex items-center space-x-1">
                         <PlusCircleIcon className="w-5 h-5 text-gray-700 group-hover:text-gray-600" />
@@ -460,7 +460,7 @@ export default function Home() {
                         </span>
                       </a>
                     </Link>
-                  </div>
+                  </div> */}
                 </section>
                 <section className="mb-8">
                   <h3 className="subtitle-section">みんなのリスト(人気)</h3>

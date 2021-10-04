@@ -155,7 +155,7 @@ export default function AppHeader() {
   return (
     <>
       <div className="relative bg-gray-50">
-        <div className="relative py-6">
+        <div className="relative py-4">
           <Popover>
             {({ open }) => (
               <>

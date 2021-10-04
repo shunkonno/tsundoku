@@ -180,7 +180,7 @@ export default function LpHeader() {
   return (
     <>
       <div className="relative bg-orange-50">
-        <div className="relative py-6">
+        <div className="relative py-4">
           <Popover>
             {({ open }) => (
               <>

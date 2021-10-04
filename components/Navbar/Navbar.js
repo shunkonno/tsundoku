@@ -1,14 +1,22 @@
-
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { HomeIcon, BookOpenIcon, TrendingUpIcon } from '@heroicons/react/outline'
+import {
+  HomeIcon,
+  BookOpenIcon,
+  TrendingUpIcon
+} from '@heroicons/react/outline'
 
 import classNames from '../../utils/classNames'
 
 var tabs = [
-  { id:"home", text: 'ホーム', href: '/home', icon: HomeIcon },
-  { id:"booklist", text: 'ブックリスト', href: '/booklist', icon: BookOpenIcon },
-  { id:"trend", text: '人気の本', href: '/trend', icon: TrendingUpIcon },
+  { id: 'home', text: 'ホーム', href: '/home', icon: HomeIcon },
+  {
+    id: 'booklist',
+    text: 'ブックリスト',
+    href: '/booklist',
+    icon: BookOpenIcon
+  },
+  { id: 'trend', text: '人気の本', href: '/trend', icon: TrendingUpIcon }
 ]
 
 export default function Navbar() {
@@ -16,14 +24,13 @@ export default function Navbar() {
 
   useEffect(() => {
     var lastPathName
-    
-    if (typeof window !== "undefined") {
+
+    if (typeof window !== 'undefined') {
       // windowを使う処理を記述
       lastPathName = window.location.pathname.split('/').slice(-1)[0]
     }
     setCurrentPage(lastPathName)
-
-  },[currentPage])
+  }, [currentPage])
 
   return (
     <div>
@@ -37,13 +44,15 @@ export default function Navbar() {
                     tab.id == currentPage
                       ? 'border-tsundoku-blue-main text-tsundoku-blue-main'
                       : 'border-transparent text-gray-500 group-hover:text-gray-700 group-hover:border-gray-300',
-                    'flex flex-col sm:flex-row items-center justify-center py-2 sm:py-4 border-t-2 sm:border-b-2 border-gray-200 font-medium text-sm'
+                    'flex flex-col sm:flex-row items-center justify-center py-2 border-t-2 sm:border-b-2 border-gray-200 font-medium text-sm'
                   )}
                   aria-current={tab.current ? 'page' : undefined}
                 >
                   <tab.icon
                     className={classNames(
-                      tab.id == currentPage ? 'text-tsundoku-blue-main' : 'text-gray-500 group-hover:text-gray-700',
+                      tab.id == currentPage
+                        ? 'text-tsundoku-blue-main'
+                        : 'text-gray-500 group-hover:text-gray-700',
                       'block sm:inline-block -ml-0.5 sm:mr-2 w-7 h-7 sm:h-5 sm:w-5'
                     )}
                     aria-hidden="true"
@@ -51,7 +60,7 @@ export default function Navbar() {
                   <span className="block text-xs">{tab.text}</span>
                 </a>
               </Link>
-              </div>
+            </div>
           ))}
         </nav>
       </div>
@@ -65,13 +74,15 @@ export default function Navbar() {
                     tab.id == currentPage
                       ? 'border-tsundoku-blue-main text-tsundoku-blue-main'
                       : 'border-transparent text-gray-500 group-hover:text-gray-700 group-hover:border-gray-300',
-                    'flex items-center justify-center py-4  border-b-2 border-gray-200 font-medium text-sm'
+                    'flex items-center justify-center py-2 border-b-2 border-gray-200 font-medium text-sm'
                   )}
                   aria-current={tab.current ? 'page' : undefined}
                 >
                   <tab.icon
                     className={classNames(
-                      tab.id == currentPage ? 'text-tsundoku-blue-main' : 'text-gray-500 group-hover:text-gray-700',
+                      tab.id == currentPage
+                        ? 'text-tsundoku-blue-main'
+                        : 'text-gray-500 group-hover:text-gray-700',
                       'inline-block -ml-0.5 mr-2 h-5 w-5'
                     )}
                     aria-hidden="true"
@@ -79,7 +90,7 @@ export default function Navbar() {
                   <span>{tab.text}</span>
                 </a>
               </Link>
-              </div>
+            </div>
           ))}
         </nav>
       </div>
