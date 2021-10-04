@@ -324,7 +324,7 @@ export default function Home() {
                     </div>
                     <div className="flex flex-1 justify-end">
                       <Link href="/session/new" passHref>
-                        <a className="group inline-block py-2 w-auto text-base font-bold hover:text-blue-700 text-tsundoku-blue-main onboarding-3">
+                        <a className="group flex inline-block items-center py-2 w-auto text-base font-bold hover:text-blue-700 text-tsundoku-blue-main onboarding-3">
                           <PlusIcon className="inline-block mr-2 w-6 h-6" />
                           <span>ルームを作成する</span>
                         </a>
