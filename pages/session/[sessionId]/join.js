@@ -155,6 +155,7 @@ export default function Session({ session }) {
   })
 
   console.log('isReadingBook is: ', isReadingBook)
+  console.log('peerIsReadingBook is: ', peerIsReadingBook )
 
   // ============================================================
   // Initialize Video Call
@@ -283,11 +284,7 @@ export default function Session({ session }) {
   const toggleIsMicrophoneOn = (e) => {
     e.preventDefault()
 
-    if (isMicrophoneOn) {
-      setIsMicrophoneOn(false)
-    } else {
-      setIsMicrophoneOn(true)
-    }
+    setIsMicrophoneOn((isMicrophoneOn) => !isMicrophoneOn)
   }
 
   // ============================================================
@@ -375,7 +372,7 @@ export default function Session({ session }) {
                   <div className="relative w-24 h-32 shadow-md">
                     <Image
                       src={
-                        isReadingBook
+                        isReadingBook?.bookInfo?.image
                           ? isReadingBook?.bookInfo.image
                           : '/img/placeholder/noimage_480x640.jpg'
                       }
@@ -437,11 +434,11 @@ export default function Session({ session }) {
                         className="object-contain"
                         layout={'fill'}
                         src={
-                          bookInfo.image
-                            ? bookInfo.image
+                          bookInfo?.image
+                            ? bookInfo?.image
                             : '/img/placeholder/noimage_480x640.jpg'
                         }
-                        alt=""
+                        alt={bookInfo?.title}
                       />
                     </div>
                     <div className="overflow-hidden flex-1 ml-3">
@@ -504,9 +501,9 @@ export default function Session({ session }) {
                   <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                     <Image
                       className=" rounded-full"
-                      src={
+                      src=
                         'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                      }
+                      
                       width={80}
                       height={80}
                       alt="Avatar"
@@ -544,8 +541,8 @@ export default function Session({ session }) {
                     <Image
                       className=" rounded-full"
                       src={
-                        peerUserInfo?.image
-                          ? peerUserInfo.image
+                        peerUserInfo?.avatar
+                          ? peerUserInfo?.avatar
                           : '/img/placeholder/noimage_480x640.jpg'
                       }
                       width={80}
@@ -573,11 +570,11 @@ export default function Session({ session }) {
                   <Image
                     src={
                       peerIsReadingBook
-                        ? peerIsReadingBook?.bookInfo.image
+                        ? peerIsReadingBook?.bookInfo?.image
                         : '/img/placeholder/noimage_480x640.jpg'
                     }
                     layout={'fill'}
-                    alt="Book cover"
+                    alt="Book Cover"
                   />
                 </div>
                 <div className="text-black">
@@ -585,12 +582,69 @@ export default function Session({ session }) {
                 </div>
               </div>
               <div className="flex flex-shrink-0 self-end text-right">
-                <button className="text-sm text-blue-400">
-                  ブックリストを見る
-                </button>
-                <ChevronRightIcon className="w-5 h-5 text-blue-400" />
+                <div
+                  className="inline-flex items-center"
+                  onClick={() => setRightSlideOpen(true)}
+                >
+                  <button className="text-sm text-blue-400">
+                    ブックリストを見る
+                  </button>
+                  <ChevronRightIcon className="w-5 h-5 text-blue-400" />
+                </div>
+                
               </div>
             </div>
+            <Transition
+              as={Fragment}
+              show={rightSlideOpen}
+              enter="transition transform ease-in-out duration-300"
+              enterFrom="translate-x-full"
+              enterTo="translate-x-0"
+              leave="transition transform ease-in-out duration-300"
+              leaveFrom="translate-x-0"
+              leaveTo="translate-x-full"
+            >
+              <div className="fixed inset-y-0 -mx-8 w-80 bg-gray-50 rounded-tl-lg rounded-bl-lg">
+                <div className="flex p-2 h-12">
+                  <XIcon
+                    className="w-9 h-9 text-gray-500"
+                    onClick={() => setRightSlideOpen(false)}
+                  />
+                </div>
+                {peerBookList?.map(({ bookInfo, date }) => (
+                  <div
+                    className='relative rounded-lg bg-white py-2 mb-2 mx-2 px-2 h-28 sm:px-3 border border-gray-300 shadow-sm flex hover:border-gray-400'
+                    key={bookInfo.bid}
+                  >
+                    
+                    <div className="relative flex-shrink-0 w-10 sm:w-16">
+                      <Image
+                        className="object-contain"
+                        layout={'fill'}
+                        src={
+                          bookInfo?.image
+                            ? bookInfo?.image
+                            : '/img/placeholder/noimage_480x640.jpg'
+                        }
+                        alt={bookInfo?.title}
+                      />
+                    </div>
+                    <div className="overflow-hidden flex-1 ml-3">
+                      <div className="flex flex-col justify-between h-full">
+                        <div className="focus:outline-none">
+                          <p className="overflow-y-hidden max-h-10 sm:max-h-16 text-base sm:text-sm font-medium leading-5 text-gray-900 overflow-ellipsis line-clamp-2">
+                            {bookInfo.title}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <a href="#" className="text-blue-500 text-sm">Amazonで見る</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Transition>
           </section>
         </div>
         <div

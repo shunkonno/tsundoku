@@ -7,7 +7,7 @@ const infoApiHandler = async (req, res) => {
   try {
     const user = await fetchUser(req.query.uid)
 
-    const info = { uid: user.uid, name: user.name, isReading: user.isReading }
+    const info = { uid: user.uid, name: user.name, avatar: user.avatar, isReading: user.isReading }
 
     res.status(200).json(info)
   } catch (error) {
