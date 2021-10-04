@@ -23,7 +23,12 @@ const booklistApiHandler = async (req, res) => {
     if (bookList.length > 0) {
       for (const item of bookList) {
         const bookInfo = await fetchOneBook(item.bid)
-        bookListDetail.push({ bookInfo: bookInfo, date: item.date })
+        bookListDetail.push({
+          bookInfo: bookInfo,
+          date: item.date,
+          totalReadTime: item.totalReadTime,
+          autoProgress: item.autoProgress
+        })
       }
     }
 
@@ -31,7 +36,12 @@ const booklistApiHandler = async (req, res) => {
     if (bookListWithoutISBN.length > 0) {
       for (const item of bookListWithoutISBN) {
         const bookInfo = await fetchOneBookWithoutISBN(item.bid)
-        bookListDetail.push({ bookInfo: bookInfo, date: item.date })
+        bookListDetail.push({
+          bookInfo: bookInfo,
+          date: item.date,
+          totalReadTime: item.totalReadTime,
+          autoProgress: item.autoProgress
+        })
       }
     }
 

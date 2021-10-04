@@ -21,10 +21,7 @@ import { AppContext } from '../context/state'
 
 // Assets
 import { Menu, Transition } from '@headlessui/react'
-import {
-  PlusSmIcon,
-  DotsVerticalIcon
-} from '@heroicons/react/solid'
+import { PlusSmIcon, DotsVerticalIcon } from '@heroicons/react/solid'
 import { BookOpenIcon, TrashIcon } from '@heroicons/react/outline'
 
 // Functions
@@ -93,6 +90,8 @@ export default function BookList() {
       }
     }
   )
+
+  console.log(bookList)
 
   // ============================================================
   // Routing
@@ -180,7 +179,8 @@ export default function BookList() {
         updatedBookList[updatedBookList.length] = {
           bid,
           date,
-          totalReadTime: 0
+          totalReadTime: 0,
+          autoProgress: true
         }
 
         // bookList を更新する
@@ -199,7 +199,8 @@ export default function BookList() {
         updatedBookList[updatedBookList.length] = {
           bid: bookInfo.bid,
           date,
-          totalReadTime: 0
+          totalReadTime: 0,
+          autoProgress: true
         }
 
         // bookList を更新する
@@ -224,7 +225,8 @@ export default function BookList() {
       updatedBookListWithoutISBN[updatedBookListWithoutISBN.length] = {
         bid,
         date,
-        totalReadTime: 0
+        totalReadTime: 0,
+        autoProgress: true
       }
 
       updateBookListWithoutISBN(user.uid, updatedBookListWithoutISBN)
@@ -300,6 +302,219 @@ export default function BookList() {
     }
   }
 
+  const renderAutoProgress = (totalReadTime, pageCount) => {
+    // 進捗割合 = 読書時間(totalReadTime) × 平均読書速度(400文字/分) ÷ 平均的な文字数(600文字/ページ) ÷ 当該書籍のページ数(pageCount)
+    const progress = (totalReadTime * 400) / 600 / pageCount
+
+    if (progress === 0) {
+      // 進捗度が0%
+      return (
+        <div className="flex mt-1">
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+        </div>
+      )
+    } else if (progress < 0.2) {
+      // 進捗度が20%未満
+      return (
+        <div className="flex mt-1">
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+        </div>
+      )
+    } else if (progress < 0.4) {
+      // 進捗度が20%以上、40%未満
+      return (
+        <div className="flex mt-1">
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-200"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+        </div>
+      )
+    } else if (progress < 0.6) {
+      // 進捗度が40%以上、60%未満
+      return (
+        <div className="flex mt-1">
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-200"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-300"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+        </div>
+      )
+    } else {
+      // 進捗度が60%以上
+      // 進捗度が100%だった場合でも、自動表示は100%に至らない
+      return (
+        <div className="flex mt-1">
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-200"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-300"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-blue-400"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+          <svg
+            className=" mr-1.5 w-1.5 h-6 text-gray-100"
+            fill="currentColor"
+            viewBox="0 0 5 20"
+          >
+            <rect x="0" y="0" r="1" width="5" height="20" />
+          </svg>
+        </div>
+      )
+    }
+  }
+
   // ============================================================
   // Return
   // ============================================================
@@ -358,272 +573,289 @@ export default function BookList() {
               <div>
                 {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                    {bookList?.map(({ bookInfo, date }) => (
-                      <div
-                        className={classNames(
-                          bookInfo.bid == userInfo.isReading
-                            ? 'ring-2 ring-tsundoku-blue-main'
-                            : 'border border-gray-300',
-                          'relative rounded-lg bg-white py-4 px-2 sm:px-6 shadow-sm flex hover:border-gray-400'
-                        )}
-                        key={bookInfo.bid}
-                      >
-                        {bookInfo.bid == userInfo?.isReading && (
-                          <BookOpenIcon className="absolute bottom-0 left-0 z-10 p-1 mb-2 ml-2 w-8 h-8 text-white bg-blue-500 rounded-full" />
-                        )}
-                        <div className="relative flex-shrink-0 w-16 sm:w-20">
-                          <Image
-                            className="object-contain"
-                            layout={'fill'}
-                            src={
-                              bookInfo.image
-                                ? bookInfo.image
-                                : '/img/placeholder/noimage_480x640.jpg'
-                            }
-                            alt=""
-                          />
-                        </div>
-                        <div className="overflow-hidden flex-1 ml-3 sm:ml-6">
-                          <div className="flex flex-col justify-between h-full">
-                            <div className="focus:outline-none">
-                              <p className="overflow-y-hidden max-h-10 sm:max-h-16 text-base sm:text-lg font-medium leading-5 text-gray-900 overflow-ellipsis line-clamp-2">
-                                {bookInfo.title}
-                              </p>
-                              {Array.isArray(bookInfo.authors) &&
-                                renderAuthors(bookInfo.authors)}
-                            </div>
-                            <div className="text-sm text-gray-500 truncate">
-                              {formatISOStringToDateTimeWithSlash(date)} 追加
-                            </div>
+                    {bookList?.map(
+                      ({ bookInfo, date, totalReadTime, autoProgress }) => (
+                        <div
+                          className={classNames(
+                            bookInfo.bid == userInfo.isReading
+                              ? 'ring-2 ring-tsundoku-blue-main'
+                              : 'border border-gray-300',
+                            'relative rounded-lg bg-white py-4 px-2 sm:px-6 shadow-sm flex hover:border-gray-400'
+                          )}
+                          key={bookInfo.bid}
+                        >
+                          {bookInfo.bid == userInfo?.isReading && (
+                            <BookOpenIcon className="absolute bottom-0 left-0 z-10 p-1 mb-2 ml-2 w-8 h-8 text-white bg-blue-500 rounded-full" />
+                          )}
+                          <div className="relative flex-shrink-0 w-16 sm:w-20">
+                            <Image
+                              className="object-contain"
+                              layout={'fill'}
+                              src={
+                                bookInfo.image
+                                  ? bookInfo.image
+                                  : '/img/placeholder/noimage_480x640.jpg'
+                              }
+                              alt=""
+                            />
                           </div>
-                        </div>
-                        <div className="flex flex-col flex-shrink-0 justify-between items-end">
-                          <div className="text-rights">
-                            <Menu as="div" className="inline-block relative">
-                              <div>
-                                <Menu.Button className="inline-flex">
-                                  <DotsVerticalIcon className="p-1 w-8 h-8 text-gray-500 hover:bg-gray-100 rounded-full" />
-                                </Menu.Button>
+                          <div className="overflow-hidden flex-1 ml-3 sm:ml-6">
+                            <div className="flex flex-col justify-between h-full">
+                              <div className="focus:outline-none">
+                                <p className="overflow-y-hidden max-h-10 sm:max-h-16 text-base sm:text-lg font-medium leading-5 text-gray-900 overflow-ellipsis line-clamp-2">
+                                  {bookInfo.title}
+                                </p>
+                                {Array.isArray(bookInfo.authors) &&
+                                  renderAuthors(bookInfo.authors)}
                               </div>
-                              <Transition
-                                as={Fragment}
-                                enter="transition ease-out duration-100"
-                                enterFrom="transform opacity-0 scale-95"
-                                enterTo="transform opacity-100 scale-100"
-                                leave="transition ease-in duration-75"
-                                leaveFrom="transform opacity-100 scale-100"
-                                leaveTo="transform opacity-0 scale-95"
-                              >
-                                <Menu.Items className="absolute right-0 z-20 w-64 bg-white rounded-md divide-y divide-gray-100 ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none">
-                                  <div className="py-1 px-1">
-                                    <Menu.Item>
-                                      {({ active }) => (
-                                        <button
-                                          className={`${
-                                            active ? 'bg-gray-100' : ''
-                                          } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
-                                          onClick={(e) =>
-                                            selectReadingBook(e, bookInfo.bid)
-                                          }
-                                        >
-                                          <BookOpenIcon
-                                            className="mr-2 w-5 h-5 text-gray-900"
-                                            aria-hidden="true"
-                                          />
-                                          『現在読んでいる本』にする
-                                        </button>
-                                      )}
-                                    </Menu.Item>
-                                    <Menu.Item>
-                                      {({ active }) => (
-                                        <button
-                                          className={`${
-                                            active ? 'bg-gray-100' : ''
-                                          } group flex rounded-md text-red-500 items-center w-full px-2 py-2 text-sm text-right`}
-                                        >
-                                          <TrashIcon
-                                            className="mr-2 w-5 h-5 text-red-500"
-                                            aria-hidden="true"
-                                          />
-                                          リストから削除
-                                        </button>
-                                      )}
-                                    </Menu.Item>
-                                  </div>
-                                </Menu.Items>
-                              </Transition>
-                            </Menu>
-                          </div>
-                          <div>
-                            <Menu as="div" className="inline-block relative">
-                              <div>
-                                <Menu.Button className="">
-                                  <div className="text-xs text-left text-gray-500 hover:text-blue-400 rounded-lg">
-                                    読了度
-                                  </div>
-                                  <div className="flex mt-1">
-                                    <svg
-                                      className=" mr-1.5 w-1.5 h-6 text-blue-100"
-                                      fill="currentColor"
-                                      viewBox="0 0 5 20"
-                                    >
-                                      <rect
-                                        x="0"
-                                        y="0"
-                                        r="1"
-                                        width="5"
-                                        height="20"
-                                      />
-                                    </svg>
-                                    <svg
-                                      className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-200"
-                                      fill="currentColor"
-                                      viewBox="0 0 5 20"
-                                    >
-                                      <rect
-                                        x="0"
-                                        y="0"
-                                        r="1"
-                                        width="5"
-                                        height="20"
-                                      />
-                                    </svg>
-                                    <svg
-                                      className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-300"
-                                      fill="currentColor"
-                                      viewBox="0 0 5 20"
-                                    >
-                                      <rect
-                                        x="0"
-                                        y="0"
-                                        r="1"
-                                        width="5"
-                                        height="20"
-                                      />
-                                    </svg>
-                                    <svg
-                                      className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-400"
-                                      fill="currentColor"
-                                      viewBox="0 0 5 20"
-                                    >
-                                      <rect
-                                        x="0"
-                                        y="0"
-                                        r="1"
-                                        width="5"
-                                        height="20"
-                                      />
-                                    </svg>
-                                    <svg
-                                      className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-500"
-                                      fill="currentColor"
-                                      viewBox="0 0 5 20"
-                                    >
-                                      <rect
-                                        x="0"
-                                        y="0"
-                                        r="1"
-                                        width="5"
-                                        height="20"
-                                      />
-                                    </svg>
-                                  </div>
-                                </Menu.Button>
+                              <div className="text-sm text-gray-500 truncate">
+                                {formatISOStringToDateTimeWithSlash(date)} 追加
                               </div>
-                              <Transition
-                                as={Fragment}
-                                enter="transition ease-out duration-100"
-                                enterFrom="transform opacity-0 scale-95"
-                                enterTo="transform opacity-100 scale-100"
-                                leave="transition ease-in duration-75"
-                                leaveFrom="transform opacity-100 scale-100"
-                                leaveTo="transform opacity-0 scale-95"
-                              >
-                                <Menu.Items className="absolute right-0 z-20 w-48 bg-white rounded-md divide-y divide-gray-100 ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none">
-                                  <div className="py-1 px-1">
-                                    <Menu.Item>
-                                      {({ active }) => (
-                                        <button
-                                          className={`${
-                                            active ? 'bg-gray-100' : ''
-                                          } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
-                                        >
-                                          <span
-                                            className="inline-block mr-2 w-5 h-5 rounded-full bg-tsundoku-blue-main"
-                                            aria-hidden="true"
-                                          />
-                                          完全に読んだ
-                                        </button>
+                            </div>
+                          </div>
+                          <div className="flex flex-col flex-shrink-0 justify-between items-end">
+                            <div className="text-rights">
+                              <Menu as="div" className="inline-block relative">
+                                <div>
+                                  <Menu.Button className="inline-flex">
+                                    <DotsVerticalIcon className="p-1 w-8 h-8 text-gray-500 hover:bg-gray-100 rounded-full" />
+                                  </Menu.Button>
+                                </div>
+                                <Transition
+                                  as={Fragment}
+                                  enter="transition ease-out duration-100"
+                                  enterFrom="transform opacity-0 scale-95"
+                                  enterTo="transform opacity-100 scale-100"
+                                  leave="transition ease-in duration-75"
+                                  leaveFrom="transform opacity-100 scale-100"
+                                  leaveTo="transform opacity-0 scale-95"
+                                >
+                                  <Menu.Items className="absolute right-0 z-20 w-64 bg-white rounded-md divide-y divide-gray-100 ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none">
+                                    <div className="py-1 px-1">
+                                      <Menu.Item>
+                                        {({ active }) => (
+                                          <button
+                                            className={`${
+                                              active ? 'bg-gray-100' : ''
+                                            } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+                                            onClick={(e) =>
+                                              selectReadingBook(e, bookInfo.bid)
+                                            }
+                                          >
+                                            <BookOpenIcon
+                                              className="mr-2 w-5 h-5 text-gray-900"
+                                              aria-hidden="true"
+                                            />
+                                            『現在読んでいる本』にする
+                                          </button>
+                                        )}
+                                      </Menu.Item>
+                                      <Menu.Item>
+                                        {({ active }) => (
+                                          <button
+                                            className={`${
+                                              active ? 'bg-gray-100' : ''
+                                            } group flex rounded-md text-red-500 items-center w-full px-2 py-2 text-sm text-right`}
+                                          >
+                                            <TrashIcon
+                                              className="mr-2 w-5 h-5 text-red-500"
+                                              aria-hidden="true"
+                                            />
+                                            リストから削除
+                                          </button>
+                                        )}
+                                      </Menu.Item>
+                                    </div>
+                                  </Menu.Items>
+                                </Transition>
+                              </Menu>
+                            </div>
+                            <div>
+                              <Menu as="div" className="inline-block relative">
+                                <div>
+                                  <Menu.Button className="">
+                                    <div className="text-xs text-left text-gray-500 hover:text-blue-400 rounded-lg">
+                                      読了度
+                                    </div>
+
+                                    {/* autoProgress=true かつ pageCount が存在する場合、進捗表示を自動計算する */}
+                                    {autoProgress &&
+                                      bookInfo.pageCount &&
+                                      renderAutoProgress(
+                                        totalReadTime,
+                                        bookInfo.pageCount
                                       )}
-                                    </Menu.Item>
-                                    <Menu.Item>
-                                      {({ active }) => (
-                                        <button
-                                          className={`${
-                                            active ? 'bg-gray-100' : ''
-                                          } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+
+                                    {/* autoProgress=false かつ pageCount が存在する場合、ユーザーが登録した進捗を表示する */}
+                                    {/* TODO: 処理の追加 renderManualProgress() */}
+
+                                    {/* pageCount が存在しない場合、進捗表示は手動のみ */}
+                                    {!bookInfo.pageCount && (
+                                      <div className="flex mt-1">
+                                        <svg
+                                          className=" mr-1.5 w-1.5 h-6 text-blue-100"
+                                          fill="currentColor"
+                                          viewBox="0 0 5 20"
                                         >
-                                          <span
-                                            className="inline-block mr-2 w-5 h-5 bg-blue-400 rounded-full"
-                                            aria-hidden="true"
+                                          <rect
+                                            x="0"
+                                            y="0"
+                                            r="1"
+                                            width="5"
+                                            height="20"
                                           />
-                                          十分に読んだ
-                                        </button>
-                                      )}
-                                    </Menu.Item>
-                                    <Menu.Item>
-                                      {({ active }) => (
-                                        <button
-                                          className={`${
-                                            active ? 'bg-gray-100' : ''
-                                          } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+                                        </svg>
+                                        <svg
+                                          className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-200"
+                                          fill="currentColor"
+                                          viewBox="0 0 5 20"
                                         >
-                                          <span
-                                            className="inline-block mr-2 w-5 h-5 bg-blue-300 rounded-full"
-                                            aria-hidden="true"
+                                          <rect
+                                            x="0"
+                                            y="0"
+                                            r="1"
+                                            width="5"
+                                            height="20"
                                           />
-                                          まあまあ読んだ
-                                        </button>
-                                      )}
-                                    </Menu.Item>
-                                    <Menu.Item>
-                                      {({ active }) => (
-                                        <button
-                                          className={`${
-                                            active ? 'bg-gray-100' : ''
-                                          } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+                                        </svg>
+                                        <svg
+                                          className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-300"
+                                          fill="currentColor"
+                                          viewBox="0 0 5 20"
                                         >
-                                          <span
-                                            className="inline-block mr-2 w-5 h-5 bg-blue-100 rounded-full"
-                                            aria-hidden="true"
+                                          <rect
+                                            x="0"
+                                            y="0"
+                                            r="1"
+                                            width="5"
+                                            height="20"
                                           />
-                                          あまり読んでいない
-                                        </button>
-                                      )}
-                                    </Menu.Item>
-                                    <Menu.Item>
-                                      {({ active }) => (
-                                        <button
-                                          className={`${
-                                            active ? 'bg-gray-100' : ''
-                                          } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+                                        </svg>
+                                        <svg
+                                          className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-400"
+                                          fill="currentColor"
+                                          viewBox="0 0 5 20"
                                         >
-                                          <span
-                                            className="inline-block mr-2 w-5 h-5 bg-white rounded-full border border-gray-200"
-                                            aria-hidden="true"
+                                          <rect
+                                            x="0"
+                                            y="0"
+                                            r="1"
+                                            width="5"
+                                            height="20"
                                           />
-                                          全く読んでいない
-                                        </button>
-                                      )}
-                                    </Menu.Item>
-                                  </div>
-                                </Menu.Items>
-                              </Transition>
-                            </Menu>
+                                        </svg>
+                                        <svg
+                                          className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-500"
+                                          fill="currentColor"
+                                          viewBox="0 0 5 20"
+                                        >
+                                          <rect
+                                            x="0"
+                                            y="0"
+                                            r="1"
+                                            width="5"
+                                            height="20"
+                                          />
+                                        </svg>
+                                      </div>
+                                    )}
+                                  </Menu.Button>
+                                </div>
+                                <Transition
+                                  as={Fragment}
+                                  enter="transition ease-out duration-100"
+                                  enterFrom="transform opacity-0 scale-95"
+                                  enterTo="transform opacity-100 scale-100"
+                                  leave="transition ease-in duration-75"
+                                  leaveFrom="transform opacity-100 scale-100"
+                                  leaveTo="transform opacity-0 scale-95"
+                                >
+                                  <Menu.Items className="absolute right-0 z-20 w-48 bg-white rounded-md divide-y divide-gray-100 ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none">
+                                    <div className="py-1 px-1">
+                                      <Menu.Item>
+                                        {({ active }) => (
+                                          <button
+                                            className={`${
+                                              active ? 'bg-gray-100' : ''
+                                            } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+                                          >
+                                            <span
+                                              className="inline-block mr-2 w-5 h-5 rounded-full bg-tsundoku-blue-main"
+                                              aria-hidden="true"
+                                            />
+                                            完全に読んだ
+                                          </button>
+                                        )}
+                                      </Menu.Item>
+                                      <Menu.Item>
+                                        {({ active }) => (
+                                          <button
+                                            className={`${
+                                              active ? 'bg-gray-100' : ''
+                                            } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+                                          >
+                                            <span
+                                              className="inline-block mr-2 w-5 h-5 bg-blue-400 rounded-full"
+                                              aria-hidden="true"
+                                            />
+                                            十分に読んだ
+                                          </button>
+                                        )}
+                                      </Menu.Item>
+                                      <Menu.Item>
+                                        {({ active }) => (
+                                          <button
+                                            className={`${
+                                              active ? 'bg-gray-100' : ''
+                                            } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+                                          >
+                                            <span
+                                              className="inline-block mr-2 w-5 h-5 bg-blue-300 rounded-full"
+                                              aria-hidden="true"
+                                            />
+                                            まあまあ読んだ
+                                          </button>
+                                        )}
+                                      </Menu.Item>
+                                      <Menu.Item>
+                                        {({ active }) => (
+                                          <button
+                                            className={`${
+                                              active ? 'bg-gray-100' : ''
+                                            } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+                                          >
+                                            <span
+                                              className="inline-block mr-2 w-5 h-5 bg-blue-100 rounded-full"
+                                              aria-hidden="true"
+                                            />
+                                            あまり読んでいない
+                                          </button>
+                                        )}
+                                      </Menu.Item>
+                                      <Menu.Item>
+                                        {({ active }) => (
+                                          <button
+                                            className={`${
+                                              active ? 'bg-gray-100' : ''
+                                            } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+                                          >
+                                            <span
+                                              className="inline-block mr-2 w-5 h-5 bg-white rounded-full border border-gray-200"
+                                              aria-hidden="true"
+                                            />
+                                            全く読んでいない
+                                          </button>
+                                        )}
+                                      </Menu.Item>
+                                    </div>
+                                  </Menu.Items>
+                                </Transition>
+                              </Menu>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      )
+                    )}
                   </div>
                 }
               </div>
