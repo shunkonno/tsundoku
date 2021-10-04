@@ -201,7 +201,7 @@ export default function Footer() {
             </Listbox>
           </div>
         </div> */}
-        <div className="md:flex md:justify-between md:items-center pt-8 mt-8 border-t border-blueGray-700">
+        <div className="md:flex md:justify-between md:items-center pt-4 mt-8 border-t border-blueGray-700">
           <p className="mt-8 md:mt-0 text-base text-gray-400">
             &copy; 2021 Tsundoku All rights reserved.
           </p>
