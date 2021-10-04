@@ -155,7 +155,7 @@ export default function Session({ session }) {
   })
 
   console.log('isReadingBook is: ', isReadingBook)
-  console.log('peerIsReadingBook is: ', peerIsReadingBook )
+  console.log('peerIsReadingBook is: ', peerIsReadingBook)
 
   // ============================================================
   // Initialize Video Call
@@ -501,9 +501,7 @@ export default function Session({ session }) {
                   <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                     <Image
                       className=" rounded-full"
-                      src=
-                        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                      
+                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                       width={80}
                       height={80}
                       alt="Avatar"
@@ -591,7 +589,6 @@ export default function Session({ session }) {
                   </button>
                   <ChevronRightIcon className="w-5 h-5 text-blue-400" />
                 </div>
-                
               </div>
             </div>
             <Transition
@@ -613,10 +610,9 @@ export default function Session({ session }) {
                 </div>
                 {peerBookList?.map(({ bookInfo, date }) => (
                   <div
-                    className='relative rounded-lg bg-white py-2 mb-2 mx-2 px-2 h-28 sm:px-3 border border-gray-300 shadow-sm flex hover:border-gray-400'
+                    className="relative rounded-lg bg-white py-2 mb-2 mx-2 px-2 h-28 sm:px-3 border border-gray-300 shadow-sm flex hover:border-gray-400"
                     key={bookInfo.bid}
                   >
-                    
                     <div className="relative flex-shrink-0 w-10 sm:w-16">
                       <Image
                         className="object-contain"
@@ -637,7 +633,9 @@ export default function Session({ session }) {
                           </p>
                         </div>
                         <div className="text-right">
-                          <a href="#" className="text-blue-500 text-sm">Amazonで見る</a>
+                          <a href="#" className="text-blue-500 text-sm">
+                            Amazonで見る
+                          </a>
                         </div>
                       </div>
                     </div>
@@ -656,6 +654,7 @@ export default function Session({ session }) {
               <div className="flex relative justify-center items-center p-2 mr-2 h-full bg-white rounded-lg">
                 <div
                   className="relative"
+                  id="toggle-mic"
                   onClick={(e) => {
                     toggleIsMicrophoneOn(e)
                     call.setLocalAudio(!call.localAudio())
