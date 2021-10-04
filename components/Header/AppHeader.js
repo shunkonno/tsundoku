@@ -15,6 +15,7 @@ import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import uselocalesFilter from '../../utils/translate'
 import { useAuth } from '../../lib/auth'
 import fetcher from '../../utils/fetcher'
+import classNames from '../../utils/classNames'
 
 const navigation = [{ name: '設定', href: '/settings' }]
 
@@ -41,6 +42,11 @@ export default function AppHeader() {
   const router = useRouter()
   const { locale, pathname } = router
   const t = uselocalesFilter('header', locale)
+
+  var isJoinPage
+  if(pathname === '/session/[sessionId]/join') {
+    isJoinPage = true
+  }
 
   // ============================================================
   // Button Handler
@@ -77,31 +83,16 @@ export default function AppHeader() {
 
   const renderHeaderButtonPopover = () => {
     if (user) {
-      if (pathname == '/home') {
-        return (
-          <div className="my-4 ml-5">
-            <button
-              className="text-sm text-gray-400"
-              onClick={(e) => handleLogout()}
-            >
-              {t.LOGOUT}
-            </button>
-          </div>
-        )
-      } else {
-        return (
-          <>
-            <div className="my-4 ml-5">
-              <button
-                className="text-sm text-gray-400"
-                onClick={(e) => handleLogout()}
-              >
-                {t.LOGOUT}
-              </button>
-            </div>
-          </>
-        )
-      }
+      return (
+        <div className="my-4 ml-5">
+          <button
+            className="text-sm text-gray-400"
+            onClick={(e) => handleLogout()}
+          >
+            {t.LOGOUT}
+          </button>
+        </div>
+      )
     } else {
       return (
         <Link href="/signin">
@@ -119,7 +110,13 @@ export default function AppHeader() {
         <div className="hidden md:flex md:space-x-10">
           {navigation.map((item) => (
             <Link href={item.href} key={item.name}>
-              <a className="font-medium text-gray-500 hover:text-gray-900">
+              <a className={classNames(
+                isJoinPage ?
+                "text-gray-100 hover:text-gray-200"
+                :
+                "text-gray-500 hover:text-gray-900",
+                "font-medium"
+              )}>
                 {item.name}
               </a>
             </Link>
@@ -149,19 +146,27 @@ export default function AppHeader() {
     }
   }
 
+  console.log('isJoinPage',isJoinPage)
   // ============================================================
   // Return Component
   // ============================================================
   return (
     <>
-      <div className="relative bg-gray-50">
+      <div className={classNames(
+        isJoinPage ?
+        "bg-blueGray-700"
+        :
+        "bg-gray-50",
+        "relative "
+      )}
+      >
         <div className="relative py-4">
           <Popover>
             {({ open }) => (
               <>
                 <div className="px-4 sm:px-6 mx-auto max-w-7xl">
                   <nav
-                    className=" flex relative justify-between items-center w-full sm:h-10"
+                    className="flex relative justify-between items-center w-full sm:h-10"
                     aria-label="Global"
                   >
                     <div className="flex items-center">
@@ -182,7 +187,12 @@ export default function AppHeader() {
                               />
                               <Image
                                 className="w-auto h-8 sm:h-10"
-                                src="/img/logos/tsundoku-logo-mark-and-typo.svg"
+                                src={
+                                  isJoinPage ?
+                                  '/img/logos/tsundoku-logo-mark-and-typo-text-wh.svg'
+                                  :
+                                  '/img/logos/tsundoku-logo-mark-and-typo.svg'
+                                }
                                 alt="tsundoku-logo-mark-and-typo"
                                 width={120}
                                 height={32}
