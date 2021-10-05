@@ -69,7 +69,7 @@ export default function Session({ session }) {
 
   // State
   const [chatMessage, setChatMessage] = useState('')
-  // const [isMicrophoneOn, setIsMicrophoneOn] = useState(true)
+  const [isMicrophoneOn, setIsMicrophoneOn] = useState(true)
   const [leftSlideOpen, setLeftSlideOpen] = useState(false)
   const [rightSlideOpen, setRightSlideOpen] = useState(false)
   const [joiningUser, setJoiningUser] = useState(false)
@@ -191,8 +191,6 @@ export default function Session({ session }) {
   // Daily - Main
   // ============================================================
 
-  var isMicrophoneOn = true
-
   async function dailyMain() {
     const ROOM_URL = 'https://tsundoku.daily.co/' + sessionId
 
@@ -222,7 +220,7 @@ export default function Session({ session }) {
   // セッションに参加する
   async function joinRoom() {
     console.log('join')
-    setJoiningUser(true)
+    // setJoiningUser(!joiningUser)
     await call.join()
   }
 
@@ -231,7 +229,7 @@ export default function Session({ session }) {
     await call.leave()
     let el = document.getElementById('participants')
     el.innerHTML = ``
-    setJoiningUser(false)
+    // setJoiningUser(!joiningUser)
   }
 
   // オーディオトラックを再生
@@ -265,11 +263,11 @@ export default function Session({ session }) {
     let el = document.getElementById('participants')
     let count = Object.entries(call.participants()).length
     el.innerHTML = `Participant count: ${count}`
-    if (count >= 2) {
-      setJoiningPeerUser(true)
-    } else {
-      setJoiningPeerUser(false)
-    }
+    // if (count === 2) {
+    //   setJoiningPeerUser(!joiningPeerUser)
+    // } else {
+    //   setJoiningPeerUser(false)
+    // }
   }
 
   // オーディオトラックの破棄
@@ -344,7 +342,7 @@ export default function Session({ session }) {
         <div className="fixed inset-0 flex items-center justify-center">
           <button
             type="button"
-            onClick={() => setModalOpen(true)}
+            onClick={() => setModalOpen(!modalOpen)}
             className="px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
           >
             Open dialog
@@ -355,7 +353,7 @@ export default function Session({ session }) {
           <Dialog
             as="div"
             className="fixed inset-0 z-10 overflow-y-auto"
-            onClose={() => setModalOpen(true)}
+            onClose={() => setModalOpen(!modalOpen)}
           >
             <div className="min-h-screen px-4 text-center">
               <Transition.Child
@@ -403,7 +401,7 @@ export default function Session({ session }) {
                     <button
                       type="button"
                       className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                      onClick={() => setModalOpen(false)}
+                      onClick={() => setModalOpen(!modalOpen)}
                     >
                       ルームに参加する
                     </button>
@@ -490,7 +488,7 @@ export default function Session({ session }) {
                 <div className="flex-shrink-0 w-full">
                   <div
                     className="inline-flex items-center"
-                    onClick={() => setLeftSlideOpen(true)}
+                    onClick={() => setLeftSlideOpen(!leftSlideOpen)}
                   >
                     <ChevronLeftIcon className="w-5 h-5 text-blue-400" />
                     <button className="text-sm text-blue-400">
@@ -514,7 +512,7 @@ export default function Session({ session }) {
                 <div className="flex flex-shrink-0 justify-end p-2 h-12 bg-blueGray-300">
                   <XIcon
                     className="w-8 h-8 text-gray-600"
-                    onClick={() => setLeftSlideOpen(false)}
+                    onClick={() => setLeftSlideOpen(!leftSlideOpen)}
                   />
                 </div>
                 <div className="flex-1 overflow-y-scroll py-2">
@@ -560,7 +558,7 @@ export default function Session({ session }) {
                             className="inline-flex items-center py-1 px-3 text-sm font-medium leading-5 text-blue-600 hover:text-white bg-white hover:bg-blue-500 rounded-full border border-blue-600 hover:border-blue-500 shadow-sm"
                             onClick={async (e) => {
                               await selectReadingBook(e, bookInfo.bid)
-                              await setLeftSlideOpen(false)
+                              await setLeftSlideOpen(!leftSlideOpen)
                             }}
                           >
                             選択
@@ -728,7 +726,7 @@ export default function Session({ session }) {
                 <div className="flex flex-shrink-0 self-end text-right">
                   <div
                     className="inline-flex items-center"
-                    onClick={() => setRightSlideOpen(true)}
+                    onClick={() => setRightSlideOpen(!rightSlideOpen)}
                   >
                     <button className="text-sm text-blue-400">
                       ブックリストを見る
@@ -752,7 +750,7 @@ export default function Session({ session }) {
                 <div className="flex flex-shrink-0 p-2 h-12 bg-blueGray-300">
                   <XIcon
                     className="w-8 h-8 text-gray-600"
-                    onClick={() => setRightSlideOpen(false)}
+                    onClick={() => setRightSlideOpen(!rightSlideOpen)}
                   />
                 </div>
                 <div className="overflow-y-auto flex-1 py-2">
@@ -801,6 +799,33 @@ export default function Session({ session }) {
           <div className="w-1/3 max-w-7xl h-10">
             <div className="flex items-center space-x-2 h-full">
               <div className="flex relative justify-center items-center p-2 mr-2 h-full bg-white rounded-lg">
+                <div
+                  className="relative"
+                  id="toggle-mic"
+                  onClick={(e) => {
+                    // setIsMicrophoneOn(!isMicrophoneOn)
+                    call.setLocalAudio(!call.localAudio())
+
+                    console.log(call.localAudio())
+                  }}
+                >
+                  <MicrophoneIcon
+                    className={classNames(
+                      isMicrophoneOn ? 'text-green-500' : 'text-red-500',
+                      'w-6 h-6 z-10'
+                    )}
+                  />
+                  {isMicrophoneOn ? (
+                    <></>
+                  ) : (
+                    <Image
+                      src="/img/Icons/DisableSlash.svg"
+                      layout={'fill'}
+                      alt="Disable slash"
+                    />
+                  )}
+                </div>
+
                 {/* <div
                   className="relative"
                   id="toggle-mic"
@@ -817,8 +842,10 @@ export default function Session({ session }) {
                       isMicrophoneOn ? 'text-green-500' : 'text-red-500',
                       'w-6 h-6 z-10'
                     )}
-                  /> */}
-                {isMicrophoneOn && (
+                  />
+                {isMicrophoneOn ? (
+                  <></>):
+                  ()
                   <div
                     className="relative"
                     id="toggle-mic"
@@ -826,14 +853,14 @@ export default function Session({ session }) {
                       console.log(call.localAudio())
                       call.setLocalAudio(!call.localAudio())
 
-                      isMicrophoneOn = false
+                      // isMicrophoneOn = false
                     }}
                   >
                     <MicrophoneIcon className="z-10 w-6 h-6 text-green-500" />
-                  </div>
-                )}
+                  </div> */}
+                {/* )} */}
 
-                {!isMicrophoneOn && (
+                {/* {!isMicrophoneOn && (
                   <div
                     className="relative"
                     id="toggle-mic"
@@ -841,7 +868,7 @@ export default function Session({ session }) {
                       console.log(call.localAudio())
                       call.setLocalAudio(!call.localAudio())
 
-                      isMicrophoneOn = true
+                      // isMicrophoneOn = true
                     }}
                   >
                     <MicrophoneIcon className="z-10 w-6 h-6 text-red-500" />
@@ -851,7 +878,7 @@ export default function Session({ session }) {
                       alt="Disable slash"
                     />
                   </div>
-                )}
+                )} */}
                 {/* </div> */}
                 <div className=" absolute -bottom-6 text-xs whitespace-nowrap">
                   {isMicrophoneOn ? (
