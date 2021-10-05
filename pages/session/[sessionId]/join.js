@@ -257,11 +257,14 @@ export default function Session({ session }) {
     audioEl.play()
   }
 
+  var count = 0
+
   // 参加者に変化があった際に制御
   function updateParticipants(evt) {
     console.log('[PARTICIPANT(S) UPDATED]', evt)
     let el = document.getElementById('participants')
-    let count = Object.entries(call.participants()).length
+    count = Object.entries(call.participants()).length
+
     el.innerHTML = `Participant count: ${count}`
     // if (count === 2) {
     //   setJoiningPeerUser(!joiningPeerUser)
@@ -804,6 +807,7 @@ export default function Session({ session }) {
                   id="toggle-mic"
                   onClick={(e) => {
                     // setIsMicrophoneOn(!isMicrophoneOn)
+                    console.log(count)
                     call.setLocalAudio(!call.localAudio())
 
                     console.log(call.localAudio())
