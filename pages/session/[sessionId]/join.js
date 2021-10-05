@@ -73,7 +73,6 @@ export default function Session({ session }) {
   const [leftSlideOpen, setLeftSlideOpen] = useState(false)
   const [rightSlideOpen, setRightSlideOpen] = useState(false)
   const [joiningUser, setJoiningUser] = useState(false)
-  const [joiningPeerUser, setJoiningPeerUser] = useState(false)
   const [modalOpen, setModalOpen] = useState(true)
 
   // Routing
@@ -257,13 +256,13 @@ export default function Session({ session }) {
     audioEl.play()
   }
 
-  var count = 0
+  var participantsCount = 0
 
   // 参加者に変化があった際に制御
   function updateParticipants(evt) {
     console.log('[PARTICIPANT(S) UPDATED]', evt)
     let el = document.getElementById('participants')
-    count = Object.entries(call.participants()).length
+    participantsCount = Object.entries(call.participants()).length
 
     el.innerHTML = `Participant count: ${count}`
     // if (count === 2) {
@@ -581,7 +580,7 @@ export default function Session({ session }) {
             >
               <div
                 className={classNames(
-                  joiningPeerUser ? 'justify-between' : 'justify-center',
+                  participantsCount >= 2 ? 'justify-between' : 'justify-center',
                   'flex  items-center space-x-8 w-full h-full'
                 )}
               >
@@ -628,7 +627,7 @@ export default function Session({ session }) {
                 </div>
                 <Transition
                   as={Fragment}
-                  show={joiningPeerUser}
+                  show={participantsCount >= 2}
                   enter="transition-opacity transform ease-in-out duration-300"
                   enterFrom="opacity-0"
                   enterTo="opacity-100"
@@ -693,7 +692,7 @@ export default function Session({ session }) {
           >
             <Transition
               as={Fragment}
-              show={!rightSlideOpen && joiningPeerUser}
+              show={!rightSlideOpen && participantsCount >= 2}
               enter="transition transform ease-in-out duration-300"
               enterFrom="translate-x-full"
               enterTo="translate-x-0"
@@ -807,7 +806,7 @@ export default function Session({ session }) {
                   id="toggle-mic"
                   onClick={(e) => {
                     // setIsMicrophoneOn(!isMicrophoneOn)
-                    console.log(count)
+                    console.log(participantsCount)
                     call.setLocalAudio(!call.localAudio())
 
                     console.log(call.localAudio())
