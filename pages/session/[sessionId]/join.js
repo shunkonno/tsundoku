@@ -224,8 +224,6 @@ export default function Session({ session }) {
     console.log('join')
     setJoiningUser(true)
     await call.join()
-    localParticipant = call.participants().local
-    console.log('LOCAL:', localParticipant)
   }
 
   // セッションを終了する
@@ -267,9 +265,9 @@ export default function Session({ session }) {
     let el = document.getElementById('participants')
     let count = Object.entries(call.participants()).length
     el.innerHTML = `Participant count: ${count}`
-    if(count >= 2){
+    if (count >= 2) {
       setJoiningPeerUser(true)
-    }else{
+    } else {
       setJoiningPeerUser(false)
     }
   }
@@ -346,7 +344,7 @@ export default function Session({ session }) {
         <div className="fixed inset-0 flex items-center justify-center">
           <button
             type="button"
-            onClick={()=> setModalOpen(true)}
+            onClick={() => setModalOpen(true)}
             className="px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
           >
             Open dialog
@@ -357,7 +355,7 @@ export default function Session({ session }) {
           <Dialog
             as="div"
             className="fixed inset-0 z-10 overflow-y-auto"
-            onClose={()=> setModalOpen(true)}
+            onClose={() => setModalOpen(true)}
           >
             <div className="min-h-screen px-4 text-center">
               <Transition.Child
@@ -389,7 +387,6 @@ export default function Session({ session }) {
                 leaveTo="opacity-0 scale-95"
               >
                 <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-                  
                   <div>
                     <p className="text-sm text-gray-500">
                       ルームに参加します。
@@ -397,15 +394,16 @@ export default function Session({ session }) {
                   </div>
 
                   <div className="mt-4 flex justify-center">
-                    <button type="button"
+                    <button
+                      type="button"
                       className="inline-flex items-center mr-4 text-xs font-medium text-gray-500"
                     >
-                        ルーム詳細に戻る
+                      ルーム詳細に戻る
                     </button>
                     <button
                       type="button"
                       className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                      onClick={()=> setModalOpen(false)}
+                      onClick={() => setModalOpen(false)}
                     >
                       ルームに参加する
                     </button>
@@ -480,7 +478,7 @@ export default function Session({ session }) {
                         }
                         objectFit={'contain'}
                         layout={'fill'}
-                        placeholder='empty'
+                        placeholder="empty"
                         alt="Book Cover"
                       />
                     </div>
@@ -513,65 +511,65 @@ export default function Session({ session }) {
               leaveTo="-translate-x-full"
             >
               <div className="absolute inset-y-0 flex flex-col overflow-hidden w-80 max-h-full bg-gray-50 rounded-tr-lg rounded-br-lg">
-                  <div className="flex flex-shrink-0 justify-end p-2 h-12 bg-blueGray-300">
-                    <XIcon
-                      className="w-8 h-8 text-gray-600"
-                      onClick={() => setLeftSlideOpen(false)}
-                    />
-                  </div>
-                  <div className="flex-1 overflow-y-scroll py-2">
-                    {bookList?.map(({ bookInfo, date }) => (
-                      <div
-                        className={classNames(
-                          bookInfo.bid == userInfo.isReading
-                            ? 'ring-2 ring-tsundoku-blue-main'
-                            : 'border border-gray-300',
-                          'relative rounded-lg bg-white py-2 mb-2 mx-2 px-2 h-28 sm:px-3 shadow-sm flex hover:border-gray-400'
-                        )}
-                        key={bookInfo.bid}
-                      >
-                        {bookInfo.bid == userInfo?.isReading && (
-                          <span className="absolute bottom-0 left-0 z-10 py-1 px-2 mb-2 ml-2 text-xs text-white bg-blue-500 rounded-full">
-                            選択中
-                          </span>
-                        )}
-                        <div className="relative flex-shrink-0 w-10 sm:w-16">
-                          <Image
-                            className="object-contain"
-                            layout={'fill'}
-                            src={
-                              bookInfo?.image
-                                ? bookInfo?.image
-                                : '/img/placeholder/noimage_480x640.jpg'
-                            }
-                            alt={bookInfo?.title}
-                          />
-                        </div>
-                        <div className="overflow-hidden flex-1 ml-3">
-                          <div className="flex flex-col justify-between h-full">
-                            <div className="focus:outline-none">
-                              <p className="overflow-y-hidden max-h-10 sm:max-h-16 text-base sm:text-sm font-medium leading-5 text-gray-900 overflow-ellipsis line-clamp-2">
-                                {bookInfo.title}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex flex-shrink-0 justify-center items-center">
-                          <div>
-                            <button
-                              className="inline-flex items-center py-1 px-3 text-sm font-medium leading-5 text-blue-600 hover:text-white bg-white hover:bg-blue-500 rounded-full border border-blue-600 hover:border-blue-500 shadow-sm"
-                              onClick={async (e) => {
-                                await selectReadingBook(e, bookInfo.bid)
-                                await setLeftSlideOpen(false)
-                              }}
-                            >
-                              選択
-                            </button>
+                <div className="flex flex-shrink-0 justify-end p-2 h-12 bg-blueGray-300">
+                  <XIcon
+                    className="w-8 h-8 text-gray-600"
+                    onClick={() => setLeftSlideOpen(false)}
+                  />
+                </div>
+                <div className="flex-1 overflow-y-scroll py-2">
+                  {bookList?.map(({ bookInfo, date }) => (
+                    <div
+                      className={classNames(
+                        bookInfo.bid == userInfo.isReading
+                          ? 'ring-2 ring-tsundoku-blue-main'
+                          : 'border border-gray-300',
+                        'relative rounded-lg bg-white py-2 mb-2 mx-2 px-2 h-28 sm:px-3 shadow-sm flex hover:border-gray-400'
+                      )}
+                      key={bookInfo.bid}
+                    >
+                      {bookInfo.bid == userInfo?.isReading && (
+                        <span className="absolute bottom-0 left-0 z-10 py-1 px-2 mb-2 ml-2 text-xs text-white bg-blue-500 rounded-full">
+                          選択中
+                        </span>
+                      )}
+                      <div className="relative flex-shrink-0 w-10 sm:w-16">
+                        <Image
+                          className="object-contain"
+                          layout={'fill'}
+                          src={
+                            bookInfo?.image
+                              ? bookInfo?.image
+                              : '/img/placeholder/noimage_480x640.jpg'
+                          }
+                          alt={bookInfo?.title}
+                        />
+                      </div>
+                      <div className="overflow-hidden flex-1 ml-3">
+                        <div className="flex flex-col justify-between h-full">
+                          <div className="focus:outline-none">
+                            <p className="overflow-y-hidden max-h-10 sm:max-h-16 text-base sm:text-sm font-medium leading-5 text-gray-900 overflow-ellipsis line-clamp-2">
+                              {bookInfo.title}
+                            </p>
                           </div>
                         </div>
                       </div>
-                    ))}
-                  </div>
+                      <div className="flex flex-shrink-0 justify-center items-center">
+                        <div>
+                          <button
+                            className="inline-flex items-center py-1 px-3 text-sm font-medium leading-5 text-blue-600 hover:text-white bg-white hover:bg-blue-500 rounded-full border border-blue-600 hover:border-blue-500 shadow-sm"
+                            onClick={async (e) => {
+                              await selectReadingBook(e, bookInfo.bid)
+                              await setLeftSlideOpen(false)
+                            }}
+                          >
+                            選択
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </Transition>
           </section>
@@ -580,16 +578,12 @@ export default function Session({ session }) {
               id="main-vc"
               className="flex items-center mx-auto max-w-screen-2xl h-full bg-orange-10"
             >
-              <div className={classNames(
-                joiningPeerUser ?
-                "justify-between"
-                :
-                "justify-center",
-                "flex  items-center space-x-8 w-full h-full"
-              )}>
-                
-
-                
+              <div
+                className={classNames(
+                  joiningPeerUser ? 'justify-between' : 'justify-center',
+                  'flex  items-center space-x-8 w-full h-full'
+                )}
+              >
                 <div className="overflow-hidden relative w-1/2 rounded-lg">
                   <div className="bg-gradient-to-b from-blue-400 to-green-400 aspect-w-1 aspect-h-1"></div>
                   <div className="absolute bottom-0 w-full h-1/2">
@@ -659,8 +653,14 @@ export default function Session({ session }) {
                             id="gradient-other"
                             gradientTransform="rotate(90)"
                           >
-                            <stop offset="10%" stopColor={colors.orange['300']} />
-                            <stop offset="90%" stopColor={colors.yellow['300']} />
+                            <stop
+                              offset="10%"
+                              stopColor={colors.orange['300']}
+                            />
+                            <stop
+                              offset="90%"
+                              stopColor={colors.yellow['300']}
+                            />
                           </linearGradient>
                         </defs>
                       </Wave>
@@ -716,7 +716,7 @@ export default function Session({ session }) {
                         }
                         objectFit={'contain'}
                         layout={'fill'}
-                        placeholder='empty'
+                        placeholder="empty"
                         alt="Book Cover"
                       />
                     </div>
