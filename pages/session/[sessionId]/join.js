@@ -33,6 +33,7 @@ import {
   formatISOStringToDateTimeWithSlash
 } from '../../../utils/formatDateTime'
 import classNames from '../../../utils/classNames'
+import { useEffect } from 'react/cjs/react.development'
 
 // ============================================================
 // Fetch static data
@@ -61,14 +62,14 @@ export async function getStaticPaths() {
 }
 
 export default function Session({ session }) {
-  console.log(session)
+  // console.log(session)
   // ============================================================
   // Initialize
   // ============================================================
 
   // State
   const [chatMessage, setChatMessage] = useState('')
-  const [isMicrophoneOn, setIsMicrophoneOn] = useState(true)
+  // const [isMicrophoneOn, setIsMicrophoneOn] = useState(true)
   const [leftSlideOpen, setLeftSlideOpen] = useState(false)
   const [rightSlideOpen, setRightSlideOpen] = useState(false)
 
@@ -98,14 +99,14 @@ export default function Session({ session }) {
       }
     }
   )
-  console.log(userInfo)
+  // console.log(userInfo)
 
   // マッチング相手のユーザー情報を取得
   // マッチング相手のユーザーのIDがguestIdかownerIdか識別
   const peerUid =
     user?.uid === session?.ownerId ? session?.guestId : session?.ownerId
 
-  console.log('PeerUid is : ', peerUid)
+  // console.log('PeerUid is : ', peerUid)
 
   const { data: peerUserInfo } = useSWR(
     peerUid ? '/api/user/' + peerUid + '/info' : null,
@@ -118,7 +119,7 @@ export default function Session({ session }) {
     }
   )
 
-  console.log('peerUserInfo:', peerUserInfo)
+  // console.log('peerUserInfo:', peerUserInfo)
 
   // ユーザーのブックリスト取得
   const { data: bookList } = useSWR(
@@ -144,7 +145,7 @@ export default function Session({ session }) {
     }
   )
 
-  console.log('peerBookList: ', peerBookList)
+  // console.log('peerBookList: ', peerBookList)
 
   const isReadingBook = bookList?.find((book) => {
     return book.bookInfo.bid == userInfo.isReading
@@ -154,8 +155,8 @@ export default function Session({ session }) {
     return book.bookInfo.bid == peerUserInfo?.isReading
   })
 
-  console.log('isReadingBook is: ', isReadingBook)
-  console.log('peerIsReadingBook is: ', peerIsReadingBook)
+  // console.log('isReadingBook is: ', isReadingBook)
+  // console.log('peerIsReadingBook is: ', peerIsReadingBook)
 
   // ============================================================
   // Initialize Video Call
@@ -187,6 +188,8 @@ export default function Session({ session }) {
   // Daily - Main
   // ============================================================
 
+  var isMicrophoneOn = true
+
   async function dailyMain() {
     const ROOM_URL = 'https://tsundoku.daily.co/' + sessionId
 
@@ -203,7 +206,7 @@ export default function Session({ session }) {
     call.on('error', (e) => console.error(e))
 
     call.on('track-started', playTrack)
-    call.on('track-stopped', destroyTrack)
+    // call.on('track-stopped', destroyTrack)
 
     call.on('participant-joined', updateParticipants)
     call.on('participant-left', updateParticipants)
@@ -217,6 +220,8 @@ export default function Session({ session }) {
   async function joinRoom() {
     console.log('join')
     await call.join()
+    localParticipant = call.participants().local
+    console.log('LOCAL:', localParticipant)
   }
 
   // セッションを終了する
@@ -261,10 +266,16 @@ export default function Session({ session }) {
 
   // オーディオトラックの破棄
   function destroyTrack(evt) {
+    console.log(evt)
+    console.log(call)
+    console.log(call.localAudio())
+
     console.log(
       '[TRACK STOPPED]',
       (evt.participant && evt.participant.session_id) || '[left meeting]'
     )
+
+    call.destroy()
 
     let els = Array.from(document.getElementsByTagName('video')).concat(
       Array.from(document.getElementsByTagName('audio'))
@@ -328,7 +339,9 @@ export default function Session({ session }) {
                 <button
                   id="leave"
                   className="flex items-center py-3 px-6 space-x-2 text-base font-medium text-white bg-red-600 rounded-md opacity-90"
-                  onClick={leaveRoom}
+                  onClick={(e) => {
+                    call.destroy(e)
+                  }}
                 >
                   <LogoutIcon className="w-6 h-6 opacity-100 transform rotate-180" />
                   <span>退出する</span>
@@ -653,12 +666,15 @@ export default function Session({ session }) {
           <div className="w-1/3 max-w-7xl h-10">
             <div className="flex items-center space-x-2 h-full">
               <div className="flex relative justify-center items-center p-2 mr-2 h-full bg-white rounded-lg">
-                <div
+                {/* <div
                   className="relative"
                   id="toggle-mic"
                   onClick={(e) => {
                     toggleIsMicrophoneOn(e)
-                    call.setLocalAudio(!call.localAudio())
+                    console.log('localAudio:', call.localAudio())
+                    updateParticipants('local', { setAudio: false })
+                    // call.setLocalAudio(!call.localAudio())
+                    console.log('localAudio:', call.localAudio())
                   }}
                 >
                   <MicrophoneIcon
@@ -666,17 +682,42 @@ export default function Session({ session }) {
                       isMicrophoneOn ? 'text-green-500' : 'text-red-500',
                       'w-6 h-6 z-10'
                     )}
-                  />
-                  {isMicrophoneOn ? (
-                    <></>
-                  ) : (
+                  /> */}
+                {isMicrophoneOn && (
+                  <div
+                    className="relative"
+                    id="toggle-mic"
+                    onClick={(e) => {
+                      console.log(call.localAudio())
+                      call.setLocalAudio(!call.localAudio())
+
+                      isMicrophoneOn = false
+                    }}
+                  >
+                    <MicrophoneIcon className="z-10 w-6 h-6 text-green-500" />
+                  </div>
+                )}
+
+                {!isMicrophoneOn && (
+                  <div
+                    className="relative"
+                    id="toggle-mic"
+                    onClick={(e) => {
+                      console.log(call.localAudio())
+                      call.setLocalAudio(!call.localAudio())
+
+                      isMicrophoneOn = true
+                    }}
+                  >
+                    <MicrophoneIcon className="z-10 w-6 h-6 text-red-500" />
                     <Image
                       src="/img/Icons/DisableSlash.svg"
                       layout={'fill'}
                       alt="Disable slash"
                     />
-                  )}
-                </div>
+                  </div>
+                )}
+                {/* </div> */}
                 <div className=" absolute -bottom-6 text-xs whitespace-nowrap">
                   {isMicrophoneOn ? (
                     <p className="text-blueGray-400">マイクの状態 : オン</p>
