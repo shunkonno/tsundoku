@@ -16,7 +16,7 @@ var tabs = [
     href: '/booklist',
     icon: BookOpenIcon
   },
-  { id: 'trend', text: '人気の本', href: '/trend', icon: TrendingUpIcon }
+  // { id: 'trend', text: '人気の本', href: '/trend', icon: TrendingUpIcon }
 ]
 
 export default function Navbar() {
@@ -37,7 +37,7 @@ export default function Navbar() {
       <div className="block sm:hidden fixed bottom-0 z-20 -mx-4 w-full bg-white">
         <nav className="flex">
           {tabs.map((tab) => (
-            <div key={tab.text} className="group w-1/3 sm:w-1/4">
+            <div key={tab.text} className="group w-1/2 sm:w-1/4">
               <Link href={tab.href}>
                 <a
                   className={classNames(
