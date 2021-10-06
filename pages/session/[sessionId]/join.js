@@ -1,7 +1,7 @@
 // ============================================================
 // Imports
 // ============================================================
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useRef } from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -69,7 +69,7 @@ export default function Session({ session }) {
 
   // State
   const [chatMessage, setChatMessage] = useState('')
-  const [isMicrophoneOn, setIsMicrophoneOn] = useState(true)
+  // const [isMicrophoneOn, setIsMicrophoneOn] = useState(true)
   const [leftSlideOpen, setLeftSlideOpen] = useState(false)
   const [rightSlideOpen, setRightSlideOpen] = useState(false)
   const [joiningUser, setJoiningUser] = useState(false)
@@ -257,6 +257,9 @@ export default function Session({ session }) {
   }
 
   var participantsCount = 0
+  var isMicrophoneOn = useRef(true)
+
+  console.log(isMicrophoneOn)
 
   // 参加者に変化があった際に制御
   function updateParticipants(evt) {
@@ -300,10 +303,28 @@ export default function Session({ session }) {
   // Helper Function
   // ============================================================
 
-  const toggleIsMicrophoneOn = (e) => {
-    e.preventDefault()
+  // const toggleIsMicrophoneOn = (e) => {
+  //   e.preventDefault()
 
-    setIsMicrophoneOn((isMicrophoneOn) => !isMicrophoneOn)
+  //   setIsMicrophoneOn((isMicrophoneOn) => !isMicrophoneOn)
+  // }
+
+  const renderMicrophoneIcon = () => {
+    let el = document.getElementById('toggle-mic')
+    console.log(el)
+
+    if (isMicrophoneOn.current) {
+      el.innerHTML = `<MicrophoneIcon className="z-10 w-6 h-6 text-green-500" />`
+    } else {
+      el.innerHTML = `
+          <MicrophoneIcon className="z-10 w-6 h-6 text-red-500" />
+          <Image
+            src="/img/Icons/DisableSlash.svg"
+            layout={'fill'}
+            alt="Disable slash"
+          />
+      `
+    }
   }
 
   // ============================================================
@@ -805,20 +826,26 @@ export default function Session({ session }) {
                   className="relative"
                   id="toggle-mic"
                   onClick={(e) => {
+                    renderMicrophoneIcon()
                     // setIsMicrophoneOn(!isMicrophoneOn)
                     console.log(participantsCount)
                     call.setLocalAudio(!call.localAudio())
+
+                    isMicrophoneOn.current = !isMicrophoneOn.current
+                    console.log(isMicrophoneOn)
 
                     console.log(call.localAudio())
                   }}
                 >
                   <MicrophoneIcon
                     className={classNames(
-                      isMicrophoneOn ? 'text-green-500' : 'text-red-500',
+                      isMicrophoneOn.current
+                        ? 'text-green-500'
+                        : 'text-red-500',
                       'w-6 h-6 z-10'
                     )}
                   />
-                  {isMicrophoneOn ? (
+                  {isMicrophoneOn.current ? (
                     <></>
                   ) : (
                     <Image
