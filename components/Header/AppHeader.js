@@ -146,7 +146,6 @@ export default function AppHeader() {
     }
   }
 
-  console.log('isJoinPage',isJoinPage)
   // ============================================================
   // Return Component
   // ============================================================
