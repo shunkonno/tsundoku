@@ -15,14 +15,15 @@ import { Footer } from '../components/Footer'
 import { Navbar } from '../components/Navbar'
 import { GeneralAlert } from '../components/Alert'
 import { AddBookModal } from '../components/Modal'
+import { BookProgressIcon } from '../components/Icon'
 
 //Context
 import { AppContext } from '../context/state'
 
 // Assets
 import { Menu, Transition } from '@headlessui/react'
-import { PlusSmIcon, DotsVerticalIcon } from '@heroicons/react/solid'
-import { BookOpenIcon, TrashIcon } from '@heroicons/react/outline'
+import { PlusSmIcon, DotsVerticalIcon, } from '@heroicons/react/solid'
+import { BookOpenIcon,ChartBarIcon,XCircleIcon, TrashIcon } from '@heroicons/react/outline'
 
 // Functions
 import { useAuth } from '../lib/auth'
@@ -53,6 +54,7 @@ export default function BookList() {
   // ============================================================
   const [searchedBooks, setSearchedBooks] = useState([])
   let [modalOpen, setModalOpen] = useState(false)
+  let [bookCardsSelected, setBookCardSelected] = useState([])
 
   // ============================================================
   // Auth
@@ -92,7 +94,12 @@ export default function BookList() {
     }
   )
 
-  console.log(bookList)
+  useEffect(() => {
+    setBookCardSelected(Array(bookList?.length).fill(false))
+  },[bookList])
+
+  console.log(bookCardsSelected)
+
 
   // ============================================================
   // Routing
@@ -242,6 +249,7 @@ export default function BookList() {
 
   const selectReadingBook = async (e, bid) => {
     e.preventDefault()
+    e.stopPropagation()
 
     await updateIsReading(user.uid, bid)
 
@@ -256,6 +264,16 @@ export default function BookList() {
     await updateManualProgress(user.uid, bid, manualProgress)
 
     mutate('/api/user/' + user.uid + '/booklist')
+  }
+
+  const toggleBookCardsSelected = (e, idx, bool) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
+    const newBookCardsSelected = bookCardsSelected.slice() //Stateの配列をコピー
+    newBookCardsSelected.fill(false) //すべてをfalseで初期化
+    newBookCardsSelected[idx] = bool // 選択したbookCardのstateをtrueにする
+    setBookCardSelected(newBookCardsSelected)
   }
 
   // ============================================================
@@ -316,351 +334,19 @@ export default function BookList() {
     // 進捗割合 = 読書時間(totalReadTime) × 平均読書速度(400文字/分) ÷ 平均的な文字数(600文字/ページ) ÷ 当該書籍のページ数(pageCount)
     const progress = (totalReadTime * 400) / 600 / pageCount
 
-    if (progress === 0) {
-      // 進捗度が0%
-      return (
-        <div className="flex mt-1">
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-        </div>
-      )
-    } else if (progress < 0.5) {
-      // 進捗度が50%未満
-      return (
-        <div className="flex mt-1">
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-200"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-        </div>
-      )
-    } else if (progress < 0.75) {
-      // 進捗度が50%以上、75%未満
-      return (
-        <div className="flex mt-1">
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-200"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-300"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-        </div>
-      )
-    } else if (progress < 1) {
-      // 進捗度が75%以上、100%未満
-      return (
-        <div className="flex mt-1">
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-200"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-300"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-400"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-        </div>
-      )
-    } else {
-      // 進捗度が100%の場合でも、自動表示は100%に至らない
-      return (
-        <div className="flex mt-1">
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-200"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-300"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-400"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-        </div>
-      )
-    }
+    console.log(progress)
+
+    return (
+      <BookProgressIcon progress={progress} />
+    )
   }
 
   const renderManualProgress = (manualProgess) => {
-    if (manualProgess === 0) {
-      // 進捗度が0%
-      return (
-        <div className="flex mt-1">
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-        </div>
-      )
-    } else if (manualProgess === 0.25) {
-      // 進捗度が20%
-      return (
-        <div className="flex mt-1">
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-200"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-        </div>
-      )
-    } else if (manualProgess === 0.5) {
-      // 進捗度が40%
-      return (
-        <div className="flex mt-1">
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-200"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-300"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-        </div>
-      )
-    } else if (manualProgess === 0.75) {
-      // 進捗度が60%
-      return (
-        <div className="flex mt-1">
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-200"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-300"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-400"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-gray-100"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-        </div>
-      )
-    } else if (manualProgess === 1) {
-      // 進捗度が100%
-      return (
-        <div className="flex mt-1">
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-200"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-300"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-400"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-          <svg
-            className=" mr-1.5 w-1.5 h-6 text-blue-500"
-            fill="currentColor"
-            viewBox="0 0 5 20"
-          >
-            <rect x="0" y="0" r="1" width="5" height="20" />
-          </svg>
-        </div>
-      )
-    }
+    return (
+      <div className="mt-1">
+        <BookProgressIcon progress={manualProgess} />
+      </div>
+    )
   }
 
   // ============================================================
@@ -705,7 +391,64 @@ export default function BookList() {
             <Navbar />
 
             <div className="mb-24">
-              <div className="flex justify-between py-5 sm:mt-12">
+              <div className="mt-6 sm:mt-12">
+                <h1 className="subtitle-section">現在読んでいる本</h1>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 h-32 mt-4">
+                {userInfo?.isReading && bookList ?
+                <>
+                {bookList.filter(({bookInfo})=>{
+                  return bookInfo.bid == userInfo.isReading
+                })
+                .map(({bookInfo,date}) => (
+                    <div
+                      className="relative rounded-lg border border-gray-300 bg-white py-4 px-2 sm:px-6 shadow-sm flex hover:border-gray-400"
+                      key={bookInfo.bid}
+                    >
+                      <div className="relative flex-shrink-0 w-16 sm:w-20">
+                        <Image
+                          className="object-contain"
+                          layout={'fill'}
+                          src={
+                            bookInfo.image
+                              ? bookInfo.image
+                              : '/img/placeholder/noimage_480x640.jpg'
+                          }
+                          alt=""
+                        />
+                      </div>
+                      <div className="overflow-hidden flex-1 ml-3 sm:ml-6">
+                        <div className="flex flex-col justify-between h-full">
+                          <div className="focus:outline-none">
+                            <p className="overflow-y-hidden max-h-10 sm:max-h-16 text-base sm:text-lg font-medium leading-5 text-gray-900 overflow-ellipsis line-clamp-2">
+                              {bookInfo.title}
+                            </p>
+                            {Array.isArray(bookInfo.authors) &&
+                              renderAuthors(bookInfo.authors)}
+                          </div>
+                          <div className="text-sm text-gray-500 truncate">
+                            {formatISOStringToDateTimeWithSlash(date)} 追加
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                )}
+                </>
+                :
+                <div
+                  className="relative flex items-center justify-center text-center rounded-lg border border-gray-300 bg-white py-4 px-2 sm:px-6 shadow-sm hover:border-gray-400"
+                >
+                  <div>
+                    <p className="text-black text-sm sm:text-base">『現在読んでいる本』は選択されていません。</p>
+                    <p className="text-gray-500 text-xs sm:text-sm mt-2">下のブックリストから選択できます。</p>
+                  </div>
+                </div>
+                }
+                </div>
+              </div>
+
+
+              <div className="flex justify-between py-5 mt-6 sm:mt-12">
                 <h1 className="title-section">ブックリスト</h1>
                 <button
                   className="flex items-center"
@@ -720,7 +463,7 @@ export default function BookList() {
 
               <div>
                 {
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8">
                     {bookList?.map(
                       ({
                         bookInfo,
@@ -728,42 +471,50 @@ export default function BookList() {
                         totalReadTime,
                         autoProgress,
                         manualProgress
-                      }) => (
+                      }, idx) => (
                         <div
                           className={classNames(
                             bookInfo.bid == userInfo.isReading
                               ? 'ring-2 ring-tsundoku-blue-main'
                               : 'border border-gray-300',
-                            'relative rounded-lg bg-white py-4 px-2 sm:px-6 shadow-sm flex hover:border-gray-400'
+                            'relative flex rounded-lg bg-white py-4 px-2 sm:px-6 shadow-sm  hover:border-gray-400'
                           )}
                           key={bookInfo.bid}
                         >
                           {bookInfo.bid == userInfo?.isReading && (
-                            <BookOpenIcon className="absolute bottom-0 left-0 z-10 p-1 mb-2 ml-2 w-8 h-8 text-white bg-blue-500 rounded-full" />
+                            <span className="absolute bottom-0 left-0 z-10 px-2 py-1 mb-2 ml-2 text-xs text-white bg-blue-500 rounded-full">
+                              選択中
+                            </span>
                           )}
-                          <div className="relative flex-shrink-0 w-16 sm:w-20">
-                            <Image
-                              className="object-contain"
-                              layout={'fill'}
-                              src={
-                                bookInfo.image
-                                  ? bookInfo.image
-                                  : '/img/placeholder/noimage_480x640.jpg'
-                              }
-                              alt=""
-                            />
-                          </div>
-                          <div className="overflow-hidden flex-1 ml-3 sm:ml-6">
-                            <div className="flex flex-col justify-between h-full">
-                              <div className="focus:outline-none">
-                                <p className="overflow-y-hidden max-h-10 sm:max-h-16 text-base sm:text-lg font-medium leading-5 text-gray-900 overflow-ellipsis line-clamp-2">
-                                  {bookInfo.title}
-                                </p>
-                                {Array.isArray(bookInfo.authors) &&
-                                  renderAuthors(bookInfo.authors)}
-                              </div>
-                              <div className="text-sm text-gray-500 truncate">
-                                {formatISOStringToDateTimeWithSlash(date)} 追加
+                          <div
+                            className="flex flex-1"
+                            onClick={(e)=>toggleBookCardsSelected(e,idx,true)}
+                          >
+
+                            <div className="relative flex-shrink-0 w-16 sm:w-20">
+                              <Image
+                                className="object-contain"
+                                layout={'fill'}
+                                src={
+                                  bookInfo.image
+                                    ? bookInfo.image
+                                    : '/img/placeholder/noimage_480x640.jpg'
+                                }
+                                alt=""
+                              />
+                            </div>
+                            <div className="overflow-hidden flex-1 ml-3 sm:ml-6">
+                              <div className="flex flex-col justify-between h-full">
+                                <div className="focus:outline-none">
+                                  <p className="overflow-y-hidden max-h-10 sm:max-h-16 text-base sm:text-lg font-medium leading-5 text-gray-900 overflow-ellipsis line-clamp-2">
+                                    {bookInfo.title}
+                                  </p>
+                                  {Array.isArray(bookInfo.authors) &&
+                                    renderAuthors(bookInfo.authors)}
+                                </div>
+                                <div className="text-sm text-gray-500 truncate">
+                                  {formatISOStringToDateTimeWithSlash(date)} 追加
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -771,9 +522,15 @@ export default function BookList() {
                             <div className="text-rights">
                               <Menu as="div" className="inline-block relative">
                                 <div>
-                                  <Menu.Button className="inline-flex">
-                                    <DotsVerticalIcon className="p-1 w-8 h-8 text-gray-500 hover:bg-gray-100 rounded-full" />
-                                  </Menu.Button>
+                                  <Menu.Button 
+                                    className="inline-flex" 
+                                  >
+                                 
+                                    <DotsVerticalIcon 
+                                      className="p-1 w-8 h-8 text-gray-500 hover:bg-gray-100 rounded-full" 
+                                      />
+                                    
+                                    </Menu.Button>
                                 </div>
                                 <Transition
                                   as={Fragment}
@@ -784,8 +541,15 @@ export default function BookList() {
                                   leaveFrom="transform opacity-100 scale-100"
                                   leaveTo="transform opacity-0 scale-95"
                                 >
-                                  <Menu.Items className="absolute right-0 z-20 w-64 bg-white rounded-md divide-y divide-gray-100 ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none">
+                                  <Menu.Items className={classNames(
+                                    (bookInfo.bid == userInfo.isReading) ?
+                                    "w-72"
+                                    :
+                                    "w-64",
+                                    "absolute right-0 z-20  bg-white rounded-md divide-y divide-gray-100 ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none"
+                                  )}>
                                     <div className="py-1 px-1">
+                                    {!(bookInfo.bid == userInfo.isReading) ?
                                       <Menu.Item>
                                         {({ active }) => (
                                           <button
@@ -804,6 +568,52 @@ export default function BookList() {
                                           </button>
                                         )}
                                       </Menu.Item>
+                                      :
+                                        <Menu.Item>
+                                        {({ active }) => (
+                                          <button
+                                            className={`${
+                                              active ? 'bg-gray-100' : ''
+                                            } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+                                            onClick={(e) =>
+                                              selectReadingBook(e, "")
+                                            }
+                                          >
+                                            <XCircleIcon
+                                              className="mr-2 w-5 h-5 text-gray-900"
+                                              aria-hidden="true"
+                                            />
+                                            『現在読んでいる本』から除外する
+                                          </button>
+                                        )}
+                                      </Menu.Item>
+                                      }
+                                      {autoProgress && bookInfo.pageCount &&
+                                        <Menu.Item>
+                                          {({ active }) => 
+                                            (
+                                              <button
+                                                className={`${
+                                                  active ? 'bg-gray-100' : ''
+                                                } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
+                                                onClick={(e) => {
+                                                  selectManualProgress(
+                                                    e,
+                                                    bookInfo.bid,
+                                                    0
+                                                  )
+                                                }}
+                                              >
+                                                <ChartBarIcon
+                                                  className="mr-2 w-5 h-5 text-gray-900"
+                                                  aria-hidden="true"
+                                                />
+                                                『読了度』を手動で管理する
+                                              </button>
+                                            )
+                                          }
+                                        </Menu.Item>
+                                      }
                                       <Menu.Item>
                                         {({ active }) => (
                                           <button
@@ -961,6 +771,67 @@ export default function BookList() {
                               </Menu>
                             </div>
                           </div>
+                          
+                          <Transition
+                            show={bookCardsSelected[idx] ? bookCardsSelected[idx]:false}
+                            as={"div"}
+                            enter="transition ease-in-out duration-100 transfrom"
+                            enterFrom="opacity-0 scale-95"
+                            enterTo="opacity-50 scale-100"
+                            leave="transition ease-in duration-75 transfrom"
+                            leaveFrom="opacity-50 scale-100"
+                            leaveTo="opacity-0 scale-95"
+                            className='absolute flex items-center bg-opacity-95 w-full h-full px-2 sm:px-6 bg-white rounded-lg top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
+                          >
+                            {!(bookInfo.bid == userInfo.isReading) ?
+                                <div className="w-full flex flex-col justify-center items-center space-y-4">
+                                  <p className="text-sm sm:text-base flex-1">
+                                  『現在読んでいる本』にしますか？
+                                  </p>
+                                  <div className="flex justify-center items-center gap-4">
+                                    <button 
+                                      className="inline-block flex-shrink-0 py-2 px-4 text-base text-center bg-gray-100 text-gray-600 rounded-md cursor-pointer"
+                                      onClick={(e) => toggleBookCardsSelected(e, idx, false)}
+                                    >
+                                      選択しない
+                                    </button>
+                                    <button 
+                                      className="inline-block flex-shrink-0 py-2 px-8 text-base text-center text-white hover:bg-blue-700 rounded-md border border-transparent cursor-pointer focus:outline-none bg-tsundoku-blue-main focus:ring-tsundoku-blue-main"
+                                      onClick={(e) => {
+                                        selectReadingBook(e, bookInfo.bid)
+                                        toggleBookCardsSelected(e, idx, false)
+                                      }}
+                                    >
+                                      選択
+                                    </button>
+                                  </div>
+                                </div>
+                              :
+                              <div className="w-full flex flex-col justify-center items-center space-y-4">
+                                  <p className="text-sm sm:text-base flex-1">
+                                  『現在読んでいる本』から除外しますか？
+                                  </p>
+                                  <div className="flex justify-center items-center gap-4">
+                                    <button 
+                                      className="inline-block flex-shrink-0 py-2 px-4 text-sm text-center bg-gray-100 text-gray-600 rounded-md cursor-pointer"
+                                      onClick={(e) => toggleBookCardsSelected(e, idx, false)}
+                                    >
+                                      除外しない
+                                    </button>
+                                    <button 
+                                      className="inline-block flex-shrink-0 py-2 px-6 text-sm text-center text-white hover:bg-red-500 rounded-md border border-transparent cursor-pointer focus:outline-none bg-red-400 focus:ring-red-400"
+                                      onClick={(e) => {
+                                        selectReadingBook(e, "")
+                                        toggleBookCardsSelected(e, idx, false)
+                                      }}
+                                    >
+                                      除外する
+                                    </button>
+                                  </div>
+                                </div>
+                            }
+                          </Transition>
+                          
                         </div>
                       )
                     )}
