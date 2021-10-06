@@ -5,6 +5,7 @@ import { Fragment, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Link from 'next/link'
+import Image from 'next/image'
 import useSWR, { useSWRConfig } from 'swr'
 import { Steps, Hints } from 'intro.js-react'
 
@@ -83,6 +84,8 @@ export default function Home() {
       }
     }
   )
+  console.log(bookList)
+  console.log(userInfo?.isReading)
 
   // 利用情報
   const { data: stats } = useSWR(
@@ -349,122 +352,49 @@ export default function Home() {
 
               {/* 右カラム -- START */}
               <div className="hidden sm:block sm:w-1/3">
-                <section className="py-3 px-2 mb-8 bg-white rounded-lg border border-gray-500">
-                  <Link href="/booklist">
-                    <a className="flex justify-between items-center py-2 px-2 mb-2 hover:bg-gray-100 rounded-lg">
-                      <h3 className="subtitle-section">ブックリスト</h3>
-                      <ChevronRightIcon className="-mr-1.5 w-6 h-6" />
-                    </a>
-                  </Link>
-                  <ul className="px-2 mb-4">
-                    {bookList?.map(({ bookInfo }) => {
+                <section className="py-3 px-4 mb-8 bg-white rounded-lg border border-gray-500">
+                    <h3 className="subtitle-section mb-4">現在読んでいる本</h3>
+                  <div className="">
+                    {bookList?.filter(({bookInfo})=>{
+                      return bookInfo.bid == userInfo.isReading
+                    })
+                    .map(({ bookInfo }) => {
+                      console.log(bookInfo)
                       return (
-                        <li className="mb-2" key={bookInfo.bid}>
-                          <div className="flex items-center space-x-2">
-                            <div className="flex flex-shrink-0 justify-center items-center">
-                              {bookInfo.bid == userInfo.isReading ? (
-                                <BookOpenIcon className="w-6 h-6 text-blue-500" />
-                              ) : (
-                                <span
-                                  className="inline-block w-6 h-6"
-                                  aria-hidden="true"
-                                />
-                              )}
-                            </div>
-
-                            <div className="overflow-hidden flex-1">
-                              <p className="text-gray-500 truncate">
-                                {bookInfo?.title}
-                              </p>
-                            </div>
-                            {/* <div className="flex flex-shrink-0 justify-center items-center">
-                              <div className="flex">
-                                <svg
-                                  className=" mr-1.5 w-1.5 h-6 text-blue-100"
-                                  fill="currentColor"
-                                  viewBox="0 0 5 20"
-                                >
-                                  <rect
-                                    x="0"
-                                    y="0"
-                                    r="1"
-                                    width="5"
-                                    height="20"
-                                  />
-                                </svg>
-                                <svg
-                                  className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-200"
-                                  fill="currentColor"
-                                  viewBox="0 0 5 20"
-                                >
-                                  <rect
-                                    x="0"
-                                    y="0"
-                                    r="1"
-                                    width="5"
-                                    height="20"
-                                  />
-                                </svg>
-                                <svg
-                                  className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-300"
-                                  fill="currentColor"
-                                  viewBox="0 0 5 20"
-                                >
-                                  <rect
-                                    x="0"
-                                    y="0"
-                                    r="1"
-                                    width="5"
-                                    height="20"
-                                  />
-                                </svg>
-                                <svg
-                                  className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-400"
-                                  fill="currentColor"
-                                  viewBox="0 0 5 20"
-                                >
-                                  <rect
-                                    x="0"
-                                    y="0"
-                                    r="1"
-                                    width="5"
-                                    height="20"
-                                  />
-                                </svg>
-                                <svg
-                                  className=" mr-1.5 -ml-0.5 w-1.5 h-6 text-blue-500"
-                                  fill="currentColor"
-                                  viewBox="0 0 5 20"
-                                >
-                                  <rect
-                                    x="0"
-                                    y="0"
-                                    r="1"
-                                    width="5"
-                                    height="20"
-                                  />
-                                </svg>
-                              </div>
-                            </div> */}
+                        <div className="" key={bookInfo.bid}>
+                          <div className="relative mx-auto w-24 h-32">
+                          <Image
+                            className="object-contain filter drop-shadow-md"
+                            layout={'fill'}
+                            src={
+                              bookInfo.image
+                                ? bookInfo.image
+                                : '/img/placeholder/noimage_480x640.jpg'
+                            }
+                            alt="book-cover"
+                          />
+                          
                           </div>
-                        </li>
+                          <dl className="mt-4">
+                            <dt className="text-sm font-bold">タイトル</dt>
+                            <dd>{bookInfo.title}</dd>
+                            <dt className="mt-2 text-sm font-bold">著者</dt>
+                          {bookInfo.authors.map((author) => {
+                            return <dd>{author}</dd>
+                          })
+                          }
+                          
+                          </dl>
+                        </div>
                       )
                     })}
-                  </ul>
-                  {/* <div className="flex justify-end px-2">
-                    <Link href="/booklist">
-                      <a className="group flex items-center space-x-1">
-                        <PlusCircleIcon className="w-5 h-5 text-gray-700 group-hover:text-gray-600" />
-                        <span className="text-sm text-gray-500 group-hover:text-gray-400">
-                          リストに追加する
-                        </span>
-                      </a>
-                    </Link>
-                  </div> */}
+                  </div>
+                  
                 </section>
-                <section className="mb-8">
+                {/* 新規機能:みんなのリストが実装されたら解放*/}
+                {/* <section className="mb-8">
                   <h3 className="subtitle-section">みんなのリスト(人気)</h3>
-                </section>
+                </section> */}
               </div>
               {/* 右カラム -- START */}
             </div>
