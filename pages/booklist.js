@@ -253,6 +253,12 @@ export default function BookList() {
   const removeBookFromList = async (e, bid) => {
     e.preventDefault()
 
+    //削除する本がisReadingだったら現在読んでいる本を空にする
+    if(bid == userInfo.isReading){
+      await updateIsReading(user.uid, "")
+      mutate(['/api/user', user.token])
+    }
+
     // 特定の bid の書籍をリストから削除
     await removeItemFromBookList(user.uid, bid)
 
@@ -347,8 +353,6 @@ export default function BookList() {
     // 進捗割合 = 読書時間(totalReadTime) × 平均読書速度(400文字/分) ÷ 平均的な文字数(600文字/ページ) ÷ 当該書籍のページ数(pageCount)
     const progress = (totalReadTime * 400) / 600 / pageCount
 
-    console.log(progress)
-
     return <BookProgressIcon progress={progress} />
   }
 
@@ -403,7 +407,7 @@ export default function BookList() {
 
             <div className="mb-24">
               <div className="mt-6 sm:mt-12">
-                <h1 className="subtitle-section">現在読んでいる本</h1>
+                <h1 className="subtitle-section">いま読んでいる本</h1>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 h-32 mt-4">
                   {userInfo?.isReading && bookList ? (
                     <>
@@ -450,7 +454,7 @@ export default function BookList() {
                     <div className="relative flex items-center justify-center text-center rounded-lg border border-gray-300 bg-white py-4 px-2 sm:px-6 shadow-sm hover:border-gray-400">
                       <div>
                         <p className="text-black text-sm sm:text-base">
-                          『現在読んでいる本』は選択されていません。
+                          『いま読んでいる本』は選択されていません。
                         </p>
                         <p className="text-gray-500 text-xs sm:text-sm mt-2">
                           下のブックリストから選択できます。
@@ -580,7 +584,7 @@ export default function BookList() {
                                                 className="mr-2 w-5 h-5 text-gray-900"
                                                 aria-hidden="true"
                                               />
-                                              『現在読んでいる本』にする
+                                              『いま読んでいる本』にする
                                             </button>
                                           )}
                                         </Menu.Item>
@@ -599,7 +603,7 @@ export default function BookList() {
                                                 className="mr-2 w-5 h-5 text-gray-900"
                                                 aria-hidden="true"
                                               />
-                                              『現在読んでいる本』から除外する
+                                              『いま読んでいる本』から除外する
                                             </button>
                                           )}
                                         </Menu.Item>
@@ -695,9 +699,31 @@ export default function BookList() {
                                   leaveFrom="transform opacity-100 scale-100"
                                   leaveTo="transform opacity-0 scale-95"
                                 >
-                                  <Menu.Items className="absolute right-0 z-20 w-48 bg-white rounded-md divide-y divide-gray-100 ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none">
+                                  <Menu.Items className="absolute right-0 z-20 w-56 bg-white rounded-md divide-y divide-gray-100 ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none">
                                     <div className="py-1 px-1">
-                                      <Menu.Item>
+                                    <Menu.Item>
+                                        {({ active }) => (
+                                          <div
+                                            className="flex flex-col items-center rounded-md text-gray-900 w-full px-2 py-2 text-sm text-right"
+                                          >
+                                           <p className="text-center text-gray-700 text-sm">この本は読了度が</p>
+                                           <p className="text-center text-gray-700 text-sm">自動で管理されています。</p>
+                                            <button
+                                             className="mt-3 px-3 py-2 border border-gray-400 rounded-lg"
+                                             onClick={(e) => {
+                                              selectManualProgress(
+                                                e,
+                                                bookInfo.bid,
+                                                0
+                                              )
+                                            }}
+                                            >
+                                              手動で管理する
+                                            </button>
+                                          </div>
+                                        )}
+                                      </Menu.Item>
+                                      {/* <Menu.Item>
                                         {({ active }) => (
                                           <button
                                             className={`${
@@ -784,7 +810,7 @@ export default function BookList() {
                                             あまり読んでいない
                                           </button>
                                         )}
-                                      </Menu.Item>
+                                      </Menu.Item> */}
                                     </div>
                                   </Menu.Items>
                                 </Transition>
