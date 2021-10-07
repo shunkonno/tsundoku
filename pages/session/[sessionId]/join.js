@@ -63,7 +63,7 @@ export async function getStaticPaths() {
   return { paths, fallback: true }
 }
 
-export default function Session({ session }) {
+export default function SessionJoin({ session }) {
   // console.log(session)
   // ============================================================
   // Initialize
