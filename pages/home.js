@@ -246,7 +246,7 @@ export default function Home() {
 
     if (!filteredList.length) {
       return (
-        <div className="text-center">現在、予約可能なルームはありません。</div>
+        <div className="text-center mt-4">現在、予約可能なルームはありません。</div>
       )
     }
   }
@@ -353,8 +353,10 @@ export default function Home() {
               {/* 右カラム -- START */}
               <div className="hidden sm:block sm:w-1/3">
                 <section className="py-3 px-4 mb-8 bg-white rounded-lg border border-gray-500">
-                    <h3 className="subtitle-section mb-4">現在読んでいる本</h3>
+                    <h3 className="subtitle-section mb-4">いま読んでいる本</h3>
                   <div className="">
+                  {userInfo?.isReading && bookList ?
+                  <>
                     {bookList?.filter(({bookInfo})=>{
                       return bookInfo.bid == userInfo.isReading
                     })
@@ -380,7 +382,7 @@ export default function Home() {
                             <dd>{bookInfo.title}</dd>
                             <dt className="mt-2 text-sm font-bold">著者</dt>
                           {bookInfo.authors.map((author) => {
-                            return <dd>{author}</dd>
+                            return <dd key="author">{author}</dd>
                           })
                           }
                           
@@ -388,6 +390,17 @@ export default function Home() {
                         </div>
                       )
                     })}
+                    </>
+                    :
+                    <div className="text-center">
+                      <p className="text-gray-900 text-sm sm:text-base">
+                          『いま読んでいる本』は選択されていません。
+                        </p>
+                        <p className="text-gray-500 text-xs sm:text-sm mt-2">
+                          <Link href="/booklist"><a className="text-blue-500">ブックリスト</a></Link>から選択できます。
+                        </p>
+                    </div>
+                    }
                   </div>
                   
                 </section>
