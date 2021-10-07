@@ -30,6 +30,7 @@
     "react-day-picker": "^7.4.10",
     "react-dom": "^17.0.2",
     "react-wavify": "^1.5.4",
+    "simple-isbn": "^1.1.5",
     "swr": "^1.0.1"
   },
   "devDependencies": {

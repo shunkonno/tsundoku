@@ -8,6 +8,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import useSWR, { useSWRConfig } from 'swr'
 import Script from 'next/script'
+import { isbn } from 'simple-isbn'
 
 // Components
 import { AppHeader } from '../../../components/Header'
@@ -220,11 +221,10 @@ export default function Session({ session }) {
   // セッションに参加する
   async function joinRoom() {
     await setModalOpen(!modalOpen)
-    await setTimeout(()=> {
+    await setTimeout(() => {
       console.log('join')
       call.join()
     }, 3000)
-    
   }
 
   // セッションを終了する
@@ -312,7 +312,6 @@ export default function Session({ session }) {
   //   setIsMicrophoneOn((isMicrophoneOn) => !isMicrophoneOn)
   // }
 
-
   const renderMicrophoneIcon = () => {
     let el = document.getElementById('toggle-mic')
     console.log(el)
@@ -328,6 +327,18 @@ export default function Session({ session }) {
             alt="Disable slash"
           />
       `
+    }
+  }
+
+  const returnAmazonLink = (isbn13) => {
+    // ISBN-13 を ISBN-10 に加工する
+    const isValid = isbn.isValidIsbn13(isbn13)
+
+    if (isValid) {
+      const isbn10 = isbn.toIsbn10(isbn13)
+      return 'https://www.amazon.co.jp/dp/' + isbn10
+    } else {
+      return '#'
     }
   }
 
@@ -401,53 +412,66 @@ export default function Session({ session }) {
                 leaveTo="opacity-0 scale-95"
               >
                 <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-                  { userInfo && bookList ?
-                  <Transition.Child
-                  as="div"
-                  enter="ease-out duration-300"
-                  enterFrom="opacity-0 "
-                  enterTo="opacity-100"
-                  leave="ease-in duration-200"
-                  leaveFrom="opacity-100"
-                  leaveTo="opacity-0"
-                >
-                  
-                  <div>
-                    <p className="text-sm text-gray-500">
-                      ルームに参加します。
-                    </p>
-                  </div>
-
-                  <div className="mt-4 flex justify-center">
-                    <Link href={`/session/${sessionId}/detail`}>
-                      <button
-                        type="button"
-                        className="inline-flex items-center mr-4 text-xs font-medium text-gray-500"
-                      >
-                        ルーム詳細に戻る
-                      </button>
-                    </Link>
-                    <button
-                      type="button"
-                      className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                      onClick={() => {
-                          joinRoom()
-                        }
-                      }
+                  {userInfo && bookList ? (
+                    <Transition.Child
+                      as="div"
+                      enter="ease-out duration-300"
+                      enterFrom="opacity-0 "
+                      enterTo="opacity-100"
+                      leave="ease-in duration-200"
+                      leaveFrom="opacity-100"
+                      leaveTo="opacity-0"
                     >
-                      ルームに参加する
-                    </button>
-                  </div>
-                  
-                  </Transition.Child>
-                  :
-                  <div className="flex justify-center items-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                  </div>
-                  }
+                      <div>
+                        <p className="text-sm text-gray-500">
+                          ルームに参加します。
+                        </p>
+                      </div>
+
+                      <div className="mt-4 flex justify-center">
+                        <Link href={`/session/${sessionId}/detail`}>
+                          <button
+                            type="button"
+                            className="inline-flex items-center mr-4 text-xs font-medium text-gray-500"
+                          >
+                            ルーム詳細に戻る
+                          </button>
+                        </Link>
+                        <button
+                          type="button"
+                          className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                          onClick={() => {
+                            joinRoom()
+                          }}
+                        >
+                          ルームに参加する
+                        </button>
+                      </div>
+                    </Transition.Child>
+                  ) : (
+                    <div className="flex justify-center items-center">
+                      <svg
+                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                    </div>
+                  )}
                 </div>
               </Transition.Child>
             </div>
@@ -461,18 +485,14 @@ export default function Session({ session }) {
           <div className="flex justify-center">
             <div className="flex-shrink-0 w-72">
               <div className="py-4">
-                
-                  <button
-                    id="leave"
-                    className="flex items-center py-3 px-6 space-x-2 text-base font-medium text-white bg-red-600 rounded-md opacity-90"
-                    onClick={(e) => 
-                      leaveRoom(e)
-                    }
-                  >
-                    <LogoutIcon className="w-6 h-6 opacity-100 transform rotate-180" />
-                    <span>退出する</span>
-                  </button>
-                
+                <button
+                  id="leave"
+                  className="flex items-center py-3 px-6 space-x-2 text-base font-medium text-white bg-red-600 rounded-md opacity-90"
+                  onClick={(e) => leaveRoom(e)}
+                >
+                  <LogoutIcon className="w-6 h-6 opacity-100 transform rotate-180" />
+                  <span>退出する</span>
+                </button>
               </div>
             </div>
             <div className="flex w-full max-w-7xl">
@@ -822,11 +842,16 @@ export default function Session({ session }) {
                               {bookInfo.title}
                             </p>
                           </div>
-                          <div className="text-right">
-                            <a href="#" className="text-blue-500 text-sm">
-                              Amazonで見る
-                            </a>
-                          </div>
+                          {bookInfo.isbn13 && (
+                            <div className="text-right">
+                              <a
+                                href={returnAmazonLink(bookInfo.isbn13)}
+                                className="text-sm text-blue-500"
+                              >
+                                Amazonで見る
+                              </a>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -847,7 +872,6 @@ export default function Session({ session }) {
                   className="relative"
                   id="toggle-mic"
                   onClick={(e) => {
-
                     renderMicrophoneIcon()
                     // setIsMicrophoneOn(!isMicrophoneOn)
                     console.log(participantsCount)
