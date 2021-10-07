@@ -76,6 +76,7 @@ export default function SessionJoin({ session }) {
   const [rightSlideOpen, setRightSlideOpen] = useState(false)
   const [joiningUser, setJoiningUser] = useState(false)
   const [modalOpen, setModalOpen] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   // Routing
   const router = useRouter()
@@ -220,12 +221,14 @@ export default function SessionJoin({ session }) {
 
   // セッションに参加する
   async function joinRoom() {
-    await setModalOpen(!modalOpen)
+    await setIsLoading((isLoading) => (!isLoading))
     await setTimeout(() => {
       console.log('join')
       call.join()
-    }, 3000)
+    }, 500)
   }
+
+  
 
   // セッションを終了する
   async function leaveRoom(e) {
@@ -276,6 +279,7 @@ export default function SessionJoin({ session }) {
     participantsCount = Object.entries(call.participants()).length
 
     el.innerHTML = `Participant count: ${participantsCount}`
+    setModalOpen((modalOpen) => (!modalOpen))
   }
 
   // オーディオトラックの破棄
@@ -412,7 +416,7 @@ export default function SessionJoin({ session }) {
                 leaveTo="opacity-0 scale-95"
               >
                 <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-                  {userInfo && bookList ? (
+                  {userInfo && bookList && !isLoading ? (
                     <Transition.Child
                       as="div"
                       enter="ease-out duration-300"
@@ -449,7 +453,10 @@ export default function SessionJoin({ session }) {
                       </div>
                     </Transition.Child>
                   ) : (
-                    <div className="flex justify-center items-center">
+                    <div className="flex flex-col justify-center items-center">
+                      {isLoading &&
+                      <p className="mb-2 text-gray-500 text-sm animate-pulse">ルームに参加しています...</p>
+                      }
                       <svg
                         className="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500"
                         xmlns="http://www.w3.org/2000/svg"
