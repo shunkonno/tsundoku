@@ -4,6 +4,7 @@
 import { Fragment, useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
+import Image from 'next/image'
 import useSWR, { useSWRConfig } from 'swr'
 
 // Components
@@ -54,6 +55,7 @@ export default function UserSettings() {
     genderOfMatchSettings[0]
   )
   const [avatarFile, setAvatarFile] = useState(null)
+  const [avatarPreviewUrl, setAvatarPreviewUrl] = useState("")
 
   // ============================================================
   // Contexts
@@ -105,6 +107,23 @@ export default function UserSettings() {
 
   // Translate
   const t = uselocalesFilter('userSettings', router.locale)
+
+  // ============================================================
+  // Handle Avatar Image
+  // ============================================================
+
+  //avatarのinput fileがchangeしたときに、即座にプレビューを表示する(DBにアップロードする前)
+  const handleAvatarFileChange = (e) => {
+    setAvatarFile(e.target.files[0])
+
+    let reader = new FileReader()
+
+    reader.onloadend = () => {
+      setAvatarPreviewUrl(reader.result);
+      console.log('preview', avatarPreviewUrl)
+    }
+    reader.readAsDataURL(e.target.files[0])
+  }
 
   // ============================================================
   // Handle Form Submit
@@ -170,122 +189,168 @@ export default function UserSettings() {
       <div className="overflow-hidden pb-16 bg-gray-50">
         <div className="sm:block sm:w-full sm:h-full" aria-hidden="true">
           <main className="sm:py-8 px-4 mx-auto max-w-xl">
-            <div className="py-3">
+            <div className="py-3 mb-12">
               <h1 className="text-2xl font-bold">ユーザー設定</h1>
             </div>
-            <div className="py-3">
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700"
-              >
-                名前(ニックネーム)
-              </label>
-              <div className="mt-1">
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  autoComplete="given-name"
-                  value={userName}
-                  className="block p-3 w-full sm:text-sm rounded-md border border-gray-300 shadow-sm focus:ring-tsundoku-brown-main focus:border-tsundoku-brown-main"
-                  onChange={(e) => {
-                    setUserName(e.target.value)
-                  }}
-                />
+            <div>
+              <div>
+                <h3 className="text-lg font-medium leading-6 text-gray-900">
+                  プロフィール
+                </h3>
+               
+              </div>
+
+              <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5 sm:border-t sm:border-gray-200">
+                  <label htmlFor="username" className="block sm:pt-2 sm:mt-px text-sm font-medium text-gray-700">
+                    ユーザーネーム
+                  </label>
+                  <div className="sm:col-span-2 mt-1 sm:mt-0">
+                    <div className="flex max-w-lg rounded-md shadow-sm">
+                      
+                      <input 
+                        type="text" 
+                        name="username" 
+                        id="username" 
+                        autoComplete="username" 
+                        value={userName}
+                        className="block p-3 w-full sm:text-sm rounded-md border border-gray-300 shadow-sm focus:ring-tsundoku-brown-main focus:border-tsundoku-brown-main"
+                        onChange={(e) => {
+                          setUserName(e.target.value)
+                        }} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5 sm:border-t sm:border-gray-200">
+                  <label htmlFor="about" className="block sm:pt-2 sm:mt-px text-sm font-medium text-gray-700">
+                    自己紹介
+                  </label>
+                  <div className="sm:col-span-2 mt-1 sm:mt-0">
+                    <textarea id="about" name="about" rows="3" className="block w-full max-w-lg sm:text-sm rounded-md border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm"></textarea>
+                    <p className="mt-2 text-sm text-gray-500">好きな本やジャンルについて紹介してみましょう。</p>
+                  </div>
+                </div>
+
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:pt-5 sm:border-t sm:border-gray-200">
+                  <label htmlFor="photo" className="block text-sm font-medium text-gray-700">
+                    プロフィール画像
+                  </label>
+                  <div className="sm:col-span-2 mt-1 sm:mt-0">
+                    <div className="flex items-center space-x-3">
+                      <span className="overflow-hidden relative w-20 h-20 bg-orange-100 rounded-full">
+                        <Image 
+                          src={avatarPreviewUrl ?
+                            avatarPreviewUrl
+                            :
+                            userInfo?.avatar ?
+                            userInfo.avatar
+                            :
+                            "/img/avatar/avatar-placeholder.png"
+                          } 
+                          layout={'fill'} 
+                          alt="profile-image" 
+                        />
+                      </span>
+                      <div>
+                        <span className="block text-sm text-gray-500 mb-3">推奨：縦360px 横360px 比率1：1 </span>
+                        <label
+                          className="py-2 px-3 text-sm font-medium leading-4 text-gray-700 bg-white hover:bg-gray-50 rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 shadow-sm focus:outline-none"
+                          htmlFor="avatar"
+                        >
+                          <input 
+                            type="file" 
+                            id="avatar"
+                            name="avatar"
+                            accept="image/png, image/jpeg"
+                            className="sr-only"
+                            onChange={(e) => handleAvatarFileChange(e)}
+                          />
+                          変更
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:pt-5 sm:border-t sm:border-gray-200">
+                  <label htmlFor="photo" className="block text-sm font-medium text-gray-700">
+                    性別
+                  </label>
+                  <div className="sm:col-span-2 mt-1 sm:mt-0">
+                    <RadioGroup
+                      className="mt-1"
+                      value={genderSelected}
+                      onChange={setGenderSelected}
+                    >
+                      <RadioGroup.Label className="sr-only">
+                        Gender setting
+                      </RadioGroup.Label>
+                      <div className="-space-y-px bg-white rounded-md">
+                        {genderSettings.map((gender, genderSettingIdx) => (
+                          <RadioGroup.Option
+                            key={gender.name}
+                            value={gender.label}
+                            className={({ checked }) =>
+                              classNames(
+                                genderSettingIdx === 0
+                                  ? 'rounded-tl-md rounded-tr-md'
+                                  : '',
+                                genderSettingIdx === genderSettings.length - 1
+                                  ? 'rounded-bl-md rounded-br-md'
+                                  : '',
+                                checked
+                                  ? 'bg-tsundoku-brown-sub  z-10'
+                                  : 'border-gray-200',
+                                gender.label == genderSelected
+                                  ? 'bg-tsundoku-brown-sub  z-10'
+                                  : 'border-gray-200',
+                                'relative border p-4 flex cursor-pointer focus:outline-none'
+                              )
+                            }
+                          >
+                            {({ active, checked }) => (
+                              <>
+                                <span
+                                  className={classNames(
+                                    checked
+                                      ? 'bg-tsundoku-brown-main border-transparent'
+                                      : 'bg-white border-gray-300',
+                                    gender == genderSelected
+                                      ? 'bg-tsundoku-brown-main border-transparent'
+                                      : 'bg-white border-gray-300',
+                                    active ? '' : '',
+                                    'h-4 w-4 mt-0.5 cursor-pointer rounded-full border flex items-center justify-center'
+                                  )}
+                                  aria-hidden="true"
+                                >
+                                  <span className="w-1.5 h-1.5 bg-white rounded-full" />
+                                </span>
+                                <div className="flex flex-col ml-3">
+                                  <RadioGroup.Label
+                                    as="span"
+                                    className={classNames(
+                                      checked ? 'text-orange-900' : 'text-gray-900',
+                                      gender == genderSelected
+                                        ? 'text-orange-900'
+                                        : 'text-gray-900',
+                                      'block text-sm font-medium'
+                                    )}
+                                  >
+                                    {gender.name}
+                                  </RadioGroup.Label>
+                                </div>
+                              </>
+                            )}
+                          </RadioGroup.Option>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </div>
+                </div>
+
+                
               </div>
             </div>
-
-            {/* 性別 */}
-            <div className="py-3">
-              <label
-                htmlFor="Gender"
-                className="block text-sm font-medium text-gray-700"
-              >
-                性別
-              </label>
-              <RadioGroup
-                className="mt-1"
-                value={genderSelected}
-                onChange={setGenderSelected}
-              >
-                <RadioGroup.Label className="sr-only">
-                  Gender setting
-                </RadioGroup.Label>
-                <div className="-space-y-px bg-white rounded-md">
-                  {genderSettings.map((gender, genderSettingIdx) => (
-                    <RadioGroup.Option
-                      key={gender.name}
-                      value={gender.label}
-                      className={({ checked }) =>
-                        classNames(
-                          genderSettingIdx === 0
-                            ? 'rounded-tl-md rounded-tr-md'
-                            : '',
-                          genderSettingIdx === genderSettings.length - 1
-                            ? 'rounded-bl-md rounded-br-md'
-                            : '',
-                          checked
-                            ? 'bg-tsundoku-brown-sub border-tsundoku-brown-main z-10'
-                            : 'border-gray-200',
-                          gender.label == genderSelected
-                            ? 'bg-tsundoku-brown-sub border-tsundoku-brown-main z-10'
-                            : 'border-gray-200',
-                          'relative border p-4 flex cursor-pointer focus:outline-none'
-                        )
-                      }
-                    >
-                      {({ active, checked }) => (
-                        <>
-                          <span
-                            className={classNames(
-                              checked
-                                ? 'bg-tsundoku-brown-main border-transparent'
-                                : 'bg-white border-gray-300',
-                              gender == genderSelected
-                                ? 'bg-tsundoku-brown-main border-transparent'
-                                : 'bg-white border-gray-300',
-                              active ? '' : '',
-                              'h-4 w-4 mt-0.5 cursor-pointer rounded-full border flex items-center justify-center'
-                            )}
-                            aria-hidden="true"
-                          >
-                            <span className="w-1.5 h-1.5 bg-white rounded-full" />
-                          </span>
-                          <div className="flex flex-col ml-3">
-                            <RadioGroup.Label
-                              as="span"
-                              className={classNames(
-                                checked ? 'text-orange-900' : 'text-gray-900',
-                                gender == genderSelected
-                                  ? 'text-orange-900'
-                                  : 'text-gray-900',
-                                'block text-sm font-medium'
-                              )}
-                            >
-                              {gender.name}
-                            </RadioGroup.Label>
-                          </div>
-                        </>
-                      )}
-                    </RadioGroup.Option>
-                  ))}
-                </div>
-              </RadioGroup>
-            </div>
-            {/* 性別 END */}
-            {/* アバター画像ファイル */}
-            <div>
-              <input
-                type="file"
-                id="avatar"
-                name="avatar"
-                accept="image/png, image/jpeg"
-                onChange={(e) => {
-                  setAvatarFile(e.target.files[0])
-                }}
-              />
-            </div>
-            {/* アバター画像ファイル - END*/}
 
             {/* <Transition
               show={genderSelected?.label == 'Female'}
