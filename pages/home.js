@@ -21,7 +21,7 @@ import { GeneralAlert } from '../components/Alert'
 import { AppContext } from '../context/state'
 
 // Assets
-import { PlusIcon, PlusCircleIcon } from '@heroicons/react/solid'
+import { PlusIcon, PlusCircleIcon,ArrowSmUpIcon } from '@heroicons/react/solid'
 import { BookOpenIcon } from '@heroicons/react/outline'
 import 'intro.js/introjs.css'
 
@@ -32,6 +32,7 @@ import fetcher from '../utils/fetcher'
 import classNames from '../utils/classNames'
 import uselocalesFilter from '../utils/translate'
 import { ChevronRightIcon } from '@heroicons/react/outline'
+import { toPath } from 'lodash'
 
 export default function Home() {
   // ============================================================
@@ -99,7 +100,7 @@ export default function Home() {
     }
   )
 
-  console.log('stats:', stats)
+  console.log('stats:', stats?.readTime)
 
   // ============================================================
   // Routing
@@ -202,8 +203,35 @@ export default function Home() {
       return monthlyReadTime
     }
   }
+  const lastMonthReadTime = () => {
+    const currentDateTime = new Date()
+    const currentYear = currentDateTime.getFullYear()
+    const lastMonth = currentDateTime.getMonth()
+
+    const readTime = stats?.readTime
+
+    if (readTime?.[currentYear]?.[lastMonth]) {
+      // 先月の月のデータが存在する場合
+      var lastMonthReadTime = 0
+
+      // 先月分を array に集約
+      const readTimeArray = Object.values(readTime[currentYear][lastMonth])
+
+      // lastMonthReadTime に加算
+      readTimeArray.forEach((readTime) => {
+        lastMonthReadTime += readTime
+      })
+
+      return lastMonthReadTime
+    } else {
+      // 先月の月のデータが存在しない場合 (=先月未利用)
+      const lastMonthReadTime = 0
+      return lastMonthReadTime
+    }
+  }
 
   console.log(monthlyReadTime())
+  console.log(lastMonthReadTime())
 
   // ============================================================
   // Button Handlers
@@ -352,7 +380,58 @@ export default function Home() {
 
               {/* 右カラム -- START */}
               <div className="hidden sm:block sm:w-1/3">
-                <section className="py-3 px-4 mb-8 bg-white rounded-lg border border-gray-500">
+                <section className="px-4 sm:px-6 bg-white rounded-lg border border-gray-500">
+                <div className="grid grid-cols-1 divide-y">
+                  <div className="py-5 sm:py-6">
+                    <dt className="text-base font-normal text-gray-900">
+                      今月の読書時間
+                    </dt>
+                    <dd className="flex md:block lg:flex justify-between items-baseline mt-1">
+                      <div className="flex items-baseline text-2xl font-semibold text-tsundoku-brown-main">
+                        {monthlyReadTime()}
+                        <span className="ml-2 text-lg font-normal text-gray-900">
+                          分 :
+                        </span>
+                        <span className="ml-2 text-sm font-medium text-gray-500">
+                          先月 {lastMonthReadTime()} 分
+                        </span>
+                      </div>
+
+                      <div className="inline-flex items-baseline py-0.5 px-2.5 md:mt-2 lg:mt-0 text-sm font-medium text-green-800 bg-green-100 rounded-full">
+                        
+                        <ArrowSmUpIcon className="flex-shrink-0 self-center mr-0.5 -ml-1 w-5 h-5 text-green-500" />
+                        <span className="sr-only">
+                          Increased by
+                        </span>
+                        {Math.round(monthlyReadTime() / lastMonthReadTime() * 100 - 100)}%
+                      </div>
+                    </dd>
+                  </div>
+                  <div  className="py-5 sm:py-6">
+                    <dt className="text-base font-normal text-gray-900">
+                      今月の読書ページ数(推定)
+                    </dt>
+                    <dd className="flex md:block lg:flex justify-between items-baseline mt-1">
+                      <div className="flex items-baseline text-2xl font-semibold text-tsundoku-brown-main">
+                        ---
+                        <span className="ml-2 text-sm font-medium text-gray-500">
+                          先月 ---
+                        </span>
+                      </div>
+
+                      <div className="inline-flex items-baseline py-0.5 px-2.5 md:mt-2 lg:mt-0 text-sm font-medium text-green-800 bg-green-100 rounded-full">
+                        
+                        <ArrowSmUpIcon className="flex-shrink-0 self-center mr-0.5 -ml-1 w-5 h-5 text-green-500" />
+                        <span className="sr-only">
+                          Increased by
+                        </span>
+                        999%
+                      </div>
+                    </dd>
+                  </div>
+                </div>
+                </section>
+                <section className="py-3 px-4 my-8 bg-white rounded-lg border border-gray-500">
                     <h3 className="mb-4 subtitle-section">いま読んでいる本</h3>
                   <div className="">
                   {userInfo?.isReading && bookList ?
