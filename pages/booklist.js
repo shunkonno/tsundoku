@@ -677,9 +677,7 @@ export default function BookList() {
                                                 active ? 'bg-gray-100' : ''
                                               } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
                                               onClick={(e) => {
-                                                console.log(
-                                                  'chage autoProgress'
-                                                )
+                                                selectAutoProgress(e, bookInfo.bid)
                                               }}
                                             >
                                               <ChartSquareBarIcon
