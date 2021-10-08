@@ -371,13 +371,14 @@ export default function BookList() {
     return (
       <div className="group">
         <div className="flex items-center space-x-1 text-xs text-left text-gray-500 group-hover:text-blue-400 rounded-lg">
-          {pageCount == 0 &&
+
+          {pageCount == 0 && (
             <span className="flex relative w-2 h-2">
               <span className="absolute w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
               <span className="w-2 h-2 bg-yellow-300 rounded-full"></span>
 
             </span>
-          }
+          )}
           <span>読了度</span>
         </div>
         <div className="mt-1">
@@ -750,7 +751,7 @@ export default function BookList() {
                                   <Menu.Items className="absolute right-0 z-20 w-56 bg-white rounded-md divide-y divide-gray-100 ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none">
                                     <div className="py-1 px-1">
                                     {autoProgress &&
-                                      bookInfo.pageCount &&
+                                      bookInfo.pageCount && (
                                       <Menu.Item>
                                         <div
                                           className="flex flex-col items-center py-2 px-2 w-full text-sm text-right text-gray-900 rounded-md"
@@ -771,66 +772,35 @@ export default function BookList() {
                                           </button>
                                         </div>
                                       </Menu.Item>
-                                    }
+                                    )}
                                     {autoProgress &&
-                                      !bookInfo.pageCount &&
+                                      !bookInfo.pageCount && (
                                       <Menu.Item>
                                         <div
                                           className="flex flex-col items-center py-2 px-2 w-full text-sm text-right text-gray-900 rounded-md"
                                         >
-                                        <div className="flex">
-                                          <ExclamationIcon className="mr-0.5 w-6 h-6 text-yellow-500"/>
-                                          <div>
-                                          <p className="text-sm leading-6 text-left text-gray-700">この本は読了度を自動で</p>
-                                          <p className="text-sm text-left text-gray-700">計測できません。</p>
-
-                                          </div>
-                                        </Menu.Item>
-                                      )}
-                                      {autoProgress && !bookInfo.pageCount && (
-                                        <Menu.Item>
-                                          <div className="flex flex-col items-center rounded-md text-gray-900 w-full px-2 py-2 text-sm text-right">
-                                            <div className="flex">
-                                              <ExclamationIcon className="w-6 h-6 text-yellow-500 mr-0.5" />
-                                              <div>
-                                                <p className="text-left text-gray-700 text-sm leading-6">
-                                                  この本は読了度を自動で
-                                                </p>
-                                                <p className="text-left text-gray-700 text-sm">
-                                                  計測できません。
-                                                </p>
-                                              </div>
+                                          <div className="flex">
+                                            <ExclamationIcon className="mr-0.5 w-6 h-6 text-yellow-500"/>
+                                            <div>
+                                              <p className="text-sm leading-6 text-left text-gray-700">この本は読了度を自動で</p>
+                                              <p className="text-sm text-left text-gray-700">計測できません。</p>
                                             </div>
-                                            <button
-                                              className="mt-3 px-3 py-2 border border-gray-400 rounded-lg"
-                                              onClick={(e) => {
+                                          </div>
+                                          <button
+                                                className="py-2 px-3 mt-3 rounded-lg border border-gray-400"
+                                                onClick={(e) => {
                                                 selectManualProgress(
                                                   e,
                                                   bookInfo.bid,
                                                   0
                                                 )
                                               }}
-                                            >
-                                              手動で管理する
-                                            </button>
-                                          </div>
-                                          <button
-                                            className="py-2 px-3 mt-3 rounded-lg border border-gray-400"
-                                            onClick={(e) => {
-                                            selectManualProgress(
-                                              e,
-                                              bookInfo.bid,
-                                              0
-                                            )
-                                          }}
-                                          >
-                                            手動で管理する
-                                          </button>
+                                              >
+                                                手動で管理する
+                                              </button>
                                         </div>
                                       </Menu.Item>
-                                      }
-
-
+                                      )}
                                       {!autoProgress && (
                                         <>
                                           <Menu.Item>
