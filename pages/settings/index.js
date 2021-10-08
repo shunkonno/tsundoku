@@ -253,7 +253,7 @@ export default function UserSettings() {
                         />
                       </span>
                       <div>
-                        <span className="block text-sm text-gray-500 mb-3">推奨：縦360px 横360px 比率1：1 </span>
+                        <span className="block mb-3 text-sm text-gray-500">推奨：縦360px 横360px 比率1：1 </span>
                         <label
                           className="py-2 px-3 text-sm font-medium leading-4 text-gray-700 bg-white hover:bg-gray-50 rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 shadow-sm focus:outline-none"
                           htmlFor="avatar"
