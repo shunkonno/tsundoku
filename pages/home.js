@@ -246,7 +246,7 @@ export default function Home() {
 
     if (!filteredList.length) {
       return (
-        <div className="text-center mt-4">現在、予約可能なルームはありません。</div>
+        <div className="mt-4 text-center">現在、予約可能なルームはありません。</div>
       )
     }
   }
@@ -353,7 +353,7 @@ export default function Home() {
               {/* 右カラム -- START */}
               <div className="hidden sm:block sm:w-1/3">
                 <section className="py-3 px-4 mb-8 bg-white rounded-lg border border-gray-500">
-                    <h3 className="subtitle-section mb-4">いま読んでいる本</h3>
+                    <h3 className="mb-4 subtitle-section">いま読んでいる本</h3>
                   <div className="">
                   {userInfo?.isReading && bookList ?
                   <>
@@ -393,10 +393,10 @@ export default function Home() {
                     </>
                     :
                     <div className="text-center">
-                      <p className="text-gray-900 text-sm sm:text-base">
+                      <p className="text-sm sm:text-base text-gray-900">
                           『いま読んでいる本』は選択されていません。
                         </p>
-                        <p className="text-gray-500 text-xs sm:text-sm mt-2">
+                        <p className="mt-2 text-xs sm:text-sm text-gray-500">
                           <Link href="/booklist"><a className="text-blue-500">ブックリスト</a></Link>から選択できます。
                         </p>
                     </div>

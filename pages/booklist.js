@@ -363,9 +363,9 @@ export default function BookList() {
       <div className="group">
         <div className="flex items-center space-x-1 text-xs text-left text-gray-500 group-hover:text-blue-400 rounded-lg">
           {pageCount == 0 &&
-            <span class="relative flex h-2 w-2">
-              <span class="animate-ping absolute h-full w-full rounded-full bg-yellow-300 opacity-75"></span>
-              <span class="rounded-full h-2 w-2 bg-yellow-300"></span>
+            <span className="flex relative w-2 h-2">
+              <span className="absolute w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
+              <span className="w-2 h-2 bg-yellow-300 rounded-full"></span>
             </span>
           }
           <span>
@@ -436,7 +436,7 @@ export default function BookList() {
             <div className="mb-24">
               <div className="mt-6 sm:mt-12">
                 <h1 className="subtitle-section">いま読んでいる本</h1>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 h-32 mt-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 mt-4 h-32">
                   {userInfo?.isReading && bookList ? (
                     <>
                       {bookList
@@ -445,7 +445,7 @@ export default function BookList() {
                         })
                         .map(({ bookInfo, date }) => (
                           <div
-                            className="relative rounded-lg border border-gray-300 bg-white py-4 px-2 sm:px-6 shadow-sm flex hover:border-gray-400"
+                            className="flex relative py-4 px-2 sm:px-6 bg-white rounded-lg border border-gray-300 hover:border-gray-400 shadow-sm"
                             key={bookInfo.bid}
                           >
                             <div className="relative flex-shrink-0 w-16 sm:w-20">
@@ -479,12 +479,12 @@ export default function BookList() {
                         ))}
                     </>
                   ) : (
-                    <div className="relative flex items-center justify-center text-center rounded-lg border border-gray-300 bg-white py-4 px-2 sm:px-6 shadow-sm hover:border-gray-400">
+                    <div className="flex relative justify-center items-center py-4 px-2 sm:px-6 text-center bg-white rounded-lg border border-gray-300 hover:border-gray-400 shadow-sm">
                       <div>
-                        <p className="text-black text-sm sm:text-base">
+                        <p className="text-sm sm:text-base text-black">
                           『いま読んでいる本』は選択されていません。
                         </p>
-                        <p className="text-gray-500 text-xs sm:text-sm mt-2">
+                        <p className="mt-2 text-xs sm:text-sm text-gray-500">
                           下のブックリストから選択できます。
                         </p>
                       </div>
@@ -530,7 +530,7 @@ export default function BookList() {
                           key={bookInfo.bid}
                         >
                           {bookInfo.bid == userInfo?.isReading && (
-                            <span className="absolute bottom-0 left-0 z-10 px-2 py-1 mb-2 ml-2 text-xs text-white bg-blue-500 rounded-full">
+                            <span className="absolute bottom-0 left-0 z-10 py-1 px-2 mb-2 ml-2 text-xs text-white bg-blue-500 rounded-full">
                               選択中
                             </span>
                           )}
@@ -742,18 +742,18 @@ export default function BookList() {
                                   leaveFrom="transform opacity-100 scale-100"
                                   leaveTo="transform opacity-0 scale-95"
                                 >
-                                  <Menu.Items className="absolute right-0 z-20 bg-white w-56 rounded-md divide-y divide-gray-100 ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none">
+                                  <Menu.Items className="absolute right-0 z-20 w-56 bg-white rounded-md divide-y divide-gray-100 ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none">
                                     <div className="py-1 px-1">
                                     {autoProgress &&
                                       bookInfo.pageCount &&
                                       <Menu.Item>
                                         <div
-                                          className="flex flex-col items-center rounded-md text-gray-900 w-full px-2 py-2 text-sm text-right"
+                                          className="flex flex-col items-center py-2 px-2 w-full text-sm text-right text-gray-900 rounded-md"
                                         >
-                                          <p className="text-center text-gray-700 text-sm">この本は読了度が</p>
-                                          <p className="text-center text-gray-700 text-sm">自動で管理されています。</p>
+                                          <p className="text-sm text-center text-gray-700">この本は読了度が</p>
+                                          <p className="text-sm text-center text-gray-700">自動で管理されています。</p>
                                           <button
-                                            className="mt-3 px-3 py-2 border border-gray-400 rounded-lg"
+                                            className="py-2 px-3 mt-3 rounded-lg border border-gray-400"
                                             onClick={(e) => {
                                             selectManualProgress(
                                               e,
@@ -771,17 +771,17 @@ export default function BookList() {
                                       !bookInfo.pageCount &&
                                       <Menu.Item>
                                         <div
-                                          className="flex flex-col items-center rounded-md text-gray-900 w-full px-2 py-2 text-sm text-right"
+                                          className="flex flex-col items-center py-2 px-2 w-full text-sm text-right text-gray-900 rounded-md"
                                         >
                                         <div className="flex">
-                                          <ExclamationIcon className="w-6 h-6 text-yellow-500 mr-0.5"/>
+                                          <ExclamationIcon className="mr-0.5 w-6 h-6 text-yellow-500"/>
                                           <div>
-                                          <p className="text-left text-gray-700 text-sm leading-6">この本は読了度を自動で</p>
-                                          <p className="text-left text-gray-700 text-sm">計測できません。</p>
+                                          <p className="text-sm leading-6 text-left text-gray-700">この本は読了度を自動で</p>
+                                          <p className="text-sm text-left text-gray-700">計測できません。</p>
                                           </div>
                                           </div>
                                           <button
-                                            className="mt-3 px-3 py-2 border border-gray-400 rounded-lg"
+                                            className="py-2 px-3 mt-3 rounded-lg border border-gray-400"
                                             onClick={(e) => {
                                             selectManualProgress(
                                               e,
@@ -908,16 +908,16 @@ export default function BookList() {
                             leave="transition ease-in duration-75 transfrom"
                             leaveFrom="opacity-50 scale-100"
                             leaveTo="opacity-0 scale-95"
-                            className="absolute flex items-center bg-opacity-95 w-full h-full px-2 sm:px-6 bg-white rounded-lg top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                            className="flex absolute top-1/2 left-1/2 items-center px-2 sm:px-6 w-full h-full bg-white bg-opacity-95 rounded-lg transform -translate-x-1/2 -translate-y-1/2"
                           >
                             {!(bookInfo.bid == userInfo.isReading) ? (
-                              <div className="w-full flex flex-col justify-center items-center space-y-4">
-                                <p className="text-sm sm:text-base flex-1">
+                              <div className="flex flex-col justify-center items-center space-y-4 w-full">
+                                <p className="flex-1 text-sm sm:text-base">
                                   『現在読んでいる本』にしますか？
                                 </p>
-                                <div className="flex justify-center items-center gap-4">
+                                <div className="flex gap-4 justify-center items-center">
                                   <button
-                                    className="inline-block flex-shrink-0 py-2 px-4 text-base text-center bg-gray-100 text-gray-600 rounded-md cursor-pointer"
+                                    className="inline-block flex-shrink-0 py-2 px-4 text-base text-center text-gray-600 bg-gray-100 rounded-md cursor-pointer"
                                     onClick={(e) =>
                                       toggleBookCardsSelected(e, idx, false)
                                     }
@@ -936,13 +936,13 @@ export default function BookList() {
                                 </div>
                               </div>
                             ) : (
-                              <div className="w-full flex flex-col justify-center items-center space-y-4">
-                                <p className="text-sm sm:text-base flex-1">
+                              <div className="flex flex-col justify-center items-center space-y-4 w-full">
+                                <p className="flex-1 text-sm sm:text-base">
                                   『現在読んでいる本』から除外しますか？
                                 </p>
-                                <div className="flex justify-center items-center gap-4">
+                                <div className="flex gap-4 justify-center items-center">
                                   <button
-                                    className="inline-block flex-shrink-0 py-2 px-4 text-sm text-center bg-gray-100 text-gray-600 rounded-md cursor-pointer"
+                                    className="inline-block flex-shrink-0 py-2 px-4 text-sm text-center text-gray-600 bg-gray-100 rounded-md cursor-pointer"
                                     onClick={(e) =>
                                       toggleBookCardsSelected(e, idx, false)
                                     }
@@ -950,7 +950,7 @@ export default function BookList() {
                                     除外しない
                                   </button>
                                   <button
-                                    className="inline-block flex-shrink-0 py-2 px-6 text-sm text-center text-white hover:bg-red-500 rounded-md border border-transparent cursor-pointer focus:outline-none bg-red-400 focus:ring-red-400"
+                                    className="inline-block flex-shrink-0 py-2 px-6 text-sm text-center text-white bg-red-400 hover:bg-red-500 rounded-md border border-transparent focus:ring-red-400 cursor-pointer focus:outline-none"
                                     onClick={(e) => {
                                       selectReadingBook(e, '')
                                       toggleBookCardsSelected(e, idx, false)

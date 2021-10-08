@@ -383,10 +383,10 @@ export default function SessionJoin({ session }) {
       <>
         <Transition appear show={modalOpen} as={Fragment}>
           <div
-            className="fixed inset-0 z-10 overflow-y-auto"
+            className="overflow-y-auto fixed inset-0 z-10"
             onClose={() => setModalOpen(!modalOpen)}
           >
-            <div className="min-h-screen px-4 text-center">
+            <div className="px-4 min-h-screen text-center">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
@@ -415,7 +415,7 @@ export default function SessionJoin({ session }) {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                <div className="inline-block overflow-hidden p-6 my-8 w-full max-w-md text-left align-middle bg-white rounded-2xl shadow-xl transition-all transform">
                   {userInfo && bookList && !isLoading ? (
                     <Transition.Child
                       as="div"
@@ -432,7 +432,7 @@ export default function SessionJoin({ session }) {
                         </p>
                       </div>
 
-                      <div className="mt-4 flex justify-center">
+                      <div className="flex justify-center mt-4">
                         <Link href={`/session/${sessionId}/detail`}>
                           <button
                             type="button"
@@ -443,7 +443,7 @@ export default function SessionJoin({ session }) {
                         </Link>
                         <button
                           type="button"
-                          className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                          className="inline-flex justify-center py-2 px-4 text-sm font-medium text-blue-900 bg-blue-100 hover:bg-blue-200 rounded-md border border-transparent focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus:outline-none"
                           onClick={() => {
                             joinRoom()
                           }}
@@ -455,10 +455,10 @@ export default function SessionJoin({ session }) {
                   ) : (
                     <div className="flex flex-col justify-center items-center">
                       {isLoading &&
-                      <p className="mb-2 text-gray-500 text-sm animate-pulse">ルームに参加しています...</p>
+                      <p className="mb-2 text-sm text-gray-500 animate-pulse">ルームに参加しています...</p>
                       }
                       <svg
-                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500"
+                        className="mr-3 -ml-1 w-5 h-5 text-blue-500 animate-spin"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -531,7 +531,7 @@ export default function SessionJoin({ session }) {
               leaveFrom="translate-x-0"
               leaveTo="-translate-x-full"
             >
-              <div className="flex flex-col items-center mr-8 w-full h-80 bg-white px-4 py-2 rounded-tr-lg rounded-br-lg">
+              <div className="flex flex-col items-center py-2 px-4 mr-8 w-full h-80 bg-white rounded-tr-lg rounded-br-lg">
                 <div className="flex-shrink-0 py-2 w-full text-lg font-bold text-gray-500">
                   いま読んでいる本
                 </div>
@@ -579,14 +579,14 @@ export default function SessionJoin({ session }) {
               leaveFrom="translate-x-0"
               leaveTo="-translate-x-full"
             >
-              <div className="absolute inset-y-0 flex flex-col overflow-hidden w-80 max-h-full bg-gray-50 rounded-tr-lg rounded-br-lg">
+              <div className="flex overflow-hidden absolute inset-y-0 flex-col w-80 max-h-full bg-gray-50 rounded-tr-lg rounded-br-lg">
                 <div className="flex flex-shrink-0 justify-end p-2 h-12 bg-blueGray-300">
                   <XIcon
                     className="w-8 h-8 text-gray-600"
                     onClick={() => setLeftSlideOpen(!leftSlideOpen)}
                   />
                 </div>
-                <div className="flex-1 overflow-y-scroll py-2">
+                <div className="overflow-y-scroll flex-1 py-2">
                   {bookList?.map(({ bookInfo, date }) => (
                     <div
                       className={classNames(
@@ -687,6 +687,7 @@ export default function SessionJoin({ session }) {
                       }
                       width={80}
                       height={80}
+                      objectFit={"cover"}
                       alt="Avatar"
                     />
                     <p className="text-center text-gray-800">
@@ -773,7 +774,7 @@ export default function SessionJoin({ session }) {
                 <div className="flex-shrink-0 py-2 w-full text-lg font-bold text-gray-500">
                   いま読んでいる本
                 </div>
-                <div className="flex flex-col flex-1 w-full h-full items-center py-4 space-y-4">
+                <div className="flex flex-col flex-1 items-center py-4 space-y-4 w-full h-full">
                   <div className="w-2/3 h-full">
                     <div className="relative max-w-full h-full">
                       <Image
@@ -817,7 +818,7 @@ export default function SessionJoin({ session }) {
               leaveFrom="translate-x-0"
               leaveTo="translate-x-full"
             >
-              <div className="absolute inset-y-0 flex flex-col right-0 overflow-y-scroll w-80 bg-gray-50 rounded-tl-lg rounded-bl-lg">
+              <div className="flex overflow-y-scroll absolute inset-y-0 right-0 flex-col w-80 bg-gray-50 rounded-tl-lg rounded-bl-lg">
                 <div className="flex flex-shrink-0 p-2 h-12 bg-blueGray-300">
                   <XIcon
                     className="w-8 h-8 text-gray-600"
@@ -827,12 +828,12 @@ export default function SessionJoin({ session }) {
                 <div className="overflow-y-auto flex-1 py-2">
                   {peerBookList?.map(({ bookInfo, date }) => (
                     <div
-                      className="relative rounded-lg bg-white py-2 mb-2 mx-2 px-2 h-28 sm:px-3 border border-gray-300 shadow-sm flex hover:border-gray-400"
+                      className="flex relative py-2 px-2 sm:px-3 mx-2 mb-2 h-28 bg-white rounded-lg border border-gray-300 hover:border-gray-400 shadow-sm"
                       key={bookInfo.bid}
                     >
                       <div className="relative flex-shrink-0 w-10 sm:w-16">
                         <Image
-                          className="object-contain "
+                          className=" object-contain"
                           layout={'fill'}
                           src={
                             bookInfo?.image
