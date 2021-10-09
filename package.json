@@ -10,11 +10,16 @@
     "fix:lint": "next lint --fix"
   },
   "dependencies": {
+    "@daily-co/daily-js": "^0.19.0",
     "@headlessui/react": "^1.4.0",
     "@heroicons/react": "^1.0.3",
     "@tailwindcss/aspect-ratio": "^0.2.1",
     "@tailwindcss/forms": "^0.3.3",
     "@tailwindcss/line-clamp": "^0.2.1",
+    "babel-plugin-inline-react-svg": "^2.0.1",
+    "bowser": "^2.11.0",
+    "classnames": "^2.3.1",
+    "debounce": "^1.2.1",
     "eslint-plugin-tailwindcss": "^1.15.0",
     "firebase": "^8.9.0",
     "firebase-admin": "^9.11.0",
@@ -26,12 +31,16 @@
     "moment": "^2.29.1",
     "nanoid": "^3.1.25",
     "next": "^11.1.2",
+    "no-scroll": "^2.1.1",
     "react": "^17.0.2",
     "react-day-picker": "^7.4.10",
     "react-dom": "^17.0.2",
+    "react-portal": "^4.2.1",
     "react-wavify": "^1.5.4",
+    "shallow-equal": "^1.2.1",
     "simple-isbn": "^1.1.5",
-    "swr": "^1.0.1"
+    "swr": "^1.0.1",
+    "use-deep-compare": "^1.1.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.3.1",

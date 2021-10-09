@@ -1,52 +1,214 @@
-// ============================================================
-// Imports
-// ============================================================
-import { Fragment, useState, useRef } from 'react'
-import Head from 'next/head'
-import Link from 'next/link'
-import Image from 'next/image'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/router'
-import useSWR, { useSWRConfig } from 'swr'
-import Script from 'next/script'
-import { isbn } from 'simple-isbn'
-
-// Components
-import { AppHeader } from '../../../components/Header'
-import Wave from 'react-wavify'
-import { Dialog, Transition } from '@headlessui/react'
-
-//Assets
-import {
-  MicrophoneIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  LogoutIcon,
-  XIcon
-} from '@heroicons/react/outline'
-import colors from 'tailwindcss/colors'
 
 // Functions
-import { useAuth } from '../../../lib/auth'
-import fetcher from '../../../utils/fetcher'
-import { fetchOneSession, fetchAllSessions } from '../../../lib/db-admin'
-import { updateIsReading } from '../../../lib/db'
-import {
-  formatISOStringToTime,
-  formatISOStringToDateTimeWithSlash
-} from '../../../utils/formatDateTime'
-import classNames from '../../../utils/classNames'
-import { useEffect } from 'react/cjs/react.development'
+import { fetchAllSessions } from '../../../lib/db-admin'
+
+// Daily
+import { CallProvider } from '../../../daily/contexts/CallProvider'
+import { MediaDeviceProvider } from '../../../daily/contexts/MediaDeviceProvider'
+import { ParticipantsProvider } from '../../../daily/contexts/ParticipantsProvider'
+import { TracksProvider } from '../../../daily/contexts/TracksProvider'
+import { UIStateProvider } from '../../../daily/contexts/UIStateProvider'
+import { WaitingRoomProvider } from '../../../daily/contexts/WaitingRoomProvider'
+import getDemoProps from '../../../daily/lib/demoProps'
+import PropTypes from 'prop-types'
+import App from '../../../daily/components/App'
+import CreatingRoom from '../../../daily/components/Prejoin/CreatingRoom'
+import Intro from '../../../daily/components/Prejoin/Intro'
+import NotConfigured from '../../../daily/components/Prejoin/NotConfigured'
+
+/**
+ * Index page
+ * ---
+ * - Checks configuration variables are set in local env
+ * - Optionally obtain a meeting token from Daily REST API (./pages/api/token)
+ * - Set call owner status
+ * - Finally, renders the main application loop
+ */
+
+export default function SessionJoin({
+  domain,
+  isConfigured = false,
+  forceFetchToken = false,
+  forceOwner = false,
+  subscribeToTracksAutomatically = true,
+  demoMode = false,
+  asides,
+  modals,
+  customTrayComponent,
+  customAppComponent
+}) {
+  // ============================================================
+  // Initialize
+  // ============================================================
+
+  // State
+  const [roomName, setRoomName] = useState()
+  const [fetchingToken, setFetchingToken] = useState(false)
+  const [token, setToken] = useState()
+  const [tokenError, setTokenError] = useState()
+
+  // Routing
+  const router = useRouter()
+  const { sessionId } = router.query
+
+  console.log('sessionId', sessionId)
+
+  // ============================================================
+  // Setup
+  // ============================================================
+
+  const getMeetingToken = useCallback(async (room, isOwner = false) => {
+    if (!room) {
+      return false
+    }
+
+    console.log('is this called')
+    console.log(room)
+
+    setFetchingToken(true)
+
+    // Fetch token from serverside method (provided by Next)
+    const res = await fetch('/api/daily/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ roomName: room, isOwner })
+    })
+
+    const resJson = await res.json()
+
+    if (!resJson?.token) {
+      setTokenError(resJson?.error || true)
+      setFetchingToken(false)
+      return false
+    }
+
+    console.log(`🪙 Token received`)
+
+    setFetchingToken(false)
+
+    setToken(resJson.token)
+
+    // Setting room name will change ready state
+    setRoomName(room)
+
+    return true
+  }, [])
+
+  console.log('roomName', roomName)
+
+  // ============================================================
+  // Get Token
+  // ============================================================
+
+  useEffect(() => {
+    if (!sessionId) return
+
+    getMeetingToken(sessionId, true)
+  }, [getMeetingToken, sessionId])
+
+  const isReady = !!(isConfigured && roomName)
+
+  if (!isReady) {
+    return (
+      <main>
+        {(() => {
+          console.log('isConfigured:', isConfigured)
+
+          if (!isConfigured) return <NotConfigured />
+          if (demoMode) return <CreatingRoom onCreated={getMeetingToken} />
+
+          if (!sessionId) return
+
+          return (
+            <Intro
+              forceFetchToken={forceFetchToken}
+              forceOwner={forceOwner}
+              title={process.env.PROJECT_TITLE}
+              room={roomName}
+              error={tokenError}
+              fetching={fetchingToken}
+              domain={domain}
+              onJoin={(room, isOwner, fetchToken) =>
+                fetchToken ? getMeetingToken(room, isOwner) : setRoomName(room)
+              }
+            />
+          )
+        })()}
+
+        <style jsx>{`
+          height: 100vh;
+          display: grid;
+          grid-template-columns: 640px;
+          align-items: center;
+          justify-content: center;
+        `}</style>
+      </main>
+    )
+  }
+
+  // ============================================================
+  // Call UI
+  // ============================================================
+  return (
+    <UIStateProvider
+      asides={asides}
+      modals={modals}
+      customTrayComponent={customTrayComponent}
+    >
+      <CallProvider
+        domain={domain}
+        room={roomName}
+        token={token}
+        subscribeToTracksAutomatically={subscribeToTracksAutomatically}
+      >
+        <ParticipantsProvider>
+          <TracksProvider>
+            <MediaDeviceProvider>
+              <WaitingRoomProvider>
+                {customAppComponent || <App />}
+              </WaitingRoomProvider>
+            </MediaDeviceProvider>
+          </TracksProvider>
+        </ParticipantsProvider>
+      </CallProvider>
+    </UIStateProvider>
+  )
+}
+
+SessionJoin.propTypes = {
+  isConfigured: PropTypes.bool.isRequired,
+  domain: PropTypes.string,
+  asides: PropTypes.arrayOf(PropTypes.func),
+  modals: PropTypes.arrayOf(PropTypes.func),
+  customTrayComponent: PropTypes.node,
+  customAppComponent: PropTypes.node,
+  forceFetchToken: PropTypes.bool,
+  forceOwner: PropTypes.bool,
+  subscribeToTracksAutomatically: PropTypes.bool,
+  demoMode: PropTypes.bool
+}
 
 // ============================================================
 // Fetch static data
 // ============================================================
 export async function getStaticProps(context) {
+  const defaultProps = getDemoProps()
+  console.log('defaultprops', defaultProps)
   // Fetch session info
-  const session = await fetchOneSession(context.params.sessionId)
+  // const session = await fetchOneSession(context.params.sessionId)
 
   return {
     props: {
-      session
+      // session,
+      domain: defaultProps.domain,
+      isConfigured: defaultProps.isConfigured,
+      subscribeToTracksAutomatically:
+        defaultProps.subscribeToTracksAutomatically,
+      demoMode: defaultProps.demoMode
     }
   }
 }
@@ -61,952 +223,4 @@ export async function getStaticPaths() {
   }))
 
   return { paths, fallback: true }
-}
-
-export default function SessionJoin({ session }) {
-  // console.log(session)
-  // ============================================================
-  // Initialize
-  // ============================================================
-
-  // State
-  const [chatMessage, setChatMessage] = useState('')
-  // const [isMicrophoneOn, setIsMicrophoneOn] = useState(true)
-  const [leftSlideOpen, setLeftSlideOpen] = useState(false)
-  const [rightSlideOpen, setRightSlideOpen] = useState(false)
-  const [joiningUser, setJoiningUser] = useState(false)
-  const [modalOpen, setModalOpen] = useState(true)
-  const [isLoading, setIsLoading] = useState(false)
-
-  // Routing
-  const router = useRouter()
-  const { sessionId } = router.query
-
-  // auth
-  const auth = useAuth()
-  const user = auth.user
-
-  // ============================================================
-  // Fetch Data
-  // ============================================================
-
-  //mutateを定義
-  const { mutate } = useSWRConfig()
-
-  // ユーザー情報
-  const { data: userInfo } = useSWR(
-    user ? ['/api/user', user.token] : null,
-    fetcher,
-    {
-      onErrorRetry: ({ retryCount }) => {
-        // エラー時には、10回まではリトライする
-        if (retryCount >= 10) return
-      }
-    }
-  )
-  // console.log(userInfo)
-
-  // マッチング相手のユーザー情報を取得
-  // マッチング相手のユーザーのIDがguestIdかownerIdか識別
-  const peerUid =
-    user?.uid === session?.ownerId ? session?.guestId : session?.ownerId
-
-  // console.log('PeerUid is : ', peerUid)
-
-  const { data: peerUserInfo } = useSWR(
-    peerUid ? '/api/user/' + peerUid + '/info' : null,
-    fetcher,
-    {
-      onErrorRetry: ({ retryCount }) => {
-        // エラー時には、10回まではリトライする
-        if (retryCount >= 10) return
-      }
-    }
-  )
-
-  // console.log('peerUserInfo:', peerUserInfo)
-
-  // ユーザーのブックリスト取得
-  const { data: bookList } = useSWR(
-    user ? '/api/user/' + user.uid + '/booklist' : null,
-    fetcher,
-    {
-      onErrorRetry: ({ retryCount }) => {
-        // Retry up to 10 times
-        if (retryCount >= 10) return
-      }
-    }
-  )
-
-  // マッチング相手のブックリスト取得
-  const { data: peerBookList } = useSWR(
-    peerUid ? '/api/user/' + peerUid + '/booklist' : null,
-    fetcher,
-    {
-      onErrorRetry: ({ retryCount }) => {
-        // Retry up to 10 times
-        if (retryCount >= 10) return
-      }
-    }
-  )
-
-  // console.log('peerBookList: ', peerBookList)
-
-  const isReadingBook = bookList?.find((book) => {
-    return book.bookInfo.bid == userInfo.isReading
-  })
-
-  const peerIsReadingBook = peerBookList?.find((book) => {
-    return book.bookInfo.bid == peerUserInfo?.isReading
-  })
-
-  // console.log('isReadingBook is: ', isReadingBook)
-  // console.log('peerIsReadingBook is: ', peerIsReadingBook)
-
-  // ============================================================
-  // Initialize Video Call
-  // ============================================================
-
-  if (typeof window !== 'undefined') {
-    dailyMain()
-  }
-
-  // function callDailyIframe() {
-  //   const callFrame = window.DailyIframe.createFrame({
-  //     // TODO: Change language based on locale (https://docs.daily.co/reference#properties)
-  //     url: 'https://tsundoku.daily.co/' + sessionId,
-  //     lang: 'jp',
-  //     showLeaveButton: true,
-  //     // showLocalVideo: false,
-  //     // videoSource: false,
-  //     iframeStyle: { position: 'fixed', width: '100%', height: '100%' }
-  //   })
-
-  //   // TODO: Set domain config with REST API (redirect_on_meeting_exit)
-  //   // callFrame.join({
-  //   //   userName: userName
-  //   // })
-  //   callFrame.join()
-  // }
-
-  // ============================================================
-  // Daily - Main
-  // ============================================================
-
-  async function dailyMain() {
-    const ROOM_URL = 'https://tsundoku.daily.co/' + sessionId
-
-    window.call = DailyIframe.createCallObject({
-      url: ROOM_URL,
-      audioSource: true,
-      videoSource: false,
-      dailyConfig: {
-        experimentalChromeVideoMuteLightOff: true
-      }
-    })
-
-    call.on('joined-meeting', updateParticipants)
-    call.on('error', (e) => console.error(e))
-
-    call.on('track-started', playTrack)
-    // call.on('track-stopped', destroyTrack)
-
-    call.on('participant-joined', updateParticipants)
-    call.on('participant-left', updateParticipants)
-  }
-
-  // ============================================================
-  // Daily - Functions
-  // ============================================================
-
-  // セッションに参加する
-  async function joinRoom() {
-    await setIsLoading((isLoading) => (!isLoading))
-    await setTimeout(() => {
-      console.log('join')
-      call.join()
-    }, 500)
-  }
-
-  
-
-  // セッションを終了する
-  async function leaveRoom(e) {
-    e.preventDefault()
-    // await call.leave()
-    await call.destroy()
-    let el = document.getElementById('participants')
-    el.innerHTML = ``
-    setTimeout(() => {
-      router.push(`/session/${sessionId}/detail`)
-    }, 3000)
-  }
-
-  // オーディオトラックを再生
-  function playTrack(evt) {
-    console.log(
-      '[TRACK STARTED]',
-      evt.participant && evt.participant.session_id
-    )
-
-    // オーディオトラックが存在することを確認する
-    if (!(evt.track && evt.track.kind === 'audio')) {
-      console.error('!!! playTrack called without an audio track !!!', evt)
-      return
-    }
-
-    // ローカルのオーディオトラックは再生しない (自分の声)
-    if (evt.participant.local) {
-      return
-    }
-
-    // audio element を作成
-    let audioEl = document.createElement('audio')
-    document.body.appendChild(audioEl)
-    audioEl.srcObject = new MediaStream([evt.track])
-    audioEl.play()
-  }
-
-  var participantsCount = 0
-  var isMicrophoneOn = useRef(true)
-
-  console.log(isMicrophoneOn)
-
-  // 参加者に変化があった際に制御
-  function updateParticipants(evt) {
-    console.log('[PARTICIPANT(S) UPDATED]', evt)
-    let el = document.getElementById('participants')
-    participantsCount = Object.entries(call.participants()).length
-
-    el.innerHTML = `Participant count: ${participantsCount}`
-    setModalOpen((modalOpen) => (!modalOpen))
-  }
-
-  // オーディオトラックの破棄
-  function destroyTrack(evt) {
-    console.log(evt)
-    console.log(call)
-    console.log(call.localAudio())
-
-    console.log(
-      '[TRACK STOPPED]',
-      (evt.participant && evt.participant.session_id) || '[left meeting]'
-    )
-
-    call.destroy()
-
-    let els = Array.from(document.getElementsByTagName('video')).concat(
-      Array.from(document.getElementsByTagName('audio'))
-    )
-
-    for (let el of els) {
-      if (el.srcObject && el.srcObject.getTracks()[0] === evt.track) {
-        el.remove()
-      }
-    }
-  }
-
-  // ============================================================
-  // Helper Function
-  // ============================================================
-
-  // const toggleIsMicrophoneOn = (e) => {
-  //   e.preventDefault()
-
-  //   setIsMicrophoneOn((isMicrophoneOn) => !isMicrophoneOn)
-  // }
-
-  const renderMicrophoneIcon = () => {
-    let el = document.getElementById('toggle-mic')
-    console.log(el)
-
-    if (isMicrophoneOn.current) {
-      el.innerHTML = `<MicrophoneIcon className="z-10 w-6 h-6 text-green-500" />`
-    } else {
-      el.innerHTML = `
-          <MicrophoneIcon className="z-10 w-6 h-6 text-red-500" />
-          <Image
-            src="/img/Icons/DisableSlash.svg"
-            layout={'fill'}
-            alt="Disable slash"
-          />
-      `
-    }
-  }
-
-  const returnAmazonLink = (isbn13) => {
-    // ISBN-13 を ISBN-10 に加工する
-    const isValid = isbn.isValidIsbn13(isbn13)
-
-    if (isValid) {
-      const isbn10 = isbn.toIsbn10(isbn13)
-      return 'https://www.amazon.co.jp/dp/' + isbn10
-    } else {
-      return '#'
-    }
-  }
-
-  // ============================================================
-  // Button Handler
-  // ============================================================
-  const selectReadingBook = async (e, bid) => {
-    e.preventDefault()
-
-    await updateIsReading(user.uid, bid)
-
-    mutate(['/api/user', user.token])
-  }
-
-  // ============================================================
-  // Return Page
-  // ============================================================
-  return (
-    <div className="min-h-screen bg-blueGray-800">
-      <Script
-        crossOrigin
-        src="https://unpkg.com/@daily-co/daily-js"
-        strategy="beforeInteractive"
-      />
-
-      <Head>
-        <title>Tsundoku | ルーム</title>
-        <meta
-          name="description"
-          content="Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。集中した読書は自己研鑽だけでなく、リラックス効果もあります。"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <AppHeader />
-
-      {/* Modal -- START */}
-      <>
-        <Transition appear show={modalOpen} as={Fragment}>
-          <div
-            className="overflow-y-auto fixed inset-0 z-10"
-            onClose={() => setModalOpen(!modalOpen)}
-          >
-            <div className="px-4 min-h-screen text-center">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0"
-                enterTo="opacity-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-              >
-                <span className="fixed inset-0 bg-white opacity-75" />
-              </Transition.Child>
-
-              {/* This element is to trick the browser into centering the modal contents. */}
-              <span
-                className="inline-block h-screen align-middle"
-                aria-hidden="true"
-              >
-                &#8203;
-              </span>
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <div className="inline-block overflow-hidden p-6 my-8 w-full max-w-md text-left align-middle bg-white rounded-2xl shadow-xl transition-all transform">
-                  {userInfo && bookList && !isLoading ? (
-                    <Transition.Child
-                      as="div"
-                      enter="ease-out duration-300"
-                      enterFrom="opacity-0 "
-                      enterTo="opacity-100"
-                      leave="ease-in duration-200"
-                      leaveFrom="opacity-100"
-                      leaveTo="opacity-0"
-                    >
-                      <div>
-                        <p className="text-sm text-gray-500">
-                          ルームに参加します。
-                        </p>
-                      </div>
-
-                      <div className="flex justify-center mt-4">
-                        <Link href={`/session/${sessionId}/detail`}>
-                          <button
-                            type="button"
-                            className="inline-flex items-center mr-4 text-xs font-medium text-gray-500"
-                          >
-                            ルーム詳細に戻る
-                          </button>
-                        </Link>
-                        <button
-                          type="button"
-                          className="inline-flex justify-center py-2 px-4 text-sm font-medium text-blue-900 bg-blue-100 hover:bg-blue-200 rounded-md border border-transparent focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus:outline-none"
-                          onClick={() => {
-                            joinRoom()
-                          }}
-                        >
-                          ルームに参加する
-                        </button>
-                      </div>
-                    </Transition.Child>
-                  ) : (
-                    <div className="flex flex-col justify-center items-center">
-                      {isLoading &&
-                      <p className="mb-2 text-sm text-gray-500 animate-pulse">ルームに参加しています...</p>
-                      }
-                      <svg
-                        className="mr-3 -ml-1 w-5 h-5 text-blue-500 animate-spin"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                    </div>
-                  )}
-                </div>
-              </Transition.Child>
-            </div>
-          </div>
-        </Transition>
-      </>
-      {/* Modal -- END */}
-
-      <main className="relative text-white">
-        <section className=" py-6 px-8">
-          <div className="flex justify-center">
-            <div className="flex-shrink-0 w-72">
-              <div className="py-4">
-                <button
-                  id="leave"
-                  className="flex items-center py-3 px-6 space-x-2 text-base font-medium text-white bg-red-600 rounded-md opacity-90"
-                  onClick={(e) => leaveRoom(e)}
-                >
-                  <LogoutIcon className="w-6 h-6 opacity-100 transform rotate-180" />
-                  <span>退出する</span>
-                </button>
-              </div>
-            </div>
-            <div className="flex w-full max-w-7xl">
-              <div className="flex-shrink-0 text-center">
-                <p>開始時刻</p>
-                <p>{formatISOStringToTime(session?.startDateTime)}</p>
-              </div>
-              <div className="flex-1 border-b border-gray-100"></div>
-              <div className="flex-shrink-0 text-center">
-                <p>終了時刻</p>
-                <p>{formatISOStringToTime(session?.endDateTime)}</p>
-              </div>
-            </div>
-            <div className="flex-shrink-0 w-72"></div>
-          </div>
-        </section>
-        <div className="flex">
-          <section
-            id="left-column"
-            className="flex flex-shrink-0 items-center w-72 bg-blue-10"
-          >
-            <Transition
-              as={Fragment}
-              show={!leftSlideOpen}
-              enter="transition transform ease-in-out duration-300"
-              enterFrom="-translate-x-full"
-              enterTo="translate-x-0"
-              leave="transition transform ease-in-out duration-300"
-              leaveFrom="translate-x-0"
-              leaveTo="-translate-x-full"
-            >
-              <div className="flex flex-col items-center py-2 px-4 mr-8 w-full h-80 bg-white rounded-tr-lg rounded-br-lg">
-                <div className="flex-shrink-0 py-2 w-full text-lg font-bold text-gray-500">
-                  いま読んでいる本
-                </div>
-                <div className="flex flex-col flex-1 items-center py-4 space-y-4">
-                  <div className="w-2/3 h-full">
-                    <div className="relative max-w-full h-full">
-                      <Image
-                        className="filter drop-shadow-lg"
-                        src={
-                          isReadingBook
-                            ? isReadingBook?.bookInfo?.image
-                            : '/img/placeholder/noimage_480x640.jpg'
-                        }
-                        objectFit={'contain'}
-                        layout={'fill'}
-                        placeholder="empty"
-                        alt="Book Cover"
-                      />
-                    </div>
-                  </div>
-                  <div className="text-black">
-                    {isReadingBook?.bookInfo.title}
-                  </div>
-                </div>
-                <div className="flex-shrink-0 w-full">
-                  <div
-                    className="inline-flex items-center"
-                    onClick={() => setLeftSlideOpen(!leftSlideOpen)}
-                  >
-                    <ChevronLeftIcon className="w-5 h-5 text-blue-400" />
-                    <button className="text-sm text-blue-400">
-                      本を変更する
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </Transition>
-            <Transition
-              as={Fragment}
-              show={leftSlideOpen}
-              enter="transition transform ease-in-out duration-300"
-              enterFrom="-translate-x-full"
-              enterTo="translate-x-0"
-              leave="transition transform ease-in-out duration-300"
-              leaveFrom="translate-x-0"
-              leaveTo="-translate-x-full"
-            >
-              <div className="flex overflow-hidden absolute inset-y-0 flex-col w-80 max-h-full bg-gray-50 rounded-tr-lg rounded-br-lg">
-                <div className="flex flex-shrink-0 justify-end p-2 h-12 bg-blueGray-300">
-                  <XIcon
-                    className="w-8 h-8 text-gray-600"
-                    onClick={() => setLeftSlideOpen(!leftSlideOpen)}
-                  />
-                </div>
-                <div className="overflow-y-scroll flex-1 py-2">
-                  {bookList?.map(({ bookInfo, date }) => (
-                    <div
-                      className={classNames(
-                        bookInfo.bid == userInfo.isReading
-                          ? 'ring-2 ring-tsundoku-blue-main'
-                          : 'border border-gray-300',
-                        'relative rounded-lg bg-white py-2 mb-2 mx-2 px-2 h-28 sm:px-3 shadow-sm flex hover:border-gray-400'
-                      )}
-                      key={bookInfo.bid}
-                    >
-                      {bookInfo.bid == userInfo?.isReading && (
-                        <span className="absolute bottom-0 left-0 z-10 py-1 px-2 mb-2 ml-2 text-xs text-white bg-blue-500 rounded-full">
-                          選択中
-                        </span>
-                      )}
-                      <div className="relative flex-shrink-0 w-10 sm:w-16">
-                        <Image
-                          className="object-contain"
-                          layout={'fill'}
-                          src={
-                            bookInfo?.image
-                              ? bookInfo?.image
-                              : '/img/placeholder/noimage_480x640.jpg'
-                          }
-                          alt={bookInfo?.title}
-                        />
-                      </div>
-                      <div className="overflow-hidden flex-1 ml-3">
-                        <div className="flex flex-col justify-between h-full">
-                          <div className="focus:outline-none">
-                            <p className="overflow-y-hidden max-h-10 sm:max-h-16 text-base sm:text-sm font-medium leading-5 text-gray-900 overflow-ellipsis line-clamp-2">
-                              {bookInfo.title}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex flex-shrink-0 justify-center items-center">
-                        <div>
-                          <button
-                            className="inline-flex items-center py-1 px-3 text-sm font-medium leading-5 text-blue-600 hover:text-white bg-white hover:bg-blue-500 rounded-full border border-blue-600 hover:border-blue-500 shadow-sm"
-                            onClick={async (e) => {
-                              await selectReadingBook(e, bookInfo.bid)
-                              await setLeftSlideOpen(!leftSlideOpen)
-                            }}
-                          >
-                            選択
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </Transition>
-          </section>
-          <section id="center-column" className="flex-1 p-8 bg-green-10">
-            <div
-              id="main-vc"
-              className="flex items-center mx-auto max-w-screen-2xl h-full bg-orange-10"
-            >
-              <div
-                className={classNames(
-                  participantsCount >= 2 ? 'justify-between' : 'justify-center',
-                  'flex  items-center space-x-8 w-full h-full'
-                )}
-              >
-                <div className="overflow-hidden relative w-1/2 rounded-lg">
-                  <div className="bg-gradient-to-b from-blue-400 to-green-400 aspect-w-1 aspect-h-1"></div>
-                  <div className="absolute bottom-0 w-full h-1/2">
-                    <Wave
-                      fill="url(#gradient-self)"
-                      className="h-full"
-                      paused={false}
-                      options={{
-                        amplitude: 30,
-                        speed: 0.15,
-                        points: 3
-                      }}
-                    >
-                      <defs>
-                        <linearGradient
-                          id="gradient-self"
-                          gradientTransform="rotate(90)"
-                        >
-                          <stop offset="10%" stopColor={colors.green['300']} />
-                          <stop offset="90%" stopColor={colors.cyan['300']} />
-                        </linearGradient>
-                      </defs>
-                    </Wave>
-                  </div>
-                  <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <Image
-                      className="rounded-full"
-                      src={
-                        userInfo?.avatar
-                          ? userInfo?.avatar
-                          : '/img/placeholder/noimage_480x640.jpg'
-                      }
-                      width={80}
-                      height={80}
-                      objectFit={"cover"}
-                      alt="Avatar"
-                    />
-                    <p className="text-center text-gray-800">
-                      {userInfo?.name}
-                    </p>
-                  </div>
-                </div>
-                <Transition
-                  as={Fragment}
-                  show={participantsCount >= 2}
-                  enter="transition-opacity transform ease-in-out duration-300"
-                  enterFrom="opacity-0"
-                  enterTo="opacity-100"
-                  leave="transition transform ease-in-out duration-300"
-                  leaveFrom="opacity-100"
-                  leaveTo="opacity-0"
-                >
-                  <div className="overflow-hidden relative w-1/2 rounded-lg">
-                    <div className="bg-gradient-to-b from-yellow-400 to-orange-400 rounded-lg aspect-w-1 aspect-h-1"></div>
-                    <div className="absolute bottom-0 w-full h-1/2">
-                      <Wave
-                        fill="url(#gradient-other)"
-                        className="h-full"
-                        paused={false}
-                        options={{
-                          amplitude: 20,
-                          speed: 0.2,
-                          points: 3
-                        }}
-                      >
-                        <defs>
-                          <linearGradient
-                            id="gradient-other"
-                            gradientTransform="rotate(90)"
-                          >
-                            <stop
-                              offset="10%"
-                              stopColor={colors.orange['300']}
-                            />
-                            <stop
-                              offset="90%"
-                              stopColor={colors.yellow['300']}
-                            />
-                          </linearGradient>
-                        </defs>
-                      </Wave>
-                    </div>
-                    <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                      <Image
-                        className=" rounded-full"
-                        src={
-                          peerUserInfo?.avatar
-                            ? peerUserInfo?.avatar
-                            : '/img/placeholder/noimage_480x640.jpg'
-                        }
-                        width={80}
-                        height={80}
-                        alt="Avatar"
-                      />
-                      <p className="text-center text-gray-800">
-                        {peerUserInfo?.name}
-                      </p>
-                    </div>
-                  </div>
-                </Transition>
-              </div>
-            </div>
-          </section>
-          <section
-            id="right-column"
-            className="flex flex-shrink-0 items-center w-72 bg-yellow-10"
-          >
-            <Transition
-              as={Fragment}
-              show={!rightSlideOpen && participantsCount >= 2}
-              enter="transition transform ease-in-out duration-300"
-              enterFrom="translate-x-full"
-              enterTo="translate-x-0"
-              leave="transition transform ease-in-out duration-300"
-              leaveFrom="translate-x-0"
-              leaveTo="translate-x-full"
-            >
-              <div className="flex flex-col items-center py-2 px-4 ml-8 w-full h-80 bg-white rounded-tl-lg rounded-bl-lg">
-                <div className="flex-shrink-0 py-2 w-full text-lg font-bold text-gray-500">
-                  いま読んでいる本
-                </div>
-                <div className="flex flex-col flex-1 items-center py-4 space-y-4 w-full h-full">
-                  <div className="w-2/3 h-full">
-                    <div className="relative max-w-full h-full">
-                      <Image
-                        className="filter drop-shadow-lg"
-                        src={
-                          peerIsReadingBook
-                            ? peerIsReadingBook?.bookInfo?.image
-                            : '/img/placeholder/noimage_480x640.jpg'
-                        }
-                        objectFit={'contain'}
-                        layout={'fill'}
-                        placeholder="empty"
-                        alt="Book Cover"
-                      />
-                    </div>
-                  </div>
-                  <div className="text-black">
-                    {peerIsReadingBook?.bookInfo.title}
-                  </div>
-                </div>
-                <div className="flex flex-shrink-0 self-end text-right">
-                  <div
-                    className="inline-flex items-center"
-                    onClick={() => setRightSlideOpen(!rightSlideOpen)}
-                  >
-                    <button className="text-sm text-blue-400">
-                      ブックリストを見る
-                    </button>
-                    <ChevronRightIcon className="w-5 h-5 text-blue-400" />
-                  </div>
-                </div>
-              </div>
-            </Transition>
-            <Transition
-              as={Fragment}
-              show={rightSlideOpen}
-              enter="transition transform ease-in-out duration-300"
-              enterFrom="translate-x-full"
-              enterTo="translate-x-0"
-              leave="transition transform ease-in-out duration-300"
-              leaveFrom="translate-x-0"
-              leaveTo="translate-x-full"
-            >
-              <div className="flex overflow-y-scroll absolute inset-y-0 right-0 flex-col w-80 bg-gray-50 rounded-tl-lg rounded-bl-lg">
-                <div className="flex flex-shrink-0 p-2 h-12 bg-blueGray-300">
-                  <XIcon
-                    className="w-8 h-8 text-gray-600"
-                    onClick={() => setRightSlideOpen(!rightSlideOpen)}
-                  />
-                </div>
-                <div className="overflow-y-auto flex-1 py-2">
-                  {peerBookList?.map(({ bookInfo, date }) => (
-                    <div
-                      className="flex relative py-2 px-2 sm:px-3 mx-2 mb-2 h-28 bg-white rounded-lg border border-gray-300 hover:border-gray-400 shadow-sm"
-                      key={bookInfo.bid}
-                    >
-                      <div className="relative flex-shrink-0 w-10 sm:w-16">
-                        <Image
-                          className=" object-contain"
-                          layout={'fill'}
-                          src={
-                            bookInfo?.image
-                              ? bookInfo?.image
-                              : '/img/placeholder/noimage_480x640.jpg'
-                          }
-                          alt={bookInfo?.title}
-                        />
-                      </div>
-                      <div className="overflow-hidden flex-1 ml-3">
-                        <div className="flex flex-col justify-between h-full">
-                          <div className="focus:outline-none">
-                            <p className="overflow-y-hidden max-h-10 sm:max-h-16 text-base sm:text-sm font-medium leading-5 text-gray-900 overflow-ellipsis line-clamp-2">
-                              {bookInfo.title}
-                            </p>
-                          </div>
-                          {bookInfo.isbn13 && (
-                            <div className="text-right">
-                              <a
-                                href={returnAmazonLink(bookInfo.isbn13)}
-                                className="text-sm text-blue-500"
-                              >
-                                Amazonで見る
-                              </a>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </Transition>
-          </section>
-        </div>
-        <div
-          id="contorol-interface-area"
-          className=" flex justify-center bg-purple-10"
-        >
-          <div className="w-1/3 max-w-7xl h-10">
-            <div className="flex items-center space-x-2 h-full">
-              <div className="flex relative justify-center items-center p-2 mr-2 h-full bg-white rounded-lg">
-                <div
-                  className="relative"
-                  id="toggle-mic"
-                  onClick={(e) => {
-                    renderMicrophoneIcon()
-                    // setIsMicrophoneOn(!isMicrophoneOn)
-                    console.log(participantsCount)
-                    call.setLocalAudio(!call.localAudio())
-
-                    isMicrophoneOn.current = !isMicrophoneOn.current
-                    console.log(isMicrophoneOn)
-
-                    console.log(call.localAudio())
-                  }}
-                >
-                  <MicrophoneIcon
-                    className={classNames(
-                      isMicrophoneOn.current
-                        ? 'text-green-500'
-                        : 'text-red-500',
-                      'w-6 h-6 z-10'
-                    )}
-                  />
-                  {isMicrophoneOn.current ? (
-                    <></>
-                  ) : (
-                    <Image
-                      src="/img/Icons/DisableSlash.svg"
-                      layout={'fill'}
-                      alt="Disable slash"
-                    />
-                  )}
-                </div>
-
-                {/* <div
-                  className="relative"
-                  id="toggle-mic"
-                  onClick={(e) => {
-                    toggleIsMicrophoneOn(e)
-                    console.log('localAudio:', call.localAudio())
-                    updateParticipants('local', { setAudio: false })
-                    // call.setLocalAudio(!call.localAudio())
-                    console.log('localAudio:', call.localAudio())
-                  }}
-                >
-                  <MicrophoneIcon
-                    className={classNames(
-                      isMicrophoneOn ? 'text-green-500' : 'text-red-500',
-                      'w-6 h-6 z-10'
-                    )}
-                  />
-                {isMicrophoneOn ? (
-                  <></>):
-                  ()
-                  <div
-                    className="relative"
-                    id="toggle-mic"
-                    onClick={(e) => {
-                      console.log(call.localAudio())
-                      call.setLocalAudio(!call.localAudio())
-
-                      // isMicrophoneOn = false
-                    }}
-                  >
-                    <MicrophoneIcon className="z-10 w-6 h-6 text-green-500" />
-                  </div> */}
-                {/* )} */}
-
-                {/* {!isMicrophoneOn && (
-                  <div
-                    className="relative"
-                    id="toggle-mic"
-                    onClick={(e) => {
-                      console.log(call.localAudio())
-                      call.setLocalAudio(!call.localAudio())
-
-                      // isMicrophoneOn = true
-                    }}
-                  >
-                    <MicrophoneIcon className="z-10 w-6 h-6 text-red-500" />
-                    <Image
-                      src="/img/Icons/DisableSlash.svg"
-                      layout={'fill'}
-                      alt="Disable slash"
-                    />
-                  </div>
-                )} */}
-                {/* </div> */}
-                <div className=" absolute -bottom-6 text-xs whitespace-nowrap">
-                  {isMicrophoneOn ? (
-                    <p className="text-blueGray-400">マイクの状態 : オン</p>
-                  ) : (
-                    <p className="text-blueGray-600">マイクの状態 : オフ</p>
-                  )}
-                </div>
-              </div>
-              <div className="relative items-center w-full h-full bg-white rounded-lg">
-                <input
-                  type="text"
-                  name="chat"
-                  id="chat"
-                  value={chatMessage}
-                  className="block absolute inset-y-0 left-0 px-0 pr-14 pl-4 w-full h-full sm:text-sm text-black rounded-lg border-none focus:ring-1 focus:ring-green-400 focus:outline-none"
-                  placeholder="ここにメッセージを入力"
-                  onChange={(e) => {
-                    setChatMessage(e.target.value)
-                  }}
-                />
-                <div className="absolute inset-y-0 right-0 pr-4">
-                  <button className="h-full text-blue-500 align-middle">
-                    送信
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div id="local-controls">
-          <div className="py-4">
-            <button
-              id="join"
-              className="items-center py-3 px-6 text-base font-medium text-white bg-tsundoku-blue-main"
-              onClick={joinRoom}
-            >
-              ルームに参加する
-            </button>
-          </div>
-          <div id="participants"></div>
-        </div>
-      </main>
-    </div>
-  )
 }
