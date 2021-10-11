@@ -57,10 +57,6 @@ export const GlobalStyle = () => (
       --shadow-depth-2: 0px 5px 15px rgba(0, 0, 0, 0.07);
     }
 
-    body {
-      background: var(--background);
-    }
-
   `}</style>
 );
 
