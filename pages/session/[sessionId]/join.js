@@ -53,8 +53,6 @@ export default function SessionJoin({
   const router = useRouter()
   const { sessionId } = router.query
 
-  console.log('sessionId', sessionId)
-
   // ============================================================
   // Setup
   // ============================================================
@@ -63,9 +61,6 @@ export default function SessionJoin({
     if (!room) {
       return false
     }
-
-    console.log('is this called')
-    console.log(room)
 
     setFetchingToken(true)
 
@@ -98,8 +93,6 @@ export default function SessionJoin({
     return true
   }, [])
 
-  console.log('roomName', roomName)
-
   // ============================================================
   // Get Token
   // ============================================================
@@ -116,10 +109,8 @@ export default function SessionJoin({
     return (
       <main>
         {(() => {
-          console.log('isConfigured:', isConfigured)
-
-          if (!isConfigured) return <NotConfigured />
-          if (demoMode) return <CreatingRoom onCreated={getMeetingToken} />
+          // if (!isConfigured) return <NotConfigured />
+          // if (demoMode) return <CreatingRoom onCreated={getMeetingToken} />
 
           if (!sessionId) return
 

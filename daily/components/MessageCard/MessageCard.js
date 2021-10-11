@@ -18,7 +18,9 @@ export const MessageCard = ({
         {onBack ? (
           <Button onClick={() => onBack()}>Go back</Button>
         ) : (
-          <Button onClick={() => window.location.reload()}>Go back</Button>
+          <Button onClick={() => window.location.assign('/ja/home')}>
+            ホームに戻る
+          </Button>
         )}
       </CardFooter>
     )}

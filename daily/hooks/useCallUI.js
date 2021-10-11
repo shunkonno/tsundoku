@@ -81,8 +81,7 @@ export const useCallUI = ({
           callEnded()
         ) : (
           <MessageCard>
-            You have left the call (either manually or because the room
-            expired). We hope you had fun!
+            ルームを退出しました。また、ご利用になってください。
           </MessageCard>
         )
       default:
