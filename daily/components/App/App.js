@@ -31,6 +31,7 @@ export const App = ({ customComponentForState }) => {
             height: 100vh;
             display: flex;
             align-items: center;
+            background-color: #2B3F56;
             justify-content: center;
 
             .loader {
