@@ -33,7 +33,6 @@ export const GlobalStyle = () => (
       --text-darkest: ${theme.text.darkest};
       --text-pre: ${theme.text.pre};
 
-      --font-family: 'Rubik', sans-serif;
       --weight-regular: 400;
       --weight-medium: 500;
       --weight-bold: 600;
@@ -58,78 +57,10 @@ export const GlobalStyle = () => (
       --shadow-depth-2: 0px 5px 15px rgba(0, 0, 0, 0.07);
     }
 
-    html {
-      background: var(--background);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      text-rendering: optimizeLegibility;
-      font: normal normal normal 1rem / 1.6 var(--font-family);
-      font-size: 1rem;
-    }
-
     body {
-      color: var(--text-default);
       background: var(--background);
-      margin: 0px;
-      font-size: 1rem;
     }
 
-    *,
-    ::before,
-    ::after {
-      box-sizing: border-box;
-    }
-
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      margin: var(--spacing-md) 0;
-      font-weight: var(--weight-bold);
-      line-height: 1.2;
-    }
-
-    a {
-      transition: color 250ms;
-    }
-
-    a,
-    a:active,
-    a:visited {
-      color: var(--text-mid);
-    }
-
-    a:hover {
-      color: var(--text-darkest);
-    }
-
-    p {
-      line-height: 1.6;
-    }
-
-    hr {
-      border: none;
-      height: 1px;
-      background-color: var(--gray-light);
-      margin: var(--spacing-sm) 0;
-    }
-
-    code {
-      display: inline;
-      color: var(--text-pre);
-      background-color: ${hexa(theme.text.pre, 0.12)};
-      border-radius: 3px;
-      padding: 2px 6px;
-      font-size: 0.875rem;
-    }
-
-    hr {
-      border: 0;
-      height: 1px;
-      background: var(--gray-light);
-    }
   `}</style>
 );
 
