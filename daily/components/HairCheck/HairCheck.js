@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
+import Image from 'next/image'
 import Button from '../Button'
 import { DEVICE_MODAL } from '../DeviceSelectModal/DeviceSelectModal'
 import { TextInput } from '../Input'
@@ -127,16 +128,20 @@ export const HairCheck = () => {
   return (
     <>
       <main className="haircheck">
-        <img
-          src="/assets/daily-logo.svg"
-          alt="Daily.co"
-          width="132"
-          height="58"
-          className="logo"
+        <div className="absolute mt-2 ml-4 top-0 left-0">
+        <Image
+          src="/img/logos/tsundoku-logo-mark-and-typo-text-wh.svg"
+          alt="tsundoku-logo"
+          width={132}
+          height={58}
         />
+        </div>
         <div className="panel">
           <header>
-            <h2>Ready to join?</h2>
+            <h2>
+              <p>準備がよろしければ</p>
+              <p>『参加』を押してください。</p>
+            </h2>
           </header>
           <div className="tile-container">
             <div className="content">
@@ -151,7 +156,7 @@ export const HairCheck = () => {
 
               {isLoading && (
                 <div className="overlay-message">
-                  Loading devices, please wait...
+                  読み込み中…
                 </div>
               )}
               {hasError && (
@@ -196,7 +201,7 @@ export const HairCheck = () => {
                   disabled={joining || userName.length < 3}
                   onClick={() => joinCall(userName)}
                 >
-                  Join call
+                  参加
                 </Button>
               </>
             )}
@@ -236,22 +241,6 @@ export const HairCheck = () => {
             border-radius: var(--radius-md) var(--radius-md) 0 0;
             border-bottom: 0px;
             padding: var(--spacing-md) 0 calc(6px + var(--spacing-md)) 0;
-          }
-
-          .haircheck header:before,
-          .haircheck footer:before {
-            content: '';
-            position: absolute;
-            height: 6px;
-            left: var(--spacing-sm);
-            right: var(--spacing-sm);
-            background: linear-gradient(
-              90deg,
-              var(--primary-default) 0%,
-              var(--secondary-dark) 100%
-            );
-            border-radius: 6px 6px 0px 0px;
-            bottom: 0px;
           }
 
           .haircheck footer:before {
@@ -326,12 +315,6 @@ export const HairCheck = () => {
 
           .waiting span {
             margin-left: var(--spacing-xxs);
-          }
-
-          .logo {
-            position: absolute;
-            top: var(--spacing-sm);
-            left: var(--spacing-sm);
           }
         `}</style>
       </main>

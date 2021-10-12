@@ -21,14 +21,8 @@ Card.propTypes = {
 
 export const CardHeader = ({ children }) => (
   <header className="card-header">
-    <h2>{children}</h2>
+    <h2 className="text-xl m-0 font-semibold text-gray-800">{children}</h2>
     <style jsx>{`
-      h2 {
-        font-size: 1.375rem;
-        margin: 0px;
-        color: var(--text-default);
-      }
-
       & + :global(.card-body) {
         margin-top: var(--spacing-lg);
       }

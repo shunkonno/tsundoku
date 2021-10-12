@@ -11,15 +11,15 @@ export const DeviceSelectModal = () => {
 
   return (
     <Modal
-      title="Select your device"
+      title="マイク・スピーカー設定"
       isOpen={currentModals[DEVICE_MODAL]}
       onClose={() => closeModal(DEVICE_MODAL)}
       actions={[
         <Button key="close" fullWidth variant="outline">
-          Cancel
+          キャンセル
         </Button>,
         <Button key="update" fullWidth>
-          Update
+          更新
         </Button>
       ]}
     >

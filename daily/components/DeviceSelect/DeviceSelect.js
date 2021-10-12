@@ -5,22 +5,22 @@ import { SelectInput } from '../Input'
 
 export const DeviceSelect = () => {
   const {
-    cams,
+    // cams,
     mics,
     speakers,
     currentDevices,
-    setCamDevice,
+    // setCamDevice,
     setMicDevice,
     setSpeakersDevice
   } = useMediaDevices()
 
   if (!currentDevices) {
-    return <div>Loading devices...</div>
+    return <div>デバイスを検索中…</div>
   }
 
   return (
     <>
-      <Field label="Select camera:">
+      {/* <Field label="Select camera:">
         <SelectInput
           onChange={(e) => setCamDevice(cams[e.target.value])}
           value={cams.findIndex(
@@ -33,9 +33,9 @@ export const DeviceSelect = () => {
             </option>
           ))}
         </SelectInput>
-      </Field>
+      </Field> */}
 
-      <Field label="Select microphone:">
+      <Field label="マイクを選択">
         <SelectInput
           onChange={(e) => setMicDevice(mics[e.target.value])}
           value={mics.findIndex(
@@ -54,7 +54,7 @@ export const DeviceSelect = () => {
        * Note: Safari does not support selection audio output devices
        */}
       {speakers.length > 0 && (
-        <Field label="Select speakers:">
+        <Field label="スピーカーを選択">
           <SelectInput
             onChange={(e) => setSpeakersDevice(speakers[e.target.value])}
             value={speakers.findIndex(

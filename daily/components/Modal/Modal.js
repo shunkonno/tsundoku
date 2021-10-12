@@ -77,9 +77,7 @@ export const Modal = ({
         <Card noBorder shadow>
           {title && <CardHeader>{title}</CardHeader>}
           <CardBody>{children}</CardBody>
-        </Card>
-
-        {actions.length > 0 && (
+          {actions.length > 0 && (
           <CardFooter>
             {actions.map((child, i) =>
               cloneElement(child, {
@@ -95,6 +93,9 @@ export const Modal = ({
             )}
           </CardFooter>
         )}
+        </Card>
+
+        
       </div>
       <style jsx>{`
         .backdrop {

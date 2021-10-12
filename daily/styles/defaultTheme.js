@@ -42,6 +42,7 @@ export const defaultTheme = {
     default: '#2B3F56',
     reverse: '#FFFFFF',
     mid: '#7B848F',
+    light: '#00ff00',
     darkest: '#1F2D3D',
     pre: '#FB651E',
   },

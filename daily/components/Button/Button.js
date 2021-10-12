@@ -61,8 +61,6 @@ export const Button = forwardRef(
         )}
         <style jsx>{`
           .button {
-            font-family: var(--font-family);
-            font-weight: var(--weight-medium);
             font-size: 1rem;
             text-align: center;
             text-decoration: none;
@@ -310,13 +308,13 @@ export const Button = forwardRef(
 
           .button.outline {
             background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: white;
+            border: 1px solid rgba(32, 32, 32, 0.15);
+            color: var(--text-light);
           }
           .button.outline:hover,
           .button.outline:focus,
           .button.outline:active {
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(32, 32, 32, 0.25);
             box-shadow: none;
           }
           .button.outline:focus {

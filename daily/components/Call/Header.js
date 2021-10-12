@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import Image from 'next/image'
 import HeaderCapsule from '../HeaderCapsule'
 import { useParticipants } from '../../contexts/ParticipantsProvider'
 import { useUIState } from '../../contexts/UIStateProvider'
@@ -10,26 +11,23 @@ export const Header = () => {
   return useMemo(
     () => (
       <header className="room-header">
-        <img
-          src="/assets/daily-logo.svg"
-          alt="Daily"
+        <Image
+          src="/img/logos/tsundoku-logo-mark-and-typo-text-wh.svg"
+          alt="tsundoku-logo"
           className="logo"
-          width="80"
-          height="32"
+          width={132}
+          height={58}
         />
 
-        <HeaderCapsule>Basic call demo</HeaderCapsule>
         <HeaderCapsule>
-          {`${participantCount} ${
-            participantCount === 1 ? 'participant' : 'participants'
-          }`}
+          {`現在の参加者:${participantCount}`}
         </HeaderCapsule>
-        {customCapsule && (
+        {/* {customCapsule && (
           <HeaderCapsule variant={customCapsule.variant}>
             {customCapsule.variant === 'recording' && <span />}
             {customCapsule.label}
           </HeaderCapsule>
-        )}
+        )} */}
 
         <style jsx>{`
           .room-header {
