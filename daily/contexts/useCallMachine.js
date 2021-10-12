@@ -186,10 +186,10 @@ export const useCallMachine = ({
 
     const co = DailyIframe.createCallObject({
       url,
-      videoSource: true,
+      videoSource: false,
       dailyConfig: {
-        experimentalChromeVideoMuteLightOff: true,
-        useDevicePreferenceCookies: true
+        experimentalChromeVideoMuteLightOff: true
+        // useDevicePreferenceCookies: true
       }
     })
 
