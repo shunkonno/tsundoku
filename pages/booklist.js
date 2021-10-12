@@ -18,7 +18,7 @@ import { AddBookModal } from '../components/Modal'
 import { BookProgressIcon } from '../components/Icon'
 
 //Context
-import { AppContext } from '../context/state'
+import { AlertContext } from '../context/AlertProvider'
 
 // Assets
 import { Menu, Transition } from '@headlessui/react'
@@ -57,7 +57,7 @@ export default function BookList() {
   // Contexts
   // ============================================================
   const { alertOpen, setAlertOpen, alertAssort, setAlertAssort } =
-    useContext(AppContext)
+    useContext(AlertContext)
 
   // ============================================================
   // Initial State

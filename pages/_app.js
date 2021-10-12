@@ -4,12 +4,12 @@ import GlobalStyle from '../daily/components/GlobalStyle'
 import 'tailwindcss/tailwind.css'
 
 //useContext
-import { AppWrapper } from '../context/state'
+import { AlertProvider } from '../context/AlertProvider'
 
 function MyApp({ Component, pageProps }) {
   return (
     <AuthProvider>
-      <AppWrapper>
+      <AlertProvider>
         <GlobalStyle />
         <Component
           asides={MyApp.asides}
@@ -18,7 +18,7 @@ function MyApp({ Component, pageProps }) {
           customAppComponent={MyApp.customAppComponent}
           {...pageProps}
         />
-      </AppWrapper>
+      </AlertProvider>
     </AuthProvider>
   )
 }

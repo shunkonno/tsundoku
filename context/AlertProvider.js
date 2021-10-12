@@ -1,8 +1,8 @@
 import { createContext, useState } from 'react'
 
-export const AppContext = createContext()
+export const AlertContext = createContext()
 
-export function AppWrapper({ children }) {
+export function AlertProvider({ children }) {
   const [alertOpen, setAlertOpen] = useState(false)
   const [alertAssort, setAlertAssort] = useState('') // create, reserve, cancel, failed
   let globalState = {
@@ -13,6 +13,6 @@ export function AppWrapper({ children }) {
   }
 
   return (
-    <AppContext.Provider value={globalState}>{children}</AppContext.Provider>
+    <AlertContext.Provider value={globalState}>{children}</AlertContext.Provider>
   )
 }

@@ -18,7 +18,7 @@ import { ReservableRoomList } from '../components/List'
 import { GeneralAlert } from '../components/Alert'
 
 //Context
-import { AppContext } from '../context/state'
+import { AlertContext } from '../context/AlertProvider'
 
 // Assets
 import { PlusIcon, PlusCircleIcon,ArrowSmUpIcon } from '@heroicons/react/solid'
@@ -33,13 +33,14 @@ import classNames from '../utils/classNames'
 import uselocalesFilter from '../utils/translate'
 import { ChevronRightIcon } from '@heroicons/react/outline'
 import { toPath } from 'lodash'
+import { AlertProvider } from '../context/AlertProvider'
 
 export default function Home() {
   // ============================================================
   // Contexts
   // ============================================================
   const { alertOpen, setAlertOpen, alertAssort, setAlertAssort } =
-    useContext(AppContext)
+    useContext(AlertContext)
 
   // ============================================================
   // Auth
