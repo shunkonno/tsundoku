@@ -6,16 +6,16 @@ import React, {
   useContext,
   useEffect,
   useMemo,
-  useReducer,
-} from 'react';
+  useReducer
+} from 'react'
 
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
-import { useDeepCompareEffect } from 'use-deep-compare';
-import { sortByKey } from '../lib/sortByKey';
-import { useCallState } from './CallProvider';
-import { useParticipants } from './ParticipantsProvider';
-import { isLocalId, isScreenId } from './participantsState';
+import { useDeepCompareEffect } from 'use-deep-compare'
+import { sortByKey } from '../lib/sortByKey'
+import { useCallState } from './CallProvider'
+import { useParticipants } from './ParticipantsProvider'
+import { isLocalId, isScreenId } from './participantsState'
 import {
   initialTracksState,
   REMOVE_TRACKS,
@@ -23,26 +23,26 @@ import {
   TRACK_STOPPED,
   TRACK_VIDEO_UPDATED,
   TRACK_AUDIO_UPDATED,
-  tracksReducer,
-} from './tracksState';
+  tracksReducer
+} from './tracksState'
 
 /**
  * Maximum amount of concurrently subscribed most recent speakers.
  */
-const MAX_RECENT_SPEAKER_COUNT = 6;
+const MAX_RECENT_SPEAKER_COUNT = 6
 /**
  * Threshold up to which all videos will be subscribed.
  * If the remote participant count passes this threshold,
  * cam subscriptions are defined by UI view modes.
  */
-const SUBSCRIBE_OR_STAGE_ALL_VIDEO_THRESHOLD = 9;
+const SUBSCRIBE_OR_STAGE_ALL_VIDEO_THRESHOLD = 9
 
-const TracksContext = createContext(null);
+const TracksContext = createContext(null)
 
 export const TracksProvider = ({ children }) => {
-  const { callObject, subscribeToTracksAutomatically } = useCallState();
-  const { participants } = useParticipants();
-  const [state, dispatch] = useReducer(tracksReducer, initialTracksState);
+  const { callObject, subscribeToTracksAutomatically } = useCallState()
+  const { participants } = useParticipants()
+  const [state, dispatch] = useReducer(tracksReducer, initialTracksState)
 
   const recentSpeakerIds = useMemo(
     () =>
@@ -53,23 +53,23 @@ export const TracksProvider = ({ children }) => {
         .map((p) => p.id)
         .reverse(),
     [participants]
-  );
+  )
 
   const remoteParticipantIds = useMemo(
     () => participants.filter((p) => !p.isLocal).map((p) => p.id),
     [participants]
-  );
+  )
 
   const subscribeToCam = useCallback(
     (id) => {
       // Ignore undefined, local or screenshare.
-      if (!id || isLocalId(id) || isScreenId(id)) return;
+      if (!id || isLocalId(id) || isScreenId(id)) return
       callObject.updateParticipant(id, {
-        setSubscribedTracks: { video: true },
-      });
+        setSubscribedTracks: { video: true }
+      })
     },
     [callObject]
-  );
+  )
 
   /**
    * Updates cam subscriptions based on passed subscribedIds and stagedIds.
@@ -77,7 +77,7 @@ export const TracksProvider = ({ children }) => {
    */
   const updateCamSubscriptions = useCallback(
     (subscribedIds, stagedIds = []) => {
-      if (!callObject) return;
+      if (!callObject) return
 
       // If total number of remote participants is less than a threshold, simply
       // stage all remote cams that aren't already marked for subscription.
@@ -88,53 +88,53 @@ export const TracksProvider = ({ children }) => {
           ? remoteParticipantIds.filter((id) => !subscribedIds.includes(id))
           : [
               ...stagedIds,
-              ...recentSpeakerIds.filter((id) => !subscribedIds.includes(id)),
-            ];
+              ...recentSpeakerIds.filter((id) => !subscribedIds.includes(id))
+            ]
 
       // Assemble updates to get to desired cam subscriptions
       const updates = remoteParticipantIds.reduce((u, id) => {
-        let desiredSubscription;
+        let desiredSubscription
         const currentSubscription =
-          callObject.participants()?.[id]?.tracks?.video?.subscribed;
+          callObject.participants()?.[id]?.tracks?.video?.subscribed
 
         // Ignore undefined, local or screenshare participant ids
-        if (!id || isLocalId(id) || isScreenId(id)) return u;
+        if (!id || isLocalId(id) || isScreenId(id)) return u
 
         // Decide on desired cam subscription for this participant:
         // subscribed, staged, or unsubscribed
         if (subscribedIds.includes(id)) {
-          desiredSubscription = true;
+          desiredSubscription = true
         } else if (stagedIdsFiltered.includes(id)) {
-          desiredSubscription = 'staged';
+          desiredSubscription = 'staged'
         } else {
-          desiredSubscription = false;
+          desiredSubscription = false
         }
 
         // Skip if we already have the desired subscription to this
         // participant's cam
-        if (desiredSubscription === currentSubscription) return u;
+        if (desiredSubscription === currentSubscription) return u
 
         u[id] = {
           setSubscribedTracks: {
             audio: true,
             screenAudio: true,
             screenVideo: true,
-            video: desiredSubscription,
-          },
-        };
-        return u;
-      }, {});
+            video: desiredSubscription
+          }
+        }
+        return u
+      }, {})
 
-      if (Object.keys(updates).length === 0) return;
-      callObject.updateParticipants(updates);
+      if (Object.keys(updates).length === 0) return
+      callObject.updateParticipants(updates)
     },
     [callObject, remoteParticipantIds, recentSpeakerIds]
-  );
+  )
 
   useEffect(() => {
-    if (!callObject) return false;
+    if (!callObject) return false
 
-    const trackStoppedQueue = [];
+    const trackStoppedQueue = []
 
     const handleTrackStarted = ({ participant, track }) => {
       /**
@@ -144,86 +144,86 @@ export const TracksProvider = ({ children }) => {
       const stoppingIdx = trackStoppedQueue.findIndex(
         ([p, t]) =>
           p.session_id === participant.session_id && t.kind === track.kind
-      );
+      )
       if (stoppingIdx >= 0) {
-        trackStoppedQueue.splice(stoppingIdx, 1);
+        trackStoppedQueue.splice(stoppingIdx, 1)
       }
       dispatch({
         type: TRACK_STARTED,
         participant,
-        track,
-      });
-    };
+        track
+      })
+    }
 
     const trackStoppedBatchInterval = setInterval(() => {
-      if (!trackStoppedQueue.length) return;
+      if (!trackStoppedQueue.length) return
       dispatch({
         type: TRACK_STOPPED,
-        items: trackStoppedQueue.splice(0, trackStoppedQueue.length),
-      });
-    }, 3000);
+        items: trackStoppedQueue.splice(0, trackStoppedQueue.length)
+      })
+    }, 3000)
 
     const handleTrackStopped = ({ participant, track }) => {
       if (participant) {
-        trackStoppedQueue.push([participant, track]);
+        trackStoppedQueue.push([participant, track])
       }
-    };
+    }
 
     const handleParticipantLeft = ({ participant }) => {
       dispatch({
         type: REMOVE_TRACKS,
-        participant,
-      });
-    };
+        participant
+      })
+    }
 
-    const joinedSubscriptionQueue = [];
+    const joinedSubscriptionQueue = []
 
     const handleParticipantJoined = ({ participant }) => {
-      joinedSubscriptionQueue.push(participant.session_id);
-    };
+      joinedSubscriptionQueue.push(participant.session_id)
+    }
 
     const joinBatchInterval = setInterval(async () => {
-      if (!joinedSubscriptionQueue.length) return;
-      const ids = joinedSubscriptionQueue.splice(0);
-      const participants = callObject.participants();
-      const topology = (await callObject.getNetworkTopology())?.topology;
+      if (!joinedSubscriptionQueue.length) return
+      const ids = joinedSubscriptionQueue.splice(0)
+      const participants = callObject.participants()
+      const topology = (await callObject.getNetworkTopology())?.topology
       const updates = ids.reduce((o, id) => {
         if (!participants?.[id]?.tracks?.audio?.subscribed) {
           o[id] = {
             setSubscribedTracks: {
               audio: true,
               screenAudio: true,
-              screenVideo: true,
-            },
-          };
+              screenVideo: true
+            }
+          }
         }
         if (topology === 'peer') {
-          o[id] = { setSubscribedTracks: true };
+          o[id] = { setSubscribedTracks: true }
         }
-        return o;
-      }, {});
+        return o
+      }, {})
 
       if (!subscribeToTracksAutomatically && Object.keys(updates).length0) {
-        callObject.updateParticipants(updates);
+        callObject.updateParticipants(updates)
       }
-    }, 100);
+    }, 100)
 
-    callObject.on('track-started', handleTrackStarted);
-    callObject.on('track-stopped', handleTrackStopped);
-    callObject.on('participant-joined', handleParticipantJoined);
-    callObject.on('participant-left', handleParticipantLeft);
+    callObject.on('track-started', handleTrackStarted)
+    callObject.on('track-stopped', handleTrackStopped)
+    callObject.on('participant-joined', handleParticipantJoined)
+    callObject.on('participant-left', handleParticipantLeft)
     return () => {
-      clearInterval(joinBatchInterval);
-      clearInterval(trackStoppedBatchInterval);
-      callObject.off('track-started', handleTrackStarted);
-      callObject.off('track-stopped', handleTrackStopped);
-      callObject.off('participant-joined', handleParticipantJoined);
-      callObject.off('participant-left', handleParticipantLeft);
-    };
-  }, [callObject, subscribeToTracksAutomatically]);
+      clearInterval(joinBatchInterval)
+      clearInterval(trackStoppedBatchInterval)
+      callObject.off('track-started', handleTrackStarted)
+      callObject.off('track-stopped', handleTrackStopped)
+      callObject.off('participant-joined', handleParticipantJoined)
+      callObject.off('participant-left', handleParticipantLeft)
+    }
+  }, [callObject, subscribeToTracksAutomatically])
 
   useDeepCompareEffect(() => {
-    if (!callObject) return;
+    if (!callObject) return
 
     const handleParticipantUpdated = ({ participant }) => {
       const hasAudioChanged =
@@ -234,13 +234,13 @@ export const TracksProvider = ({ children }) => {
         !deepEqual(
           {
             ...(participant.tracks.audio?.blocked ?? {}),
-            ...(participant.tracks.audio?.off ?? {}),
+            ...(participant.tracks.audio?.off ?? {})
           },
           {
             ...(state.audioTracks?.[participant.user_id].blocked ?? {}),
-            ...(state.audioTracks?.[participant.user_id].off ?? {}),
+            ...(state.audioTracks?.[participant.user_id].off ?? {})
           }
-        );
+        )
       const hasVideoChanged =
         // State changed
         participant.tracks.video.state !==
@@ -249,34 +249,34 @@ export const TracksProvider = ({ children }) => {
         !deepEqual(
           {
             ...(participant.tracks.video?.blocked ?? {}),
-            ...(participant.tracks.video?.off ?? {}),
+            ...(participant.tracks.video?.off ?? {})
           },
           {
             ...(state.videoTracks?.[participant.user_id].blocked ?? {}),
-            ...(state.videoTracks?.[participant.user_id].off ?? {}),
+            ...(state.videoTracks?.[participant.user_id].off ?? {})
           }
-        );
+        )
       if (hasAudioChanged) {
         // Update audio track state
         dispatch({
           type: TRACK_AUDIO_UPDATED,
-          participant,
-        });
+          participant
+        })
       }
       if (hasVideoChanged) {
         // Update video track state
         dispatch({
           type: TRACK_VIDEO_UPDATED,
-          participant,
-        });
+          participant
+        })
       }
-    };
+    }
 
-    callObject.on('participant-updated', handleParticipantUpdated);
+    callObject.on('participant-updated', handleParticipantUpdated)
     return () => {
-      callObject.off('participant-updated', handleParticipantUpdated);
-    };
-  }, [callObject, state.audioTracks, state.videoTracks]);
+      callObject.off('participant-updated', handleParticipantUpdated)
+    }
+  }, [callObject, state.audioTracks, state.videoTracks])
 
   return (
     <TracksContext.Provider
@@ -286,16 +286,16 @@ export const TracksProvider = ({ children }) => {
         subscribeToCam,
         updateCamSubscriptions,
         remoteParticipantIds,
-        recentSpeakerIds,
+        recentSpeakerIds
       }}
     >
       {children}
     </TracksContext.Provider>
-  );
-};
+  )
+}
 
 TracksProvider.propTypes = {
-  children: PropTypes.node,
-};
+  children: PropTypes.node
+}
 
-export const useTracks = () => useContext(TracksContext);
+export const useTracks = () => useContext(TracksContext)
