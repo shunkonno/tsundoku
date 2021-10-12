@@ -13,7 +13,7 @@ import { Footer } from '../../components/Footer'
 import { GeneralAlert } from '../../components/Alert'
 
 //Context
-import { AlertContext } from '../../context/state'
+import { useAlertState } from '../../context/AlertProvider'
 
 // Assets
 import { Transition, RadioGroup } from '@headlessui/react'
@@ -60,8 +60,7 @@ export default function UserSettings() {
   // ============================================================
   // Contexts
   // ============================================================
-  const { alertOpen, setAlertOpen, alertAssort, setAlertAssort } =
-    useContext(AlertContext)
+  const { alertOpen, setAlertOpen, alertAssort, setAlertAssort } = useAlertState()
 
   // ============================================================
   // Auth

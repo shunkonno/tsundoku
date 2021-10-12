@@ -14,7 +14,7 @@ import { Footer } from '../../components/Footer'
 import { Listbox, Transition } from '@headlessui/react'
 
 // Context
-import { AlertContext } from '../../context/AlertProvider'
+import { useAlertState } from '../../context/AlertProvider'
 
 //Assets
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
@@ -152,7 +152,7 @@ export default function NewSession() {
   // ============================================================
   // Context
   // ============================================================
-  const { setAlertAssort } = useContext(AlertContext)
+  const { setAlertAssort } = useAlertState()
 
   // ============================================================
   // Auth

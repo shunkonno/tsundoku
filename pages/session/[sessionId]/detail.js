@@ -15,7 +15,7 @@ import { Footer } from '../../../components/Footer'
 import { Disclosure, Transition } from '@headlessui/react'
 
 //Context
-import { AppContext } from '../../../context/state'
+import { useAlertState } from '../../../context/AlertProvider'
 
 //Assets
 import { PlusSmIcon, ChevronLeftIcon } from '@heroicons/react/solid'
@@ -62,7 +62,7 @@ export default function SessionDetail({ session }) {
   // ============================================================
   // Contexts
   // ============================================================
-  const { setAlertAssort } = useContext(AppContext)
+  const { setAlertAssort } = useAlertState()
 
   // ============================================================
   // Auth
