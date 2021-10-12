@@ -33,7 +33,6 @@ import classNames from '../utils/classNames'
 import uselocalesFilter from '../utils/translate'
 import { ChevronRightIcon } from '@heroicons/react/outline'
 import { toPath } from 'lodash'
-import { AlertProvider } from '../context/AlertProvider'
 
 export default function Home() {
   // ============================================================
