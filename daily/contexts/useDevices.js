@@ -40,13 +40,15 @@ export const useDevices = (callObject) => {
 
       const { camera, mic, speaker } = await callObject.getInputDevices()
 
-      console.log(camera)
+      console.log('camera is ', camera)
+      console.log('mic is ', mic)
+      console.log('speaker is ', speaker)
 
       const [defaultCam, ...videoDevices] = devices.filter(
         (d) => d.kind === 'videoinput' && d.deviceId !== ''
       )
 
-      console.log(defaultCam)
+      console.log('default Camera is ', defaultCam)
 
       setCams(
         [
@@ -54,6 +56,8 @@ export const useDevices = (callObject) => {
           ...videoDevices.sort((a, b) => sortByKey(a, b, 'label', false))
         ].filter(Boolean)
       )
+      
+      // Get Mic
       const [defaultMic, ...micDevices] = devices.filter(
         (d) => d.kind === 'audioinput' && d.deviceId !== ''
       )
@@ -63,6 +67,8 @@ export const useDevices = (callObject) => {
           ...micDevices.sort((a, b) => sortByKey(a, b, 'label', false))
         ].filter(Boolean)
       )
+
+      // Get Speaker
       const [defaultSpeaker, ...speakerDevices] = devices.filter(
         (d) => d.kind === 'audiooutput' && d.deviceId !== ''
       )

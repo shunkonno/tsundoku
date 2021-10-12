@@ -21,6 +21,7 @@ export const Tile = memo(
     onVideoResize,
     ...props
   }) => {
+    console.log('Participantsssssss:',participant)
     const videoTrack = useVideoTrack(participant)
     const videoRef = useRef(null)
     const tileRef = useRef(null)

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ReactComponent as IconCameraOff } from '../../icons/camera-off-md.svg'
 import { ReactComponent as IconCameraOn } from '../../icons/camera-on-md.svg'
 import { ReactComponent as IconMicOff } from '../../icons/mic-off-md.svg'

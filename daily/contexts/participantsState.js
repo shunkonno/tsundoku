@@ -23,7 +23,7 @@ const initialParticipantsState = {
       hasNameSet: false,
       id: 'local',
       isActiveSpeaker: false,
-      isCamMuted: false,
+      isCamMuted: true,
       isLoading: true,
       isLocal: true,
       isMicMuted: false,

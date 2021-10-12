@@ -2,21 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 export const Field = ({ label, children }) => (
-  <div className="field">
-    {label && <div className="label">{label}</div>}
-    <div className="field">{children}</div>
-
-    <style jsx>{`
-      .field {
-        margin-bottom: var(--spacing-sm);
-      }
-
-      .field .label {
-        font-weight: var(--weight-medium);
-        color: var(--text-default);
-        margin-bottom: var(--spacing-xxxs);
-      }
-    `}</style>
+  <div className="mb-6">
+    {label && <div className="text-gray-800 mb-2">{label}</div>}
+    <div>{children}</div>
   </div>
 )
 

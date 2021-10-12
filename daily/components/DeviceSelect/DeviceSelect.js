@@ -1,15 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useMediaDevices } from '../../contexts/MediaDeviceProvider'
 import Field from '../Field'
 import { SelectInput } from '../Input'
 
 export const DeviceSelect = () => {
   const {
-    // cams,
+    cams,
     mics,
     speakers,
     currentDevices,
-    // setCamDevice,
+    setCamDevice,
     setMicDevice,
     setSpeakersDevice
   } = useMediaDevices()
@@ -18,9 +18,11 @@ export const DeviceSelect = () => {
     return <div>デバイスを検索中…</div>
   }
 
+  
+
   return (
     <>
-      {/* <Field label="Select camera:">
+      <Field label="Select camera:">
         <SelectInput
           onChange={(e) => setCamDevice(cams[e.target.value])}
           value={cams.findIndex(
@@ -33,7 +35,7 @@ export const DeviceSelect = () => {
             </option>
           ))}
         </SelectInput>
-      </Field> */}
+      </Field>
 
       <Field label="マイクを選択">
         <SelectInput

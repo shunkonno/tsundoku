@@ -4,6 +4,7 @@ import Button from '../Button'
 import { DEVICE_MODAL } from '../DeviceSelectModal/DeviceSelectModal'
 import { TextInput } from '../Input'
 import Loader from '../Loader'
+import DeviceSelect from '../DeviceSelect'
 import MuteButton from '../MuteButton'
 import Tile from '../Tile'
 import { ACCESS_STATE_LOBBY } from '../../constants'
@@ -23,6 +24,8 @@ import IconSettings from '../../icons/settings-sm.svg'
 
 import { useDeepCompareMemo } from 'use-deep-compare'
 
+import { useUserInfo } from '../../../context/useUserInfo'
+
 /**
  * Hair check
  * ---
@@ -31,6 +34,9 @@ import { useDeepCompareMemo } from 'use-deep-compare'
  * - Set user name and join call / request access
  */
 export const HairCheck = () => {
+
+  const userInfo = useUserInfo()
+
   const { callObject, join } = useCallState()
   const { localParticipant } = useParticipants()
   const { deviceState, camError, micError, isCamMuted, isMicMuted } =
@@ -40,6 +46,16 @@ export const HairCheck = () => {
   const [joining, setJoining] = useState(false)
   const [denied, setDenied] = useState()
   const [userName, setUserName] = useState('')
+
+  useEffect(()=>{
+    setUserName(userInfo?.name)
+  },[userInfo])
+
+  useEffect(()=>{
+    setTimeout(()=>{
+      callObject.setLocalVideo(false)
+    }, 1000)
+  },[callObject])
 
   // Initialise devices (even though we're not yet in a call)
   useEffect(() => {
@@ -136,13 +152,16 @@ export const HairCheck = () => {
           height={58}
         />
         </div>
-        <div className="panel">
+        <div className="panel text-center text-black border border-gray-100 bg-white bg-opacity-80 rounded-lg px-12 py-8">
           <header>
-            <h2>
+            <h2 className="">
               <p>準備がよろしければ</p>
               <p>『参加』を押してください。</p>
             </h2>
           </header>
+          {/* <div className="text-left py-6">
+            <DeviceSelect />
+          </div> */}
           <div className="tile-container">
             <div className="content">
               <Button
@@ -177,7 +196,7 @@ export const HairCheck = () => {
 
               <MuteButton mic isMuted={isMicMuted} />
             </div>
-            {tileMemo}
+            {/* {tileMemo} */}
           </div>
           <footer>
             {waiting ? (
@@ -191,14 +210,9 @@ export const HairCheck = () => {
               </div>
             ) : (
               <>
-                <TextInput
-                  placeholder="Enter display name"
-                  variant="dark"
-                  disabled={joining}
-                  onChange={(e) => setUserName(e.target.value)}
-                />
+                <p className="p-4 w-full rounded-lg bg-white bg-opacity-20 text-left text-white">{userName}</p>
                 <Button
-                  disabled={joining || userName.length < 3}
+                  disabled={joining}
                   onClick={() => joinCall(userName)}
                 >
                   参加
@@ -222,25 +236,12 @@ export const HairCheck = () => {
 
           .haircheck .panel {
             width: 580px;
-            text-align: center;
           }
 
           .haircheck .tile-container {
             border-radius: var(--radius-md);
             -webkit-mask-image: -webkit-radial-gradient(white, black);
-            overflow: hidden;
             position: relative;
-          }
-
-          .haircheck header {
-            position: relative;
-            color: white;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            max-width: 480px;
-            margin: 0 auto;
-            border-radius: var(--radius-md) var(--radius-md) 0 0;
-            border-bottom: 0px;
-            padding: var(--spacing-md) 0 calc(6px + var(--spacing-md)) 0;
           }
 
           .haircheck footer:before {
@@ -254,7 +255,7 @@ export const HairCheck = () => {
           }
 
           .haircheck .content {
-            position: absolute;
+            position: relative;
             top: 0px;
             left: 0px;
             right: 0px;
@@ -266,7 +267,7 @@ export const HairCheck = () => {
           }
 
           .haircheck .mute-buttons {
-            position: absolute;
+            position: relative;
             bottom: 0px;
             left: 0px;
             right: 0px;
@@ -279,11 +280,7 @@ export const HairCheck = () => {
             gap: var(--spacing-xs);
           }
 
-          .haircheck .content :global(.device-button) {
-            position: absolute;
-            top: var(--spacing-xxs);
-            right: var(--spacing-xxs);
-          }
+          
 
           .haircheck .overlay-message {
             color: var(--reverse);
@@ -294,14 +291,7 @@ export const HairCheck = () => {
 
           .haircheck footer {
             position: relative;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            max-width: 480px;
-            margin: 0 auto;
             border-radius: 0 0 var(--radius-md) var(--radius-md);
-            padding: calc(6px + var(--spacing-md)) var(--spacing-sm)
-              var(--spacing-md) var(--spacing-sm);
-            border-top: 0px;
-
             display: grid;
             grid-template-columns: 1fr auto;
             grid-column-gap: var(--spacing-xs);
