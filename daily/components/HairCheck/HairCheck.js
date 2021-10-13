@@ -49,13 +49,8 @@ export const HairCheck = () => {
 
   useEffect(()=>{
     setUserName(userInfo?.name)
+    console.log(userInfo)
   },[userInfo])
-
-  useEffect(()=>{
-    setTimeout(()=>{
-      callObject.setLocalVideo(false)
-    }, 1000)
-  },[callObject])
 
   // Initialise devices (even though we're not yet in a call)
   useEffect(() => {
@@ -159,19 +154,19 @@ export const HairCheck = () => {
               <p>『参加』を押してください。</p>
             </h2>
           </header>
-          {/* <div className="text-left py-6">
+          <div className="text-left mt-6">
             <DeviceSelect />
-          </div> */}
+          </div>
           <div className="tile-container">
             <div className="content">
-              <Button
+              {/* <Button
                 className="device-button"
                 size="medium-square"
                 variant="blur"
                 onClick={() => openModal(DEVICE_MODAL)}
               >
                 <IconSettings />
-              </Button>
+              </Button> */}
 
               {isLoading && (
                 <div className="overlay-message">
@@ -189,12 +184,13 @@ export const HairCheck = () => {
                 </>
               )}
             </div>
-            <div className="mute-buttons">
+            <div className="flex items-center justify-center gap-4 py-2 mb-6">
               {/* DISABLE CAMERA TOGGLE */}
               {/* <MuteButton isMuted={isCamMuted} /> */}
               {/* DISABLE CAMERA TOGGLE - END*/}
 
               <MuteButton mic isMuted={isMicMuted} />
+              <p>マイクの状態 : {isMicMuted ? 'オフ' : 'オン'}</p>
             </div>
             {/* {tileMemo} */}
           </div>
@@ -210,7 +206,7 @@ export const HairCheck = () => {
               </div>
             ) : (
               <>
-                <p className="p-4 w-full rounded-lg bg-white bg-opacity-20 text-left text-white">{userName}</p>
+                <p className="px-4 py-2 leading-8 w-full rounded-lg bg-white opacity-90 text-left text-black">{userName}</p>
                 <Button
                   disabled={joining}
                   onClick={() => joinCall(userName)}
@@ -265,22 +261,6 @@ export const HairCheck = () => {
             justify-content: center;
             z-index: 99;
           }
-
-          .haircheck .mute-buttons {
-            position: relative;
-            bottom: 0px;
-            left: 0px;
-            right: 0px;
-            z-index: 99;
-            padding: var(--spacing-xs);
-            box-sizing: border-box;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-xs);
-          }
-
-          
 
           .haircheck .overlay-message {
             color: var(--reverse);

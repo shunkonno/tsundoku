@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react'
 import Tile from '../Tile'
+import { WaveTile } from '../Tile'
 import { DEFAULT_ASPECT_RATIO } from '../../constants'
 import { useParticipants } from '../../contexts/ParticipantsProvider'
 import { useDeepCompareMemo } from 'use-deep-compare'
@@ -19,88 +20,26 @@ export const VideoGrid = React.memo(
   () => {
     const containerRef = useRef()
     const { participants } = useParticipants()
-    const [dimensions, setDimensions] = useState({
-      width: 1,
-      height: 1
-    })
 
-    // Keep a reference to the width and height of the page, so we can repack
-    useEffect(() => {
-      let frame
-      const handleResize = () => {
-        if (frame) cancelAnimationFrame(frame)
-        frame = requestAnimationFrame(() =>
-          setDimensions({
-            width: containerRef.current?.clientWidth,
-            height: containerRef.current?.clientHeight
-          })
-        )
-      }
-      handleResize()
-      window.addEventListener('resize', handleResize)
-      window.addEventListener('orientationchange', handleResize)
-      return () => {
-        window.removeEventListener('resize', handleResize)
-        window.removeEventListener('orientationchange', handleResize)
-      }
-    }, [])
-
-    // Basic brute-force packing algo
-    const layout = useMemo(() => {
-      const aspectRatio = DEFAULT_ASPECT_RATIO
-      const tileCount = participants.length || 0
-      const w = dimensions.width
-      const h = dimensions.height
-
-      // brute-force search layout where video occupy the largest area of the container
-      let bestLayout = {
-        area: 0,
-        cols: 0,
-        rows: 0,
-        width: 0,
-        height: 0
-      }
-
-      for (let cols = 0; cols <= tileCount; cols += 1) {
-        const rows = Math.ceil(tileCount / cols)
-        const hScale = w / (cols * aspectRatio)
-        const vScale = h / rows
-        let width
-        let height
-        if (hScale <= vScale) {
-          width = Math.floor(w / cols)
-          height = Math.floor(width / aspectRatio)
-        } else {
-          height = Math.floor(h / rows)
-          width = Math.floor(height * aspectRatio)
-        }
-        const area = width * height
-        if (area > bestLayout.area) {
-          bestLayout = {
-            area,
-            width,
-            height,
-            rows,
-            cols
-          }
-        }
-      }
-
-      return bestLayout
-    }, [dimensions, participants])
+    const aspectRatio = DEFAULT_ASPECT_RATIO
+    const tileCount = participants.length || 0
 
     // Memoize our tile list to avoid unnecassary re-renders
     const tiles = useDeepCompareMemo(
       () =>
         participants.map((p) => (
-          <Tile
+          // <Tile
+          //   participant={p}
+          //   key={p.id}
+          //   mirrored
+          // />
+          <WaveTile 
             participant={p}
             key={p.id}
             mirrored
-            style={{ maxWidth: layout.width, maxHeight: layout.height }}
           />
         )),
-      [layout, participants]
+      [participants]
     )
 
     if (!participants.length) {
@@ -108,29 +47,10 @@ export const VideoGrid = React.memo(
     }
 
     return (
-      <div className="video-grid" ref={containerRef}>
-        <div className="tiles">{tiles}</div>
-        <style jsx>{`
-          .video-grid {
-            align-items: center;
-            display: flex;
-            height: 100%;
-            justify-content: center;
-            position: relative;
-            width: 100%;
-          }
-
-          .video-grid .tiles {
-            align-items: center;
-            display: flex;
-            flex-flow: row wrap;
-            max-height: 100%;
-            justify-content: center;
-            margin: auto;
-            overflow: hidden;
-            width: 100%;
-          }
-        `}</style>
+      <div className="main-area flex h-full items-center justify-center relative w-full" ref={containerRef}>
+        <div className="left-sidebar flex-shrink-0 w-72 bg-blue-500 h-full"></div>
+        <div className="tiles flex-1">{tiles}</div>
+        <div className="right-sidebar flex-shrink-0 w-72 bg-blue-500 h-full"></div>
       </div>
     )
   },

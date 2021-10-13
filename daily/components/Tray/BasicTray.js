@@ -52,12 +52,12 @@ export const BasicTray = () => {
       <TrayButton label="Settings" onClick={() => openModal(DEVICE_MODAL)}>
         <IconSettings />
       </TrayButton>
-      <TrayButton label="Network" onClick={() => toggleAside(NETWORK_ASIDE)}>
+      {/* <TrayButton label="Network" onClick={() => toggleAside(NETWORK_ASIDE)}>
         <IconNetwork />
-      </TrayButton>
-      <TrayButton label="People" onClick={() => toggleAside(PEOPLE_ASIDE)}>
+      </TrayButton> */}
+      {/* <TrayButton label="People" onClick={() => toggleAside(PEOPLE_ASIDE)}>
         <IconPeople />
-      </TrayButton>
+      </TrayButton> */}
 
       {customTrayComponent}
 

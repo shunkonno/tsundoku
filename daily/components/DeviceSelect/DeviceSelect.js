@@ -22,7 +22,7 @@ export const DeviceSelect = () => {
 
   return (
     <>
-      <Field label="Select camera:">
+      {/* <Field label="Select camera:">
         <SelectInput
           onChange={(e) => setCamDevice(cams[e.target.value])}
           value={cams.findIndex(
@@ -35,7 +35,7 @@ export const DeviceSelect = () => {
             </option>
           ))}
         </SelectInput>
-      </Field>
+      </Field> */}
 
       <Field label="マイクを選択">
         <SelectInput

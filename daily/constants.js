@@ -11,4 +11,4 @@ export const VIDEO_QUALITY_LOW = 'low';
 export const VIDEO_QUALITY_VERY_LOW = 'very-low';
 export const VIDEO_QUALITY_BANDWIDTH_SAVER = 'bandwidth-saver';
 
-export const DEFAULT_ASPECT_RATIO = 16 / 9;
+export const DEFAULT_ASPECT_RATIO = 1 / 0.90;
