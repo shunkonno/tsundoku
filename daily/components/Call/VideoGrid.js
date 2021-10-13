@@ -5,6 +5,8 @@ import { DEFAULT_ASPECT_RATIO } from '../../constants'
 import { useParticipants } from '../../contexts/ParticipantsProvider'
 import { useDeepCompareMemo } from 'use-deep-compare'
 
+import classNames from '../../../utils/classNames'
+
 /**
  * Basic unpaginated video tile grid, scaled by aspect ratio
  *
@@ -22,7 +24,10 @@ export const VideoGrid = React.memo(
     const { participants } = useParticipants()
 
     const aspectRatio = DEFAULT_ASPECT_RATIO
-    const tileCount = participants.length || 0
+    // const tileCount = participants.length || 0
+    const tileCount = 2
+
+    console.log(tileCount)
 
     // Memoize our tile list to avoid unnecassary re-renders
     const tiles = useDeepCompareMemo(
@@ -33,11 +38,19 @@ export const VideoGrid = React.memo(
           //   key={p.id}
           //   mirrored
           // />
+          <>
           <WaveTile 
             participant={p}
             key={p.id}
             mirrored
           />
+          <WaveTile 
+            participant={p}
+            key={p.id}
+            mirrored
+          />
+          
+          </>
         )),
       [participants]
     )
@@ -48,9 +61,26 @@ export const VideoGrid = React.memo(
 
     return (
       <div className="main-area flex h-full items-center justify-center relative w-full" ref={containerRef}>
-        <div className="left-sidebar flex-shrink-0 w-72 bg-blue-500 h-full"></div>
-        <div className="tiles flex-1">{tiles}</div>
-        <div className="right-sidebar flex-shrink-0 w-72 bg-blue-500 h-full"></div>
+        <div className="left-sidebar hidden md:block flex-shrink-0 md:w-56 xl:w-64 2xl:w-72 bg-blue-500 h-full"></div>
+        <div className={classNames(
+          !(tileCount >= 2) ?
+          ""
+          :
+          "",
+          "tiles flex-1 h-full"
+          )}
+        >
+          <div className={classNames(
+          !(tileCount >= 2) ?
+          "w-1/2 grid-cols-1 mx-auto"
+          :
+          "h-full lg:h-full lg:w-full mx-auto grid-cols-1 lg:grid-cols-2",
+          "grid gap-4 justify-center items-center"
+          )}>
+            {tiles}
+          </div>
+        </div>
+        <div className="right-sidebar hidden md:block flex-shrink-0 md:w-56 xl:w-64 2xl:w-72 bg-blue-500 h-full"></div>
       </div>
     )
   },
