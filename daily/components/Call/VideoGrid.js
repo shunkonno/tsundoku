@@ -74,8 +74,8 @@ export const VideoGrid = React.memo(
     const { participants } = useParticipants()
 
     const aspectRatio = DEFAULT_ASPECT_RATIO
-    // const tileCount = participants.length || 0
-    const tileCount = 2
+    const tileCount = participants.length || 0
+    // const tileCount = 2
 
     
 
@@ -259,7 +259,7 @@ export const VideoGrid = React.memo(
             leaveFrom="translate-x-0"
             leaveTo="translate-x-full"
           >
-            <div className="flex flex-col items-center py-2 px-4 ml-8 w-full h-80 bg-white rounded-tl-lg rounded-bl-lg">
+            <div className="flex flex-col items-center py-2 px-4 ml-4 xl:ml-8 w-full h-64 lg:h-72 2xl:h-80 bg-white rounded-tl-lg rounded-bl-lg">
               <div className="flex-shrink-0 py-2 w-full text-lg font-bold text-gray-500">
                 いま読んでいる本
               </div>
