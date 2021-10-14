@@ -13,6 +13,7 @@ export const App = ({ customComponentForState, session }) => {
 
   const componentForState = useCallUI({
     state,
+    session,
     room: <Room session={session}/>,
     ...customComponentForState
   })

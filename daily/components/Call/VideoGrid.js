@@ -40,11 +40,8 @@ import colors from 'tailwindcss/colors'
 export const VideoGrid = React.memo(
   ({session}) => {
 
-    console.log('session is in videoGrid:',session)
-
     const userInfo = useUserInfo()
     const bookList = useUserBookList(userInfo?.uid)
-    console.log(bookList)
     let isReadingBook
     if(bookList && userInfo){
       isReadingBook = useIsReadingBook(bookList, userInfo.isReading)

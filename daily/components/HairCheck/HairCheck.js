@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
+import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import Button from '../Button'
 import { DEVICE_MODAL } from '../DeviceSelectModal/DeviceSelectModal'
 import { TextInput } from '../Input'
@@ -26,6 +28,15 @@ import { useDeepCompareMemo } from 'use-deep-compare'
 
 import { useUserInfo } from '../../../context/useUserInfo'
 
+//Assets
+import {
+  MicrophoneIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  LogoutIcon,
+  XIcon
+} from '@heroicons/react/outline'
+
 /**
  * Hair check
  * ---
@@ -33,7 +44,9 @@ import { useUserInfo } from '../../../context/useUserInfo'
  * - Toggle mute state of camera and mic
  * - Set user name and join call / request access
  */
-export const HairCheck = () => {
+export const HairCheck = ({session}) => {
+
+  const router = useRouter()
 
   const userInfo = useUserInfo()
 
@@ -49,7 +62,6 @@ export const HairCheck = () => {
 
   useEffect(()=>{
     setUserName(userInfo?.name)
-    console.log(userInfo)
   },[userInfo])
 
   // Initialise devices (even though we're not yet in a call)
@@ -136,9 +148,31 @@ export const HairCheck = () => {
     }
   }, [camError])
 
+  // ============================================================
+  // Button Handler
+  // ============================================================
+
+  const handleBackToDetailOrHome = (e) => {
+    e.preventDefault()
+
+    const currentDateTime = new Date().toISOString()
+
+    if(session.endDateTime > currentDateTime){
+      //現在が終了時間を過ぎていたら
+      router.push(`/session/${session.sessionId}/detail`)
+    }else{
+      router.replace(`/home`)
+    }
+    
+  }
+
+  // ============================================================
+  // Return Component
+  // ============================================================
+
   return (
     <>
-      <main className="haircheck">
+      <main className="haircheck relative flex items-center justify-center w-full h-full ">
         <div className="absolute mt-2 ml-4 top-0 left-0">
         <Image
           src="/img/logos/tsundoku-logo-mark-and-typo-text-wh.svg"
@@ -147,18 +181,33 @@ export const HairCheck = () => {
           height={58}
         />
         </div>
-        <div className="panel text-center text-black border border-gray-100 bg-white bg-opacity-80 rounded-lg px-12 py-8">
-          <header>
-            <h2 className="">
+        <div 
+          className="text-center text-black border border-gray-100 bg-white bg-opacity-80 rounded-lg px-8 py-6"
+          style={{ width: '580px' }}
+        >
+          <header className="relative">
+            <h2>
               <p>準備がよろしければ</p>
               <p>『参加』を押してください。</p>
             </h2>
+            <div className="absolute top-0 left-0">
+              <button 
+                onClick={(e)=>{
+                  handleBackToDetailOrHome(e)
+              }}>
+              <ChevronLeftIcon 
+                className="inline-block mr-1 w-5 h-5 text-gray-900"
+                aria-hidden="true"
+              />
+                <span className="text-sm text-gray-900">戻る</span>
+              </button>
+            </div>
           </header>
           <div className="text-left mt-6">
             <DeviceSelect />
           </div>
-          <div className="tile-container">
-            <div className="content">
+          <div className="rounded-lg relative;">
+            <div className="relative inset-0 flex items-center justify-items-center z-90">
               {/* <Button
                 className="device-button"
                 size="medium-square"
@@ -169,7 +218,7 @@ export const HairCheck = () => {
               </Button> */}
 
               {isLoading && (
-                <div className="overlay-message">
+                <div className="absolute top-1/2 left-1/2 overlay-message text-gray-900 bg-gray-400 rounded-md py-3 px-4">
                   読み込み中…
                 </div>
               )}
@@ -196,95 +245,32 @@ export const HairCheck = () => {
           </div>
           <footer>
             {waiting ? (
-              <div className="waiting">
+              <div className="flex items-center justify-center">
                 <Loader />
                 {denied ? (
-                  <span>Call owner denied request</span>
+                  <span className="ml-4">Call owner denied request</span>
                 ) : (
-                  <span>Waiting for host to grant access</span>
+                  <span className="ml-4">Waiting for host to grant access</span>
                 )}
               </div>
             ) : (
-              <>
-                <p className="px-4 py-2 leading-8 w-full rounded-lg bg-white opacity-90 text-left text-black">{userName}</p>
+              <div className="flex items-center justify-center">
+                  
                 <Button
                   disabled={joining}
                   onClick={() => joinCall(userName)}
                 >
-                  参加
+                  参加する
                 </Button>
-              </>
+              </div>
             )}
           </footer>
         </div>
 
         <style jsx>{`
           .haircheck {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            width: 100%;
             background: url('/assets/pattern-bg.png') center center no-repeat;
             background-size: 100%;
-          }
-
-          .haircheck .panel {
-            width: 580px;
-          }
-
-          .haircheck .tile-container {
-            border-radius: var(--radius-md);
-            -webkit-mask-image: -webkit-radial-gradient(white, black);
-            position: relative;
-          }
-
-          .haircheck footer:before {
-            top: 0px;
-            bottom: auto;
-            border-radius: 0px 0px 6px 6px;
-          }
-
-          .haircheck header h2 {
-            margin: 0px;
-          }
-
-          .haircheck .content {
-            position: relative;
-            top: 0px;
-            left: 0px;
-            right: 0px;
-            bottom: 0px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 99;
-          }
-
-          .haircheck .overlay-message {
-            color: var(--reverse);
-            padding: var(--spacing-xxs) var(--spacing-xs);
-            background: rgba(0, 0, 0, 0.35);
-            border-radius: var(--radius-sm);
-          }
-
-          .haircheck footer {
-            position: relative;
-            border-radius: 0 0 var(--radius-md) var(--radius-md);
-            display: grid;
-            grid-template-columns: 1fr auto;
-            grid-column-gap: var(--spacing-xs);
-          }
-
-          .waiting {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-          }
-
-          .waiting span {
-            margin-left: var(--spacing-xxs);
           }
         `}</style>
       </main>

@@ -17,6 +17,7 @@ import { useRouter } from 'next/router'
 import HairCheck from '../components/HairCheck'
 
 export const useCallUI = ({
+  session,
   state,
   room,
   haircheck,
@@ -63,7 +64,7 @@ export const useCallUI = ({
           </MessageCard>
         )
       case CALL_STATE_LOBBY:
-        return haircheck ? haircheck() : <HairCheck />
+        return haircheck ? haircheck() : <HairCheck session={session} />
       case CALL_STATE_JOINED:
         return room ? (
           room

@@ -20,7 +20,7 @@ export const Header = () => {
         />
 
         <HeaderCapsule>
-          {`現在の参加者:${participantCount}`}
+          {`ルーム内の人数:${participantCount}`}
         </HeaderCapsule>
         {/* {customCapsule && (
           <HeaderCapsule variant={customCapsule.variant}>
