@@ -5,12 +5,12 @@ import { Container } from './Container'
 import { Header } from './Header'
 import { VideoGrid } from './VideoGrid'
 
-export function Room() {
+export function Room({session}) {
   return (
     <Container>
       <Header />
       <VideoContainer>
-        <VideoGrid />
+        <VideoGrid session={session}/>
       </VideoContainer>
     </Container>
   )

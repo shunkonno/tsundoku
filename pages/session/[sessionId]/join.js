@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/router'
 
 // Functions
-import { fetchAllSessions } from '../../../lib/db-admin'
+import { fetchOneSession, fetchAllSessions } from '../../../lib/db-admin'
 
 // Daily
 import { CallProvider } from '../../../daily/contexts/CallProvider'
@@ -28,6 +28,7 @@ import NotConfigured from '../../../daily/components/Prejoin/NotConfigured'
  */
 
 export default function SessionJoin({
+  session,
   domain,
   isConfigured = false,
   forceFetchToken = false,
@@ -37,7 +38,7 @@ export default function SessionJoin({
   asides,
   modals,
   customTrayComponent,
-  customAppComponent
+  customAppComponent,
 }) {
   // ============================================================
   // Initialize
@@ -160,7 +161,7 @@ export default function SessionJoin({
           <TracksProvider>
             <MediaDeviceProvider>
               <WaitingRoomProvider>
-                {customAppComponent || <App />}
+                {customAppComponent || <App session={session}/>}
               </WaitingRoomProvider>
             </MediaDeviceProvider>
           </TracksProvider>
@@ -190,11 +191,11 @@ export async function getStaticProps(context) {
   const defaultProps = getDemoProps()
   console.log('defaultprops', defaultProps)
   // Fetch session info
-  // const session = await fetchOneSession(context.params.sessionId)
+  const session = await fetchOneSession(context.params.sessionId)
 
   return {
     props: {
-      // session,
+      session,
       domain: defaultProps.domain,
       isConfigured: defaultProps.isConfigured,
       subscribeToTracksAutomatically:

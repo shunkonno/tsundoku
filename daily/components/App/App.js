@@ -8,12 +8,12 @@ import Room from '../Call/Room'
 import { Asides } from './Asides'
 import { Modals } from './Modals'
 
-export const App = ({ customComponentForState }) => {
+export const App = ({ customComponentForState, session }) => {
   const { roomExp, state } = useCallState()
 
   const componentForState = useCallUI({
     state,
-    room: <Room />,
+    room: <Room session={session}/>,
     ...customComponentForState
   })
 
