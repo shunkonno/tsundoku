@@ -8,7 +8,6 @@ export default async function tokenHandler(req, res) {
 
   if (req.method === 'POST' && roomName) {
     console.log(`Getting token for room '${roomName}' as owner: ${isOwner}`)
-    console.log(process.env.DAILY_API_KEY)
 
     const options = {
       method: 'POST',

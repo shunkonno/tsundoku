@@ -21,7 +21,7 @@ import { GeneralAlert } from '../components/Alert'
 import { useAlertState } from '../context/AlertProvider'
 
 // Assets
-import { PlusIcon, PlusCircleIcon,ArrowSmUpIcon } from '@heroicons/react/solid'
+import { PlusIcon, PlusCircleIcon, ArrowSmUpIcon } from '@heroicons/react/solid'
 import { BookOpenIcon } from '@heroicons/react/outline'
 import 'intro.js/introjs.css'
 
@@ -38,7 +38,8 @@ export default function Home() {
   // ============================================================
   // Contexts
   // ============================================================
-  const { alertOpen, setAlertOpen, alertAssort, setAlertAssort } = useAlertState()
+  const { alertOpen, setAlertOpen, alertAssort, setAlertAssort } =
+    useAlertState()
 
   // ============================================================
   // Auth
@@ -84,8 +85,8 @@ export default function Home() {
       }
     }
   )
-  console.log(bookList)
-  console.log(userInfo?.isReading)
+
+  // console.log('bookList:', bookList)
 
   // 利用情報
   const { data: stats } = useSWR(
@@ -98,8 +99,6 @@ export default function Home() {
       }
     }
   )
-
-  console.log('stats:', stats?.readTime)
 
   // ============================================================
   // Routing
@@ -229,9 +228,6 @@ export default function Home() {
     }
   }
 
-  console.log(monthlyReadTime())
-  console.log(lastMonthReadTime())
-
   // ============================================================
   // Button Handlers
   // ============================================================
@@ -273,7 +269,9 @@ export default function Home() {
 
     if (!filteredList.length) {
       return (
-        <div className="mt-4 text-center">現在、予約可能なルームはありません。</div>
+        <div className="mt-4 text-center">
+          現在、予約可能なルームはありません。
+        </div>
       )
     }
   }
@@ -380,107 +378,108 @@ export default function Home() {
               {/* 右カラム -- START */}
               <div className="hidden sm:block sm:w-1/3">
                 <section className="px-4 sm:px-6 bg-white rounded-lg border border-gray-500">
-                <div className="grid grid-cols-1 divide-y">
-                  <div className="py-5 sm:py-6">
-                    <dt className="text-base font-normal text-gray-900">
-                      今月の読書時間
-                    </dt>
-                    <dd className="flex md:block lg:flex justify-between items-baseline mt-1">
-                      <div className="flex items-baseline text-2xl font-semibold text-tsundoku-brown-main">
-                        {monthlyReadTime()}
-                        <span className="ml-2 text-lg font-normal text-gray-900">
-                          分 :
-                        </span>
-                        <span className="ml-2 text-sm font-medium text-gray-500">
-                          先月 {lastMonthReadTime()} 分
-                        </span>
-                      </div>
+                  <div className="grid grid-cols-1 divide-y">
+                    <div className="py-5 sm:py-6">
+                      <dt className="text-base font-normal text-gray-900">
+                        今月の読書時間
+                      </dt>
+                      <dd className="flex md:block lg:flex justify-between items-baseline mt-1">
+                        <div className="flex items-baseline text-2xl font-semibold text-tsundoku-brown-main">
+                          {monthlyReadTime()}
+                          <span className="ml-2 text-lg font-normal text-gray-900">
+                            分 :
+                          </span>
+                          <span className="ml-2 text-sm font-medium text-gray-500">
+                            先月 {lastMonthReadTime()} 分
+                          </span>
+                        </div>
 
-                      <div className="inline-flex items-baseline py-0.5 px-2.5 md:mt-2 lg:mt-0 text-sm font-medium text-green-800 bg-green-100 rounded-full">
-                        
-                        <ArrowSmUpIcon className="flex-shrink-0 self-center mr-0.5 -ml-1 w-5 h-5 text-green-500" />
-                        <span className="sr-only">
-                          Increased by
-                        </span>
-                        {Math.round(monthlyReadTime() / lastMonthReadTime() * 100 - 100)}%
-                      </div>
-                    </dd>
-                  </div>
-                  <div  className="py-5 sm:py-6">
-                    <dt className="text-base font-normal text-gray-900">
-                      今月の読書ページ数(推定)
-                    </dt>
-                    <dd className="flex md:block lg:flex justify-between items-baseline mt-1">
-                      <div className="flex items-baseline text-2xl font-semibold text-tsundoku-brown-main">
-                        ---
-                        <span className="ml-2 text-sm font-medium text-gray-500">
-                          先月 ---
-                        </span>
-                      </div>
+                        <div className="inline-flex items-baseline py-0.5 px-2.5 md:mt-2 lg:mt-0 text-sm font-medium text-green-800 bg-green-100 rounded-full">
+                          <ArrowSmUpIcon className="flex-shrink-0 self-center mr-0.5 -ml-1 w-5 h-5 text-green-500" />
+                          <span className="sr-only">Increased by</span>
+                          {Math.round(
+                            (monthlyReadTime() / lastMonthReadTime()) * 100 -
+                              100
+                          )}
+                          %
+                        </div>
+                      </dd>
+                    </div>
+                    <div className="py-5 sm:py-6">
+                      <dt className="text-base font-normal text-gray-900">
+                        今月の読書ページ数(推定)
+                      </dt>
+                      <dd className="flex md:block lg:flex justify-between items-baseline mt-1">
+                        <div className="flex items-baseline text-2xl font-semibold text-tsundoku-brown-main">
+                          ---
+                          <span className="ml-2 text-sm font-medium text-gray-500">
+                            先月 ---
+                          </span>
+                        </div>
 
-                      <div className="inline-flex items-baseline py-0.5 px-2.5 md:mt-2 lg:mt-0 text-sm font-medium text-green-800 bg-green-100 rounded-full">
-                        
-                        <ArrowSmUpIcon className="flex-shrink-0 self-center mr-0.5 -ml-1 w-5 h-5 text-green-500" />
-                        <span className="sr-only">
-                          Increased by
-                        </span>
-                        999%
-                      </div>
-                    </dd>
+                        <div className="inline-flex items-baseline py-0.5 px-2.5 md:mt-2 lg:mt-0 text-sm font-medium text-green-800 bg-green-100 rounded-full">
+                          <ArrowSmUpIcon className="flex-shrink-0 self-center mr-0.5 -ml-1 w-5 h-5 text-green-500" />
+                          <span className="sr-only">Increased by</span>
+                          999%
+                        </div>
+                      </dd>
+                    </div>
                   </div>
-                </div>
                 </section>
                 <section className="py-3 px-4 my-8 bg-white rounded-lg border border-gray-500">
-                    <h3 className="mb-4 subtitle-section">いま読んでいる本</h3>
+                  <h3 className="mb-4 subtitle-section">いま読んでいる本</h3>
                   <div className="">
-                  {userInfo?.isReading && bookList ?
-                  <>
-                    {bookList?.filter(({bookInfo})=>{
-                      return bookInfo.bid == userInfo.isReading
-                    })
-                    .map(({ bookInfo }) => {
-                      console.log(bookInfo)
-                      return (
-                        <div className="" key={bookInfo.bid}>
-                          <div className="relative mx-auto w-24 h-32">
-                          <Image
-                            className="object-contain filter drop-shadow-md"
-                            layout={'fill'}
-                            src={
-                              bookInfo.image
-                                ? bookInfo.image
-                                : '/img/placeholder/noimage_480x640.jpg'
-                            }
-                            alt="book-cover"
-                          />
-                          
-                          </div>
-                          <dl className="mt-4">
-                            <dt className="text-sm font-bold">タイトル</dt>
-                            <dd>{bookInfo.title}</dd>
-                            <dt className="mt-2 text-sm font-bold">著者</dt>
-                          {bookInfo.authors.map((author) => {
-                            return <dd key="author">{author}</dd>
+                    {userInfo?.isReading && bookList ? (
+                      <>
+                        {bookList
+                          ?.filter(({ bookInfo }) => {
+                            return bookInfo.bid == userInfo.isReading
                           })
-                          }
-                          
-                          </dl>
-                        </div>
-                      )
-                    })}
-                    </>
-                    :
-                    <div className="text-center">
-                      <p className="text-sm sm:text-base text-gray-900">
+                          .map(({ bookInfo }) => {
+                            return (
+                              <div className="" key={bookInfo.bid}>
+                                <div className="relative mx-auto w-24 h-32">
+                                  <Image
+                                    className="object-contain filter drop-shadow-md"
+                                    layout={'fill'}
+                                    src={
+                                      bookInfo.image
+                                        ? bookInfo.image
+                                        : '/img/placeholder/noimage_480x640.jpg'
+                                    }
+                                    alt="book-cover"
+                                  />
+                                </div>
+                                <dl className="mt-4">
+                                  <dt className="text-sm font-bold">
+                                    タイトル
+                                  </dt>
+                                  <dd>{bookInfo.title}</dd>
+                                  <dt className="mt-2 text-sm font-bold">
+                                    著者
+                                  </dt>
+                                  {bookInfo.authors.map((author) => {
+                                    return <dd key="author">{author}</dd>
+                                  })}
+                                </dl>
+                              </div>
+                            )
+                          })}
+                      </>
+                    ) : (
+                      <div className="text-center">
+                        <p className="text-sm sm:text-base text-gray-900">
                           『いま読んでいる本』は選択されていません。
                         </p>
                         <p className="mt-2 text-xs sm:text-sm text-gray-500">
-                          <Link href="/booklist"><a className="text-blue-500">ブックリスト</a></Link>から選択できます。
+                          <Link href="/booklist">
+                            <a className="text-blue-500">ブックリスト</a>
+                          </Link>
+                          から選択できます。
                         </p>
-                    </div>
-                    }
+                      </div>
+                    )}
                   </div>
-                  
                 </section>
                 {/* 新規機能:みんなのリストが実装されたら解放*/}
                 {/* <section className="mb-8">

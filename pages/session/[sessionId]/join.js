@@ -38,7 +38,7 @@ export default function SessionJoin({
   asides,
   modals,
   customTrayComponent,
-  customAppComponent,
+  customAppComponent
 }) {
   // ============================================================
   // Initialize
@@ -161,7 +161,7 @@ export default function SessionJoin({
           <TracksProvider>
             <MediaDeviceProvider>
               <WaitingRoomProvider>
-                {customAppComponent || <App session={session}/>}
+                {customAppComponent || <App session={session} />}
               </WaitingRoomProvider>
             </MediaDeviceProvider>
           </TracksProvider>
@@ -172,7 +172,7 @@ export default function SessionJoin({
 }
 
 SessionJoin.propTypes = {
-  isConfigured: PropTypes.bool.isRequired,
+  isConfigured: PropTypes.bool,
   domain: PropTypes.string,
   asides: PropTypes.arrayOf(PropTypes.func),
   modals: PropTypes.arrayOf(PropTypes.func),
@@ -189,7 +189,6 @@ SessionJoin.propTypes = {
 // ============================================================
 export async function getStaticProps(context) {
   const defaultProps = getDemoProps()
-  console.log('defaultprops', defaultProps)
   // Fetch session info
   const session = await fetchOneSession(context.params.sessionId)
 

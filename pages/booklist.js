@@ -56,7 +56,8 @@ export default function BookList() {
   // ============================================================
   // Contexts
   // ============================================================
-  const { alertOpen, setAlertOpen, alertAssort, setAlertAssort } = useAlertState()
+  const { alertOpen, setAlertOpen, alertAssort, setAlertAssort } =
+    useAlertState()
 
   // ============================================================
   // Initial State
@@ -103,13 +104,9 @@ export default function BookList() {
     }
   )
 
-  console.log(bookList)
-
   useEffect(() => {
     setBookCardSelected(Array(bookList?.length).fill(false))
   }, [bookList])
-
-  console.log(bookCardsSelected)
 
   // ============================================================
   // Routing
@@ -370,12 +367,10 @@ export default function BookList() {
     return (
       <div className="group">
         <div className="flex items-center space-x-1 text-xs text-left text-gray-500 group-hover:text-blue-400 rounded-lg">
-
           {pageCount == 0 && (
             <span className="flex relative w-2 h-2">
               <span className="absolute w-full h-full bg-yellow-300 rounded-full opacity-75 animate-ping"></span>
               <span className="w-2 h-2 bg-yellow-300 rounded-full"></span>
-
             </span>
           )}
           <span>読了度</span>
@@ -676,7 +671,10 @@ export default function BookList() {
                                                 active ? 'bg-gray-100' : ''
                                               } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
                                               onClick={(e) => {
-                                                selectAutoProgress(e, bookInfo.bid)
+                                                selectAutoProgress(
+                                                  e,
+                                                  bookInfo.bid
+                                                )
                                               }}
                                             >
                                               <ChartSquareBarIcon
@@ -747,56 +745,58 @@ export default function BookList() {
                                 >
                                   <Menu.Items className="absolute right-0 z-20 w-56 bg-white rounded-md divide-y divide-gray-100 ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none">
                                     <div className="py-1 px-1">
-                                    {autoProgress &&
-                                      bookInfo.pageCount && (
-                                      <Menu.Item>
-                                        <div
-                                          className="flex flex-col items-center py-2 px-2 w-full text-sm text-right text-gray-900 rounded-md"
-                                        >
-                                          <p className="text-sm text-center text-gray-700">この本は読了度が</p>
-                                          <p className="text-sm text-center text-gray-700">自動で管理されています。</p>
-                                          <button
-                                            className="py-2 px-3 mt-3 rounded-lg border border-gray-400"
-                                            onClick={(e) => {
-                                            selectManualProgress(
-                                              e,
-                                              bookInfo.bid,
-                                              0
-                                            )
-                                          }}
-                                          >
-                                            手動で管理する
-                                          </button>
-                                        </div>
-                                      </Menu.Item>
-                                    )}
-                                    {autoProgress &&
-                                      !bookInfo.pageCount && (
-                                      <Menu.Item>
-                                        <div
-                                          className="flex flex-col items-center py-2 px-2 w-full text-sm text-right text-gray-900 rounded-md"
-                                        >
-                                          <div className="flex">
-                                            <ExclamationIcon className="mr-0.5 w-6 h-6 text-yellow-500"/>
-                                            <div>
-                                              <p className="text-sm leading-6 text-left text-gray-700">この本は読了度を自動で</p>
-                                              <p className="text-sm text-left text-gray-700">計測できません。</p>
-                                            </div>
-                                          </div>
-                                          <button
-                                                className="py-2 px-3 mt-3 rounded-lg border border-gray-400"
-                                                onClick={(e) => {
+                                      {autoProgress && bookInfo.pageCount && (
+                                        <Menu.Item>
+                                          <div className="flex flex-col items-center py-2 px-2 w-full text-sm text-right text-gray-900 rounded-md">
+                                            <p className="text-sm text-center text-gray-700">
+                                              この本は読了度が
+                                            </p>
+                                            <p className="text-sm text-center text-gray-700">
+                                              自動で管理されています。
+                                            </p>
+                                            <button
+                                              className="py-2 px-3 mt-3 rounded-lg border border-gray-400"
+                                              onClick={(e) => {
                                                 selectManualProgress(
                                                   e,
                                                   bookInfo.bid,
                                                   0
                                                 )
                                               }}
-                                              >
-                                                手動で管理する
-                                              </button>
-                                        </div>
-                                      </Menu.Item>
+                                            >
+                                              手動で管理する
+                                            </button>
+                                          </div>
+                                        </Menu.Item>
+                                      )}
+                                      {autoProgress && !bookInfo.pageCount && (
+                                        <Menu.Item>
+                                          <div className="flex flex-col items-center py-2 px-2 w-full text-sm text-right text-gray-900 rounded-md">
+                                            <div className="flex">
+                                              <ExclamationIcon className="mr-0.5 w-6 h-6 text-yellow-500" />
+                                              <div>
+                                                <p className="text-sm leading-6 text-left text-gray-700">
+                                                  この本は読了度を自動で
+                                                </p>
+                                                <p className="text-sm text-left text-gray-700">
+                                                  計測できません。
+                                                </p>
+                                              </div>
+                                            </div>
+                                            <button
+                                              className="py-2 px-3 mt-3 rounded-lg border border-gray-400"
+                                              onClick={(e) => {
+                                                selectManualProgress(
+                                                  e,
+                                                  bookInfo.bid,
+                                                  0
+                                                )
+                                              }}
+                                            >
+                                              手動で管理する
+                                            </button>
+                                          </div>
+                                        </Menu.Item>
                                       )}
                                       {!autoProgress && (
                                         <>
