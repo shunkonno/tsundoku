@@ -347,7 +347,7 @@ export default function NewSession() {
   }
 
   return (
-    <div>
+    <div className="h-screen bg-gray-50 flex flex-col">
       <Head>
         <title>Tsundoku | ルーム新規作成</title>
         <meta
@@ -359,7 +359,7 @@ export default function NewSession() {
 
       <AppHeader />
 
-      <div className="overflow-hidden relative pb-16 bg-gray-50">
+      <div className="relative pb-16 bg-gray-50 flex-1">
         <div className="sm:block sm:w-full sm:h-full" aria-hidden="true">
           <main className="relative sm:py-4 px-4 mx-auto max-w-2xl">
             <div className="pb-2 mb-4">
