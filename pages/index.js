@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router'
+import router, { useRouter } from 'next/router'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -13,6 +13,7 @@ import { BookmarkIcon } from '@heroicons/react/outline'
 // Funtions
 import { useAuth } from '../lib/auth'
 import uselocalesFilter from '../utils/translate'
+import { isBuffer } from 'lodash'
 
 export default function Home() {
   // ============================================================
@@ -27,6 +28,11 @@ export default function Home() {
 
   const { locale } = useRouter()
   const t = uselocalesFilter('LP', locale)
+
+  //暫定的に"https://tsundoku.live/"にアクセスしたら、"https://tsundoku.live/ja/"にアクセスするようにする
+  if(locale == 'en'){
+    router.replace('/ja')
+  }
 
   // ============================================================
   // Return Page
