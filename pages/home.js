@@ -228,6 +228,21 @@ export default function Home() {
     }
   }
 
+  const calculateRateOfReadTime = (monthlyReadTime, lastMonthReadTime) => {
+    let result
+
+    if(lastMonthReadTime != 0){
+      result = Math.round(
+        (monthlyReadTime / lastMonthReadTime) * 100 -
+          100
+      )
+    }else{
+      result = 0
+    }
+
+    return result
+  }
+
   // ============================================================
   // Button Handlers
   // ============================================================
@@ -273,6 +288,23 @@ export default function Home() {
           現在、予約可能なルームはありません。
         </div>
       )
+    }
+  }
+
+  const renderIncreasedRate = () => {
+    let increasedRate = calculateRateOfReadTime(monthlyReadTime(), lastMonthReadTime())
+
+    if(increasedRate > 0){
+      return (
+        <div className="inline-flex items-baseline py-0.5 px-2.5 md:mt-2 lg:mt-0 text-sm font-medium text-green-800 bg-green-100 rounded-full">
+          <ArrowSmUpIcon className="flex-shrink-0 self-center mr-0.5 -ml-1 w-5 h-5 text-green-500" />
+          <span className="sr-only">Increased by</span>
+          {calculateRateOfReadTime(monthlyReadTime(), lastMonthReadTime())}
+          %
+        </div>
+      )
+    }else{
+      return
     }
   }
 
@@ -380,7 +412,7 @@ export default function Home() {
                 <section className="px-4 sm:px-6 bg-white rounded-lg border border-gray-500">
                   <div className="grid grid-cols-1 divide-y">
                     <div className="py-5 sm:py-6">
-                      <dt className="text-base font-normal text-gray-900">
+                      <dt className="subtitle-section">
                         今月の読書時間
                       </dt>
                       <dd className="flex md:block lg:flex justify-between items-baseline mt-1">
@@ -394,18 +426,10 @@ export default function Home() {
                           </span>
                         </div>
 
-                        <div className="inline-flex items-baseline py-0.5 px-2.5 md:mt-2 lg:mt-0 text-sm font-medium text-green-800 bg-green-100 rounded-full">
-                          <ArrowSmUpIcon className="flex-shrink-0 self-center mr-0.5 -ml-1 w-5 h-5 text-green-500" />
-                          <span className="sr-only">Increased by</span>
-                          {Math.round(
-                            (monthlyReadTime() / lastMonthReadTime()) * 100 -
-                              100
-                          )}
-                          %
-                        </div>
+                        {renderIncreasedRate()}
                       </dd>
                     </div>
-                    <div className="py-5 sm:py-6">
+                    {/* <div className="py-5 sm:py-6">
                       <dt className="text-base font-normal text-gray-900">
                         今月の読書ページ数(推定)
                       </dt>
@@ -423,7 +447,7 @@ export default function Home() {
                           999%
                         </div>
                       </dd>
-                    </div>
+                    </div> */}
                   </div>
                 </section>
                 <section className="py-3 px-4 my-8 bg-white rounded-lg border border-gray-500">
