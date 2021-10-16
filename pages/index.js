@@ -337,7 +337,7 @@ export default function Home() {
       {/* CTA (フッター) */}
       <div className="md:flex md:justify-between md:items-center py-8 md:py-10 px-4 sm:px-6 md:px-8 sm:my-10 mx-auto max-w-7xl">
         <h2 className="md:text-4xl font-bold tracking-tight">
-          <p className="block text-3xl sm:text-4xl tracking-wider leading-normal text-gray-900">
+          <p className="block text-2xl sm:text-4xl tracking-wider leading-normal text-gray-900">
             もっと充実した読書時間を
           </p>
         </h2>
