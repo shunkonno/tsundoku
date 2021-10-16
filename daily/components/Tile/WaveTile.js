@@ -32,7 +32,7 @@ export const WaveTile = memo(
 
     return(
       <Transition
-        as={Fragment}
+        
         show={isApper}
         enter="transition ease-out duration-300"
         enterFrom="transform opacity-0 scale-95"

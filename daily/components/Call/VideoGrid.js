@@ -106,7 +106,6 @@ export const VideoGrid = React.memo(
         <div id="left-sidebar" className=" hidden md:flex md:items-center flex-shrink-0 md:w-56 xl:w-64 2xl:w-72 h-full">
        
             <Transition
-              as={Fragment}
               show={!leftSlideOpen}
               enter="transition transform ease-in-out duration-300"
               enterFrom="-translate-x-full"
@@ -154,7 +153,7 @@ export const VideoGrid = React.memo(
               </div>
             </Transition>
             <Transition
-              as={Fragment}
+              
               show={leftSlideOpen}
               enter="transition transform ease-in-out duration-300"
               enterFrom="-translate-x-full"
@@ -247,7 +246,7 @@ export const VideoGrid = React.memo(
         </div>
         <div className="right-sidebar items-center hidden md:flex flex-shrink-0 md:w-56 xl:w-64 2xl:w-72 h-full">
           <Transition
-            as={Fragment}
+            
             show={!rightSlideOpen && tileCount >=2 }
             enter="transition transform ease-in-out duration-300"
             enterFrom="translate-x-full"
@@ -295,7 +294,7 @@ export const VideoGrid = React.memo(
             </div>
           </Transition>
           <Transition
-            as={Fragment}
+            
             show={rightSlideOpen}
             enter="transition transform ease-in-out duration-300"
             enterFrom="translate-x-full"
