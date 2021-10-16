@@ -255,7 +255,7 @@ export default function Home() {
         <div className="py-12 sm:py-24">
           <div className="px-4 sm:px-6 lg:px-8 mx-auto max-w-xl lg:max-w-7xl">
             <h2 className="sr-only">利用の流れ</h2>
-            <h2 className="pb-12 text-2xl sm:text-4xl font-bold text-center text-gray-900">
+            <h2 className="pb-12 text-2xl sm:text-4xl font-bold text-left sm:text-center text-gray-900">
               Tsundoku を始める
             </h2>
             <dl className="lg:grid lg:grid-cols-3 lg:gap-8 space-y-10 lg:space-y-0">
