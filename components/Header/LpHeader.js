@@ -186,36 +186,22 @@ export default function LpHeader() {
               <>
                 <div className="px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
                   <nav
-                    className="flex relative justify-between items-center w-full"
+                    className="flex relative justify-between items-center w-full h-8 sm:h-10"
                     aria-label="Global"
                   >
-                    <div className="flex items-center">
-                      <div className="flex justify-between items-center md:w-auto">
-                        <Link href="/">
-                          <a>
+                    <div className="flex items-center flex-shrink-0 h-full">
+                        <Link href="/home">
+                          <a className="h-full w-28">
                             <span className="sr-only">Tsundoku</span>
-                            <picture>
-                              <source
-                                className="w-auto h-4"
-                                srcSet="/img/logos/tsundoku-logo-mark-and-typo.svg"
-                                media="(max-width: 639px)"
-                              />
-                              <source
-                                className="w-auto h-8 sm:h-10"
-                                srcSet="/img/logos/tsundoku-logo-mark-and-typo.svg"
-                                media="(min-width: 640px)"
-                              />
+                            <span className="block relative h-full">
                               <Image
-                                className="w-auto h-8 sm:h-10"
-                                src="/img/logos/tsundoku-logo-mark-and-typo.svg"
+                                src={'/img/logos/tsundoku-logo-mark-and-typo.svg'}
                                 alt="tsundoku-logo-mark-and-typo"
-                                width={120}
-                                height={32}
+                                layout={'fill'}
                               />
-                            </picture>
+                            </span>
                           </a>
                         </Link>
-                      </div>
                     </div>
                     <div>
                       {/* <div className="-mr-2 flex items-center md:hidden">
