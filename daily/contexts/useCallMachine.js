@@ -189,7 +189,6 @@ export const useCallMachine = ({
       videoSource: false,
       dailyConfig: {
         experimentalChromeVideoMuteLightOff: true
-        // useDevicePreferenceCookies: true
       }
     })
 
