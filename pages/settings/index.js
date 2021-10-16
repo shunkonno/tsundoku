@@ -221,7 +221,7 @@ export default function UserSettings() {
                   </div>
                 </div>
 
-                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5 sm:border-t sm:border-gray-200">
+                {/* <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5 sm:border-t sm:border-gray-200">
                   <label htmlFor="about" className="block sm:pt-2 sm:mt-px text-sm font-medium text-gray-700">
                     自己紹介
                   </label>
@@ -229,7 +229,7 @@ export default function UserSettings() {
                     <textarea id="about" name="about" rows="3" className="block w-full max-w-lg sm:text-sm rounded-md border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm"></textarea>
                     <p className="mt-2 text-sm text-gray-500">好きな本やジャンルについて紹介してみましょう。</p>
                   </div>
-                </div>
+                </div> */}
 
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:pt-5 sm:border-t sm:border-gray-200">
                   <label htmlFor="photo" className="block text-sm font-medium text-gray-700">
