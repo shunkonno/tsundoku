@@ -33,7 +33,7 @@ export default function Home() {
   // ============================================================
 
   return (
-    <div>
+    <div className="h-full">
       <Head>
         <title>Tsundoku</title>
         <meta
@@ -85,11 +85,11 @@ export default function Home() {
       </div>
 
       {/* 音声でつながり、読書に集中 */}
-      <div className="bg-white">
-        <div className="py-12 sm:py-24 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
-          <div className="md:flex md:justify-between">
+      <div className="bg-white h-full">
+        <div className="py-12 sm:py-24 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl h-full">
+          <div className="md:flex md:justify-between h-full">
             {/* 説明文 */}
-            <div className="md:max-w-lg">
+            <div className="md:max-w-lg h-full">
               <div className="mb-2">
                 <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
                   音声でつながり、読書に集中
@@ -135,13 +135,13 @@ export default function Home() {
             </div>
             {/* 説明文 - END */}
             {/* 画像 */}
-            <div className="hidden md:block md:max-w-sm">
+            <div className="hidden md:block relative w-2/5 h-96 rounded-2xl overflow-hidden">
               <Image
-                src="/img/video-matching.png"
-                width={400}
-                height={400}
+                src="/img/blue-flow.jpg"
+                layout={'fill'}
                 className=""
                 alt="video matching"
+                objectFit={'cover'}
               />
             </div>
             {/* 画像 - END */}
@@ -150,11 +150,11 @@ export default function Home() {
       </div>
 
       {/* 「ちょうどいい」つながり */}
-      <div className="bg-white">
+      {/* <div className="bg-white">
         <div className="py-12 sm:py-24 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
-          <div className="md:flex md:justify-between">
-            {/* 画像 */}
-            <div className="md:py-0 pb-12 sm:max-w-sm">
+          <div className="md:flex md:justify-between"> */}
+      {/* 画像 */}
+      {/* <div className="md:py-0 pb-12 sm:max-w-sm">
               <Image
                 src="/img/video-matching.png"
                 width={400}
@@ -162,10 +162,10 @@ export default function Home() {
                 className=""
                 alt="video matching"
               />
-            </div>
-            {/* 画像 - END */}
-            {/* 説明文 */}
-            <div className="md:max-w-lg">
+            </div> */}
+      {/* 画像 - END */}
+      {/* 説明文 */}
+      {/* <div className="md:max-w-lg">
               <div className="mb-2">
                 <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
                   ｢ちょうどいい｣ つながり
@@ -184,18 +184,18 @@ export default function Home() {
                   </p>
                 </div>
               </div>
-            </div>
-            {/* 説明文 - END */}
-          </div>
+            </div> */}
+      {/* 説明文 - END */}
+      {/* </div>
         </div>
-      </div>
+      </div> */}
 
       {/* 読書管理も */}
-      <div className="bg-white">
+      {/* <div className="bg-white">
         <div className="py-12 sm:py-24 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
-          <div className="md:flex md:justify-between">
-            {/* 説明文 */}
-            <div className="md:max-w-lg">
+          <div className="md:flex md:justify-between"> */}
+      {/* 説明文 */}
+      {/* <div className="md:max-w-lg">
               <div className="mb-2">
                 <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
                   読書管理も
@@ -233,10 +233,10 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-            </div>
-            {/* 説明文 - END */}
-            {/* 画像 */}
-            <div className="hidden md:block md:max-w-sm">
+            </div> */}
+      {/* 説明文 - END */}
+      {/* 画像 */}
+      {/* <div className="hidden md:block md:max-w-sm">
               <Image
                 src="/img/video-matching.png"
                 width={400}
@@ -246,12 +246,12 @@ export default function Home() {
               />
             </div>
             {/* 画像 - END */}
-          </div>
+      {/* </div>
         </div>
-      </div>
+      </div> */}
 
       {/* 利用の流れ */}
-      <div className=" bg-orange-50">
+      <div className=" border-t border-b border-gray-200">
         <div className="py-12 sm:py-24">
           <div className="px-4 sm:px-6 lg:px-8 mx-auto max-w-xl lg:max-w-7xl">
             <h2 className="sr-only">利用の流れ</h2>
