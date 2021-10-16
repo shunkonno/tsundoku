@@ -269,7 +269,7 @@ export default function Home() {
         <div className="py-16 sm:py-24">
           <div className="px-4 sm:px-6 lg:px-8 mx-auto max-w-xl lg:max-w-7xl">
             <h2 className="sr-only">利用の流れ</h2>
-            <h2 className="pb-12 text-3xl sm:text-4xl font-bold text-center text-gray-900">
+            <h2 className="pb-12 text-2xl sm:text-4xl font-bold text-left sm:text-center text-gray-900">
               Tsundoku を始める
             </h2>
             <dl className="lg:grid lg:grid-cols-3 lg:gap-8 space-y-10 lg:space-y-0">
@@ -375,7 +375,7 @@ export default function Home() {
       {/* CTA (フッター) */}
       <div className="md:flex md:justify-between md:items-center py-20 md:py-10 px-4 sm:px-6 md:px-8 sm:my-10 mx-auto max-w-7xl">
         <h2 className="md:text-4xl font-bold tracking-tight">
-          <p className="block text-3xl sm:text-4xl tracking-wider leading-normal text-gray-900">
+          <p className="block text-2xl sm:text-4xl tracking-wider leading-normal text-gray-900">
             もっと充実した読書時間を
           </p>
         </h2>
