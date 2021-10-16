@@ -231,12 +231,9 @@ export default function Home() {
   const calculateRateOfReadTime = (monthlyReadTime, lastMonthReadTime) => {
     let result
 
-    if(lastMonthReadTime != 0){
-      result = Math.round(
-        (monthlyReadTime / lastMonthReadTime) * 100 -
-          100
-      )
-    }else{
+    if (lastMonthReadTime != 0) {
+      result = Math.round((monthlyReadTime / lastMonthReadTime) * 100 - 100)
+    } else {
       result = 0
     }
 
@@ -292,18 +289,20 @@ export default function Home() {
   }
 
   const renderIncreasedRate = () => {
-    let increasedRate = calculateRateOfReadTime(monthlyReadTime(), lastMonthReadTime())
+    let increasedRate = calculateRateOfReadTime(
+      monthlyReadTime(),
+      lastMonthReadTime()
+    )
 
-    if(increasedRate > 0){
+    if (increasedRate > 0) {
       return (
         <div className="inline-flex items-baseline py-0.5 px-2.5 md:mt-2 lg:mt-0 text-sm font-medium text-green-800 bg-green-100 rounded-full">
           <ArrowSmUpIcon className="flex-shrink-0 self-center mr-0.5 -ml-1 w-5 h-5 text-green-500" />
           <span className="sr-only">Increased by</span>
-          {calculateRateOfReadTime(monthlyReadTime(), lastMonthReadTime())}
-          %
+          {calculateRateOfReadTime(monthlyReadTime(), lastMonthReadTime())}%
         </div>
       )
-    }else{
+    } else {
       return
     }
   }
@@ -409,17 +408,15 @@ export default function Home() {
 
               {/* 右カラム -- START */}
               <div className="hidden sm:block sm:w-1/3">
-                <section className="px-4 sm:px-6 bg-white rounded-lg border border-gray-500">
+                <section className="px-4 sm:px-6 bg-gray-100 rounded-md">
                   <div className="grid grid-cols-1 divide-y">
                     <div className="py-5 sm:py-6">
-                      <dt className="subtitle-section">
-                        今月の読書時間
-                      </dt>
+                      <dt className="subtitle-section">今月の読書時間</dt>
                       <dd className="flex md:block lg:flex justify-between items-baseline mt-1">
                         <div className="flex items-baseline text-2xl font-semibold text-tsundoku-brown-main">
                           {monthlyReadTime()}
                           <span className="ml-2 text-lg font-normal text-gray-900">
-                            分 :
+                            分&nbsp;
                           </span>
                           <span className="ml-2 text-sm font-medium text-gray-500">
                             先月 {lastMonthReadTime()} 分
@@ -450,7 +447,7 @@ export default function Home() {
                     </div> */}
                   </div>
                 </section>
-                <section className="py-3 px-4 my-8 bg-white rounded-lg border border-gray-500">
+                <section className="py-5 sm:py-6 px-4 sm:px-6 my-8 bg-gray-100 rounded-md">
                   <h3 className="mb-4 subtitle-section">いま読んでいる本</h3>
                   <div className="">
                     {userInfo?.isReading && bookList ? (
