@@ -1,14 +1,19 @@
 // ============================================================
 // Import
 // ============================================================
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-import useSWR from 'swr'
+import Image from 'next/image'
+import useSWR, { useSWRConfig } from 'swr'
 
 // Components
 import { AppHeader } from '../../components/Header'
 import { Footer } from '../../components/Footer'
+import { GeneralAlert } from '../../components/Alert'
+
+//Context
+import { useAlertState } from '../../context/AlertProvider'
 
 // Assets
 import { Transition, RadioGroup } from '@headlessui/react'
@@ -19,6 +24,7 @@ import { useAuth } from '../../lib/auth'
 import uselocalesFilter from '../../utils/translate'
 import { updateUser } from '../../lib/db'
 import fetcher from '../../utils/fetcher'
+import { addAvatar } from '../../lib/storage'
 
 // ============================================================
 // Settings
@@ -48,9 +54,13 @@ export default function UserSettings() {
   const [genderOfMatchSelected, setGenderOfMatchSelected] = useState(
     genderOfMatchSettings[0]
   )
+  const [avatarFile, setAvatarFile] = useState(null)
+  const [avatarPreviewUrl, setAvatarPreviewUrl] = useState("")
 
-  const [alertOpen, setAlertOpen] = useState(false)
-  const [alertAssort, setAlertAssort] = useState('') // update
+  // ============================================================
+  // Contexts
+  // ============================================================
+  const { alertOpen, setAlertOpen, alertAssort, setAlertAssort } = useAlertState()
 
   // ============================================================
   // Auth
@@ -61,7 +71,11 @@ export default function UserSettings() {
   // ============================================================
   // Fetch Data
   // ============================================================
-  // Fetch logged user info on client side
+
+  //mutateを定義
+  const { mutate } = useSWRConfig()
+
+  // ユーザー情報
   const { data: userInfo } = useSWR(
     user ? ['/api/user', user.token] : null,
     fetcher,
@@ -81,12 +95,12 @@ export default function UserSettings() {
 
   useEffect(() => {
     if (user === false) {
-      // If the access isn't authenticated, redirect to index page
+      // 認証されていないユーザーは、index へリダイレクト
       router.push('/')
     } else if (userInfo) {
+      // 認証されているなら、ユーザー情報を state に反映
       userInfo.name ? setUserName(userInfo.name) : setUserName('')
-
-      setGenderSelected(userInfo?.gender)
+      setGenderSelected(userInfo.gender)
     }
   }, [router, user, userInfo])
 
@@ -94,94 +108,58 @@ export default function UserSettings() {
   const t = uselocalesFilter('userSettings', router.locale)
 
   // ============================================================
-  // Handle Alert
+  // Handle Avatar Image
   // ============================================================
 
-  // Function
-  const alertControl = async (alertAssort) => {
-    await setAlertOpen(true)
-    await setAlertAssort(alertAssort)
-    setTimeout(async () => {
-      await setAlertOpen(false)
-    }, 5000)
-  }
+  //avatarのinput fileがchangeしたときに、即座にプレビューを表示する(DBにアップロードする前)
+  const handleAvatarFileChange = (e) => {
+    setAvatarFile(e.target.files[0])
 
-  //alertControl by parameter
-  useEffect(() => {
-    if (router.query.successUpdateUserSettings == 'true') {
-      alertControl('update')
+    let reader = new FileReader()
+
+    reader.onloadend = () => {
+      setAvatarPreviewUrl(reader.result);
+      console.log('preview', avatarPreviewUrl)
     }
-  }, [router.query.successUpdateUserSettings])
+    reader.readAsDataURL(e.target.files[0])
+  }
 
   // ============================================================
   // Handle Form Submit
   // ============================================================
+
+  // 設定更新ボタン
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    await updateUser(user.uid, {
-      name: userName,
-      gender: genderSelected
-    })
+    // TODO: 項目が選択されていない場合はエラーを返す
+    // 性別を選択せずに保存しようとするとエラーになったため
 
-    await router.push({
-      pathname: '/empty'
-    })
-    await router.push({
-      pathname: '/settings',
-      query: { successUpdateUserSettings: true }
+    if (avatarFile) {
+      // アバター画像が選択された場合は、アップロードする
+      const avatarUrl = await addAvatar(user?.uid, avatarFile)
+
+      await updateUser(user.uid, {
+        name: userName,
+        gender: genderSelected,
+        avatar: avatarUrl
+      })
+    } else {
+      // アバターがアップロードされなかった場合
+      await updateUser(user.uid, {
+        name: userName,
+        gender: genderSelected
+      })
+    }
+
+    // アラートの設定
+    await setAlertAssort('updateUserSetting')
+
+    // リダイレクト
+    router.push({
+      pathname: '/home'
     })
   }
-
-  // ============================================================
-  // Render Function
-  // ============================================================
-  const renderAlert = (alertAssort) => (
-    <div className="relative w-full flex justify-center">
-      <Transition
-        show={alertOpen}
-        as={Fragment}
-        enter="transition duration-75"
-        enterFrom="transform -translate-y-1/4 opacity-0"
-        enterTo="transform -translate-y-0 opacity-95"
-        leave="transition-opacity duration-150"
-        leaveFrom="opacity-95"
-        leaveTo="opacity-0"
-      >
-        <div className="absolute z-10 w-full sm:w-1/3 px-4">
-          <div className="opacity-95">
-            <div className="rounded-b-md p-4 bg-green-50">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <CheckCircleIcon
-                    className="h-5 w-5 text-green-400"
-                    aria-hidden="true"
-                  />
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm font-medium text-green-800">
-                    ユーザー設定を更新しました。
-                  </p>
-                </div>
-                <div className="ml-auto pl-3">
-                  <div className="-mx-1.5 -my-1.5">
-                    <button
-                      type="button"
-                      className="inline-flex bg-green-50 rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"
-                      onClick={() => setUpdateUserSettingsAlertOpen(false)}
-                    >
-                      <span className="sr-only">Dismiss</span>
-                      <XIcon className="h-5 w-5" aria-hidden="true" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Transition>
-    </div>
-  )
 
   // ============================================================
   // Return Page
@@ -189,125 +167,189 @@ export default function UserSettings() {
   return (
     <div>
       <Head>
-        <title>Settings</title>
+        <title>Tsundoku | 設定</title>
         <meta
           name="description"
-          content="一緒に読書してくれる誰かを探すためのマッチングサービス"
+          content="Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。集中した読書は自己研鑽だけでなく、リラックス効果もあります。"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {renderAlert(alertAssort)}
+      <GeneralAlert
+        alertOpen={alertOpen}
+        alertAssort={alertAssort}
+        setAlertOpen={setAlertOpen}
+        setAlertAssort={setAlertAssort}
+      />
 
       <AppHeader />
 
       {/* main content */}
-      <div className="pb-16 bg-gray-50 overflow-hidden">
-        <div className="sm:block sm:h-full sm:w-full" aria-hidden="true">
-          <main className="mx-auto max-w-xl px-4 sm:py-8">
-            <div className="py-3">
+      <div className="overflow-hidden pb-16 bg-gray-50">
+        <div className="sm:block sm:w-full sm:h-full" aria-hidden="true">
+          <main className="sm:py-8 px-4 mx-auto max-w-xl">
+            <div className="py-3 mb-12">
               <h1 className="text-2xl font-bold">ユーザー設定</h1>
             </div>
-            <div className="py-3">
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700"
-              >
-                名前(ニックネーム)
-              </label>
-              <div className="mt-1">
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  autoComplete="given-name"
-                  value={userName}
-                  className="p-3 shadow-sm block w-full sm:text-sm border border-gray-300 focus:ring-tsundoku-brown-main focus:border-tsundoku-brown-main rounded-md"
-                  onChange={(e) => {
-                    setUserName(e.target.value)
-                  }}
-                />
+            <div>
+              <div>
+                <h3 className="text-lg font-medium leading-6 text-gray-900">
+                  プロフィール
+                </h3>
+               
+              </div>
+
+              <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5 sm:border-t sm:border-gray-200">
+                  <label htmlFor="username" className="block sm:pt-2 sm:mt-px text-sm font-medium text-gray-700">
+                    ユーザーネーム
+                  </label>
+                  <div className="sm:col-span-2 mt-1 sm:mt-0">
+                    <div className="flex max-w-lg rounded-md shadow-sm">
+                      
+                      <input 
+                        type="text" 
+                        name="username" 
+                        id="username" 
+                        autoComplete="username" 
+                        value={userName}
+                        className="block p-3 w-full sm:text-sm rounded-md border border-gray-300 shadow-sm focus:ring-tsundoku-brown-main focus:border-tsundoku-brown-main"
+                        onChange={(e) => {
+                          setUserName(e.target.value)
+                        }} />
+                    </div>
+                  </div>
+                </div>
+
+                {/* <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5 sm:border-t sm:border-gray-200">
+                  <label htmlFor="about" className="block sm:pt-2 sm:mt-px text-sm font-medium text-gray-700">
+                    自己紹介
+                  </label>
+                  <div className="sm:col-span-2 mt-1 sm:mt-0">
+                    <textarea id="about" name="about" rows="3" className="block w-full max-w-lg sm:text-sm rounded-md border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm"></textarea>
+                    <p className="mt-2 text-sm text-gray-500">好きな本やジャンルについて紹介してみましょう。</p>
+                  </div>
+                </div> */}
+
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:pt-5 sm:border-t sm:border-gray-200">
+                  <label htmlFor="photo" className="block text-sm font-medium text-gray-700">
+                    プロフィール画像
+                  </label>
+                  <div className="sm:col-span-2 mt-1 sm:mt-0">
+                    <div className="flex items-center space-x-3">
+                      <span className="overflow-hidden relative w-20 h-20 bg-orange-100 rounded-full">
+                        <Image 
+                          src={avatarPreviewUrl ?
+                            avatarPreviewUrl
+                            :
+                            userInfo?.avatar ?
+                            userInfo.avatar
+                            :
+                            "/img/avatar/avatar-placeholder.png"
+                          } 
+                          layout={'fill'} 
+                          alt="profile-image" 
+                        />
+                      </span>
+                      <div>
+                        <span className="block mb-3 text-sm text-gray-500">推奨：縦360px 横360px 比率1：1 </span>
+                        <label
+                          className="py-2 px-3 text-sm font-medium leading-4 text-gray-700 bg-white hover:bg-gray-50 rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 shadow-sm focus:outline-none"
+                          htmlFor="avatar"
+                        >
+                          <input 
+                            type="file" 
+                            id="avatar"
+                            name="avatar"
+                            accept="image/png, image/jpeg"
+                            className="sr-only"
+                            onChange={(e) => handleAvatarFileChange(e)}
+                          />
+                          変更
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:pt-5 sm:border-t sm:border-gray-200">
+                  <label htmlFor="photo" className="block text-sm font-medium text-gray-700">
+                    性別
+                  </label>
+                  <div className="sm:col-span-2 mt-1 sm:mt-0">
+                    <RadioGroup
+                      className="mt-1"
+                      value={genderSelected}
+                      onChange={setGenderSelected}
+                    >
+                      <RadioGroup.Label className="sr-only">
+                        Gender setting
+                      </RadioGroup.Label>
+                      <div className="-space-y-px bg-white rounded-md">
+                        {genderSettings.map((gender, genderSettingIdx) => (
+                          <RadioGroup.Option
+                            key={gender.name}
+                            value={gender.label}
+                            className={({ checked }) =>
+                              classNames(
+                                genderSettingIdx === 0
+                                  ? 'rounded-tl-md rounded-tr-md'
+                                  : '',
+                                genderSettingIdx === genderSettings.length - 1
+                                  ? 'rounded-bl-md rounded-br-md'
+                                  : '',
+                                checked
+                                  ? 'bg-tsundoku-brown-sub  z-10'
+                                  : 'border-gray-200',
+                                gender.label == genderSelected
+                                  ? 'bg-tsundoku-brown-sub  z-10'
+                                  : 'border-gray-200',
+                                'relative border p-4 flex cursor-pointer focus:outline-none'
+                              )
+                            }
+                          >
+                            {({ active, checked }) => (
+                              <>
+                                <span
+                                  className={classNames(
+                                    checked
+                                      ? 'bg-tsundoku-brown-main border-transparent'
+                                      : 'bg-white border-gray-300',
+                                    gender == genderSelected
+                                      ? 'bg-tsundoku-brown-main border-transparent'
+                                      : 'bg-white border-gray-300',
+                                    active ? '' : '',
+                                    'h-4 w-4 mt-0.5 cursor-pointer rounded-full border flex items-center justify-center'
+                                  )}
+                                  aria-hidden="true"
+                                >
+                                  <span className="w-1.5 h-1.5 bg-white rounded-full" />
+                                </span>
+                                <div className="flex flex-col ml-3">
+                                  <RadioGroup.Label
+                                    as="span"
+                                    className={classNames(
+                                      checked ? 'text-orange-900' : 'text-gray-900',
+                                      gender == genderSelected
+                                        ? 'text-orange-900'
+                                        : 'text-gray-900',
+                                      'block text-sm font-medium'
+                                    )}
+                                  >
+                                    {gender.name}
+                                  </RadioGroup.Label>
+                                </div>
+                              </>
+                            )}
+                          </RadioGroup.Option>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </div>
+                </div>
+
+                
               </div>
             </div>
-
-            {/* 性別 */}
-            <div className="py-3">
-              <label
-                htmlFor="Gender"
-                className="block text-sm font-medium text-gray-700"
-              >
-                性別
-              </label>
-              <RadioGroup
-                className="mt-1"
-                value={genderSelected}
-                onChange={setGenderSelected}
-              >
-                <RadioGroup.Label className="sr-only">
-                  Gender setting
-                </RadioGroup.Label>
-                <div className="bg-white rounded-md -space-y-px">
-                  {genderSettings.map((gender, genderSettingIdx) => (
-                    <RadioGroup.Option
-                      key={gender.name}
-                      value={gender.label}
-                      className={({ checked }) =>
-                        classNames(
-                          genderSettingIdx === 0
-                            ? 'rounded-tl-md rounded-tr-md'
-                            : '',
-                          genderSettingIdx === genderSettings.length - 1
-                            ? 'rounded-bl-md rounded-br-md'
-                            : '',
-                          checked
-                            ? 'bg-tsundoku-brown-sub border-tsundoku-brown-main z-10'
-                            : 'border-gray-200',
-                          gender.label == genderSelected
-                            ? 'bg-tsundoku-brown-sub border-tsundoku-brown-main z-10'
-                            : 'border-gray-200',
-                          'relative border p-4 flex cursor-pointer focus:outline-none'
-                        )
-                      }
-                    >
-                      {({ active, checked }) => (
-                        <>
-                          <span
-                            className={classNames(
-                              checked
-                                ? 'bg-tsundoku-brown-main border-transparent'
-                                : 'bg-white border-gray-300',
-                              gender == genderSelected
-                                ? 'bg-tsundoku-brown-main border-transparent'
-                                : 'bg-white border-gray-300',
-                              active ? '' : '',
-                              'h-4 w-4 mt-0.5 cursor-pointer rounded-full border flex items-center justify-center'
-                            )}
-                            aria-hidden="true"
-                          >
-                            <span className="rounded-full bg-white w-1.5 h-1.5" />
-                          </span>
-                          <div className="ml-3 flex flex-col">
-                            <RadioGroup.Label
-                              as="span"
-                              className={classNames(
-                                checked ? 'text-orange-900' : 'text-gray-900',
-                                gender == genderSelected
-                                  ? 'text-orange-900'
-                                  : 'text-gray-900',
-                                'block text-sm font-medium'
-                              )}
-                            >
-                              {gender.name}
-                            </RadioGroup.Label>
-                          </div>
-                        </>
-                      )}
-                    </RadioGroup.Option>
-                  ))}
-                </div>
-              </RadioGroup>
-            </div>
-            {/* 性別 END */}
 
             {/* <Transition
               show={genderSelected?.label == 'Female'}
@@ -403,7 +445,7 @@ export default function UserSettings() {
               <div className="flex justify-end">
                 <span
                   type="button"
-                  className="inline-flex items-center cursor-pointer px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-tsundoku-blue-main hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tsundoku-blue-main"
+                  className="inline-flex items-center py-3 px-6 text-base font-medium text-white hover:bg-blue-600 rounded-md border border-transparent focus:ring-2 focus:ring-offset-2 shadow-sm cursor-pointer focus:outline-none bg-tsundoku-blue-main focus:ring-tsundoku-blue-main"
                   onClick={(e) => handleSubmit(e)}
                 >
                   保存

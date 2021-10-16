@@ -14,6 +14,7 @@ module.exports = {
       blueGray: colors.blueGray,
       blue: colors.blue,
       indigo: colors.indigo,
+      purple: colors.purple,
       red: colors.red,
       green: colors.green,
       teal: colors.teal,
@@ -32,15 +33,32 @@ module.exports = {
         }
       }
     },
+    
     extend: {
       fontFamily: {
         NotoSerif: ['Noto Serif JP'],
         NotoSans: ['Noto Sans JP']
-      }
+      },
+      height: {
+				"10v": "10vh",
+				"20v": "20vh",
+				"30v": "30vh",
+				"40v": "40vh",
+				"50v": "50vh",
+				"60v": "60vh",
+				"70v": "70vh",
+				"80v": "80vh",
+				"90v": "90vh",
+				"100v": "100vh",
+			},
     }
   },
   variants: {
     extend: {}
   },
-  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/aspect-ratio')]
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/aspect-ratio'),
+    require('@tailwindcss/line-clamp'),
+  ]
 }

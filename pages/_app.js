@@ -1,19 +1,31 @@
 import '../styles/globals.css'
 import { AuthProvider } from '../lib/auth'
+import GlobalStyle from '../daily/components/GlobalStyle'
 import 'tailwindcss/tailwind.css'
-import '../styles/globals.css'
 
 //useContext
-import { AppWrapper } from '../context/state'
+import { AlertProvider } from '../context/AlertProvider'
 
 function MyApp({ Component, pageProps }) {
   return (
     <AuthProvider>
-      <AppWrapper>
-        <Component {...pageProps} />
-      </AppWrapper>
+      <AlertProvider>
+        <GlobalStyle />
+        <Component
+          asides={MyApp.asides}
+          modals={MyApp.modals}
+          customTrayComponent={MyApp.customTrayComponent}
+          customAppComponent={MyApp.customAppComponent}
+          {...pageProps}
+        />
+      </AlertProvider>
     </AuthProvider>
   )
 }
+
+MyApp.asides = []
+MyApp.modals = []
+MyApp.customTrayComponent = null
+MyApp.customAppComponent = null
 
 export default MyApp

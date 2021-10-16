@@ -4,10 +4,6 @@ export const dict = [
       Copy: {
         en: 'apple',
         ja: 'りんご'
-      },
-      Greeting: {
-        en: 'orange',
-        ja: 'オレンジ'
       }
     }
   },
@@ -24,7 +20,7 @@ export const dict = [
     }
   },
   {
-    dashboard: {
+    home: {
       text1: {
         en: 'text1',
         ja: 'テキスト1'
@@ -32,6 +28,22 @@ export const dict = [
       text2: {
         en: 'text2',
         ja: 'テキスト2'
+      }
+    }
+  },
+  {
+    booklist: {
+      text1: {
+        en: 'text1',
+        ja: 'テキスト1'
+      }
+    }
+  },
+  {
+    trend: {
+      text1: {
+        en: 'text1',
+        ja: 'テキスト1'
       }
     }
   },
@@ -69,9 +81,9 @@ export const dict = [
         en: 'LOGIN',
         ja: 'ログイン'
       },
-      TODASHBOARD: {
+      TO_HOME: {
         en: 'Home',
-        ja: 'マイページ'
+        ja: 'ホーム'
       },
       LOGOUT: {
         en: 'LOGOUT',
