@@ -50,7 +50,7 @@ export default function Home() {
         <div className="py-4 sm:py-12 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
           <div className="md:flex items-center">
             <div className="md:py-12 md:w-3/5">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl text-center sm:text-left font-bold sm:tracking-wide leading-normal text-gray-900">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold sm:tracking-wide leading-normal text-center sm:text-left text-gray-900">
                 <span className="inline">読書に</span>
                 <span className="inline text-tsundoku-blue-main">没頭</span>
                 <span className="inline">する</span>
@@ -85,7 +85,7 @@ export default function Home() {
       </div>
 
       {/* 音声でつながり、読書に集中 */}
-      <div className="bg-white h-full">
+      <div className="h-full bg-white">
         <div className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl h-full">
           <div className="md:flex md:justify-between items-center h-full">
             {/* 説明文 */}
@@ -97,7 +97,7 @@ export default function Home() {
                 </h2>
               </div>
               {/* 画像 PC位置 -- START */}
-              <div className="block md:hidden relative w-full h-48 my-12 rounded-2xl overflow-hidden">
+              <div className="block md:hidden overflow-hidden relative my-12 w-full h-48 rounded-2xl">
                 <Image
                   src="/img/blue-flow.jpg"
                   layout={'fill'}
@@ -120,7 +120,7 @@ export default function Home() {
                   </p>
                 </div>
               </div>
-              <div className="mt-8 sm:mt-8 p-6 rounded-lg bg-blue-50">
+              <div className="p-6 mt-8 sm:mt-8 bg-blue-50 rounded-lg">
                 <div className="text-base font-bold text-gray-900">
                   フロー状態について
                 </div>
@@ -148,7 +148,7 @@ export default function Home() {
             {/* 説明文 - END */}
             {/* 画像 PC位置 -- START */}
             <div className="flex justify-end w-full h-full">
-              <div className="hidden md:block relative w-2/3 h-80 rounded-2xl overflow-hidden">
+              <div className="hidden md:block overflow-hidden relative w-2/3 h-80 rounded-2xl">
                 <Image
                   src="/img/blue-flow.jpg"
                   layout={'fill'}
@@ -280,7 +280,7 @@ export default function Home() {
                     <div className="relative flex-1">
                       <span className="absolute top-1/2 left-0 w-5/6 h-0.5 bg-gray-200"/>
                     </div>
-                    <div className="flex justify-center items-center flex-shrink-0 w-12 h-12 text-blue-500 border border-blue-500 rounded-full">
+                    <div className="flex flex-shrink-0 justify-center items-center w-12 h-12 text-blue-500 rounded-full border border-blue-500">
                       <span className="font-bold">1</span>
                     </div>
                     <div className="relative flex-1">
@@ -314,7 +314,7 @@ export default function Home() {
                     <div className="relative flex-1">
                       <span className="absolute top-1/2 left-0 w-5/6 h-0.5 bg-gray-200"/>
                     </div>
-                    <div className="flex justify-center items-center flex-shrink-0 w-12 h-12 text-blue-500 border border-blue-500 rounded-full">
+                    <div className="flex flex-shrink-0 justify-center items-center w-12 h-12 text-blue-500 rounded-full border border-blue-500">
                       <span className="font-bold">2</span>
                     </div>
                     <div className="relative flex-1">
@@ -342,7 +342,7 @@ export default function Home() {
                     <div className="relative flex-1">
                       <span className="absolute top-1/2 left-0 w-5/6 h-0.5 bg-gray-200"/>
                     </div>
-                    <div className="flex justify-center items-center flex-shrink-0 w-12 h-12 text-blue-500 border border-blue-500 rounded-full">
+                    <div className="flex flex-shrink-0 justify-center items-center w-12 h-12 text-blue-500 rounded-full border border-blue-500">
                       <span className="font-bold">3</span>
                     </div>
                     <div className="relative flex-1">

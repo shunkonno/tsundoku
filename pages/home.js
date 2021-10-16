@@ -315,7 +315,7 @@ export default function Home() {
   }
 
   return (
-    <div>
+    <div className="flex flex-col h-screen bg-gray-50">
       <Head>
         <title>Tsundoku | ホーム</title>
         <meta
@@ -344,7 +344,7 @@ export default function Home() {
       />
 
       {/* main content */}
-      <div className="overflow-hidden relative pb-16 bg-gray-50">
+      <div className="relative flex-1 pb-16 bg-gray-50">
         <div className="sm:block sm:w-full sm:h-full" aria-hidden="true">
           <main className="relative sm:py-4 px-4 mx-auto max-w-7xl">
             <Navbar />

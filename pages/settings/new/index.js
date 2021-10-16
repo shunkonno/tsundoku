@@ -131,7 +131,7 @@ export default function NewUserSettings() {
   // ============================================================
 
   return (
-    <div>
+    <div className="flex flex-col h-screen bg-gray-50">
       <Head>
         <title>Tsundoku | 新規ユーザー</title>
         <meta
@@ -144,10 +144,10 @@ export default function NewUserSettings() {
       <AppHeader />
 
       {/* main content */}
-      <div className="overflow-hidden pb-16 bg-gray-50">
+      <div className="relative flex-1 pb-16 bg-gray-50">
         <div className="sm:block sm:w-full sm:h-full" aria-hidden="true">
           <main className="sm:py-8 px-4 mx-auto max-w-xl">
-            <div className="py-3 ">
+            <div className=" py-3">
               <h1 className="text-2xl font-bold">まず最初に教えて下さい。</h1>
             </div>
             <div>
