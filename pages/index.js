@@ -14,8 +14,9 @@ import { BookmarkIcon } from '@heroicons/react/outline'
 import { useAuth } from '../lib/auth'
 import uselocalesFilter from '../utils/translate'
 import { isBuffer } from 'lodash'
+import { useEffect } from 'react'
 
-export default function Home() {
+export default function Top() {
   // ============================================================
   // Auth
   // ============================================================
@@ -26,13 +27,17 @@ export default function Home() {
   // Routing
   // ============================================================
 
-  const { locale } = useRouter()
+  const router = useRouter()
+  const { locale } = router
   const t = uselocalesFilter('LP', locale)
 
   //暫定的に"https://tsundoku.live/"にアクセスしたら、"https://tsundoku.live/ja/"にアクセスするようにする
-  // if(locale == 'en'){
-  //   router.replace('/ja')
-  // }
+  useEffect(()=>{
+    if(locale != 'ja'){
+      router.replace('/ja')
+    }
+  },[locale])
+  
 
   // ============================================================
   // Return Page
