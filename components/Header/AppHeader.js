@@ -27,26 +27,9 @@ export default function AppHeader() {
   const auth = useAuth()
   const user = auth.user
 
-  // Fetch logged user info on client side
-  const { data: userInfo } = useSWR(
-    user ? ['/api/user', user.token] : null,
-    fetcher,
-    {
-      onErrorRetry: ({ retryCount }) => {
-        // Retry up to 10 times
-        if (retryCount >= 10) return
-      }
-    }
-  )
-
   const router = useRouter()
-  const { locale, pathname } = router
+  const { locale } = router
   const t = uselocalesFilter('header', locale)
-
-  var isJoinPage
-  if(pathname === '/session/[sessionId]/join') {
-    isJoinPage = true
-  }
 
   // ============================================================
   // Button Handler
@@ -110,13 +93,7 @@ export default function AppHeader() {
         <div className="hidden md:flex md:space-x-10">
           {navigation.map((item) => (
             <Link href={item.href} key={item.name}>
-              <a className={classNames(
-                isJoinPage ?
-                "text-gray-100 hover:text-gray-200"
-                :
-                "text-gray-500 hover:text-gray-900",
-                "font-medium"
-              )}>
+              <a className={"font-medium text-gray-500 hover:text-gray-900"}>
                 {item.name}
               </a>
             </Link>
@@ -151,55 +128,29 @@ export default function AppHeader() {
   // ============================================================
   return (
     <>
-      <div className={classNames(
-        isJoinPage ?
-        "bg-blueGray-700"
-        :
-        "bg-gray-50",
-        "relative "
-      )}
-      >
+      <div className="bg-gray-50 relative">
         <div className="relative py-4">
           <Popover>
             {({ open }) => (
               <>
                 <div className="px-4 sm:px-6 mx-auto max-w-7xl">
                   <nav
-                    className="flex relative justify-between items-center w-full sm:h-10"
+                    className="flex relative justify-between items-center h-8 sm:h-10"
                     aria-label="Global"
                   >
-                    <div className="flex items-center">
-                      <div className="flex justify-between items-center md:w-auto">
+                    <div className="flex items-center flex-shrink-0 h-full">
                         <Link href="/home">
-                          <a>
+                          <a className="h-full w-28">
                             <span className="sr-only">Tsundoku</span>
-                            <picture className="flex items-center">
-                              <source
-                                className="w-auto h-4"
-                                srcSet="/img/logos/tsundoku-logo-mark-and-typo.svg"
-                                media="(max-width: 639px)"
-                              />
-                              <source
-                                className="w-auto h-8 sm:h-10"
-                                srcSet="/img/logos/tsundoku-logo-mark-and-typo.svg"
-                                media="(min-width: 640px)"
-                              />
+                            <span className="block relative h-full">
                               <Image
-                                className="w-auto h-8 sm:h-10"
-                                src={
-                                  isJoinPage ?
-                                  '/img/logos/tsundoku-logo-mark-and-typo-text-wh.svg'
-                                  :
-                                  '/img/logos/tsundoku-logo-mark-and-typo.svg'
-                                }
+                                src={'/img/logos/tsundoku-logo-mark-and-typo.svg'}
                                 alt="tsundoku-logo-mark-and-typo"
-                                width={120}
-                                height={32}
+                                layout={'fill'}
                               />
-                            </picture>
+                            </span>
                           </a>
                         </Link>
-                      </div>
                     </div>
                     <div className="flex">
                       <div className="flex md:hidden items-center -mr-2">
