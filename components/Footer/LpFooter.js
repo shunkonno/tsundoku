@@ -214,9 +214,9 @@ export default function LpFooter() {
           </div>
         </div> */}
         <div className="md:flex md:justify-end md:items-center pt-4 border-t border-blueGray-700">
-          <p className="mt-8 md:mt-0 text-base text-gray-400">
+          {/* <p className="mt-8 md:mt-0 text-base text-gray-400">
             &copy; 2021 Tsundoku All rights reserved.
-          </p>
+          </p> */}
           <div className="flex items-center">
             <div className="hidden sm:block my-4">
               {user ? (
