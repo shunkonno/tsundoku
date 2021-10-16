@@ -190,7 +190,7 @@ export default function LpHeader() {
                     aria-label="Global"
                   >
                     <div className="flex items-center flex-shrink-0 h-full">
-                        <Link href="/home">
+                        <Link href="/">
                           <a className="h-full w-28">
                             <span className="sr-only">Tsundoku</span>
                             <span className="block relative h-full">

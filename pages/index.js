@@ -28,12 +28,12 @@ export default function Top() {
   // ============================================================
 
   const router = useRouter()
-  const { locale } = router
+  const { locale, pathname } = router
   const t = uselocalesFilter('LP', locale)
 
   //暫定的に"https://tsundoku.live/"にアクセスしたら、"https://tsundoku.live/ja/"にアクセスするようにする
   useEffect(()=>{
-    if(locale != 'ja'){
+    if(pathname != '/ja'){
       router.replace('/ja')
     }
   },[locale])
