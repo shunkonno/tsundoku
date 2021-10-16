@@ -50,13 +50,13 @@ export default function Home() {
         <div className="py-4 sm:py-12 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
           <div className="md:flex items-center">
             <div className="md:py-12 md:w-3/5">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold sm:tracking-wide leading-normal text-gray-900">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl text-center sm:text-left font-bold sm:tracking-wide leading-normal text-gray-900">
                 <span className="inline">読書に</span>
                 <span className="inline text-tsundoku-blue-main">没頭</span>
                 <span className="inline">する</span>
                 <span className="block sm:mt-2">時間をつくる</span>
               </h1>
-              <p className="mt-5 md:mt-12 max-w-md md:max-w-xl text-sm sm:text-base md:text-lg text-gray-900">
+              <p className="mt-8 md:mt-12 max-w-md md:max-w-xl text-sm sm:text-base md:text-lg text-gray-900">
                 誰かとゆるくつながるカフェのような環境で、 読書に集中できます。
                 ｢読みたいけど、読めてない本｣ を消化しましょう。
               </p>
@@ -86,36 +86,48 @@ export default function Home() {
 
       {/* 音声でつながり、読書に集中 */}
       <div className="bg-white h-full">
-        <div className="py-12 sm:py-24 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl h-full">
-          <div className="md:flex md:justify-between h-full">
+        <div className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl h-full">
+          <div className="md:flex md:justify-between items-center h-full">
             {/* 説明文 */}
             <div className="md:max-w-lg h-full">
               <div className="mb-2">
                 <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
-                  音声でつながり、読書に集中
+                  <span className="block sm:inline leading-10"> 音声でつながり、</span>
+                  <span className="block sm:inline leading-10">読書に集中</span>
                 </h2>
               </div>
-              <div className="space-y-4 leading-relaxed">
-                <div className="mt-4">
+              {/* 画像 PC位置 -- START */}
+              <div className="block md:hidden relative w-full h-48 my-12 rounded-2xl overflow-hidden">
+                <Image
+                  src="/img/blue-flow.jpg"
+                  layout={'fill'}
+                  className=""
+                  alt="video matching"
+                  objectFit={'cover'}
+                />
+              </div>
+            {/* 画像 PC位置 - END */}
+              <div className="space-y-8 sm:space-y-4 leading-relaxed">
+                <div className="mt-8 sm:mt-4">
                   <p className="text-lg text-gray-900">
                     Tsundokuは、本を読む人同士をマッチングし、音声チャットで繋がりながら読書する場所です。簡単な挨拶を済ませたら、それぞれ読書に集中しましょう。
                   </p>
                 </div>
                 <div>
                   <p className="text-lg text-gray-700">
-                    適度な緊張感 (ソーシャル・プレッシャー)
-                    によって、カフェにいるときのような集中力を発揮することができます。フロー状態を誘い、充実感に加え、リラックス効果もあります。
+                    <span className="text-tsundoku-brown-main">適度な緊張感 (ソーシャル・プレッシャー)</span>
+                    によって、カフェにいるときのような集中力を発揮することができます。 <span className="text-tsundoku-brown-main">フロー状態</span>を誘い、充実感に加え、リラックス効果もあります。
                   </p>
                 </div>
               </div>
-              <div className="mt-4 sm:mt-8">
+              <div className="mt-8 sm:mt-8 p-6 rounded-lg bg-blue-50">
                 <div className="text-base font-bold text-gray-900">
                   フロー状態について
                 </div>
                 <div className="text-base text-gray-900">
-                  知的好奇心や冒険心を満たす本を読むのに夢中になり、時間さえ忘れてしまうような体験はありませんでしょうか。フロー状態とは、そうした無心状態を指します。
+                  知的好奇心や冒険心を満たす本を読むのに夢中になり、時間さえ忘れてしまうような体験はありませんか。フロー状態とは、そうした無心状態を指します。
                 </div>
-                <div className="flex items-center mt-2 space-x-2">
+                <div className="flex items-center mt-4 space-x-2">
                   <div>
                     <BookmarkIcon
                       className="w-4 h-4 text-gray-900"
@@ -124,7 +136,7 @@ export default function Home() {
                   </div>
                   <div>
                     <a
-                      className="text-base text-gray-500"
+                      className="text-sm text-gray-500"
                       href="https://www.amazon.co.jp/dp/4790714799"
                     >
                       フロー体験入門―楽しみと創造の心理学
@@ -134,17 +146,19 @@ export default function Home() {
               </div>
             </div>
             {/* 説明文 - END */}
-            {/* 画像 */}
-            <div className="hidden md:block relative w-2/5 h-96 rounded-2xl overflow-hidden">
-              <Image
-                src="/img/blue-flow.jpg"
-                layout={'fill'}
-                className=""
-                alt="video matching"
-                objectFit={'cover'}
-              />
+            {/* 画像 PC位置 -- START */}
+            <div className="flex justify-end w-full h-full">
+              <div className="hidden md:block relative w-2/3 h-80 rounded-2xl overflow-hidden">
+                <Image
+                  src="/img/blue-flow.jpg"
+                  layout={'fill'}
+                  className=""
+                  alt="video matching"
+                  objectFit={'cover'}
+                />
+              </div>
             </div>
-            {/* 画像 - END */}
+            {/* 画像 PC位置 - END */}
           </div>
         </div>
       </div>
@@ -252,7 +266,7 @@ export default function Home() {
 
       {/* 利用の流れ */}
       <div className=" border-t border-b border-gray-200">
-        <div className="py-12 sm:py-24">
+        <div className="py-16 sm:py-24">
           <div className="px-4 sm:px-6 lg:px-8 mx-auto max-w-xl lg:max-w-7xl">
             <h2 className="sr-only">利用の流れ</h2>
             <h2 className="pb-12 text-3xl sm:text-4xl font-bold text-center text-gray-900">
@@ -262,8 +276,16 @@ export default function Home() {
               {/* ステップ 1 */}
               <div>
                 <dt>
-                  <div className="flex justify-center items-center w-12 h-12 text-white bg-blue-500 rounded-md">
-                    <span className="font-bold text-white">1</span>
+                <div className="flex justify-center sm:justify-start">
+                    <div className="relative flex-1">
+                      <span className="absolute top-1/2 left-0 w-5/6 h-0.5 bg-gray-200"/>
+                    </div>
+                    <div className="flex justify-center items-center flex-shrink-0 w-12 h-12 text-blue-500 border border-blue-500 rounded-full">
+                      <span className="font-bold">1</span>
+                    </div>
+                    <div className="relative flex-1">
+                      <span className="absolute top-1/2 right-0 w-5/6 h-0.5 bg-gray-200"/>
+                    </div>
                   </div>
                   <p className="mt-5 text-lg font-bold leading-6 text-gray-900">
                     Google アカウントでログイン
@@ -288,8 +310,16 @@ export default function Home() {
               {/* ステップ 2 */}
               <div>
                 <dt>
-                  <div className="flex justify-center items-center w-12 h-12 text-white bg-blue-500 rounded-md">
-                    <span className="font-bold text-white">2</span>
+                  <div className="flex justify-center sm:justify-start">
+                    <div className="relative flex-1">
+                      <span className="absolute top-1/2 left-0 w-5/6 h-0.5 bg-gray-200"/>
+                    </div>
+                    <div className="flex justify-center items-center flex-shrink-0 w-12 h-12 text-blue-500 border border-blue-500 rounded-full">
+                      <span className="font-bold">2</span>
+                    </div>
+                    <div className="relative flex-1">
+                      <span className="absolute top-1/2 right-0 w-5/6 h-0.5 bg-gray-200"/>
+                    </div>
                   </div>
                   <p className="mt-5 text-lg font-bold leading-6 text-gray-900">
                     ルームを予約
@@ -308,8 +338,16 @@ export default function Home() {
               {/* ステップ 3 */}
               <div>
                 <dt>
-                  <div className="flex justify-center items-center w-12 h-12 text-white bg-blue-500 rounded-md">
-                    <span className="font-bold text-white">3</span>
+                <div className="flex justify-center sm:justify-start">
+                    <div className="relative flex-1">
+                      <span className="absolute top-1/2 left-0 w-5/6 h-0.5 bg-gray-200"/>
+                    </div>
+                    <div className="flex justify-center items-center flex-shrink-0 w-12 h-12 text-blue-500 border border-blue-500 rounded-full">
+                      <span className="font-bold">3</span>
+                    </div>
+                    <div className="relative flex-1">
+                      <span className="absolute top-1/2 right-0 w-5/6 h-0.5 bg-gray-200"/>
+                    </div>
                   </div>
                   <p className="mt-5 text-lg font-bold leading-6 text-gray-900">
                     参加
@@ -335,7 +373,7 @@ export default function Home() {
       </div>
 
       {/* CTA (フッター) */}
-      <div className="md:flex md:justify-between md:items-center py-8 md:py-10 px-4 sm:px-6 md:px-8 sm:my-10 mx-auto max-w-7xl">
+      <div className="md:flex md:justify-between md:items-center py-20 md:py-10 px-4 sm:px-6 md:px-8 sm:my-10 mx-auto max-w-7xl">
         <h2 className="md:text-4xl font-bold tracking-tight">
           <p className="block text-3xl sm:text-4xl tracking-wider leading-normal text-gray-900">
             もっと充実した読書時間を
