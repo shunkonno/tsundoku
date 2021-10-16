@@ -175,7 +175,7 @@ export default function AppHeader() {
                             <span className="sr-only">Tsundoku</span>
                             <picture className="flex items-center">
                               <source
-                                className="w-auto h-8 sm:h-10"
+                                className="w-auto h-4"
                                 srcSet="/img/logos/tsundoku-logo-mark-and-typo.svg"
                                 media="(max-width: 639px)"
                               />

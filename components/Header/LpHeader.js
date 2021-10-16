@@ -196,7 +196,7 @@ export default function LpHeader() {
                             <span className="sr-only">Tsundoku</span>
                             <picture>
                               <source
-                                className="w-auto h-8 sm:h-10"
+                                className="w-auto h-4"
                                 srcSet="/img/logos/tsundoku-logo-mark-and-typo.svg"
                                 media="(max-width: 639px)"
                               />
