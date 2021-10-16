@@ -312,7 +312,7 @@ export default function NewSession() {
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        Authorization: 'Bearer ' + process.env.DAILY_API_KEY
+        Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_DAILY_API_KEY
       }
     }
 
