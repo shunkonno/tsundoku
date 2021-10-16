@@ -113,7 +113,7 @@ export default function Home() {
                   フロー状態について
                 </div>
                 <div className="text-base text-gray-900">
-                  フロー状態とは・・・
+                  知的好奇心や冒険心を満たす本を読むのに夢中になり、時間さえ忘れてしまうような体験はありませんでしょうか。フロー状態とは、そうした無心状態を指します。
                 </div>
                 <div className="flex items-center mt-2 space-x-2">
                   <div>
