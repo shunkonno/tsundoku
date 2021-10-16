@@ -30,9 +30,9 @@ export default function Home() {
   const t = uselocalesFilter('LP', locale)
 
   //暫定的に"https://tsundoku.live/"にアクセスしたら、"https://tsundoku.live/ja/"にアクセスするようにする
-  if(locale == 'en'){
-    router.replace('/ja')
-  }
+  // if(locale == 'en'){
+  //   router.replace('/ja')
+  // }
 
   // ============================================================
   // Return Page
