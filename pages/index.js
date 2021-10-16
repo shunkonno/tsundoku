@@ -91,7 +91,7 @@ export default function Home() {
             {/* 説明文 */}
             <div className="md:max-w-lg h-full">
               <div className="mb-2">
-                <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
+                <h2 className="text-2xl lg:text-4xl font-bold text-gray-900">
                   音声でつながり、読書に集中
                 </h2>
               </div>
@@ -255,7 +255,7 @@ export default function Home() {
         <div className="py-12 sm:py-24">
           <div className="px-4 sm:px-6 lg:px-8 mx-auto max-w-xl lg:max-w-7xl">
             <h2 className="sr-only">利用の流れ</h2>
-            <h2 className="pb-12 text-3xl sm:text-4xl font-bold text-center text-gray-900">
+            <h2 className="pb-12 text-2xl sm:text-4xl font-bold text-center text-gray-900">
               Tsundoku を始める
             </h2>
             <dl className="lg:grid lg:grid-cols-3 lg:gap-8 space-y-10 lg:space-y-0">
