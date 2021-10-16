@@ -51,7 +51,7 @@ export default function NewUserSettings() {
     genderOfMatchSettings[0]
   )
   const [avatarFile, setAvatarFile] = useState(null)
-  const [avatarPreviewUrl, setAvatarPreviewUrl] = useState("")
+  const [avatarPreviewUrl, setAvatarPreviewUrl] = useState('')
 
   // ============================================================
   // Auth
@@ -62,7 +62,7 @@ export default function NewUserSettings() {
   const auth = useAuth()
   const user = auth.user
 
-    const userInfo = useUserInfo()
+  const userInfo = useUserInfo()
 
   // ============================================================
   // Routing
@@ -83,7 +83,7 @@ export default function NewUserSettings() {
     let reader = new FileReader()
 
     reader.onloadend = () => {
-      setAvatarPreviewUrl(reader.result);
+      setAvatarPreviewUrl(reader.result)
       console.log('preview', avatarPreviewUrl)
     }
     reader.readAsDataURL(e.target.files[0])
@@ -121,7 +121,7 @@ export default function NewUserSettings() {
       })
     }
 
-    initializeUserStats(user.uid, { readTime: { [currentYear]: {} } })
+    initializeUserStats(user.uid, { readTime: {} })
 
     router.push({ pathname: '/home', query: { welcome: true } })
   }
@@ -151,26 +151,27 @@ export default function NewUserSettings() {
               <h1 className="text-2xl font-bold">まず最初に教えて下さい。</h1>
             </div>
             <div>
-              
-
               <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5 sm:border-t sm:border-gray-200">
-                  <label htmlFor="username" className="block sm:pt-2 sm:mt-px text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="username"
+                    className="block sm:pt-2 sm:mt-px text-sm font-medium text-gray-700"
+                  >
                     ユーザーネーム
                   </label>
                   <div className="sm:col-span-2 mt-1 sm:mt-0">
                     <div className="flex max-w-lg rounded-md shadow-sm">
-                      
-                      <input 
-                        type="text" 
-                        name="username" 
-                        id="username" 
-                        autoComplete="username" 
+                      <input
+                        type="text"
+                        name="username"
+                        id="username"
+                        autoComplete="username"
                         value={userName}
                         className="block p-3 w-full sm:text-sm rounded-md border border-gray-300 shadow-sm focus:ring-tsundoku-brown-main focus:border-tsundoku-brown-main"
                         onChange={(e) => {
                           setUserName(e.target.value)
-                        }} />
+                        }}
+                      />
                     </div>
                   </div>
                 </div>
@@ -186,33 +187,37 @@ export default function NewUserSettings() {
                 </div> */}
 
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:pt-5 sm:border-t sm:border-gray-200">
-                  <label htmlFor="photo" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="photo"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     プロフィール画像
                   </label>
                   <div className="sm:col-span-2 mt-1 sm:mt-0">
                     <div className="flex items-center space-x-3">
                       <span className="overflow-hidden relative w-20 h-20 bg-orange-100 rounded-full">
-                        <Image 
-                          src={avatarPreviewUrl ?
+                        <Image
+                          src={
                             avatarPreviewUrl
-                            :
-                            userInfo?.avatar ?
-                            userInfo.avatar
-                            :
-                            "/img/avatar/avatar-placeholder.png"
-                          } 
-                          layout={'fill'} 
-                          alt="profile-image" 
+                              ? avatarPreviewUrl
+                              : userInfo?.avatar
+                              ? userInfo.avatar
+                              : '/img/avatar/avatar-placeholder.png'
+                          }
+                          layout={'fill'}
+                          alt="profile-image"
                         />
                       </span>
                       <div>
-                        <span className="block mb-3 text-sm text-gray-500">推奨：縦360px 横360px 比率1：1 </span>
+                        <span className="block mb-3 text-sm text-gray-500">
+                          推奨：縦360px 横360px 比率1：1{' '}
+                        </span>
                         <label
                           className="py-2 px-3 text-sm font-medium leading-4 text-gray-700 bg-white hover:bg-gray-50 rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 shadow-sm focus:outline-none"
                           htmlFor="avatar"
                         >
-                          <input 
-                            type="file" 
+                          <input
+                            type="file"
                             id="avatar"
                             name="avatar"
                             accept="image/png, image/jpeg"
@@ -226,7 +231,10 @@ export default function NewUserSettings() {
                   </div>
                 </div>
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:pt-5 sm:border-t sm:border-gray-200">
-                  <label htmlFor="photo" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="photo"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     性別
                   </label>
                   <div className="sm:col-span-2 mt-1 sm:mt-0">
@@ -282,7 +290,9 @@ export default function NewUserSettings() {
                                   <RadioGroup.Label
                                     as="span"
                                     className={classNames(
-                                      checked ? 'text-orange-900' : 'text-gray-900',
+                                      checked
+                                        ? 'text-orange-900'
+                                        : 'text-gray-900',
                                       gender == genderSelected
                                         ? 'text-orange-900'
                                         : 'text-gray-900',
@@ -300,8 +310,6 @@ export default function NewUserSettings() {
                     </RadioGroup>
                   </div>
                 </div>
-
-                
               </div>
             </div>
 
