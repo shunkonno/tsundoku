@@ -96,9 +96,6 @@ export default function NewUserSettings() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const currentDateTime = new Date()
-    const currentYear = currentDateTime.getFullYear()
-
     if (avatarFile) {
       // アバター画像が選択された場合は、アップロードする
       const avatarUrl = await addAvatar(user?.uid, avatarFile)
@@ -108,7 +105,8 @@ export default function NewUserSettings() {
         bookList: [],
         bookListWithoutISBN: [],
         isReading: '',
-        name: userName
+        name: userName,
+        isNewUser: false
       })
     } else {
       // アバターがアップロードされなかった場合
@@ -117,7 +115,8 @@ export default function NewUserSettings() {
         bookList: [],
         bookListWithoutISBN: [],
         isReading: '',
-        name: userName
+        name: userName,
+        isNewUser: false
       })
     }
 
