@@ -60,17 +60,16 @@ export default function Top() {
       <div className="bg-orange-50">
         <div className="py-4 sm:py-12 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
           <div className="md:flex items-center">
-            <div className="md:py-12 md:w-3/5">
+            <div className="px-0 py-0 md:px-12 md:py-12 md:w-1/2">
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold sm:tracking-wide leading-normal text-center sm:text-left text-gray-900">
-                <span className="inline">読書に</span>
-                <span className="inline text-tsundoku-blue-main">没頭</span>
-                <span className="inline">する</span>
-                <span className="block sm:mt-2">時間をつくる</span>
+                <span className="inline">音でつながる</span>
+                <span className="block sm:mt-2">オンライン読書</span>
               </h1>
-              <p className="mt-8 md:mt-12 max-w-md md:max-w-xl text-sm sm:text-base md:text-lg text-gray-900">
-                誰かとゆるくつながるカフェのような環境で、 読書に集中できます。
-                ｢読みたいけど、読めてない本｣ を消化しましょう。
-              </p>
+              <div className="mt-8 md:mt-12 max-w-md md:max-w-xl text-sm sm:text-base md:text-lg text-center md:text-left text-gray-900">
+                <p className="mb-4">"最近、集中して読書できてない"</p>
+                <p className="">ボイスチャットで誰かとつながりながら、</p>
+                <span>読書に集中できる環境を。</span>
+              </div>
               <div className="sm:flex sm:justify-start mt-6 sm:mt-12 max-w-md">
                 <div className="rounded-md shadow">
                   <Link href="/signin" passHref>
@@ -83,12 +82,13 @@ export default function Top() {
                 </div>
               </div>
             </div>
-            <div className="py-12 md:py-0 mx-auto md:w-2/5 sm:max-w-sm">
+            <div className="px-0 py-12 md:px-4 md:py-0 mx-auto md:w-1/2 sm:max-w-lg">
               <Image
-                src="/img/mainvisual_circle_2160x2160.png"
+                src="/img/topvisual.png"
                 alt="main visual"
-                width={2160}
-                height={2160}
+                width={1600}
+                height={1200}
+                className="rounded-lg"
               />
             </div>
           </div>
@@ -97,14 +97,14 @@ export default function Top() {
 
       {/* 音声でつながり、読書に集中 */}
       <div className="h-full bg-white">
-        <div className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl h-full">
+        <div className="py-16 sm:py-16 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl h-full">
           <div className="md:flex md:justify-between items-center h-full">
             {/* 説明文 */}
             <div className="md:max-w-lg h-full">
               <div className="mb-2">
                 <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
-                  <span className="block sm:inline leading-10"> 音声でつながり、</span>
-                  <span className="block sm:inline leading-10">読書に集中</span>
+                  <span className="block sm:inline leading-10"> 読書に没頭できる空間</span>
+                  <span className="block sm:inline leading-10"></span>
                 </h2>
               </div>
               {/* 画像 PC位置 -- START */}
@@ -121,38 +121,22 @@ export default function Top() {
               <div className="space-y-8 sm:space-y-4 leading-relaxed">
                 <div className="mt-8 sm:mt-4">
                   <p className="text-lg text-gray-900">
-                    Tsundokuは、本を読む人同士をマッチングし、音声チャットで繋がりながら読書する場所です。簡単な挨拶を済ませたら、それぞれ読書に集中しましょう。
+                    Tsundokuは、本を読む人同士をマッチングし、音声チャットで繋がりながら読書する場所です。お互いに、別々の本を読んでもかまいません。
                   </p>
                 </div>
                 <div>
                   <p className="text-lg text-gray-700">
-                    <span className="text-tsundoku-brown-main">適度な緊張感 (ソーシャル・プレッシャー)</span>
-                    によって、カフェにいるときのような集中力を発揮することができます。 <span className="text-tsundoku-brown-main">フロー状態</span>を誘い、充実感に加え、リラックス効果もあります。
+                    適度な緊張感(<span className="text-tsundoku-brown-main"> ピアプレッシャー</span>)
+                    によって、カフェにいるときのような集中力をもたらします。 充実感とリラックスの時間を取り戻しましょう。
                   </p>
                 </div>
               </div>
               <div className="p-6 mt-8 sm:mt-8 bg-blue-50 rounded-lg">
                 <div className="text-base font-bold text-gray-900">
-                  フロー状態について
+                  ピアプレッシャーとは
                 </div>
-                <div className="text-base text-gray-900">
-                  知的好奇心や冒険心を満たす本を読むのに夢中になり、時間さえ忘れてしまうような体験はありませんか。フロー状態とは、そうした無心状態を指します。
-                </div>
-                <div className="flex items-center mt-4 space-x-2">
-                  <div>
-                    <BookmarkIcon
-                      className="w-4 h-4 text-gray-900"
-                      aria-hidden="true"
-                    />
-                  </div>
-                  <div>
-                    <a
-                      className="text-sm text-gray-500"
-                      href="https://www.amazon.co.jp/dp/4790714799"
-                    >
-                      フロー体験入門―楽しみと創造の心理学
-                    </a>
-                  </div>
+                <div className="text-base text-gray-900 mt-2">
+                  お互いに相手のことを意識することで生まれるその場の緊張感。それをポジティブに利用し、「相手もやっているから自分もやろう」という動機が自然と生まれます。
                 </div>
               </div>
             </div>
@@ -175,27 +159,40 @@ export default function Top() {
       </div>
 
       {/* 「ちょうどいい」つながり */}
-      {/* <div className="bg-white">
-        <div className="py-12 sm:py-24 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
-          <div className="md:flex md:justify-between"> */}
-      {/* 画像 */}
-      {/* <div className="md:py-0 pb-12 sm:max-w-sm">
+      <div className="bg-white">
+        <div className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
+          <div className="block md:flex md:justify-between items-center">
+            {/* PC画像 - START */}
+            <div className="hidden md:block md:py-0 relative md:w-1/2 h-full p-8">
               <Image
-                src="/img/video-matching.png"
-                width={400}
-                height={400}
+                src="/img/flowchart.svg"
+                width={500}
+                height={500}
                 className=""
                 alt="video matching"
               />
-            </div> */}
-      {/* 画像 - END */}
-      {/* 説明文 */}
-      {/* <div className="md:max-w-lg">
+            </div>
+            {/* PC画像 - END */}
+            {/* 説明文 */}
+            <div className="md:w-1/2">
               <div className="mb-2">
                 <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
-                  ｢ちょうどいい｣ つながり
+                  <span className="block md:inline leading-8">音声のみだから、</span>
+                  <span className="block md:inline leading-8">疲れない</span>
+                  
                 </h2>
               </div>
+              {/* PC画像 - START */}
+              <div className="block md:hidden md:py-0 relative md:w-1/2 h-full p-0 md:p-4">
+                <Image
+                  src="/img/flowchart.jpg"
+                  width={500}
+                  height={500}
+                  className=""
+                  alt="video matching"
+                />
+              </div>
+              {/* PC画像 - END */}
               <div className="space-y-4 leading-relaxed">
                 <div className="mt-4">
                   <p className="text-lg text-gray-900">
@@ -209,35 +206,46 @@ export default function Top() {
                   </p>
                 </div>
               </div>
-            </div> */}
-      {/* 説明文 - END */}
-      {/* </div>
+            </div>
+            {/* 説明文 - END */}
+          </div>
         </div>
-      </div> */}
+      </div> 
 
       {/* 読書管理も */}
-      {/* <div className="bg-white">
-        <div className="py-12 sm:py-24 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
-          <div className="md:flex md:justify-between"> */}
+      <div className="bg-white">
+        <div className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
+          <div className="md:flex md:justify-between items-center">
       {/* 説明文 */}
-      {/* <div className="md:max-w-lg">
+      <div className="md:max-w-lg">
               <div className="mb-2">
                 <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
-                  読書管理も
+                  読書時間を自動で把握
                 </h2>
               </div>
+              {/* PC画像 - START */}
+              <div className="block md:hidden">
+                <Image
+                  src="/img/automation.svg"
+                  width={600}
+                  height={500}
+                  className=""
+                  alt="video matching"
+                />
+              </div>
+              {/* PC画像 - END */}
               <div className="space-y-4 leading-relaxed">
                 <div className="mt-4">
                   <p className="text-lg text-gray-900">
-                    読書時間や、ブックリストの管理もできます。読書量を可視化することで、他の予定で埋まってしまいがちな読書時間をしっかり確保しましょう。
+                    読書時間や、読んでいる本の管理もできます。読書量を可視化することで、他の予定で埋まってしまいがちな読書時間をしっかり確保しましょう。
                   </p>
                 </div>
               </div>
-              <div className="mt-4 sm:mt-8">
-                <div className="text-base font-bold text-gray-900">
+              <div className="p-6 mt-8 sm:mt-8 bg-blue-50 rounded-lg">
+                <div className="text-base font-bold text-gray-900 ">
                   読書をカレンダー登録
                 </div>
-                <div className="text-base text-gray-900">
+                <div className="mt-2 text-base text-gray-900">
                   Tsundoku
                   では、集中して読書する時間を可視化することに加え、カレンダーに簡単に追加することもできます。読書を生活に組み込み、習慣化します。
                 </div>
@@ -258,28 +266,28 @@ export default function Top() {
                   </div>
                 </div>
               </div>
-            </div> */}
+            </div> 
       {/* 説明文 - END */}
       {/* 画像 */}
-      {/* <div className="hidden md:block md:max-w-sm">
-              <Image
-                src="/img/video-matching.png"
-                width={400}
-                height={400}
-                className=""
-                alt="video matching"
-              />
-            </div>
-            {/* 画像 - END */}
-      {/* </div>
-        </div>
-      </div> */}
+      <div className="hidden md:block">
+        <Image
+          src="/img/automation.svg"
+          width={600}
+          height={500}
+          className=""
+          alt="video matching"
+        />
+      </div>
+      {/* 画像 - END */}
+      </div>
+    </div>
+  </div>
 
       {/* 利用の流れ */}
       <div className=" border-t border-b border-gray-200">
         <div className="py-16 sm:py-24">
           <div className="px-4 sm:px-6 lg:px-8 mx-auto max-w-xl lg:max-w-7xl">
-            <h2 className="sr-only">利用の流れ</h2>
+            <h2 className="sr-only">ご利用の流れ</h2>
             <h2 className="pb-12 text-2xl sm:text-4xl font-bold text-left sm:text-center text-gray-900">
               Tsundoku を始める
             </h2>
@@ -367,7 +375,7 @@ export default function Top() {
                 <dd className="mt-2 text-base text-gray-900">
                   <div>
                     <span>
-                      ルームに参加すると、もう1人の参加者とつながります。軽く挨拶を済ませたら、じっくり読書しましょう。
+                      ルームに参加すると、もう1人の参加者とボイスチャットでつながります。軽く挨拶を済ませたら、じっくり読書しましょう。
                     </span>
                   </div>
                   <div className="mt-2">

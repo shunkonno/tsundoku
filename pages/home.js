@@ -99,6 +99,7 @@ export default function Home() {
       }
     }
   )
+  console.log(stats)
 
   // ============================================================
   // Routing
@@ -194,6 +195,8 @@ export default function Home() {
         monthlyReadTime += readTime
       })
 
+      console.log(monthlyReadTime)
+
       return monthlyReadTime
     } else {
       // 現在の月のデータが存在しない場合 (=今月未利用)
@@ -201,6 +204,7 @@ export default function Home() {
       return monthlyReadTime
     }
   }
+
   const lastMonthReadTime = () => {
     const currentDateTime = new Date()
     const currentYear = currentDateTime.getFullYear()
