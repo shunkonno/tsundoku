@@ -27,7 +27,7 @@ export default function ReservedRoomCard({sessionId, ownerName, startDateTime, e
             </div>
           </div>
           <div className="mt-1">
-            <span className="text-gray-500 session-card-duration">
+            <span className="text-gray-500 session-card-duration truncate">
               {`${duration} 分間 / 開催者：${ownerName}`}
             </span>
           </div>

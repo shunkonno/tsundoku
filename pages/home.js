@@ -285,8 +285,8 @@ export default function Home() {
 
     if (!filteredList.length) {
       return (
-        <div className="mt-4 text-center">
-          現在、予約可能なルームはありません。
+        <div className="py-6 text-center bg-gray-100 rounded-md">
+          現在、予約可能のルームはありません。
         </div>
       )
     }
@@ -356,7 +356,7 @@ export default function Home() {
               {/* 左カラム -- START */}
               <div className="w-full sm:w-2/3 max-w-7xl">
                 <section className="pb-3">
-                  <div className="pb-2 mb-4">
+                  <div className="mb-4">
                     <h2 className="title-section onboarding-2">
                       参加予定のルーム
                     </h2>
@@ -375,13 +375,13 @@ export default function Home() {
                       )}
                     </ul>
                   ) : (
-                    <div className="py-6 text-center bg-gray-200 rounded-md">
+                    <div className="py-6 text-center bg-gray-100 rounded-md">
                       現在、参加予定のルームはありません。
                     </div>
                   )}
                 </section>
                 <section className="py-3 mt-10">
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center mb-4">
                     <div className="flex-shrink-0">
                       <h2 className="title-section onboarding-1">ルーム一覧</h2>
                     </div>
