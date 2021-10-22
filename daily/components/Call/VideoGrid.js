@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useMemo, useEffect, useRef } from 'react'
+import { useSWRConfig } from 'swr'
 import Tile from '../Tile'
 import { WaveTile } from '../Tile'
 import { DEFAULT_ASPECT_RATIO } from '../../constants'
@@ -26,6 +27,12 @@ import {
 } from '@heroicons/react/outline'
 import colors from 'tailwindcss/colors'
 
+//Functions
+import { useAuth } from '../../../lib/auth'
+import { selectReadingBook } from '../../../functions/selectReadingBook'
+
+
+
 /**
  * Basic unpaginated video tile grid, scaled by aspect ratio
  *
@@ -39,6 +46,13 @@ import colors from 'tailwindcss/colors'
  */
 export const VideoGrid = React.memo(
   ({session}) => {
+
+    //auth
+    const auth = useAuth()
+    const user = auth.user
+
+    // mutateを定義
+    const { mutate } = useSWRConfig()
 
     const userInfo = useUserInfo()
     const bookList = useUserBookList(userInfo?.uid)
@@ -101,6 +115,9 @@ export const VideoGrid = React.memo(
       return null
     }
 
+    // ============================================================
+    // Return Component
+    // ============================================================
     return (
       <div className="main-area flex h-full items-center justify-center relative w-full" ref={containerRef}>
         <div id="left-sidebar" className=" hidden md:flex md:items-center flex-shrink-0 md:w-56 xl:w-64 2xl:w-72 h-full">
@@ -212,7 +229,7 @@ export const VideoGrid = React.memo(
                           <button
                             className="inline-flex items-center py-1 px-3 text-sm font-medium leading-5 text-blue-600 hover:text-white bg-white hover:bg-blue-500 rounded-full border border-blue-600 hover:border-blue-500 shadow-sm"
                             onClick={async (e) => {
-                              await selectReadingBook(e, bookInfo.bid)
+                              await selectReadingBook(e, user, bookInfo.bid ,mutate)
                               await setLeftSlideOpen(!leftSlideOpen)
                             }}
                           >
