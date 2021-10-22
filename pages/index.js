@@ -85,9 +85,10 @@ export default function Top() {
               <Image
                 src="/img/topvisual.png"
                 alt="main visual"
-                width={1600}
-                height={1200}
-                className="rounded-lg"
+                width={1400}
+                height={900}
+                className="rounded-xl"
+                objectFit={'cover'}
               />
             </div>
           </div>
@@ -97,7 +98,7 @@ export default function Top() {
       {/* 音声でつながり、読書に集中 */}
       <div className="h-full bg-white">
         <div className="py-16 sm:py-16 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl h-full">
-          <div className="md:flex md:justify-between items-center h-full">
+          <div className="md:flex md:justify-between items-center h-full space-x-24">
             {/* 説明文 */}
             <div className="md:max-w-lg h-full">
               <div className="mb-2">
@@ -106,17 +107,18 @@ export default function Top() {
                   <span className="block sm:inline leading-10"></span>
                 </h2>
               </div>
-              {/* 画像 PC位置 -- START */}
-              <div className="block md:hidden overflow-hidden relative my-12 w-full h-48 rounded-2xl">
+              {/* 画像 SP位置 -- START */}
+              <div className="block md:hidden relative my-12 w-full">
                 <Image
-                  src="/img/blue-flow.jpg"
-                  layout={'fill'}
-                  className=""
-                  alt="video matching"
+                  src="/img/tsundoku_room.png"
+                  width={960}
+                  height={560}
+                  className="rounded-xl"
+                  alt="tsundoku room"
                   objectFit={'cover'}
                 />
               </div>
-            {/* 画像 PC位置 - END */}
+            {/* 画像 SP位置 - END */}
               <div className="space-y-8 sm:space-y-4 leading-relaxed">
                 <div className="mt-8 sm:mt-4">
                   <p className="text-lg text-gray-900">
@@ -142,12 +144,13 @@ export default function Top() {
             {/* 説明文 - END */}
             {/* 画像 PC位置 -- START */}
             <div className="flex justify-end w-full h-full">
-              <div className="hidden md:block overflow-hidden relative w-2/3 h-80 rounded-2xl">
+              <div className="hidden md:block relative">
                 <Image
-                  src="/img/blue-flow.jpg"
-                  layout={'fill'}
-                  className=""
-                  alt="video matching"
+                  src="/img/tsundoku_room.png"
+                  width={960}
+                  height={560}
+                  className="rounded-xl"
+                  alt="tsundoku room"
                   objectFit={'cover'}
                 />
               </div>
