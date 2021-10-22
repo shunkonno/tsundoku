@@ -66,8 +66,7 @@ export default function Top() {
                 <span className="block sm:mt-2">オンライン読書</span>
               </h1>
               <div className="mt-8 md:mt-12 max-w-md md:max-w-xl text-sm sm:text-base md:text-lg text-center md:text-left text-gray-900">
-                <p className="mb-4">&quot;最近、集中して読書できてない&quot;</p>
-                <p className="">ボイスチャットで誰かとつながりながら、</p>
+                <p >ボイスチャットで誰かとつながりながら、</p>
                 <span>読書に集中できる環境を。</span>
               </div>
               <div className="sm:flex sm:justify-start mt-6 sm:mt-12 max-w-md">

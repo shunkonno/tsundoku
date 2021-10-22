@@ -186,10 +186,12 @@ export const HairCheck = ({session}) => {
           style={{ width: '580px' }}
         >
           <header className="relative">
+            {!isLoading && (
             <h2>
               <p>準備がよろしければ</p>
               <p>『参加』を押してください。</p>
             </h2>
+            )}
             <div className="absolute top-0 left-0">
               <button 
                 onClick={(e)=>{
@@ -208,20 +210,6 @@ export const HairCheck = ({session}) => {
           </div>
           <div className="rounded-lg relative;">
             <div className="relative inset-0 flex items-center justify-items-center z-90">
-              {/* <Button
-                className="device-button"
-                size="medium-square"
-                variant="blur"
-                onClick={() => openModal(DEVICE_MODAL)}
-              >
-                <IconSettings />
-              </Button> */}
-
-              {isLoading && (
-                <div className="absolute top-1/2 left-1/2 overlay-message text-gray-900 bg-gray-400 rounded-md py-3 px-4">
-                  読み込み中…
-                </div>
-              )}
               {hasError && (
                 <>
                   {camError && (
@@ -233,35 +221,36 @@ export const HairCheck = ({session}) => {
                 </>
               )}
             </div>
+            {!isLoading && (
             <div className="flex items-center justify-center gap-4 py-2 mb-6">
-              {/* DISABLE CAMERA TOGGLE */}
-              {/* <MuteButton isMuted={isCamMuted} /> */}
-              {/* DISABLE CAMERA TOGGLE - END*/}
-
               <MuteButton mic isMuted={isMicMuted} />
               <p>マイクの状態 : {isMicMuted ? 'オフ' : 'オン'}</p>
             </div>
-            {/* {tileMemo} */}
+            )}
           </div>
           <footer>
             {waiting ? (
               <div className="flex items-center justify-center">
                 <Loader />
                 {denied ? (
-                  <span className="ml-4">Call owner denied request</span>
+                  <span className="ml-4">{/* Call owner denied request*/}ホストからのリクエストが拒否されました。</span>
                 ) : (
-                  <span className="ml-4">Waiting for host to grant access</span>
+                  <span className="ml-4">{/*Waiting for host to grant access*/}ホストからの許可を待機しています。</span>
                 )}
               </div>
             ) : (
-              <div className="flex items-center justify-center">
-                  
+              <div className="flex items-center justify-center mt-4">
+                {isLoading ? 
+                <Loader />
+                : 
+                (
                 <Button
                   disabled={joining}
                   onClick={() => joinCall(userName)}
                 >
                   参加する
                 </Button>
+                )}
               </div>
             )}
           </footer>

@@ -15,7 +15,10 @@ export const DeviceSelect = () => {
   } = useMediaDevices()
 
   if (!currentDevices) {
-    return <div>デバイスを検索中…</div>
+    return <div className="text-center">
+      <p>デバイスを検索中…</p>
+      <p className="mt-1">(マイクの使用を許可してください。)</p>
+      </div>
   }
 
   
