@@ -135,12 +135,12 @@ export default function AppHeader() {
               <>
                 <div className="px-4 sm:px-6 mx-auto max-w-7xl">
                   <nav
-                    className="flex relative justify-between items-center h-8 sm:h-10"
+                    className="flex relative justify-between items-center h-10 sm:h-12"
                     aria-label="Global"
                   >
                     <div className="flex items-center flex-shrink-0 h-full">
                         <Link href="/home">
-                          <a className="h-full w-28">
+                          <a className="h-full w-32">
                             <span className="sr-only">Tsundoku</span>
                             <span className="block relative h-full">
                               <Image
