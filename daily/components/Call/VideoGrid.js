@@ -106,6 +106,7 @@ export const VideoGrid = React.memo(
         <div id="left-sidebar" className=" hidden md:flex md:items-center flex-shrink-0 md:w-56 xl:w-64 2xl:w-72 h-full">
        
             <Transition
+              as={Fragment}
               show={!leftSlideOpen}
               enter="transition transform ease-in-out duration-300"
               enterFrom="-translate-x-full"
@@ -153,7 +154,7 @@ export const VideoGrid = React.memo(
               </div>
             </Transition>
             <Transition
-              
+              as={Fragment}
               show={leftSlideOpen}
               enter="transition transform ease-in-out duration-300"
               enterFrom="-translate-x-full"
@@ -246,7 +247,7 @@ export const VideoGrid = React.memo(
         </div>
         <div className="right-sidebar items-center hidden md:flex flex-shrink-0 md:w-56 xl:w-64 2xl:w-72 h-full">
           <Transition
-            
+            as={Fragment}
             show={!rightSlideOpen && tileCount >=2 }
             enter="transition transform ease-in-out duration-300"
             enterFrom="translate-x-full"
@@ -255,7 +256,7 @@ export const VideoGrid = React.memo(
             leaveFrom="translate-x-0"
             leaveTo="translate-x-full"
           >
-            <div className="flex flex-col items-center py-2 px-4 ml-4 xl:ml-8 w-full h-64 lg:h-72 2xl:h-80 bg-white rounded-tl-lg rounded-bl-lg">
+            <div className="flex flex-col items-center justify-end py-2 px-4 ml-4 xl:ml-8 w-full h-64 lg:h-72 2xl:h-80 bg-white rounded-tl-lg rounded-bl-lg">
               <div className="flex-shrink-0 py-2 w-full text-lg font-bold text-gray-500">
                 いま読んでいる本
               </div>
@@ -294,7 +295,7 @@ export const VideoGrid = React.memo(
             </div>
           </Transition>
           <Transition
-            
+            as={Fragment}
             show={rightSlideOpen}
             enter="transition transform ease-in-out duration-300"
             enterFrom="translate-x-full"
