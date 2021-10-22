@@ -35,7 +35,7 @@ import {
 
 // Functions
 import { useAuth } from '../lib/auth'
-import { selectReadingBook } from '../functions/selectReadingBook'
+import { selectReadingBook } from '../utils/bookFunctions/selectReadingBook'
 import fetcher from '../utils/fetcher'
 import uselocalesFilter from '../utils/translate'
 import {

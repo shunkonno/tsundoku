@@ -29,9 +29,8 @@ import colors from 'tailwindcss/colors'
 
 //Functions
 import { useAuth } from '../../../lib/auth'
-import { selectReadingBook } from '../../../functions/selectReadingBook'
-
-
+import { selectReadingBook } from '../../../utils/bookFunctions/selectReadingBook'
+import { returnAmazonLink } from '../../../utils/amazonLink/book'
 
 /**
  * Basic unpaginated video tile grid, scaled by aspect ratio
@@ -356,7 +355,7 @@ export const VideoGrid = React.memo(
                         {bookInfo.isbn13 && (
                           <div className="text-right">
                             <a
-                              // href={returnAmazonLink(bookInfo.isbn13)}
+                              href={returnAmazonLink(bookInfo.isbn13)}
                               className="text-sm text-blue-500"
                             >
                               Amazonで見る

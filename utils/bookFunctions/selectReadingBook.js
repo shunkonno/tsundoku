@@ -1,5 +1,5 @@
 //Function
-import { updateIsReading } from '../lib/db'
+import { updateIsReading } from '../../lib/db'
 
 export const selectReadingBook = async (e, user, bid, mutate) => {
   e.preventDefault()
