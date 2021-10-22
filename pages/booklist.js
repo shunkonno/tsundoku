@@ -35,6 +35,7 @@ import {
 
 // Functions
 import { useAuth } from '../lib/auth'
+import { selectReadingBook } from '../functions/selectReadingBook'
 import fetcher from '../utils/fetcher'
 import uselocalesFilter from '../utils/translate'
 import {
@@ -103,6 +104,8 @@ export default function BookList() {
       }
     }
   )
+
+  console.log(bookList)
 
   useEffect(() => {
     setBookCardSelected(Array(bookList?.length).fill(false))
@@ -264,17 +267,6 @@ export default function BookList() {
 
     // 画面をリフレッシュ
     mutate('/api/user/' + user.uid + '/booklist')
-  }
-
-  const selectReadingBook = async (e, bid) => {
-    e.preventDefault()
-    e.stopPropagation()
-
-    await updateIsReading(user.uid, bid)
-
-    await setAlertAssort('updateIsReading')
-
-    mutate(['/api/user', user.token])
   }
 
   const selectManualProgress = async (e, bid, manualProgress) => {
@@ -607,7 +599,9 @@ export default function BookList() {
                                               onClick={(e) =>
                                                 selectReadingBook(
                                                   e,
-                                                  bookInfo.bid
+                                                  user,
+                                                  bookInfo.bid,
+                                                  mutate
                                                 )
                                               }
                                             >
@@ -627,7 +621,7 @@ export default function BookList() {
                                                 active ? 'bg-gray-100' : ''
                                               } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
                                               onClick={(e) =>
-                                                selectReadingBook(e, '')
+                                                selectReadingBook(e, user, '', mutate)
                                               }
                                             >
                                               <XCircleIcon
@@ -929,7 +923,7 @@ export default function BookList() {
                                   <button
                                     className="inline-block flex-shrink-0 py-2 px-8 text-base text-center text-white hover:bg-blue-700 rounded-md border border-transparent cursor-pointer focus:outline-none bg-tsundoku-blue-main focus:ring-tsundoku-blue-main"
                                     onClick={(e) => {
-                                      selectReadingBook(e, bookInfo.bid)
+                                      selectReadingBook(e, user, bookInfo.bid, mutate)
                                       toggleBookCardsSelected(e, idx, false)
                                     }}
                                   >
@@ -954,7 +948,7 @@ export default function BookList() {
                                   <button
                                     className="inline-block flex-shrink-0 py-2 px-6 text-sm text-center text-white bg-red-400 hover:bg-red-500 rounded-md border border-transparent focus:ring-red-400 cursor-pointer focus:outline-none"
                                     onClick={(e) => {
-                                      selectReadingBook(e, '')
+                                      selectReadingBook(e, user, '', mutate)
                                       toggleBookCardsSelected(e, idx, false)
                                     }}
                                   >
