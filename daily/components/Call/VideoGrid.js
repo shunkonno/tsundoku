@@ -45,6 +45,9 @@ import fetcher from '../../../utils/fetcher'
  * Note: this grid does not sort participants
  */
 export const VideoGrid = ({session}) => {
+    //state
+    const [peerIsReadingBook, setPeerIsReadingBook] = useState(null)
+
     //auth
     const auth = useAuth()
     const user = auth.user
@@ -108,9 +111,15 @@ export const VideoGrid = ({session}) => {
     }
   )
 
-  const peerIsReadingBook = peerBookList?.find((book) => {
+  const peerIsReadingBookObj = peerBookList?.find((book) => {
     return book.bookInfo.bid == peerUserInfo?.isReading
   })
+  
+  useEffect(()=>{
+    setPeerIsReadingBook(peerIsReadingBookObj)
+  },[peerIsReadingBookObj])
+
+  
 
 
     const [leftSlideOpen, setLeftSlideOpen] = useState(false)
@@ -122,10 +131,6 @@ export const VideoGrid = ({session}) => {
     const aspectRatio = DEFAULT_ASPECT_RATIO
     const tileCount = participants.length || 0
     // const tileCount = 2
-
-    useEffect(() => {
-      mutate('/api/user/' + peerUid + '/info')
-    },[peerIsReadingBook])
 
     // Memoize our tile list to avoid unnecassary re-renders
     const tiles = useDeepCompareMemo(
