@@ -18,6 +18,8 @@ import { ReservableRoomList } from '../components/List'
 import { GeneralAlert } from '../components/Alert'
 
 //Context
+import { useUserInfo } from '../context/useUserInfo'
+import { useUserBookList } from '../context/useUserBookList'
 import { useAlertState } from '../context/AlertProvider'
 
 // Assets
@@ -55,16 +57,7 @@ export default function Home() {
   const { mutate } = useSWRConfig()
 
   // ユーザー情報
-  const { data: userInfo } = useSWR(
-    user ? ['/api/user', user.token] : null,
-    fetcher,
-    {
-      onErrorRetry: ({ retryCount }) => {
-        // Retry up to 10 times
-        if (retryCount >= 10) return
-      }
-    }
-  )
+  const { userInfo, error } = useUserInfo()
 
   // セッション情報
   const { data: sessions } = useSWR(user ? '/api/session' : null, fetcher, {
@@ -75,18 +68,7 @@ export default function Home() {
   })
 
   // ブックリスト
-  const { data: bookList } = useSWR(
-    user ? '/api/user/' + user.uid + '/booklist' : null,
-    fetcher,
-    {
-      onErrorRetry: ({ retryCount }) => {
-        // Retry up to 10 times
-        if (retryCount >= 10) return
-      }
-    }
-  )
-
-  // console.log('bookList:', bookList)
+  const bookList = useUserBookList(userInfo?.uid)
 
   // 利用情報
   const { data: stats } = useSWR(
@@ -318,6 +300,13 @@ export default function Home() {
     return <div>Waiting..</div>
   }
 
+  if (typeof window !== "undefined") {
+    // windowを使う処理を記述
+    if(error?.status === 500){
+      window.location.reload()
+    }
+  }
+
   return (
     <div className="flex flex-col h-screen bg-gray-50">
       <Head>
@@ -484,7 +473,7 @@ export default function Home() {
                                     著者
                                   </dt>
                                   {bookInfo.authors.map((author) => {
-                                    return <dd key="author">{author}</dd>
+                                    return <dd key={author}>{author}</dd>
                                   })}
                                 </dl>
                               </div>
