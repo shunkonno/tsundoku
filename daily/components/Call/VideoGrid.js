@@ -43,9 +43,7 @@ import { returnAmazonLink } from '../../../utils/amazonLink/book'
  *
  * Note: this grid does not sort participants
  */
-export const VideoGrid = React.memo(
-  ({session}) => {
-
+export const VideoGrid = ({session}) => {
     //auth
     const auth = useAuth()
     const user = auth.user
@@ -372,8 +370,6 @@ export const VideoGrid = React.memo(
         </div>
       </div>
     )
-  },
-  () => true
-)
+  }
 
 export default VideoGrid
