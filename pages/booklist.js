@@ -259,7 +259,7 @@ export default function BookList() {
     //削除する本がisReadingだったら現在読んでいる本を空にする
     if (bid == userInfo.isReading) {
       await updateIsReading(user.uid, '')
-      mutate('/api/user')
+      mutate(['/api/user', user.token])
     }
 
     // 特定の bid の書籍をリストから削除
