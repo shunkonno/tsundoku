@@ -395,6 +395,8 @@ export const VideoGrid = ({session}) => {
                             <a
                               href={returnAmazonLink(bookInfo.isbn13)}
                               className="text-sm text-blue-500"
+                              target="_blank"
+                              rel="noreferrer"
                             >
                               Amazonで見る
                             </a>
