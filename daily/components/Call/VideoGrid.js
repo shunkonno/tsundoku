@@ -53,26 +53,17 @@ export const VideoGrid = ({session}) => {
 
     const userInfo = useUserInfo()
     const bookList = useUserBookList(userInfo?.uid)
-    let isReadingBook
-    if(bookList && userInfo){
-      isReadingBook = useIsReadingBook(bookList, userInfo.isReading)
-    }
+    const isReadingBook = useIsReadingBook(bookList, userInfo?.isReading)
 
     // マッチング相手のユーザー情報を取得
     // マッチング相手のユーザーのIDがguestIdかownerIdか識別
     const peerUid =
     userInfo?.uid === session?.ownerId ? session?.guestId : session?.ownerId
 
-    let peerUserInfo
-    if(peerUid){
-      peerUserInfo = useOneUserInfo(peerUid)
-    }
+    const peerUserInfo = useOneUserInfo(peerUid)
 
     const peerBookList = useUserBookList(peerUserInfo?.uid)
-    let peerIsReadingBook
-    if(peerBookList && peerUserInfo){
-      peerIsReadingBook = useIsReadingBook(peerBookList, peerUserInfo.isReading)
-    }
+    const peerIsReadingBook = useIsReadingBook(peerBookList, peerUserInfo?.isReading)
 
 
     const [leftSlideOpen, setLeftSlideOpen] = useState(false)
