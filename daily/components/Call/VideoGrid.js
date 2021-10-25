@@ -46,7 +46,9 @@ import fetcher from '../../../utils/fetcher'
  */
 export const VideoGrid = ({session}) => {
     //state
-    const [peerIsReadingBook, setPeerIsReadingBook] = useState(null)
+    const [peerUserInfoState, setPeerUserInfo] = useState(null)
+    const [peerBookListState, setPeerBookList] = useState([])
+    const [peerIsReadingBookState, setPeerIsReadingBook] = useState(null)
 
     //auth
     const auth = useAuth()
@@ -111,13 +113,19 @@ export const VideoGrid = ({session}) => {
     }
   )
 
-  const peerIsReadingBookObj = peerBookList?.find((book) => {
+  const peerIsReadingBook = peerBookList?.find((book) => {
     return book.bookInfo.bid == peerUserInfo?.isReading
   })
-  
+
   useEffect(()=>{
-    setPeerIsReadingBook(peerIsReadingBookObj)
-  },[peerIsReadingBookObj])
+    setPeerUserInfo(peerUserInfo)
+    setPeerBookList(peerBookList)
+    setPeerIsReadingBook(peerIsReadingBook)
+  },[peerUserInfo, peerBookList, peerIsReadingBook])
+
+  console.log('peerUserInfo:',peerUserInfoState)
+  console.log('PeerBookList:',peerBookListState)
+  console.log('PeerIsReadingBook:',peerIsReadingBookState)
 
   
 
