@@ -76,7 +76,9 @@ export const VideoGrid = ({session}) => {
     const tileCount = participants.length || 0
     // const tileCount = 2
 
-    
+    useEffect(() => {
+      mutate('/api/user/' + peerUid + '/info')
+    },[peerIsReadingBook])
 
     // Memoize our tile list to avoid unnecassary re-renders
     const tiles = useDeepCompareMemo(
