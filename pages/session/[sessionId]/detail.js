@@ -1,7 +1,7 @@
 // ============================================================
 // Imports
 // ============================================================
-import { useState, useEffect, useContext } from 'react'
+import { Fragment, useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -12,13 +12,14 @@ import PropTypes from 'prop-types'
 // Components
 import { AppHeader } from '../../../components/Header'
 import { Footer } from '../../../components/Footer'
-import { Disclosure, Transition } from '@headlessui/react'
+import { Disclosure, Menu, Transition } from '@headlessui/react'
 
 //Context
 import { useAlertState } from '../../../context/AlertProvider'
 
 //Assets
 import { PlusSmIcon, ChevronLeftIcon } from '@heroicons/react/solid'
+import { TrashIcon, XCircleIcon } from '@heroicons/react/outline'
 
 // Functions
 import uselocalesFilter from '../../../utils/translate'
@@ -31,6 +32,8 @@ import {
   addReadTimeToUserStats
 } from '../../../lib/db'
 import { fetchOneSession, fetchAllSessions } from '../../../lib/db-admin'
+import { DotsVerticalIcon } from '@heroicons/react/outline'
+import classNames from '../../../utils/classNames'
 
 // ============================================================
 // Fetch static data
@@ -253,7 +256,7 @@ export default function SessionDetail({ session }) {
               <div className="flex items-center">
                 <PlusSmIcon className="w-6 h-6 text-blue-500" />
                 <a
-                  className="text-sm text-blue-500"
+                  className="text-sm text-blue-500 hidden sm:block"
                   href={`https://www.google.com/calendar/event?action=TEMPLATE&dates=${startEvent}/${endEvent}&text=Tsundoku ${formatTime(
                     session?.startDateTime
                   )} 開催&details=https://tsundoku.live/ja/session/${
@@ -264,12 +267,80 @@ export default function SessionDetail({ session }) {
                 >
                   Googleカレンダーに予定を追加する
                 </a>
+                <a
+                  className="text-sm text-blue-500 block sm:hidden"
+                  href={`https://www.google.com/calendar/event?action=TEMPLATE&dates=${startEvent}/${endEvent}&text=Tsundoku ${formatTime(
+                    session?.startDateTime
+                  )} 開催&details=https://tsundoku.live/ja/session/${
+                    session?.sessionId
+                  }/detail`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  カレンダーに追加
+                </a>
               </div>
             </div>
             <div className="overflow-hidden bg-white sm:rounded-lg border border-black">
-              <div className="sm:p-0 py-5 px-4 border-t border-gray-200">
-                <dl className="p-4">
-                  <div className="py-3">
+              
+              <div className="py-5 px-4 relative">
+                <div className="absolute right-0 mr-4">
+                  <Menu as={'div'} className="relative">
+                    <Menu.Button as="div" className="inline-block relative cursor-pointer">
+                      <DotsVerticalIcon className="w-6 h-6 text-gray-500"/>
+                    </Menu.Button>
+                    <Transition
+                      as={Fragment}
+                      enter="transition ease-out duration-100"
+                      enterFrom="transform opacity-0 scale-95"
+                      enterTo="transform opacity-100 scale-100"
+                      leave="transition ease-in duration-75"
+                      leaveFrom="transform opacity-100 scale-100"
+                      leaveTo="transform opacity-0 scale-95"
+                    >
+                    
+                      <Menu.Items
+                        className={classNames(
+                          'absolute w-48 right-0 z-20 bg-white rounded-md divide-y divide-gray-100 ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none'
+                        )}
+                      >
+                        <div className="px-2 py-2">
+                          <Menu.Item>
+                          {session?.ownerId == userInfo?.uid ?
+                          <div 
+                            className="group flex items-center space-x-2"
+                            onClick={(e) => deleteSessionData(e)}
+                          >
+                            <TrashIcon className="w-5 h-5 text-red-600 group-hover:text-red-700"/>
+                            <span
+                              type="button"
+                              className="text-sm text-red-600 group-hover:text-red-700 cursor-pointer"
+                            >
+                              ルームを削除する
+                            </span>
+                          </div>
+                          :
+                          <div 
+                            className="group flex items-center space-x-2"
+                            onClick={(e) => cancelSession(e)}
+                          >
+                            <XCircleIcon className="w-5 h-5 text-red-600 group-hover:text-red-700"/>
+                            <span
+                              type="button"
+                              className="text-sm text-red-600 group-hover:text-red-700 cursor-pointer"
+                            >
+                              予約をキャンセルする
+                            </span>
+                          </div>
+                          }
+                          </Menu.Item>
+                        </div>
+                      </Menu.Items>
+                    </Transition>
+                </Menu>
+                </div>
+                <dl className="">
+                  <div className="pb-3">
                     <dt className="text-sm font-bold text-gray-900">
                       開始日時
                     </dt>
@@ -301,7 +372,7 @@ export default function SessionDetail({ session }) {
                 </dl>
               </div>
             </div>
-            <div className="flex justify-between items-start py-6">
+            <div className="flex justify-center items-start py-6">
               <div className="flex">
                 {enterRoomOpen ? (
                   <a
@@ -331,27 +402,6 @@ export default function SessionDetail({ session }) {
                   </div>
                 )}
               </div>
-              {session?.ownerId == userInfo?.uid ? (
-                <div>
-                  <span
-                    type="button"
-                    className="text-sm text-red-600 hover:text-red-700 cursor-pointer"
-                    onClick={(e) => deleteSessionData(e)}
-                  >
-                    ルームを削除する
-                  </span>
-                </div>
-              ) : (
-                <div>
-                  <span
-                    type="button"
-                    className="text-sm text-red-600 hover:text-red-700 cursor-pointer"
-                    onClick={(e) => cancelSession(e)}
-                  >
-                    予約を取り消す
-                  </span>
-                </div>
-              )}
             </div>
           </main>
         </div>
