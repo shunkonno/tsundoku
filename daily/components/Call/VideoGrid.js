@@ -52,9 +52,32 @@ export const VideoGrid = ({session}) => {
     // mutateを定義
     const { mutate } = useSWRConfig()
 
-    const userInfo = useUserInfo()
-    const bookList = useUserBookList(userInfo?.uid)
-    const isReadingBook = useIsReadingBook(bookList, userInfo?.isReading)
+    // ユーザー情報
+    const { data: userInfo } = useSWR(
+      user ? ['/api/user', user.token] : null,
+      fetcher,
+      {
+        onErrorRetry: ({ retryCount }) => {
+          // Retry up to 10 times
+          if (retryCount >= 10) return
+        }
+      }
+    )
+    // ユーザーのブックリスト取得
+    const { data: bookList } = useSWR(
+      userInfo?.uid ? '/api/user/' + userInfo?.uid + '/booklist' : null,
+      fetcher,
+      {
+        onErrorRetry: ({ retryCount }) => {
+          // Retry up to 10 times
+          if (retryCount >= 10) return
+        }
+      }
+    )
+    
+    const isReadingBook = bookList?.find((book) => {
+      return book.bookInfo.bid == userInfo?.isReading
+    })
 
     // マッチング相手のユーザー情報を取得
     // マッチング相手のユーザーのIDがguestIdかownerIdか識別
