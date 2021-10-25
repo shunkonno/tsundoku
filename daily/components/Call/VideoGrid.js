@@ -30,6 +30,7 @@ import colors from 'tailwindcss/colors'
 //Functions
 import { useAuth } from '../../../lib/auth'
 import { selectReadingBook } from '../../../utils/bookFunctions/selectReadingBook'
+import { updateIsReading } from '../../../lib/db'
 import { returnAmazonLink } from '../../../utils/amazonLink/book'
 import fetcher from '../../../utils/fetcher'
 
@@ -163,6 +164,15 @@ export const VideoGrid = ({session}) => {
 
     if (!participants.length) {
       return null
+    }
+
+    const selectReadingBook = async (e, user, bid) => {
+      e.preventDefault()
+      e.stopPropagation()
+    
+      await updateIsReading(user.uid, bid)
+    
+      mutate(['/api/user', user.token])
     }
 
     // ============================================================
