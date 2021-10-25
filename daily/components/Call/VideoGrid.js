@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useMemo, useEffect, useRef } from 'react'
-import { useSWRConfig } from 'swr'
+import useSWR, { useSWRConfig } from 'swr'
 import Tile from '../Tile'
 import { WaveTile } from '../Tile'
 import { DEFAULT_ASPECT_RATIO } from '../../constants'
@@ -31,6 +31,7 @@ import colors from 'tailwindcss/colors'
 import { useAuth } from '../../../lib/auth'
 import { selectReadingBook } from '../../../utils/bookFunctions/selectReadingBook'
 import { returnAmazonLink } from '../../../utils/amazonLink/book'
+import fetcher from '../../../utils/fetcher'
 
 /**
  * Basic unpaginated video tile grid, scaled by aspect ratio
@@ -60,10 +61,33 @@ export const VideoGrid = ({session}) => {
     const peerUid =
     userInfo?.uid === session?.ownerId ? session?.guestId : session?.ownerId
 
-    const peerUserInfo = useOneUserInfo(peerUid)
+    // ユーザー情報
+    const { data: peerUserInfo } = useSWR(
+      peerUid ? '/api/user/' + peerUid + '/info' : null,
+      fetcher,
+      {
+        onErrorRetry: ({ retryCount }) => {
+          // エラー時には、10回まではリトライする
+          if (retryCount >= 10) return
+        }
+      }
+    )
 
-    const peerBookList = useUserBookList(peerUserInfo?.uid)
-    const peerIsReadingBook = useIsReadingBook(peerBookList, peerUserInfo?.isReading)
+    // ユーザーのブックリスト取得
+  const { data: peerBookList } = useSWR(
+    peerUid ? '/api/user/' + peerUid + '/booklist' : null,
+    fetcher,
+    {
+      onErrorRetry: ({ retryCount }) => {
+        // Retry up to 10 times
+        if (retryCount >= 10) return
+      }
+    }
+  )
+
+  const peerIsReadingBook = peerBookList?.find((book) => {
+    return book.bookInfo.bid == peerUserInfo?.isReading
+  })
 
 
     const [leftSlideOpen, setLeftSlideOpen] = useState(false)
