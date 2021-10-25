@@ -259,7 +259,7 @@ export default function BookList() {
     //削除する本がisReadingだったら現在読んでいる本を空にする
     if (bid == userInfo.isReading) {
       await updateIsReading(user.uid, '')
-      mutate(['/api/user', user.token])
+      mutate('/api/user')
     }
 
     // 特定の bid の書籍をリストから削除
@@ -621,7 +621,12 @@ export default function BookList() {
                                                 active ? 'bg-gray-100' : ''
                                               } group flex rounded-md text-gray-900 items-center w-full px-2 py-2 text-sm text-right`}
                                               onClick={(e) =>
-                                                selectReadingBook(e, user, '', mutate)
+                                                selectReadingBook(
+                                                  e,
+                                                  user,
+                                                  '',
+                                                  mutate
+                                                )
                                               }
                                             >
                                               <XCircleIcon
@@ -923,7 +928,12 @@ export default function BookList() {
                                   <button
                                     className="inline-block flex-shrink-0 py-2 px-8 text-base text-center text-white hover:bg-blue-700 rounded-md border border-transparent cursor-pointer focus:outline-none bg-tsundoku-blue-main focus:ring-tsundoku-blue-main"
                                     onClick={(e) => {
-                                      selectReadingBook(e, user, bookInfo.bid, mutate)
+                                      selectReadingBook(
+                                        e,
+                                        user,
+                                        bookInfo.bid,
+                                        mutate
+                                      )
                                       toggleBookCardsSelected(e, idx, false)
                                     }}
                                   >

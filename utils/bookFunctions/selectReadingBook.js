@@ -7,5 +7,5 @@ export const selectReadingBook = async (e, user, bid, mutate) => {
 
   await updateIsReading(user.uid, bid)
 
-  mutate(['/api/user', user.token])
+  mutate('/api/user')
 }
