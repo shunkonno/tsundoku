@@ -9,7 +9,7 @@ export const useUserInfo = () => {
   const user = auth.user
 
   // ユーザー情報
-  const { data: userInfo } = useSWR(
+  const { data: userInfo, error } = useSWR(
     user ? ['/api/user', user.token] : null,
     fetcher,
     {
@@ -20,5 +20,5 @@ export const useUserInfo = () => {
     }
   )
 
-  return userInfo
+  return { userInfo, error }
 }
