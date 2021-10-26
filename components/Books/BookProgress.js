@@ -6,7 +6,8 @@ import { useSWRConfig } from 'swr'
 import { Menu, Transition } from '@headlessui/react'
 import { BookProgressIcon } from '../Icon'
 
-//Context
+//Assets
+import { ExclamationIcon } from '@heroicons/react/outline'
 
 // Function
 import { useAuth } from '../../lib/auth'
