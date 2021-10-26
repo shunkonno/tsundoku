@@ -83,7 +83,7 @@ export default function Top() {
             </div>
             <div className="px-0 py-12 md:px-4 md:py-0 mx-auto md:w-1/2 sm:max-w-lg">
               <Image
-                src="/img/topvisual.png"
+                src="/img/topvisual.jpg"
                 alt="main visual"
                 width={1400}
                 height={900}
@@ -110,7 +110,7 @@ export default function Top() {
               {/* 画像 SP位置 -- START */}
               <div className="block md:hidden relative my-12 w-full">
                 <Image
-                  src="/img/tsundoku_room.png"
+                  src="/img/tsundoku_room.jpg"
                   width={960}
                   height={560}
                   className="rounded-xl"
@@ -146,7 +146,7 @@ export default function Top() {
             <div className="flex justify-end w-full h-full">
               <div className="hidden md:block relative">
                 <Image
-                  src="/img/tsundoku_room.png"
+                  src="/img/tsundoku_room.jpg"
                   width={960}
                   height={560}
                   className="rounded-xl"
@@ -228,7 +228,7 @@ export default function Top() {
               {/* PC画像 - START */}
               <div className="block md:hidden">
                 <Image
-                  src="/img/automation.svg"
+                  src="/img/automation.jpg"
                   width={600}
                   height={500}
                   className=""
@@ -273,7 +273,7 @@ export default function Top() {
       {/* 画像 */}
       <div className="hidden md:block">
         <Image
-          src="/img/automation.svg"
+          src="/img/automation.jpg"
           width={600}
           height={500}
           className=""
