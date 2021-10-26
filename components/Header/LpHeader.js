@@ -119,11 +119,11 @@ export default function LpHeader() {
                   >
                     <div className="flex items-center flex-shrink-0 h-full">
                         <Link href="/">
-                          <a className="h-full w-32">
+                          <a className="h-full w-52">
                             <span className="sr-only">Tsundoku</span>
                             <span className="block relative h-full">
                               <Image
-                                src={'/img/logos/tsundoku-logo-mark-and-typo.svg'}
+                                src={'/img/logos/tsundoku-logo-mark-and-typo-beta.svg'}
                                 alt="tsundoku-logo-mark-and-typo"
                                 layout={'fill'}
                               />

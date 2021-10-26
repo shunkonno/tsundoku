@@ -18,15 +18,6 @@ import CreatingRoom from '../../../daily/components/Prejoin/CreatingRoom'
 import Intro from '../../../daily/components/Prejoin/Intro'
 import NotConfigured from '../../../daily/components/Prejoin/NotConfigured'
 
-/**
- * Index page
- * ---
- * - Checks configuration variables are set in local env
- * - Optionally obtain a meeting token from Daily REST API (./pages/api/token)
- * - Set call owner status
- * - Finally, renders the main application loop
- */
-
 export default function SessionJoin({
   session,
   domain,
