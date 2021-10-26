@@ -65,7 +65,10 @@ export const VideoGrid = ({ session }) => {
   // ============================================================
   let wakeLock = null
 
-  if (typeof window !== 'undefined') {
+  if (
+    typeof window !== 'undefined' &&
+    typeof window.navigator !== 'undefined'
+  ) {
     try {
       wakeLock = navigator.wakeLock.request('screen')
       console.log('Wake Lock is active')
