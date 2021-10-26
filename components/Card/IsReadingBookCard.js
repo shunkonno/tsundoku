@@ -6,7 +6,7 @@ import { useUserInfo } from "../../context/useUserInfo"
 import { useUserBookList } from "../../context/useUserBookList"
 
 //Components
-import { RenderAuthorsDescription } from "../Description"
+import { AuthorsDescription } from "../Description"
 
 //Functions
 import { formatISOStringToDateTimeWithSlash } from "../../utils/formatDateTime"
@@ -48,7 +48,7 @@ export default function IsReadingBookCard () {
                         {bookInfo.title}
                       </p>
                       {Array.isArray(bookInfo.authors) &&
-                        RenderAuthorsDescription(bookInfo.authors)}
+                        AuthorsDescription(bookInfo.authors)}
                     </div>
                     <div className="text-sm text-gray-500 truncate">
                       {formatISOStringToDateTimeWithSlash(date)}{' '}

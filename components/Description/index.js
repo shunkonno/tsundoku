@@ -1,3 +1,3 @@
-import RenderAuthorsDescription from './RenderAuthorsDescription'
+import AuthorsDescription from './AuthorsDescription'
 
-export { RenderAuthorsDescription }
+export { AuthorsDescription }
