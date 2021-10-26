@@ -14,11 +14,17 @@ import {
   XIcon,
 } from '@heroicons/react/solid'
 
+// Context
+import { useAlertState } from '../../context/AlertProvider'
+
 //Functions
 import classNames from '../../utils/classNames'
 
+export default function GeneralAlert() {
 
-export default function GeneralAlert({ alertOpen, alertAssort, setAlertOpen, setAlertAssort}) {
+  //Context
+  const { alertOpen, setAlertOpen, alertAssort, setAlertAssort } =
+  useAlertState()
 
   // ============================================================
   // Alert Handlers
