@@ -24,11 +24,15 @@ export const WaveTile = memo(
   ({uid}) => {
     const [ isApper, setIsAppear] = useState(false)
 
+    //初回のみアニメーションを実行するため、マウント時isAppearをfalseからtrueに切り替える。
     useEffect(()=>{
       setIsAppear(true)
     },[])
 
     const userInfo = useOneUserInfo(uid)
+
+    // 波の速さを0.10から0.15の範囲でランダムで決定
+    const waveSpeed = (Math.random() * (0.150 - 0.100) + 0.100)
 
     return(
       <Transition
@@ -50,7 +54,7 @@ export const WaveTile = memo(
                 paused={false}
                 options={{
                   amplitude: 30,
-                  speed: 0.15,
+                  speed: waveSpeed,
                   points: 3
                 }}
               >
