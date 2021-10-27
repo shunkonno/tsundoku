@@ -109,14 +109,12 @@ export const VideoGrid = ({ session }) => {
     return book.bookInfo.bid == userInfo?.isReading
   })
 
-  console.log('isReadingBook is :',isReadingBook)
-
-  // マッチング相手のユーザー情報を取得
-  // マッチング相手のユーザーのIDがguestIdかownerIdか識別
+  // ピアユーザー情報を取得
+  // ピアユーザーのIDがguestIdかownerIdか識別
   const peerUid =
     userInfo?.uid === session?.ownerId ? session?.guestId : session?.ownerId
 
-  // ユーザー情報
+  // ピアユーザー情報
   const { data: peerUserInfo } = useSWR(
     peerUid ? '/api/user/' + peerUid + '/info' : null,
     fetcher,
@@ -128,7 +126,7 @@ export const VideoGrid = ({ session }) => {
     }
   )
 
-  // ユーザーのブックリスト取得
+  // ピアユーザーのブックリスト取得
   const { data: peerBookList } = useSWR(
     peerUid ? '/api/user/' + peerUid + '/booklist' : null,
     fetcher,
@@ -151,8 +149,8 @@ export const VideoGrid = ({ session }) => {
   const { participants } = useParticipants()
 
   const aspectRatio = DEFAULT_ASPECT_RATIO
-  const tileCount = participants.length || 0
-  // const tileCount = 2
+  // const tileCount = participants.length || 0
+  const tileCount = 2
 
   // Memoize our tile list to avoid unnecassary re-renders
   const tiles = useDeepCompareMemo(() => {
@@ -164,7 +162,7 @@ export const VideoGrid = ({ session }) => {
         )}
       </>
     )
-  }, [participants])
+  }, [participants, peerUserInfo])
 
   if (!participants.length) {
     return null
