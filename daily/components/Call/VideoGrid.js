@@ -1,21 +1,9 @@
+// Basic
 import React, { Fragment, useState, useMemo, useEffect, useRef } from 'react'
+
+// Vercel
 import useSWR, { useSWRConfig } from 'swr'
-import Tile from '../Tile'
-import { WaveTile } from '../Tile'
-import { DEFAULT_ASPECT_RATIO } from '../../constants'
-import { useParticipants } from '../../contexts/ParticipantsProvider'
-import { useDeepCompareMemo } from 'use-deep-compare'
-
-import classNames from '../../../utils/classNames'
-
 import Image from 'next/image'
-
-import { useUserInfo } from '../../../context/useUserInfo'
-import { useOneUserInfo } from '../../../context/useOneUserInfo'
-import { useUserBookList } from '../../../context/useUserBookList'
-import { useIsReadingBook } from '../../../context/useIsReadingBook'
-
-import { Transition } from '@headlessui/react'
 
 //Assets
 import {
@@ -27,12 +15,29 @@ import {
 } from '@heroicons/react/outline'
 import colors from 'tailwindcss/colors'
 
-//Functions
+// Components
+import { WaveTile } from '../Tile'
+import { Transition } from '@headlessui/react'
+
+// Settings
+import { DEFAULT_ASPECT_RATIO } from '../../constants'
+
+// Context
+import { useParticipants } from '../../contexts/ParticipantsProvider'
+import { useDeepCompareMemo } from 'use-deep-compare'
+
+import { useUserInfo } from '../../../context/useUserInfo'
+import { useOneUserInfo } from '../../../context/useOneUserInfo'
+import { useUserBookList } from '../../../context/useUserBookList'
+import { useIsReadingBook } from '../../../context/useIsReadingBook'
+
+// Functions
 import { useAuth } from '../../../lib/auth'
 import { selectReadingBook } from '../../../utils/bookFunctions/selectReadingBook'
 import { updateIsReading } from '../../../lib/db'
 import { returnAmazonLink } from '../../../utils/amazonLink/book'
 import fetcher from '../../../utils/fetcher'
+import classNames from '../../../utils/classNames'
 
 /**
  * Basic unpaginated video tile grid, scaled by aspect ratio
@@ -49,10 +54,6 @@ export const VideoGrid = ({ session }) => {
   // ============================================================
   // Initialize
   // ============================================================
-  const [peerUserInfoState, setPeerUserInfo] = useState(null)
-  const [peerBookListState, setPeerBookList] = useState([])
-  const [peerIsReadingBookState, setPeerIsReadingBook] = useState(null)
-
   // Auth
   const auth = useAuth()
   const user = auth.user
@@ -108,6 +109,8 @@ export const VideoGrid = ({ session }) => {
     return book.bookInfo.bid == userInfo?.isReading
   })
 
+  console.log('isReadingBook is :',isReadingBook)
+
   // マッチング相手のユーザー情報を取得
   // マッチング相手のユーザーのIDがguestIdかownerIdか識別
   const peerUid =
@@ -140,16 +143,6 @@ export const VideoGrid = ({ session }) => {
   const peerIsReadingBook = peerBookList?.find((book) => {
     return book.bookInfo.bid == peerUserInfo?.isReading
   })
-
-  useEffect(() => {
-    setPeerUserInfo(peerUserInfo)
-    setPeerBookList(peerBookList)
-    setPeerIsReadingBook(peerIsReadingBook)
-  }, [peerUserInfo, peerBookList, peerIsReadingBook])
-
-  console.log('peerUserInfo:', peerUserInfoState)
-  console.log('PeerBookList:', peerBookListState)
-  console.log('PeerIsReadingBook:', peerIsReadingBookState)
 
   const [leftSlideOpen, setLeftSlideOpen] = useState(false)
   const [rightSlideOpen, setRightSlideOpen] = useState(false)
@@ -196,7 +189,7 @@ export const VideoGrid = ({ session }) => {
     >
       <div
         id="left-sidebar"
-        className=" hidden md:flex md:items-center flex-shrink-0 md:w-56 xl:w-64 2xl:w-72 h-full"
+        className=" hidden md:flex md:items-center flex-shrink-0 md:w-56 xl:w-64 2xl:w-72 h-full relative z-10"
       >
         <Transition
           as={Fragment}
@@ -212,33 +205,56 @@ export const VideoGrid = ({ session }) => {
             <div className="flex-shrink-0 py-2 w-full text-lg font-bold text-gray-500">
               いま読んでいる本
             </div>
-            <div className="flex flex-col flex-1 w-full items-center mb-2 lg:mb-0 py-0 lg:py-2 space-y-2 lg:space-y-4">
-              <div className="w-2/3 h-full">
-                <div className="relative max-w-full h-full">
-                  <Image
-                    className="filter drop-shadow-lg"
-                    src={
-                      isReadingBook
-                        ? isReadingBook?.bookInfo?.image
-                        : '/img/placeholder/noimage_480x640.jpg'
-                    }
-                    objectFit={'contain'}
-                    layout={'fill'}
-                    placeholder="empty"
-                    alt="Book Cover"
-                  />
+            <div className="flex flex-col flex-1 w-full items-center mb-2 lg:mb-0 py-0 lg:py-2 space-y-2">
+              {userInfo?.isReading == "" ?
+                <div className="flex flex-1 items-center">
+                  <div>
+                    <p className="text-center text-sm text-gray-500">
+                      『いま読んでいる本』が選択されていません。
+                    </p>
+                    <p 
+                      className="mt-4 text-blue-400 text-sm text-center cursor-pointer hover:text-blue-500"
+                      onClick={() => setLeftSlideOpen(!leftSlideOpen)}
+                    >
+                      本を選択する
+                    </p>
+                  </div>
                 </div>
+                :
+                <div className="w-2/3 h-full">
+                  <div className="relative max-w-full h-full">
+                      <Image
+                      className="filter drop-shadow-lg"
+                      src={
+                        isReadingBook
+                          ? isReadingBook?.bookInfo?.image
+                          : '/img/placeholder/noimage_480x640.jpg'
+                      }
+                      objectFit={'contain'}
+                      layout={'fill'}
+                      placeholder="empty"
+                      alt="Book Cover"
+                    />
+                  </div>
+                </div>
+              }
+              <div className="h-16 w-full">
+                <div className="text-black overflow-ellipsis line-clamp-2">{isReadingBook?.bookInfo.title}</div>
               </div>
-              <div className="text-black">{isReadingBook?.bookInfo.title}</div>
             </div>
             <div className="flex-shrink-0 w-full">
+              {userInfo?.isReading == "" ?
+              <>
+              </>
+              :
               <div
-                className="inline-flex items-center"
+                className="group inline-flex items-center cursor-pointer"
                 onClick={() => setLeftSlideOpen(!leftSlideOpen)}
               >
-                <ChevronLeftIcon className="w-5 h-5 text-blue-400" />
-                <button className="text-sm text-blue-400">本を変更する</button>
+                <ChevronLeftIcon className="w-5 h-5 text-blue-400 group-hover:text-blue-500" />
+                <button className="text-sm text-blue-400 group-hover:text-blue-500">本を変更する</button>
               </div>
+              }
             </div>
           </div>
         </Transition>
@@ -252,7 +268,7 @@ export const VideoGrid = ({ session }) => {
           leaveFrom="translate-x-0"
           leaveTo="-translate-x-full"
         >
-          <div className="flex overflow-hidden absolute inset-y-0 flex-col md:w-56 xl:w-64 2xl:w-72 max-h-full bg-gray-50 rounded-tr-lg rounded-br-lg">
+          <div className="flex overflow-hidden absolute inset-y-0 flex-col w-72 max-h-full bg-gray-50 rounded-tr-lg rounded-br-lg">
             <div className="flex flex-shrink-0 justify-end p-2 h-12 bg-blueGray-300">
               <XIcon
                 className="w-8 h-8 text-gray-600"
@@ -260,14 +276,24 @@ export const VideoGrid = ({ session }) => {
               />
             </div>
             <div className="overflow-y-scroll flex-1 py-2">
-              {bookList?.map(({ bookInfo, date }) => (
+              {bookList?.length == 0 ?
+              <div className="px-2 text-sm text-center text-gray-500">
+                <p>ブックリストに</p>
+                <p>本がありません。</p>
+              </div>
+              :
+              bookList?.map(({ bookInfo, date }) => (
                 <div
                   className={classNames(
                     bookInfo.bid == userInfo.isReading
                       ? 'ring-2 ring-tsundoku-blue-main'
                       : 'border border-gray-300',
-                    'relative rounded-lg bg-white py-2 mb-2 mx-2 px-2 h-28 sm:px-3 shadow-sm flex hover:border-gray-400'
+                    'relative rounded-lg bg-white py-2 mb-2 mx-2 px-2 h-28 sm:px-3 shadow-sm flex hover:border-blue-400'
                   )}
+                  onClick={async (e) => {
+                    await selectReadingBook(e, user, bookInfo.bid, mutate)
+                    await setLeftSlideOpen(!leftSlideOpen)
+                  }}
                   key={bookInfo.bid}
                 >
                   {bookInfo.bid == userInfo?.isReading && (
@@ -290,23 +316,10 @@ export const VideoGrid = ({ session }) => {
                   <div className="overflow-hidden flex-1 ml-3">
                     <div className="flex flex-col justify-between h-full">
                       <div className="focus:outline-none">
-                        <p className="overflow-y-hidden max-h-10 sm:max-h-16 text-base sm:text-sm font-medium leading-5 text-gray-900 overflow-ellipsis line-clamp-2">
+                        <p className="overflow-y-hidden text-base sm:text-sm font-medium leading-5 text-gray-900 overflow-ellipsis line-clamp-4">
                           {bookInfo.title}
                         </p>
                       </div>
-                    </div>
-                  </div>
-                  <div className="flex flex-shrink-0 justify-center items-center">
-                    <div>
-                      <button
-                        className="inline-flex items-center py-1 px-3 text-sm font-medium leading-5 text-blue-600 hover:text-white bg-white hover:bg-blue-500 rounded-full border border-blue-600 hover:border-blue-500 shadow-sm"
-                        onClick={async (e) => {
-                          await selectReadingBook(e, user, bookInfo.bid, mutate)
-                          await setLeftSlideOpen(!leftSlideOpen)
-                        }}
-                      >
-                        選択
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -348,6 +361,16 @@ export const VideoGrid = ({ session }) => {
               いま読んでいる本
             </div>
             <div className="flex flex-col flex-1 items-center py-4 space-y-4 w-full h-full">
+              {
+              peerUserInfo?.isReading == "" ?
+              <div className="flex flex-1 items-center">
+                <div>
+                  <p className="text-center text-sm text-gray-500">
+                    『いま読んでいる本』が選択されていません。
+                  </p>
+                </div>
+              </div>
+              :
               <div className="w-2/3 h-full">
                 <div className="relative max-w-full h-full">
                   <Image
@@ -364,6 +387,7 @@ export const VideoGrid = ({ session }) => {
                   />
                 </div>
               </div>
+              }
               <div className="text-black">
                 {peerIsReadingBook?.bookInfo.title}
               </div>
@@ -391,7 +415,7 @@ export const VideoGrid = ({ session }) => {
           leaveFrom="translate-x-0"
           leaveTo="translate-x-full"
         >
-          <div className="flex overflow-y-scroll absolute inset-y-0 right-0 flex-col w-80 bg-gray-50 rounded-tl-lg rounded-bl-lg">
+          <div className="flex overflow-y-scroll absolute inset-y-0 right-0 flex-col w-72 bg-gray-50 rounded-tl-lg rounded-bl-lg z-90">
             <div className="flex flex-shrink-0 p-2 h-12 bg-blueGray-300">
               <XIcon
                 className="w-8 h-8 text-gray-600"
@@ -399,7 +423,13 @@ export const VideoGrid = ({ session }) => {
               />
             </div>
             <div className="overflow-y-auto flex-1 py-2">
-              {peerBookList?.map(({ bookInfo, date }) => (
+              {peerBookList?.length == 0 ?
+              <div className="px-2 text-sm text-center text-gray-500">
+                <p>ブックリストに</p>
+                <p>本がありません。</p>
+              </div>
+              :
+              peerBookList?.map(({ bookInfo, date }) => (
                 <div
                   className="flex relative py-2 px-2 sm:px-3 mx-2 mb-2 h-28 bg-white rounded-lg border border-gray-300 hover:border-gray-400 shadow-sm"
                   key={bookInfo.bid}
