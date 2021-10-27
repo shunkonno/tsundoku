@@ -67,8 +67,8 @@ export const WaveTile = memo(
             </div>
             <div className="absolute">
               <div className="relative w-full h-full">
-                <div className="absolute w-16 sm:w-20 h-20 sm:h-24 md:h-20 top-1/2 md:top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                  <div className="relative w-16 sm:w-20 h-16 sm:h-20">
+                <div className="absolute w-full top-1/2 md:top-1/4 transform -translate-y-1/2 md:-translate-y-0">
+                  <div className="mx-auto relative w-16 sm:w-20 h-16 sm:h-20">
                     <Image
                       className="rounded-full"
                       src={
@@ -81,10 +81,11 @@ export const WaveTile = memo(
                       alt="Avatar"
                     />
                   </div>
-                  <p className="text-center text-gray-800">
+                  <p className="w-full mt-0 md:mt-2 px-4 truncate text-center text-gray-800">
                     {userInfo ? userInfo.name : 'noname'}
                   </p>
                 </div>
+                
               </div>
             </div>
           </div>
