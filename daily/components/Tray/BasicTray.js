@@ -43,13 +43,13 @@ export const BasicTray = () => {
       {/* DISABLE CAMERA TOGGLE - END */}
 
       <TrayButton
-        label="Mic"
+        label="マイク"
         onClick={() => toggleMic(isMicMuted)}
         orange={isMicMuted}
       >
         {isMicMuted ? <IconMicOff /> : <IconMicOn />}
       </TrayButton>
-      <TrayButton label="Settings" onClick={() => openModal(DEVICE_MODAL)}>
+      <TrayButton label="デバイス" onClick={() => openModal(DEVICE_MODAL)}>
         <IconSettings />
       </TrayButton>
       {/* <TrayButton label="Network" onClick={() => toggleAside(NETWORK_ASIDE)}>
@@ -63,7 +63,7 @@ export const BasicTray = () => {
 
       <span className="divider" />
 
-      <TrayButton label="Leave" onClick={() => leave()} orange>
+      <TrayButton label="退室" onClick={() => leave()} orange>
         <IconLeave />
       </TrayButton>
     </Tray>
