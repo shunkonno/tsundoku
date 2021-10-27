@@ -14,6 +14,7 @@ import { WaitingRoomProvider } from '../../../daily/contexts/WaitingRoomProvider
 import getDemoProps from '../../../daily/lib/demoProps'
 import PropTypes from 'prop-types'
 import App from '../../../daily/components/App'
+import Loader from '../../../daily/components/Loader'
 import CreatingRoom from '../../../daily/components/Prejoin/CreatingRoom'
 import Intro from '../../../daily/components/Prejoin/Intro'
 import NotConfigured from '../../../daily/components/Prejoin/NotConfigured'
@@ -107,18 +108,21 @@ export default function SessionJoin({
           if (!sessionId) return
 
           return (
-            <Intro
-              forceFetchToken={forceFetchToken}
-              forceOwner={forceOwner}
-              title={process.env.PROJECT_TITLE}
-              room={roomName}
-              error={tokenError}
-              fetching={fetchingToken}
-              domain={domain}
-              onJoin={(room, isOwner, fetchToken) =>
-                fetchToken ? getMeetingToken(room, isOwner) : setRoomName(room)
-              }
-            />
+            <div className="flex w-6 h-6 items-center justify-center text-white">
+              <Loader />
+            </div>
+            // <Intro
+            //   forceFetchToken={forceFetchToken}
+            //   forceOwner={forceOwner}
+            //   title={process.env.PROJECT_TITLE}
+            //   room={roomName}
+            //   error={tokenError}
+            //   fetching={fetchingToken}
+            //   domain={domain}
+            //   onJoin={(room, isOwner, fetchToken) =>
+            //     fetchToken ? getMeetingToken(room, isOwner) : setRoomName(room)
+            //   }
+            // />
           )
         })()}
 
@@ -128,6 +132,7 @@ export default function SessionJoin({
           grid-template-columns: 640px;
           align-items: center;
           justify-content: center;
+          background-color: #303C5B;
         `}</style>
       </main>
     )
