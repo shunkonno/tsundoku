@@ -108,9 +108,7 @@ export default function SessionJoin({
           if (!sessionId) return
 
           return (
-            <div className="flex w-6 h-6 items-center justify-center text-white">
-              <Loader />
-            </div>
+               <Loader />
             // <Intro
             //   forceFetchToken={forceFetchToken}
             //   forceOwner={forceOwner}
@@ -127,12 +125,16 @@ export default function SessionJoin({
         })()}
 
         <style jsx>{`
+          color: white;
           height: 100vh;
-          display: grid;
-          grid-template-columns: 640px;
+          display: flex;
           align-items: center;
-          justify-content: center;
           background-color: #303C5B;
+          justify-content: center;
+
+          .loader {
+            margin: 0 auto;
+          }
         `}</style>
       </main>
     )
