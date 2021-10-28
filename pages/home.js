@@ -300,9 +300,9 @@ export default function Home() {
     return <div>Waiting..</div>
   }
 
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     // windowを使う処理を記述
-    if(error?.status === 500){
+    if (error?.status === 500) {
       window.location.reload()
     }
   }
@@ -352,7 +352,7 @@ export default function Home() {
                   </div>
                   {userIsOwnerOrGuest ? (
                     <ul role="list" className="">
-                      {sessions.map((session) =>
+                      {sessions.map((session, index) =>
                         userInfo.uid == session.guestId ||
                         userInfo.uid == session.ownerId ? (
                           <li key={session?.sessionId} className="mb-5">
