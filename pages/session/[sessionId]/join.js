@@ -58,45 +58,48 @@ export default function SessionJoin({
   // Setup
   // ============================================================
 
-  const getMeetingToken = useCallback(async (room, isOwner = false) => {
-    if (!room) {
-      return false
-    }
+  const getMeetingToken = useCallback(
+    async (room, isOwner = false) => {
+      if (!room) {
+        return false
+      }
 
-    if (!user) {
-      return false
-    }
+      if (!user) {
+        return false
+      }
 
-    setFetchingToken(true)
+      setFetchingToken(true)
 
-    // Fetch token from serverside method (provided by Next)
-    const res = await fetch('/api/daily/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ roomName: room, isOwner, userId: user?.uid })
-    })
+      // Fetch token from serverside method (provided by Next)
+      const res = await fetch('/api/daily/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ roomName: room, isOwner, userId: user?.uid })
+      })
 
-    const resJson = await res.json()
+      const resJson = await res.json()
 
-    if (!resJson?.token) {
-      setTokenError(resJson?.error || true)
+      if (!resJson?.token) {
+        setTokenError(resJson?.error || true)
+        setFetchingToken(false)
+        return false
+      }
+
+      console.log(`🪙 Token received`)
+
       setFetchingToken(false)
-      return false
-    }
 
-    console.log(`🪙 Token received`)
+      setToken(resJson.token)
 
-    setFetchingToken(false)
+      // Setting room name will change ready state
+      setRoomName(room)
 
-    setToken(resJson.token)
-
-    // Setting room name will change ready state
-    setRoomName(room)
-
-    return true
-  }, [])
+      return true
+    },
+    [user]
+  )
 
   // ============================================================
   // Get Token
