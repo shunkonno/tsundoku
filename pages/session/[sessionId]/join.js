@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 
 // Functions
 import { fetchOneSession, fetchAllSessions } from '../../../lib/db-admin'
+import { useAuth } from '../../../lib/auth'
 
 // Daily
 import { CallProvider } from '../../../daily/contexts/CallProvider'
@@ -47,6 +48,13 @@ export default function SessionJoin({
   const { sessionId } = router.query
 
   // ============================================================
+  // Auth
+  // ============================================================
+
+  const auth = useAuth()
+  const user = auth.user
+
+  // ============================================================
   // Setup
   // ============================================================
 
@@ -63,7 +71,7 @@ export default function SessionJoin({
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ roomName: room, isOwner })
+      body: JSON.stringify({ roomName: room, isOwner, userId: user?.uid })
     })
 
     const resJson = await res.json()
@@ -108,7 +116,7 @@ export default function SessionJoin({
           if (!sessionId) return
 
           return (
-               <Loader />
+            <Loader />
             // <Intro
             //   forceFetchToken={forceFetchToken}
             //   forceOwner={forceOwner}
@@ -129,7 +137,7 @@ export default function SessionJoin({
           height: 100vh;
           display: flex;
           align-items: center;
-          background-color: #303C5B;
+          background-color: #303c5b;
           justify-content: center;
 
           .loader {
