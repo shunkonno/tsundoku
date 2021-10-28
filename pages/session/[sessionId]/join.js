@@ -63,6 +63,10 @@ export default function SessionJoin({
       return false
     }
 
+    if (!user) {
+      return false
+    }
+
     setFetchingToken(true)
 
     // Fetch token from serverside method (provided by Next)
