@@ -60,7 +60,7 @@ export const VideoGrid = ({ session }) => {
     typeof window.navigator !== 'undefined'
   ) {
     try {
-      wakeLock = navigator.wakeLock.request('screen')
+      wakeLock = navigator.wakeLock?.request('screen')
       console.log('Wake Lock is active')
     } catch (err) {
       console.error(`${err.name}, ${err.message}`)
@@ -145,11 +145,12 @@ export const VideoGrid = ({ session }) => {
   // Return Component
   // ============================================================
   return (
-    <div
-      className="main-area flex h-full items-center justify-center relative w-full"
-    >
-      <LeftBookListSidebar leftSlideOpen={leftSlideOpen} setLeftSlideOpen={setLeftSlideOpen} />
-      <div id='tiles' className='flex-1 h-full'>
+    <div className="main-area flex h-full items-center justify-center relative w-full">
+      <LeftBookListSidebar
+        leftSlideOpen={leftSlideOpen}
+        setLeftSlideOpen={setLeftSlideOpen}
+      />
+      <div id="tiles" className="flex-1 h-full">
         <div
           className={classNames(
             !(tileCount >= 2)
@@ -161,9 +162,9 @@ export const VideoGrid = ({ session }) => {
           {tiles}
         </div>
       </div>
-      <RightBookListSidebar 
-        rightSlideOpen={rightSlideOpen} 
-        setRightSlideOpen={setRightSlideOpen} 
+      <RightBookListSidebar
+        rightSlideOpen={rightSlideOpen}
+        setRightSlideOpen={setRightSlideOpen}
         tileCount={tileCount}
         peerUserInfo={peerUserInfo}
         peerBookList={peerBookList}
