@@ -122,8 +122,8 @@ export const VideoGrid = ({ session }) => {
   const { participants } = useParticipants()
 
   // const aspectRatio = DEFAULT_ASPECT_RATIO
-  // const tileCount = participants.length || 0
-  const tileCount = 2
+  const tileCount = participants.length || 0
+  // const tileCount = 2
 
   // Memoize our tile list to avoid unnecassary re-renders
   const tiles = useDeepCompareMemo(() => {
