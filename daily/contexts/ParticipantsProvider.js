@@ -51,10 +51,14 @@ export const ParticipantsProvider = ({ children }) => {
     [state?.participants, state?.screens]
   )
 
+  console.log('callObjectParticipants : ', callObject?.participants())
+
   /**
    * Only return participants that should be visible in the call
    */
   const participants = useMemo(() => state.participants, [state.participants])
+
+  console.log('participants is :', participants)
 
   /**
    * Array of participant IDs
