@@ -198,20 +198,22 @@ export default function SessionDetail({ session }) {
     })
   }
 
-  const joinSession = async () => {
-    // e.preventDefault()
+  const joinSession = async (e) => {
+    e.preventDefault()
 
     // ユーザーが現在読んでいる本に、読書時間を加算する
     const bid = userInfo?.isReading
 
     if (bid) {
       // CONSIDER: join ページで退出した際に、加算したほうが精度は高まる
-      addReadTime(user?.uid, bid, session?.duration)
+      await addReadTime(user?.uid, bid, session?.duration)
     }
 
     // userStats の readTime に追加
     // CONSIDER: join ページで退出した際に、加算したほうが精度は高まる
-    addReadTimeToUserStats(user?.uid, session?.duration)
+    await addReadTimeToUserStats(user?.uid, session?.duration)
+
+    router.push({ pathname: '/session/' + session?.sessionId + '/join' })
   }
 
   // ============================================================
@@ -282,12 +284,14 @@ export default function SessionDetail({ session }) {
               </div>
             </div>
             <div className="overflow-hidden bg-white sm:rounded-lg border border-black">
-              
               <div className="py-5 px-4 relative">
                 <div className="absolute right-0 mr-4">
                   <Menu as={'div'} className="relative">
-                    <Menu.Button as="div" className="inline-block relative cursor-pointer">
-                      <DotsVerticalIcon className="w-6 h-6 text-gray-500"/>
+                    <Menu.Button
+                      as="div"
+                      className="inline-block relative cursor-pointer"
+                    >
+                      <DotsVerticalIcon className="w-6 h-6 text-gray-500" />
                     </Menu.Button>
                     <Transition
                       as={Fragment}
@@ -298,7 +302,6 @@ export default function SessionDetail({ session }) {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                    
                       <Menu.Items
                         className={classNames(
                           'absolute w-48 right-0 z-20 bg-white rounded-md divide-y divide-gray-100 ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none'
@@ -306,38 +309,38 @@ export default function SessionDetail({ session }) {
                       >
                         <div className="px-2 py-2">
                           <Menu.Item>
-                          {session?.ownerId == userInfo?.uid ?
-                          <div 
-                            className="group flex items-center space-x-2"
-                            onClick={(e) => deleteSessionData(e)}
-                          >
-                            <TrashIcon className="w-5 h-5 text-red-600 group-hover:text-red-700"/>
-                            <span
-                              type="button"
-                              className="text-sm text-red-600 group-hover:text-red-700 cursor-pointer"
-                            >
-                              ルームを削除する
-                            </span>
-                          </div>
-                          :
-                          <div 
-                            className="group flex items-center space-x-2"
-                            onClick={(e) => cancelSession(e)}
-                          >
-                            <XCircleIcon className="w-5 h-5 text-red-600 group-hover:text-red-700"/>
-                            <span
-                              type="button"
-                              className="text-sm text-red-600 group-hover:text-red-700 cursor-pointer"
-                            >
-                              予約をキャンセルする
-                            </span>
-                          </div>
-                          }
+                            {session?.ownerId == userInfo?.uid ? (
+                              <div
+                                className="group flex items-center space-x-2"
+                                onClick={(e) => deleteSessionData(e)}
+                              >
+                                <TrashIcon className="w-5 h-5 text-red-600 group-hover:text-red-700" />
+                                <span
+                                  type="button"
+                                  className="text-sm text-red-600 group-hover:text-red-700 cursor-pointer"
+                                >
+                                  ルームを削除する
+                                </span>
+                              </div>
+                            ) : (
+                              <div
+                                className="group flex items-center space-x-2"
+                                onClick={(e) => cancelSession(e)}
+                              >
+                                <XCircleIcon className="w-5 h-5 text-red-600 group-hover:text-red-700" />
+                                <span
+                                  type="button"
+                                  className="text-sm text-red-600 group-hover:text-red-700 cursor-pointer"
+                                >
+                                  予約をキャンセルする
+                                </span>
+                              </div>
+                            )}
                           </Menu.Item>
                         </div>
                       </Menu.Items>
                     </Transition>
-                </Menu>
+                  </Menu>
                 </div>
                 <dl className="">
                   <div className="pb-3">
@@ -375,10 +378,7 @@ export default function SessionDetail({ session }) {
             <div className="flex justify-center items-start py-6">
               <div className="flex">
                 {enterRoomOpen ? (
-                  <a
-                    href={`/ja/session/${session?.sessionId}/join`}
-                    onClick={() => joinSession()}
-                  >
+                  <a onClick={(e) => joinSession(e)}>
                     <span
                       type="button"
                       className="inline-flex items-center py-3 px-6 text-base font-medium text-white hover:bg-blue-600 rounded-md border border-transparent focus:ring-2 focus:ring-offset-2 shadow-sm cursor-pointer focus:outline-none bg-tsundoku-blue-main focus:ring-tsundoku-blue-main"
