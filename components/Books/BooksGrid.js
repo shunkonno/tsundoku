@@ -11,6 +11,7 @@ import { useUserInfo } from "../../context/useUserInfo"
 export default function BooksGrid() {
 
   // State
+  let [loading, setLoading] = useState(true)
   let [bookCardsSelected, setBookCardSelected] = useState([])
 
   // ユーザー情報
@@ -39,13 +40,41 @@ export default function BooksGrid() {
   }
 
   // ============================================================
+  // Loading
+  // ============================================================
+  useEffect(()=> {
+    if(userInfo && bookList){
+      setLoading(false)
+    }
+  },[userInfo, bookList])
+
+  // Render Skeleton
+  const renderSkeleton = (loading) => {
+
+    return(
+      [...Array(6)].map((empty, idx)=>{
+        return(
+          <ListBookCard
+            key={idx}
+            loading={loading}
+          />
+        )
+      }
+      )
+    )
+  }
+
+  // ============================================================
   // Return Component
   // ============================================================
 
   return(
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8">
-        {bookList?.map(
+        {loading ?
+        renderSkeleton(loading)
+        :
+        bookList?.map(
           (
             {
               bookInfo,

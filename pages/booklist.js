@@ -1,9 +1,12 @@
 // ============================================================
 // Imports
 // ===========================================================
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+
+// Assets
+import { PlusSmIcon } from '@heroicons/react/solid'
 
 // Components
 import { AppHeader } from '../components/Header'
@@ -16,9 +19,6 @@ import { BooksGrid } from '../components/Books'
 
 //Context
 import { useUserInfo } from '../context/useUserInfo'
-
-// Assets
-import { PlusSmIcon } from '@heroicons/react/solid'
 
 // Functions
 import { useAuth } from '../lib/auth'
@@ -48,10 +48,6 @@ export default function BookList() {
   // ============================================================
   // Return
   // ============================================================
-  if (user === null || !userInfo) {
-    return <div>Waiting..</div>
-  }
-
   if (typeof window !== "undefined") {
     // windowを使う処理を記述
     // Internal Server Error 500 が出たら強制リロード
