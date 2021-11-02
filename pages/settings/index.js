@@ -251,20 +251,26 @@ export default function UserSettings() {
                   </label>
                   <div className="sm:col-span-2 mt-1 sm:mt-0">
                     <div className="flex items-center space-x-3">
-                      {loading ?
+                      {userInfo?.avatar === undefined ?
                       <span className="relative w-20 h-20">
                         <Skeleton circle height="100%"/>
                       </span>
                       :
-                      <span className="overflow-hidden relative w-20 h-20 bg-orange-100 rounded-full">
+                      <span className="overflow-hidden relative w-20 h-20  rounded-full">
                         <Image 
+                          className={
+                            !(userInfo?.avatar == "") ?
+                            "bg-white"
+                            :
+                            "bg-orange-100"
+                          }
                           src={avatarPreviewUrl ?
-                            avatarPreviewUrl
+                              avatarPreviewUrl
                             :
-                            userInfo?.avatar ?
-                            userInfo.avatar
-                            :
-                            "/img/avatar/avatar-placeholder.png"
+                              !(userInfo?.avatar == "") ?
+                                userInfo.avatar
+                              :
+                              "/img/avatar/avatar-placeholder.png"
                           } 
                           layout={'fill'} 
                           alt="profile-image" 

@@ -17,6 +17,7 @@ import Wave from 'react-wavify'
 
 // Functions
 import {useOneUserInfo} from '../../../context/useOneUserInfo'
+import classNames from '../../../utils/classNames'
 
 export const WaveTile = memo(
   ({uid}) => {
@@ -80,19 +81,26 @@ export const WaveTile = memo(
               <div className="relative w-full h-full">
                 <div className="absolute w-full top-1/2 md:top-1/4 transform -translate-y-1/2 md:-translate-y-0">
                   <div className="mx-auto relative w-16 sm:w-20 h-16 sm:h-20">
-                    {loading ?
-                    <Skeleton circle height={"100%"}/>
+                    {userInfo?.avatar === undefined ?
+                      <Skeleton circle height={"100%"}/>
                     :
                     <Image
-                      className="rounded-full bg-blue-100"
+                      className={classNames(
+                        !(userInfo?.avatar == "") ?
+                        "bg-white"
+                        :
+                        "bg-blue-100",
+                        "rounded-full"
+                      )}
                       src={
-                        userInfo?.avatar
-                          ? userInfo?.avatar
-                          : "/img/avatar/avatar-placeholder.png"
+                        !(userInfo?.avatar == "") ? 
+                            userInfo?.avatar
+                          : 
+                            "/img/avatar/avatar-placeholder.png"
                       }
                       layout={'fill'}
                       objectFit={"cover"}
-                      alt="Avatar"
+                      alt="avatar-image"
                     />
                     }
                   </div>
