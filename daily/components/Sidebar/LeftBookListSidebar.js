@@ -96,7 +96,7 @@ export const LeftBookListSidebar = ({leftSlideOpen, setLeftSlideOpen}) => {
               </div>
             }
             <div className="h-16 w-full">
-              <div className="text-black overflow-ellipsis line-clamp-2">{isReadingBook?.bookInfo.title}</div>
+              <div className="text-black overflow-ellipsis text-center line-clamp-2">{isReadingBook?.bookInfo.title}</div>
             </div>
           </div>
           <div className="flex-shrink-0 w-full">
@@ -145,7 +145,7 @@ export const LeftBookListSidebar = ({leftSlideOpen, setLeftSlideOpen}) => {
                   bookInfo.bid == userInfo.isReading
                     ? 'ring-2 ring-tsundoku-blue-main'
                     : 'border border-gray-300',
-                  'relative rounded-lg bg-white py-2 mb-2 mx-2 px-2 h-28 sm:px-3 shadow-sm flex hover:border-blue-400'
+                  'relative rounded-lg bg-white py-2 mb-2 mx-2 px-2 h-28 sm:px-3 shadow-sm flex hover:border-blue-400 cursor-pointer'
                 )}
                 onClick={async (e) => {
                   await selectReadingBook(e, user, bookInfo.bid, mutate)
