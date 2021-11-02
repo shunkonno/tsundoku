@@ -36,6 +36,7 @@
     "react": "^17.0.2",
     "react-day-picker": "^7.4.10",
     "react-dom": "^17.0.2",
+    "react-loading-skeleton": "^3.0.1",
     "react-portal": "^4.2.1",
     "react-wavify": "^1.5.4",
     "shallow-equal": "^1.2.1",
