@@ -1,22 +1,41 @@
-//Component
+// Basics
+import { useState, useEffect } from 'react'
+
+// Components
 import { ReservableRoomCard } from '../Card'
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
 
 //Functions
+import { useUserInfo } from '../../context/useUserInfo'
 import { formatISOStringToDate } from '../../utils/formatDateTime'
+import { useAllSessions } from '../../context/useAllSessions'
 
-export default function ReservableRoomList({reserveSession, sessions, uid, loading}) {
+export default function ReservableRoomList() {
+  // State
+  let [loading, setLoading] = useState(true)
+
+  // ユーザー情報
+  const { userInfo, error } = useUserInfo()
+  const uid = userInfo?.uid
+
+  // セッション情報
+  const sessions = useAllSessions()
+
+  // Loading
+  useEffect(()=>{
+    if (userInfo && sessions) {
+      setLoading(false)
+    }
+  },[userInfo, sessions])
+
   // Skeleton
   if(loading){
     return(
       <ul className="py-2">
-        <li className="mb-5">
-          <ReservableRoomCard loading={loading}/>
-        </li>
-        <li className="mb-5">
-          <ReservableRoomCard loading={loading}/>
-        </li>
+        {[...Array(2)].map((a, idx) => (
+          <li key={idx} className="mb-5">
+            <ReservableRoomCard loading={loading}/>
+          </li>
+        ))}
       </ul>
     )
   }
@@ -58,7 +77,7 @@ if(reservableList.length){
             })
             .map((session) => (
                   <li key={session?.sessionId} className="mb-5">
-                    <ReservableRoomCard reserveSession={reserveSession} {...session} loading={loading}/>
+                    <ReservableRoomCard {...session} loading={loading}/>
                   </li>
                 
             ))}
@@ -75,7 +94,4 @@ else{
   )
 }
 
-  
-
-    
 }

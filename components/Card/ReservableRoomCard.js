@@ -1,13 +1,55 @@
 
+// Vercel
+import { useSWRConfig } from 'swr'
+
 //Component
 import { Disclosure, Transition } from '@headlessui/react'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
+// Context
+import { useAlertState } from '../../context/AlertProvider'
+import { useUserInfo } from '../../context/useUserInfo'
+
 //Functions
+import { updateSession } from '../../lib/db'
 import { formatISOStringToTime } from '../../utils/formatDateTime'
 
-export default function ReservableRoomCard({reserveSession, sessionId, ownerName, guestId, startDateTime, endDateTime, duration, loading}) {
+export default function ReservableRoomCard({sessionId, ownerName, guestId, startDateTime, endDateTime, duration, loading}) {
+
+  // Context
+  const { setAlertAssort } = useAlertState()
+
+  // Mutate
+  const mutate = useSWRConfig()
+
+  // ユーザー情報
+  const userInfo = useUserInfo()
+
+  // セッション予約ボタン
+  const reserveSession = async (sessionId, guestId) => {
+    if (guestId) {
+      // guestId がすでに設定されている場合、予約することができない
+
+      // アラートの設定
+      await setAlertAssort('failed')
+    } else {
+      // guestId 未設定であれば、当ユーザーをIDを設定する
+
+      // セッション情報の更新
+      await updateSession(sessionId, {
+        guestId: userInfo.uid,
+        guestName: userInfo.name
+      })
+
+      // 画面をリフレッシュ
+      mutate('/api/session')
+
+      // アラートの設定
+      await setAlertAssort('reserve')
+    }
+  }
+
   if(loading) {
     return(
       <div className="w-full">
