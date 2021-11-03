@@ -50,7 +50,6 @@ export default function BooksGrid() {
 
   // Render Skeleton
   const renderSkeleton = (loading) => {
-
     return(
       [...Array(6)].map((empty, idx)=>{
         return(

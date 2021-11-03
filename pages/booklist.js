@@ -113,7 +113,7 @@ export default function BookList() {
       <Footer />
 
       {/* スマホ時、コンテンツとNavbarが重なるのを防ぐ */}
-      <div className="sm:hidden h-16 bg-gray" />
+      <div className="sm:hidden h-16 bg-gray-50" />
     </div>
   )
 }
