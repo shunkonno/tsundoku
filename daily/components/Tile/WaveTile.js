@@ -1,38 +1,50 @@
-import React, { memo, Fragment, useEffect, useState, useRef } from 'react'
+// Basic
+import React, { memo, Fragment, useEffect, useState } from 'react'
 import { ReactComponent as IconMicMute } from '../../icons/mic-off-sm.svg'
-import classNames from 'classnames'
-import PropTypes from 'prop-types'
-import { DEFAULT_ASPECT_RATIO } from '../../constants'
 import { ReactComponent as Avatar } from './avatar.svg'
 
+// Vercel
 import Image from 'next/image'
-import {useOneUserInfo} from '../../../context/useOneUserInfo'
-import Wave from 'react-wavify'
-import { Dialog, Transition } from '@headlessui/react'
 
-//Assets
-import {
-  MicrophoneIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  LogoutIcon,
-  XIcon
-} from '@heroicons/react/outline'
+// Assets
 import colors from 'tailwindcss/colors'
+
+// Components
+import { Transition } from '@headlessui/react'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+import Wave from 'react-wavify'
+
+// Functions
+import {useOneUserInfo} from '../../../context/useOneUserInfo'
+import classNames from '../../../utils/classNames'
 
 export const WaveTile = memo(
   ({uid}) => {
     const [ isApper, setIsAppear] = useState(false)
+    let [loading, setLoading] = useState(true)
 
+    //初回のみアニメーションを実行するため、マウント時isAppearをfalseからtrueに切り替える。
     useEffect(()=>{
       setIsAppear(true)
     },[])
 
     const userInfo = useOneUserInfo(uid)
 
+    // 波の速さを0.10から0.15の範囲でランダムで決定
+    const waveSpeed = (Math.random() * (0.150 - 0.100) + 0.100)
+
+    // Loading
+    useEffect(()=>{
+      if(userInfo){
+        setLoading(false)
+      }else{
+        setLoading(true)
+      }
+    },[userInfo])
+
     return(
       <Transition
-        
         show={isApper}
         enter="transition ease-out duration-300"
         enterFrom="transform opacity-0 scale-95"
@@ -50,7 +62,7 @@ export const WaveTile = memo(
                 paused={false}
                 options={{
                   amplitude: 30,
-                  speed: 0.15,
+                  speed: waveSpeed,
                   points: 3
                 }}
               >
@@ -67,24 +79,43 @@ export const WaveTile = memo(
             </div>
             <div className="absolute">
               <div className="relative w-full h-full">
-                <div className="absolute w-16 sm:w-20 h-20 sm:h-24 md:h-20 top-1/2 md:top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                  <div className="relative w-16 sm:w-20 h-16 sm:h-20">
+                <div className="absolute w-full top-1/2 md:top-1/4 transform -translate-y-1/2 md:-translate-y-0">
+                  <div className="mx-auto relative w-16 sm:w-20 h-16 sm:h-20">
+                    {userInfo?.avatar === undefined ?
+                      <Skeleton circle height={"100%"}/>
+                    :
                     <Image
-                      className="rounded-full"
+                      className={classNames(
+                        !(userInfo?.avatar == "") ?
+                        "bg-white"
+                        :
+                        "bg-blue-100",
+                        "rounded-full"
+                      )}
                       src={
-                        userInfo?.avatar
-                          ? userInfo?.avatar
-                          : '/img/placeholder/noimage_480x640.jpg'
+                        !(userInfo?.avatar == "") ? 
+                            userInfo?.avatar
+                          : 
+                            "/img/avatar/avatar-placeholder.png"
                       }
                       layout={'fill'}
                       objectFit={"cover"}
-                      alt="Avatar"
+                      alt="avatar-image"
                     />
+                    }
                   </div>
-                  <p className="text-center text-gray-800">
-                    {userInfo ? userInfo.name : 'noname'}
+                  <p className="w-full mt-0 md:mt-2 px-4 truncate text-center text-gray-800">
+                    {loading ?
+                    <Skeleton width={80}/>
+                    : 
+                      userInfo.name ?
+                        userInfo.name
+                        :
+                        'noname'
+                    }
                   </p>
                 </div>
+                
               </div>
             </div>
           </div>

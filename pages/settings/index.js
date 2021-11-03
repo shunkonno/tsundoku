@@ -7,17 +7,18 @@ import Head from 'next/head'
 import Image from 'next/image'
 import useSWR, { useSWRConfig } from 'swr'
 
+// Assets
+import { RadioGroup } from '@headlessui/react'
+
 // Components
 import { AppHeader } from '../../components/Header'
 import { Footer } from '../../components/Footer'
 import { GeneralAlert } from '../../components/Alert'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 //Context
 import { useAlertState } from '../../context/AlertProvider'
-
-// Assets
-import { Transition, RadioGroup } from '@headlessui/react'
-import { CheckCircleIcon, XIcon } from '@heroicons/react/solid'
 
 // Functions
 import { useAuth } from '../../lib/auth'
@@ -62,6 +63,10 @@ export default function UserSettings() {
   // ============================================================
   const { alertOpen, setAlertOpen, alertAssort, setAlertAssort } = useAlertState()
 
+  // ============================================================
+  // State
+  // ============================================================
+  let [loading, setLoading] = useState(true)
   // ============================================================
   // Auth
   // ============================================================
@@ -162,6 +167,15 @@ export default function UserSettings() {
   }
 
   // ============================================================
+  // Loading
+  // ===========================================================
+  useEffect(()=> {
+    if(userInfo){
+      setLoading(false)
+    }
+  },[userInfo])
+
+  // ===========================================================
   // Return Page
   // ===========================================================
   return (
@@ -237,20 +251,32 @@ export default function UserSettings() {
                   </label>
                   <div className="sm:col-span-2 mt-1 sm:mt-0">
                     <div className="flex items-center space-x-3">
-                      <span className="overflow-hidden relative w-20 h-20 bg-orange-100 rounded-full">
+                      {userInfo?.avatar === undefined ?
+                      <span className="relative w-20 h-20">
+                        <Skeleton circle height="100%"/>
+                      </span>
+                      :
+                      <span className="overflow-hidden relative w-20 h-20  rounded-full">
                         <Image 
+                          className={
+                            !(userInfo?.avatar == "") ?
+                            "bg-white"
+                            :
+                            "bg-orange-100"
+                          }
                           src={avatarPreviewUrl ?
-                            avatarPreviewUrl
+                              avatarPreviewUrl
                             :
-                            userInfo?.avatar ?
-                            userInfo.avatar
-                            :
-                            "/img/avatar/avatar-placeholder.png"
+                              !(userInfo?.avatar == "") ?
+                                userInfo.avatar
+                              :
+                              "/img/avatar/avatar-placeholder.png"
                           } 
                           layout={'fill'} 
                           alt="profile-image" 
                         />
                       </span>
+                      }
                       <div>
                         <span className="block mb-3 text-sm text-gray-500">推奨：縦360px 横360px 比率1：1 </span>
                         <label

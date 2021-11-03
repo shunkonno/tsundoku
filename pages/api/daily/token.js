@@ -4,7 +4,7 @@
  * custom user authentication, etc.
  */
 export default async function tokenHandler(req, res) {
-  const { roomName, isOwner } = req.body
+  const { roomName, isOwner, userId } = req.body
 
   if (req.method === 'POST' && roomName) {
     console.log(`Getting token for room '${roomName}' as owner: ${isOwner}`)
@@ -16,7 +16,7 @@ export default async function tokenHandler(req, res) {
         Authorization: `Bearer ${process.env.DAILY_API_KEY}`
       },
       body: JSON.stringify({
-        properties: { room_name: roomName, is_owner: isOwner }
+        properties: { room_name: roomName, is_owner: isOwner, user_id: userId }
       })
     }
 

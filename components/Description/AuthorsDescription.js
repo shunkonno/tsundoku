@@ -1,5 +1,5 @@
 
-export default function RenderAuthorsDescription(authors) {
+export default function AuthorsDescription(authors) {
   //3人以上著者がいたら、3人目以降を省略し、"・他"を付け加えて表示する。
   if (authors.length > 2) {
     return (

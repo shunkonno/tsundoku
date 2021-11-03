@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 
 // Functions
 import { fetchOneSession, fetchAllSessions } from '../../../lib/db-admin'
+import { useAuth } from '../../../lib/auth'
 
 // Daily
 import { CallProvider } from '../../../daily/contexts/CallProvider'
@@ -14,6 +15,7 @@ import { WaitingRoomProvider } from '../../../daily/contexts/WaitingRoomProvider
 import getDemoProps from '../../../daily/lib/demoProps'
 import PropTypes from 'prop-types'
 import App from '../../../daily/components/App'
+import Loader from '../../../daily/components/Loader'
 import CreatingRoom from '../../../daily/components/Prejoin/CreatingRoom'
 import Intro from '../../../daily/components/Prejoin/Intro'
 import NotConfigured from '../../../daily/components/Prejoin/NotConfigured'
@@ -46,44 +48,58 @@ export default function SessionJoin({
   const { sessionId } = router.query
 
   // ============================================================
+  // Auth
+  // ============================================================
+
+  const auth = useAuth()
+  const user = auth.user
+
+  // ============================================================
   // Setup
   // ============================================================
 
-  const getMeetingToken = useCallback(async (room, isOwner = false) => {
-    if (!room) {
-      return false
-    }
+  const getMeetingToken = useCallback(
+    async (room, isOwner = false) => {
+      if (!room) {
+        return false
+      }
 
-    setFetchingToken(true)
+      if (!user) {
+        return false
+      }
 
-    // Fetch token from serverside method (provided by Next)
-    const res = await fetch('/api/daily/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ roomName: room, isOwner })
-    })
+      setFetchingToken(true)
 
-    const resJson = await res.json()
+      // Fetch token from serverside method (provided by Next)
+      const res = await fetch('/api/daily/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ roomName: room, isOwner, userId: user?.uid })
+      })
 
-    if (!resJson?.token) {
-      setTokenError(resJson?.error || true)
+      const resJson = await res.json()
+
+      if (!resJson?.token) {
+        setTokenError(resJson?.error || true)
+        setFetchingToken(false)
+        return false
+      }
+
+      console.log(`🪙 Token received`)
+
       setFetchingToken(false)
-      return false
-    }
 
-    console.log(`🪙 Token received`)
+      setToken(resJson.token)
 
-    setFetchingToken(false)
+      // Setting room name will change ready state
+      setRoomName(room)
 
-    setToken(resJson.token)
-
-    // Setting room name will change ready state
-    setRoomName(room)
-
-    return true
-  }, [])
+      return true
+    },
+    [user]
+  )
 
   // ============================================================
   // Get Token
@@ -107,27 +123,33 @@ export default function SessionJoin({
           if (!sessionId) return
 
           return (
-            <Intro
-              forceFetchToken={forceFetchToken}
-              forceOwner={forceOwner}
-              title={process.env.PROJECT_TITLE}
-              room={roomName}
-              error={tokenError}
-              fetching={fetchingToken}
-              domain={domain}
-              onJoin={(room, isOwner, fetchToken) =>
-                fetchToken ? getMeetingToken(room, isOwner) : setRoomName(room)
-              }
-            />
+            <Loader />
+            // <Intro
+            //   forceFetchToken={forceFetchToken}
+            //   forceOwner={forceOwner}
+            //   title={process.env.PROJECT_TITLE}
+            //   room={roomName}
+            //   error={tokenError}
+            //   fetching={fetchingToken}
+            //   domain={domain}
+            //   onJoin={(room, isOwner, fetchToken) =>
+            //     fetchToken ? getMeetingToken(room, isOwner) : setRoomName(room)
+            //   }
+            // />
           )
         })()}
 
         <style jsx>{`
+          color: white;
           height: 100vh;
-          display: grid;
-          grid-template-columns: 640px;
+          display: flex;
           align-items: center;
+          background-color: #303c5b;
           justify-content: center;
+
+          .loader {
+            margin: 0 auto;
+          }
         `}</style>
       </main>
     )

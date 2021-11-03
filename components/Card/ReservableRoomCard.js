@@ -1,11 +1,27 @@
 
 //Component
 import { Disclosure, Transition } from '@headlessui/react'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 //Functions
 import { formatISOStringToTime } from '../../utils/formatDateTime'
 
-export default function ReservableRoomCard({reserveSession, sessionId, ownerName, guestId, startDateTime, endDateTime, duration}) {
+export default function ReservableRoomCard({reserveSession, sessionId, ownerName, guestId, startDateTime, endDateTime, duration, loading}) {
+  if(loading) {
+    return(
+      <div className="w-full">
+          <div className="p-4">
+              <h3 className="session-card-date">
+                <Skeleton width={140} />
+              </h3>
+              <div className="mt-1">
+                <Skeleton />
+              </div>
+          </div>
+        </div>
+    )
+  }
 
   return (
     <Disclosure>

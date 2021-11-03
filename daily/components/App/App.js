@@ -32,7 +32,7 @@ export const App = ({ customComponentForState, session }) => {
             height: 100vh;
             display: flex;
             align-items: center;
-            background-color: #2B3F56;
+            background-color: #303C5B;
             justify-content: center;
 
             .loader {

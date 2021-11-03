@@ -1,7 +1,7 @@
 // ============================================================
 // Imports
 // ============================================================
-import { Fragment, useEffect, useContext } from 'react'
+import { Fragment, useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -16,6 +16,8 @@ import { Navbar } from '../components/Navbar'
 import { ReservedRoomCard } from '../components/Card'
 import { ReservableRoomList } from '../components/List'
 import { GeneralAlert } from '../components/Alert'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 //Context
 import { useUserInfo } from '../context/useUserInfo'
@@ -42,6 +44,11 @@ export default function Home() {
   // ============================================================
   const { alertOpen, setAlertOpen, alertAssort, setAlertAssort } =
     useAlertState()
+
+  // ============================================================
+  // State
+  // ============================================================
+  let [loading, setLoading] = useState(true)
 
   // ============================================================
   // Auth
@@ -258,22 +265,6 @@ export default function Home() {
   // Render Function
   // ============================================================
 
-  const renderNoEmptyRoomStatement = (sessions) => {
-    const filteredList = sessions.filter((session) => {
-      return !(
-        session?.ownerId == userInfo?.uid || session?.guestId == userInfo?.uid
-      )
-    })
-
-    if (!filteredList.length) {
-      return (
-        <div className="py-6 text-center bg-gray-100 rounded-md">
-          現在、予約可能のルームはありません。
-        </div>
-      )
-    }
-  }
-
   const renderIncreasedRate = () => {
     let increasedRate = calculateRateOfReadTime(
       monthlyReadTime(),
@@ -294,15 +285,24 @@ export default function Home() {
   }
 
   // ============================================================
+  // Loading
+  // ============================================================
+
+  useEffect(()=>{
+    if (!(user === null || !userInfo || !sessions || !bookList)) {
+      setLoading(false)
+    }
+  },[user, userInfo, sessions, bookList])
+
+  console.log(loading)
+
+  // ============================================================
   // Return
   // ============================================================
-  if (user === null || !userInfo || !sessions) {
-    return <div>Waiting..</div>
-  }
 
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     // windowを使う処理を記述
-    if(error?.status === 500){
+    if (error?.status === 500) {
       window.location.reload()
     }
   }
@@ -328,6 +328,7 @@ export default function Home() {
       <AppHeader />
 
       {/* intro.js */}
+      {!loading &&
       <Steps
         enabled={introjsStepsEnabled}
         steps={introjsSteps}
@@ -335,6 +336,7 @@ export default function Home() {
         initialStep={introjsInitialStep}
         onExit={introjsOnExit}
       />
+    }
 
       {/* main content */}
       <div className="relative flex-1 pb-16 bg-gray-50">
@@ -350,13 +352,23 @@ export default function Home() {
                       参加予定のルーム
                     </h2>
                   </div>
-                  {userIsOwnerOrGuest ? (
-                    <ul role="list" className="">
-                      {sessions.map((session) =>
+                  {loading ?
+                  <ul>
+                    <li className="mb-5">
+                      <ReservedRoomCard loading={loading} />
+                    </li>
+                    <li className="mb-5">
+                      <ReservedRoomCard loading={loading} />
+                    </li>
+                  </ul>
+                  :
+                  userIsOwnerOrGuest ? (
+                    <ul role="list">
+                      {sessions.map((session, index) =>
                         userInfo.uid == session.guestId ||
                         userInfo.uid == session.ownerId ? (
                           <li key={session?.sessionId} className="mb-5">
-                            <ReservedRoomCard {...session} />
+                            <ReservedRoomCard {...session} loading={loading} />
                           </li>
                         ) : (
                           <></>
@@ -384,7 +396,6 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {renderNoEmptyRoomStatement(sessions)}
                   <nav
                     className="overflow-y-auto h-full"
                     aria-label="Directory"
@@ -393,6 +404,7 @@ export default function Home() {
                       reserveSession={reserveSession}
                       sessions={sessions}
                       {...userInfo}
+                      loading={loading} 
                     />
                   </nav>
                 </section>
@@ -404,8 +416,11 @@ export default function Home() {
                 <section className="px-4 sm:px-6 bg-gray-100 rounded-md">
                   <div className="grid grid-cols-1 divide-y">
                     <div className="py-5 sm:py-6">
-                      <dt className="subtitle-section">今月の読書時間</dt>
-                      <dd className="flex md:block lg:flex justify-between items-baseline mt-1">
+                      <dt className="subtitle-section mb-2">今月の読書時間</dt>
+                      {loading ?
+                      <Skeleton width={"33%"}/>
+                      :
+                      <dd className="flex md:block lg:flex justify-between items-baseline">
                         <div className="flex items-baseline text-2xl font-semibold text-tsundoku-brown-main">
                           {monthlyReadTime()}
                           <span className="ml-2 text-lg font-normal text-gray-900">
@@ -418,6 +433,7 @@ export default function Home() {
 
                         {renderIncreasedRate()}
                       </dd>
+                      }
                     </div>
                     {/* <div className="py-5 sm:py-6">
                       <dt className="text-base font-normal text-gray-900">
@@ -442,16 +458,32 @@ export default function Home() {
                 </section>
                 <section className="py-5 sm:py-6 px-4 sm:px-6 my-8 bg-gray-100 rounded-md">
                   <h3 className="mb-4 subtitle-section">いま読んでいる本</h3>
-                  <div className="">
-                    {userInfo?.isReading && bookList ? (
+                  <div>
+                    {loading ?
+                    <div>
+                      <div className="relative mx-auto w-24 h-32">
+                        <Skeleton height="100%"/>
+                      </div>
+                      <dl className="mt-4">
+                        <dt className="text-sm font-bold">
+                          タイトル
+                        </dt>
+                        <dd><Skeleton /></dd>
+                        <dt className="mt-2 text-sm font-bold">
+                          著者
+                        </dt>
+                        <Skeleton count={2} width="50%"/>
+                      </dl>
+                    </div>
+                    :
+                    userInfo.isReading && bookList ? (
                       <>
-                        {bookList
-                          ?.filter(({ bookInfo }) => {
+                        {bookList.filter(({ bookInfo }) => {
                             return bookInfo.bid == userInfo.isReading
                           })
                           .map(({ bookInfo }) => {
                             return (
-                              <div className="" key={bookInfo.bid}>
+                              <div key={bookInfo.bid}>
                                 <div className="relative mx-auto w-24 h-32">
                                   <Image
                                     className="object-contain filter drop-shadow-md"
