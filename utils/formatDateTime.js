@@ -17,5 +17,5 @@ export const formatISOStringToDate = (IsoString) => {
 
 // ISOString を 時、分 に変換 (例：12:45)
 export const formatISOStringToTime = (IsoString) => {
-  return moment(IsoString).format('HH:mm')
+  return moment(IsoString).format('H:mm')
 }

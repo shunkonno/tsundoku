@@ -1,7 +1,7 @@
 // ============================================================
 // Imports
 // ============================================================
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import moment from 'moment'
@@ -25,51 +25,52 @@ import uselocalesFilter from '../../utils/translate'
 import { useAuth } from '../../lib/auth'
 import fetcher from '../../utils/fetcher'
 import { addSession } from '../../lib/db'
+import { formatISOStringToTime } from '../../utils/formatDateTime'
 
 // ============================================================
 // Constants
 // ============================================================
 const timeData = [
-  '00:00',
-  '00:15',
-  '00:30',
-  '00:45',
-  '01:00',
-  '01:15',
-  '01:30',
-  '01:45',
-  '02:00',
-  '02:15',
-  '02:30',
-  '02:45',
-  '03:00',
-  '03:15',
-  '03:30',
-  '03:45',
-  '04:00',
-  '04:15',
-  '04:30',
-  '04:45',
-  '05:00',
-  '05:15',
-  '05:30',
-  '05:45',
-  '06:00',
-  '06:15',
-  '06:30',
-  '06:45',
-  '07:00',
-  '07:15',
-  '07:30',
-  '07:45',
-  '08:00',
-  '08:15',
-  '08:30',
-  '08:45',
-  '09:00',
-  '09:15',
-  '09:30',
-  '09:45',
+  '0:00',
+  '0:15',
+  '0:30',
+  '0:45',
+  '1:00',
+  '1:15',
+  '1:30',
+  '1:45',
+  '2:00',
+  '2:15',
+  '2:30',
+  '2:45',
+  '3:00',
+  '3:15',
+  '3:30',
+  '3:45',
+  '4:00',
+  '4:15',
+  '4:30',
+  '4:45',
+  '5:00',
+  '5:15',
+  '5:30',
+  '5:45',
+  '6:00',
+  '6:15',
+  '6:30',
+  '6:45',
+  '7:00',
+  '7:15',
+  '7:30',
+  '7:45',
+  '8:00',
+  '8:15',
+  '8:30',
+  '8:45',
+  '9:00',
+  '9:15',
+  '9:30',
+  '9:45',
   '10:00',
   '10:15',
   '10:30',
@@ -128,7 +129,7 @@ const timeData = [
   '23:45'
 ]
 
-const durationData = ['30分', '45分', '60分', '90分']
+const durationData = [30, 45, 60, 90]
 
 export default function NewSession() {
   // ============================================================
@@ -147,7 +148,9 @@ export default function NewSession() {
   const [selectedMonth, setSelectedMonth] = useState('')
   const [selectedDate, setSelectedDate] = useState('')
   const [startTime, setStartTime] = useState('')
+  const [endTime, setEndTime] = useState('')
   const [duration, setDuration] = useState(durationData[2])
+  const [ownerReadBookId, setOwnerReadBookId] = useState('')
 
   // ============================================================
   // Context
@@ -198,32 +201,20 @@ export default function NewSession() {
   // Manage DateTime Form
   // ============================================================
 
-  useEffect(() => {
+  useEffect(()=> {
     // デフォルトの開始時刻を設定する
     const now = new Date()
 
-    const h = moment(now).format('HH')
-    const m = Number(moment(now).format('m'))
+    //現在の時刻から分数を切り上げ(2:37なら3:00)して、デフォルトの値としてセット
+    const hourNumber = Number(moment(now).format('H')) + 1
+    const hour = hourNumber.toString()
 
-    let everyFifteenMinutes
+    const defaultTime = `${hour}:00`
 
-    if ((45 <= m) & (m <= 59)) {
-      everyFifteenMinutes = '00'
-    } else if (0 <= m && m < 15) {
-      everyFifteenMinutes = '15'
-    } else if (15 <= m && m < 30) {
-      everyFifteenMinutes = '30'
-    } else if (30 <= m && m < 45) {
-      everyFifteenMinutes = '45'
-    } else {
-      return
-    }
+    setStartTime(defaultTime)
+  },[setStartTime])
 
-    const initialTime = `${h}:${everyFifteenMinutes}`
-
-    // デフォルトの開始時刻に現在時刻に近い値をセット
-    setStartTime(initialTime)
-
+  useEffect(() => {
     // フォームで選択された日付を state にセット
     const dt = moment(selectedDay.toDateString(), 'ddd MMM DD YYYY')
 
@@ -269,41 +260,68 @@ export default function NewSession() {
   }
 
   // ============================================================
-  // Button Handlers
+  // Helper Function
   // ============================================================
-
-  const createSession = async (e) => {
-    e.preventDefault()
-
+  // HH:mm を ISOStringに変換する。(addtionalMinitesがあったら、その分数を追加して変換する)
+  const formatTimeToISOString = useCallback((time, additionalMinutes) => {
     // Get hour and minute values from form input
-    const hourAndMinute = startTime.split(':')
+    const hourAndMinute = time.split(':')
     const hour = hourAndMinute[0]
     const minute = hourAndMinute[1]
-
-    // Get duration from form, in minutes
-    const durationValue = duration.replace('分', '')
-
-    // Set startDateTime for session
+    
     // NOTE: Months are 0 indexed, so input should be decreased by 1
-    var startDateTime = moment({
-      year: Number(selectedYear),
-      month: Number(selectedMonth) - 1,
-      day: Number(selectedDate),
-      hour: Number(hour),
-      minute: Number(minute)
-    }).toISOString()
-
-    // Set hideDateTime for session
-    // This adds the duration to startDateTime, to calculate expected end
-    var endDateTime = moment({
+    var momentObject =  moment({
       year: Number(selectedYear),
       month: Number(selectedMonth) - 1,
       day: Number(selectedDate),
       hour: Number(hour),
       minute: Number(minute)
     })
-      .add(Number(durationValue), 'minutes')
-      .toISOString()
+
+    var isoString
+
+    if(additionalMinutes){
+      isoString  = momentObject
+                    .add(additionalMinutes, 'minutes')
+                    .toISOString()
+    }
+    else{
+      isoString = momentObject.toISOString()
+    }
+
+    return isoString
+  },[selectedYear, selectedMonth, selectedDate])
+
+  // This adds the duration to startDateTime, to calculate expected end
+  useEffect(()=>{
+    const calculateEndDateTime = () => {
+      // startTime(HH:mm) をduration(分)を追加して、ISOStringに変換する。
+      const endDateTimeISOString = formatTimeToISOString(startTime, duration)
+
+      // ISOStringを、HH:mmに戻す
+      const formatedEndTime = formatISOStringToTime(endDateTimeISOString)
+  
+      setEndTime(formatedEndTime)
+    }
+
+    calculateEndDateTime()
+  },[startTime, duration, formatTimeToISOString])
+  
+  console.log(startTime)
+  console.log(endTime)
+
+  // ============================================================
+  // Button Handlers
+  // ============================================================
+
+  const createSession = async (e) => {
+    e.preventDefault()
+
+    // Set startDateTime for session
+    var startDateTime = formatTimeToISOString(startTime)
+
+    // Set hideDateTime for session (startTime + duration)
+    var endDateTime = formatTimeToISOString(startTime, duration)
 
     // Create Daily Room
     const url = 'https://api.daily.co/v1/rooms'
@@ -327,7 +345,8 @@ export default function NewSession() {
           guestName: '',
           startDateTime,
           endDateTime,
-          duration: Number(durationValue)
+          // ownerReadBookId: ownerReadBookId,
+          duration
         })
 
         setAlertAssort('create')
@@ -361,6 +380,33 @@ export default function NewSession() {
             <div className="pb-2 mb-4">
               <h1 className="title-section">ルームを作成する</h1>
             </div>
+            {/* 選択された日程 */}
+            <div className="mt-8 bg-white border-2 border-blue-500 px-6 py-4 rounded-lg">
+                <div>
+                  <h2 className="subtitle-section">開催する日程</h2>
+                </div>
+                <div className="block sm:flex">
+                  <div className="w-full sm:w-5/12">
+                    <div  className="text-gray-500 text-sm mt-4">日付</div>
+                    <div className="pl-4 text-xl mt-1">
+                        {`${selectedYear}年 ${selectedMonth}月 ${selectedDate}日`}
+                    </div>
+                  </div>
+                  <div className="w-full sm:w-4/12">
+                    <div className="text-gray-500 text-sm mt-4">開催時間</div>
+                    <div className="pl-4 text-xl mt-1">
+                        {`${startTime} 〜 ${endTime}`}
+                    </div>
+                  </div>
+                  <div className="w-full sm:w-3/12">
+                    <div className="text-gray-500 text-sm mt-4">長さ</div>
+                    <div className="pl-4 text-xl mt-1">
+                        {`${duration}分間`}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* 選択された日程 - END */}
             <div className="flex flex-row flex-wrap mt-8 sm:mt-8">
               <div className="w-full sm:w-1/2">
                 {/* 日付選択 */}
@@ -465,7 +511,7 @@ export default function NewSession() {
                       </Listbox.Label>
                       <div className="relative mt-1">
                         <Listbox.Button className="relative py-2 pr-10 pl-3 w-full sm:text-sm text-left bg-white rounded-md border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 shadow-sm cursor-default focus:outline-none">
-                          <span className="block truncate">{duration}</span>
+                          <span className="block truncate">{`${duration} 分`}</span>
                           <span className="flex absolute inset-y-0 right-0 items-center pr-2 pointer-events-none">
                             <SelectorIcon
                               className="w-5 h-5 text-gray-400"
@@ -505,7 +551,7 @@ export default function NewSession() {
                                         'block truncate'
                                       )}
                                     >
-                                      {duration}
+                                      {`${duration} 分`}
                                     </span>
 
                                     {selected ? (
@@ -537,27 +583,11 @@ export default function NewSession() {
               </div>
             </div>
             <div>
-              {/* 選択された日程 */}
-              <div className="mt-8">
-                <div>
-                  <h2 className="subtitle-section">選択された日程</h2>
-                </div>
-                <div className="mt-1">
-                  <span className="text-lg">
-                    {selectedYear +
-                      '年 ' +
-                      selectedMonth +
-                      '月 ' +
-                      selectedDate +
-                      '日 ' +
-                      startTime +
-                      ' から ' +
-                      duration +
-                      '間'}
-                  </span>
-                </div>
+              
+
+              <div>
+                
               </div>
-              {/* 選択された日程 - END */}
 
               {/* 作成ボタン */}
               <div className="py-8">
