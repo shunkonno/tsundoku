@@ -1,14 +1,14 @@
 // ============================================================
 // Imports
 // ============================================================
-import { Fragment, useState, useEffect, useContext } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import Head from 'next/head'
 import useSWR from 'swr'
 import moment from 'moment'
 import DayPicker from 'react-day-picker'
 
 // Components
+import { SEO } from '../../components/Meta'
 import { AppHeader } from '../../components/Header'
 import { Footer } from '../../components/Footer'
 import { Listbox, Transition } from '@headlessui/react'
@@ -348,14 +348,10 @@ export default function NewSession() {
 
   return (
     <div className="flex flex-col h-screen bg-gray-50">
-      <Head>
-        <title>Tsundoku | ルーム新規作成</title>
-        <meta
-          name="description"
-          content="Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。集中した読書は自己研鑽だけでなく、リラックス効果もあります。"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <SEO
+        title={"Tsundoku | ルーム新規作成"} 
+        description={"Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。集中した読書は自己研鑽だけでなく、リラックス効果もあります。"} 
+      />
 
       <AppHeader />
 

@@ -4,7 +4,7 @@ export default function Empty() {
   return (
     <>
       <Head>
-        <title>Empty</title>
+        <title>Empty Page</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
     </>

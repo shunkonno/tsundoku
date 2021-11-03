@@ -1,28 +1,21 @@
-import router, { useRouter } from 'next/router'
-import Head from 'next/head'
+import { useRouter } from 'next/router'
 import Image from 'next/image'
 import Link from 'next/link'
 
 // Components
+import { SEO } from '../components/Meta'
 import { LpHeader } from '../components/Header'
 import { LpFooter } from '../components/Footer'
 
 // Assets
-import { BookmarkIcon } from '@heroicons/react/outline'
+import { BookmarkIcon, ExternalLinkIcon } from '@heroicons/react/outline'
 
 // Funtions
 import { useAuth } from '../lib/auth'
 import uselocalesFilter from '../utils/translate'
-import { isBuffer } from 'lodash'
 import { useEffect } from 'react'
 
 export default function Top() {
-  // ============================================================
-  // Auth
-  // ============================================================
-
-  const auth = useAuth()
-
   // ============================================================
   // Routing
   // ============================================================
@@ -45,14 +38,10 @@ export default function Top() {
 
   return (
     <div className="h-full">
-      <Head>
-        <title>Tsundoku</title>
-        <meta
-          name="description"
-          content="Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。集中した読書は自己研鑽だけでなく、リラックス効果もあります。"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <SEO
+        title={"Tsundoku"} 
+        description={"Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。集中した読書は自己研鑽だけでなく、リラックス効果もあります。"} 
+      />
 
       <LpHeader />
 
@@ -258,13 +247,16 @@ export default function Top() {
                       aria-hidden="true"
                     />
                   </div>
-                  <div>
+                  <div className='inline-flex space-x-2 items-center'>
                     <a
                       className="text-base text-gray-500"
                       href="https://www.amazon.co.jp/dp/B07HQ41FSN"
+                      target="_blank"
+                      rel="noreferrer"
                     >
                       習慣が10割
                     </a>
+                    <ExternalLinkIcon className="w-4 h-4 text-gray-400" />
                   </div>
                 </div>
               </div>

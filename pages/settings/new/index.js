@@ -3,10 +3,10 @@
 // ============================================================
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import Head from 'next/head'
 import Image from 'next/image'
 
 // Components
+import { SEO } from '../../../components/Meta'
 import { AppHeader } from '../../../components/Header'
 import { FooterSmall } from '../../../components/Footer'
 
@@ -131,14 +131,10 @@ export default function NewUserSettings() {
 
   return (
     <div className="flex flex-col h-screen bg-gray-50">
-      <Head>
-        <title>Tsundoku | 新規ユーザー</title>
-        <meta
-          name="description"
-          content="Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。集中した読書は自己研鑽だけでなく、リラックス効果もあります。"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <SEO
+        title={"Tsundoku | 新規ユーザー"} 
+        description={"Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。集中した読書は自己研鑽だけでなく、リラックス効果もあります。"} 
+      />
 
       <AppHeader />
 

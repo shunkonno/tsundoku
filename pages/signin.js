@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import Image from 'next/image'
 
 // Components
+import { SEO } from '../components/Meta'
 import { LpHeader } from '../components/Header'
 import { LpFooter } from '../components/Footer'
 
@@ -34,6 +35,10 @@ export default function SignIn() {
 
   return (
     <div>
+      <SEO
+        title={"ログイン"} 
+        description={"Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。集中した読書は自己研鑽だけでなく、リラックス効果もあります。"} 
+      />
       <LpHeader />
 
       <div className="flex flex-col justify-center py-12 sm:px-6 lg:px-0 min-h-screen bg-gray-50">
