@@ -10,24 +10,27 @@ import { useAllSessions } from '../../context/useAllSessions'
 
 export default function ReservedRoomList() {
   let [loading, setLoading] = useState(true)
+  let [userIsOwnerOrGuest, setUserIsOwnerOrGuest] = useState(false)
 
   //ユーザー情報
-  const userInfo = useUserInfo()
+  const { userInfo, error } = useUserInfo()
 
   //セッション情報
   const sessions = useAllSessions()
 
   // ログインしているユーザーが、セッションのオーナー・ゲストか判定する
-  var userIsOwnerOrGuest
-
-  if (sessions) {
-    userIsOwnerOrGuest = sessions.some((session) => {
-      return (
-        userInfo?.uid == session?.guestId || userInfo?.uid == session?.ownerId
-      )
-    })
-  }
-
+  useEffect(()=>{
+    var isUserFlag
+    if (sessions) {
+      isUserFlag = sessions.some((session) => {
+        return (
+          userInfo?.uid == session?.guestId || userInfo?.uid == session?.ownerId
+        )
+      })
+      setUserIsOwnerOrGuest(isUserFlag)
+    }
+  },[sessions, userInfo])
+  
   // Loading
   useEffect(()=>{
     if (userInfo && sessions) {

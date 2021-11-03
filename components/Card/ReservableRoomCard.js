@@ -21,10 +21,10 @@ export default function ReservableRoomCard({sessionId, ownerName, guestId, start
   const { setAlertAssort } = useAlertState()
 
   // Mutate
-  const mutate = useSWRConfig()
+  const { mutate } = useSWRConfig()
 
   // ユーザー情報
-  const userInfo = useUserInfo()
+  const { userInfo, error } = useUserInfo()
 
   // セッション予約ボタン
   const reserveSession = async (sessionId, guestId) => {

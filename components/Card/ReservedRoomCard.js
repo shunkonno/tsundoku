@@ -13,8 +13,6 @@ import 'react-loading-skeleton/dist/skeleton.css'
 //Functions
 import { formatISOStringToDateTime, formatISOStringToTime } from '../../utils/formatDateTime'
 
-
-
 export default function ReservedRoomCard({sessionId, ownerName, startDateTime, endDateTime, duration, loading}) {
   if(loading){
     return (
