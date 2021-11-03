@@ -8,7 +8,7 @@ export const DeviceSelect = () => {
   const {
     cams,
     mics,
-    // speakers,
+    speakers,
     currentDevices,
     setCamDevice,
     setMicDevice,
@@ -23,38 +23,6 @@ export const DeviceSelect = () => {
       <p className="mt-1">(マイクの使用を許可してください。)</p>
       </div>
   }
-
-  const [devis, setDevis] = useState([])
-  const [speakers, setSpeakers] = useState([])
-  // var a = []
-  // navigator.mediaDevices.enumerateDevices().then(function(devices) {
-  //   console.log("devices", devices);
-  //   a = devices
-  //  });
-  
-   useEffect(()=>{
-    async function getDevices () {
-      navigator.mediaDevices.enumerateDevices().then(function(devices) {
-          console.log("devices", devices);
-          setDevis(devices)
-
-          const [defaultSpeaker, ...speakerDevices] = devices.filter(
-            (d) => d.kind === 'audiooutput' && d.deviceId !== ''
-          )
-          setSpeakers(
-            [
-              defaultSpeaker,
-              ...speakerDevices.sort((a, b) => sortByKey(a, b, 'label', false))
-            ].filter(Boolean)
-          )
-         });
-    }
-    getDevices()
-   },[])
-
-   console.log('devis :', devis)
-   console.log('speakers :', speakers)
-
 
   return (
     <>
