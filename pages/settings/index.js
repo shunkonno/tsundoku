@@ -1,7 +1,7 @@
 // ============================================================
 // Import
 // ============================================================
-import { Fragment, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import useSWR, { useSWRConfig } from 'swr'
