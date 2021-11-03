@@ -1,99 +1,44 @@
 // ============================================================
 // Imports
 // ============================================================
-import { Fragment, useState, useEffect, useContext } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import Head from 'next/head'
-import Link from 'next/link'
-import Image from 'next/image'
-import useSWR, { useSWRConfig } from 'swr'
 import { Steps, Hints } from 'intro.js-react'
 
 // Components
+import { SEO } from '../components/Meta'
 import { AppHeader } from '../components/Header'
 import { Footer } from '../components/Footer'
 import { Navbar } from '../components/Navbar'
-import { ReservedRoomCard } from '../components/Card'
-import { ReservableRoomList } from '../components/List'
+import { ReservedRoomSection } from '../components/Section'
+import { ReservableRoomSection } from '../components/Section'
 import { GeneralAlert } from '../components/Alert'
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
+import { HomeIsReadingSection } from '../components/Section'
+import { HomeReadTimeSection } from '../components/Section'
 
 //Context
 import { useUserInfo } from '../context/useUserInfo'
-import { useUserBookList } from '../context/useUserBookList'
-import { useAlertState } from '../context/AlertProvider'
 
 // Assets
-import { PlusIcon, PlusCircleIcon, ArrowSmUpIcon } from '@heroicons/react/solid'
-import { BookOpenIcon } from '@heroicons/react/outline'
 import 'intro.js/introjs.css'
 
 // Functions
 import { useAuth } from '../lib/auth'
-import { updateSession } from '../lib/db'
-import fetcher from '../utils/fetcher'
-import classNames from '../utils/classNames'
 import uselocalesFilter from '../utils/translate'
-import { ChevronRightIcon } from '@heroicons/react/outline'
-import { toPath } from 'lodash'
 
 export default function Home() {
   // ============================================================
-  // Contexts
-  // ============================================================
-  const { alertOpen, setAlertOpen, alertAssort, setAlertAssort } =
-    useAlertState()
-
-  // ============================================================
-  // State
-  // ============================================================
-  let [loading, setLoading] = useState(true)
-
-  // ============================================================
   // Auth
   // ============================================================
-
   const auth = useAuth()
   const user = auth.user
-
-  // ============================================================
-  // Fetch Data
-  // ============================================================
-
-  const { mutate } = useSWRConfig()
 
   // ユーザー情報
   const { userInfo, error } = useUserInfo()
 
-  // セッション情報
-  const { data: sessions } = useSWR(user ? '/api/session' : null, fetcher, {
-    onErrorRetry: ({ retryCount }) => {
-      // Retry up to 10 times
-      if (retryCount >= 10) return
-    }
-  })
-
-  // ブックリスト
-  const bookList = useUserBookList(userInfo?.uid)
-
-  // 利用情報
-  const { data: stats } = useSWR(
-    user ? '/api/user/' + user.uid + '/stats' : null,
-    fetcher,
-    {
-      onErrorRetry: ({ retryCount }) => {
-        // Retry up to 10 times
-        if (retryCount >= 10) return
-      }
-    }
-  )
-  console.log(stats)
-
   // ============================================================
   // Routing
   // ============================================================
-
   const router = useRouter()
 
   useEffect(() => {
@@ -104,7 +49,7 @@ export default function Home() {
       // はじめてログインしたユーザーを設定画面へリダイレクト
       router.push('/settings/new')
     }
-  })
+  },[router, user, userInfo])
 
   // ============================================================
   // Localization
@@ -148,155 +93,6 @@ export default function Home() {
   }
 
   // ============================================================
-  // User-related States
-  // ============================================================
-
-  // ログインしているユーザーが、セッションのオーナー・ゲストか判定する
-  var userIsOwnerOrGuest
-
-  if (sessions) {
-    userIsOwnerOrGuest = sessions.some((session) => {
-      return (
-        userInfo?.uid == session?.guestId || userInfo?.uid == session?.ownerId
-      )
-    })
-  }
-
-  // ============================================================
-  // Helper Functions
-  // ===========================================================
-  const monthlyReadTime = () => {
-    const currentDateTime = new Date()
-    const currentYear = currentDateTime.getFullYear()
-    const currentMonth = currentDateTime.getMonth() + 1
-
-    const readTime = stats?.readTime
-
-    if (readTime?.[currentYear]?.[currentMonth]) {
-      // 現在の月のデータが存在する場合
-      var monthlyReadTime = 0
-
-      // 今月分を array に集約
-      const readTimeArray = Object.values(readTime[currentYear][currentMonth])
-
-      // monthlyReadTime に加算
-      readTimeArray.forEach((readTime) => {
-        monthlyReadTime += readTime
-      })
-
-      console.log(monthlyReadTime)
-
-      return monthlyReadTime
-    } else {
-      // 現在の月のデータが存在しない場合 (=今月未利用)
-      const monthlyReadTime = 0
-      return monthlyReadTime
-    }
-  }
-
-  const lastMonthReadTime = () => {
-    const currentDateTime = new Date()
-    const currentYear = currentDateTime.getFullYear()
-    const lastMonth = currentDateTime.getMonth()
-
-    const readTime = stats?.readTime
-
-    if (readTime?.[currentYear]?.[lastMonth]) {
-      // 先月の月のデータが存在する場合
-      var lastMonthReadTime = 0
-
-      // 先月分を array に集約
-      const readTimeArray = Object.values(readTime[currentYear][lastMonth])
-
-      // lastMonthReadTime に加算
-      readTimeArray.forEach((readTime) => {
-        lastMonthReadTime += readTime
-      })
-
-      return lastMonthReadTime
-    } else {
-      // 先月の月のデータが存在しない場合 (=先月未利用)
-      const lastMonthReadTime = 0
-      return lastMonthReadTime
-    }
-  }
-
-  const calculateRateOfReadTime = (monthlyReadTime, lastMonthReadTime) => {
-    let result
-
-    if (lastMonthReadTime != 0) {
-      result = Math.round((monthlyReadTime / lastMonthReadTime) * 100 - 100)
-    } else {
-      result = 0
-    }
-
-    return result
-  }
-
-  // ============================================================
-  // Button Handlers
-  // ============================================================
-
-  // セッション予約ボタン
-  const reserveSession = async (sessionId, guestId) => {
-    if (guestId) {
-      // guestId がすでに設定されている場合、予約することができない
-
-      // アラートの設定
-      await setAlertAssort('failed')
-    } else {
-      // guestId 未設定であれば、当ユーザーをIDを設定する
-
-      // セッション情報の更新
-      await updateSession(sessionId, {
-        guestId: user.uid,
-        guestName: userInfo.name
-      })
-
-      // 画面をリフレッシュ
-      mutate('/api/session')
-
-      // アラートの設定
-      await setAlertAssort('reserve')
-    }
-  }
-
-  // ============================================================
-  // Render Function
-  // ============================================================
-
-  const renderIncreasedRate = () => {
-    let increasedRate = calculateRateOfReadTime(
-      monthlyReadTime(),
-      lastMonthReadTime()
-    )
-
-    if (increasedRate > 0) {
-      return (
-        <div className="inline-flex items-baseline py-0.5 px-2.5 md:mt-2 lg:mt-0 text-sm font-medium text-green-800 bg-green-100 rounded-full">
-          <ArrowSmUpIcon className="flex-shrink-0 self-center mr-0.5 -ml-1 w-5 h-5 text-green-500" />
-          <span className="sr-only">Increased by</span>
-          {calculateRateOfReadTime(monthlyReadTime(), lastMonthReadTime())}%
-        </div>
-      )
-    } else {
-      return
-    }
-  }
-
-  // ============================================================
-  // Loading
-  // ============================================================
-
-  useEffect(()=>{
-    if (!(user === null || !userInfo || !sessions || !bookList)) {
-      setLoading(false)
-    }
-  },[user, userInfo, sessions, bookList])
-
-  console.log(loading)
-
-  // ============================================================
   // Return
   // ============================================================
 
@@ -309,26 +105,17 @@ export default function Home() {
 
   return (
     <div className="flex flex-col h-screen bg-gray-50">
-      <Head>
-        <title>Tsundoku | ホーム</title>
-        <meta
-          name="description"
-          content="Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。集中した読書は自己研鑽だけでなく、リラックス効果もあります。"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <GeneralAlert
-        alertOpen={alertOpen}
-        alertAssort={alertAssort}
-        setAlertOpen={setAlertOpen}
-        setAlertAssort={setAlertAssort}
+      <SEO
+        title={"Tsundoku | ホーム"} 
+        description={"Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。集中した読書は自己研鑽だけでなく、リラックス効果もあります。"} 
       />
+
+      <GeneralAlert />
 
       <AppHeader />
 
       {/* intro.js */}
-      {!loading &&
+      {userInfo &&
       <Steps
         enabled={introjsStepsEnabled}
         steps={introjsSteps}
@@ -346,191 +133,15 @@ export default function Home() {
             <div className="flex gap-14 mt-8 sm:mt-16">
               {/* 左カラム -- START */}
               <div className="w-full sm:w-2/3 max-w-7xl">
-                <section className="pb-3">
-                  <div className="mb-4">
-                    <h2 className="title-section onboarding-2">
-                      参加予定のルーム
-                    </h2>
-                  </div>
-                  {loading ?
-                  <ul>
-                    <li className="mb-5">
-                      <ReservedRoomCard loading={loading} />
-                    </li>
-                    <li className="mb-5">
-                      <ReservedRoomCard loading={loading} />
-                    </li>
-                  </ul>
-                  :
-                  userIsOwnerOrGuest ? (
-                    <ul role="list">
-                      {sessions.map((session, index) =>
-                        userInfo.uid == session.guestId ||
-                        userInfo.uid == session.ownerId ? (
-                          <li key={session?.sessionId} className="mb-5">
-                            <ReservedRoomCard {...session} loading={loading} />
-                          </li>
-                        ) : (
-                          <></>
-                        )
-                      )}
-                    </ul>
-                  ) : (
-                    <div className="py-6 text-center bg-gray-100 rounded-md">
-                      現在、参加予定のルームはありません。
-                    </div>
-                  )}
-                </section>
-                <section className="py-3 mt-10">
-                  <div className="flex justify-between items-center mb-4">
-                    <div className="flex-shrink-0">
-                      <h2 className="title-section onboarding-1">ルーム一覧</h2>
-                    </div>
-                    <div className="flex flex-1 justify-end">
-                      <Link href="/session/new" passHref>
-                        <a className="group flex items-center py-2 w-auto text-base font-bold hover:text-blue-700 text-tsundoku-blue-main onboarding-3">
-                          <PlusIcon className="inline-block mr-2 w-6 h-6" />
-                          <span>ルームを作成する</span>
-                        </a>
-                      </Link>
-                    </div>
-                  </div>
-
-                  <nav
-                    className="overflow-y-auto h-full"
-                    aria-label="Directory"
-                  >
-                    <ReservableRoomList
-                      reserveSession={reserveSession}
-                      sessions={sessions}
-                      {...userInfo}
-                      loading={loading} 
-                    />
-                  </nav>
-                </section>
+                <ReservedRoomSection />
+                <ReservableRoomSection />
               </div>
               {/* 左カラム -- END */}
 
               {/* 右カラム -- START */}
               <div className="hidden sm:block sm:w-1/3">
-                <section className="px-4 sm:px-6 bg-gray-100 rounded-md">
-                  <div className="grid grid-cols-1 divide-y">
-                    <div className="py-5 sm:py-6">
-                      <dt className="subtitle-section mb-2">今月の読書時間</dt>
-                      {loading ?
-                      <Skeleton width={"33%"}/>
-                      :
-                      <dd className="flex md:block lg:flex justify-between items-baseline">
-                        <div className="flex items-baseline text-2xl font-semibold text-tsundoku-brown-main">
-                          {monthlyReadTime()}
-                          <span className="ml-2 text-lg font-normal text-gray-900">
-                            分&nbsp;
-                          </span>
-                          <span className="ml-2 text-sm font-medium text-gray-500">
-                            先月 {lastMonthReadTime()} 分
-                          </span>
-                        </div>
-
-                        {renderIncreasedRate()}
-                      </dd>
-                      }
-                    </div>
-                    {/* <div className="py-5 sm:py-6">
-                      <dt className="text-base font-normal text-gray-900">
-                        今月の読書ページ数(推定)
-                      </dt>
-                      <dd className="flex md:block lg:flex justify-between items-baseline mt-1">
-                        <div className="flex items-baseline text-2xl font-semibold text-tsundoku-brown-main">
-                          ---
-                          <span className="ml-2 text-sm font-medium text-gray-500">
-                            先月 ---
-                          </span>
-                        </div>
-
-                        <div className="inline-flex items-baseline py-0.5 px-2.5 md:mt-2 lg:mt-0 text-sm font-medium text-green-800 bg-green-100 rounded-full">
-                          <ArrowSmUpIcon className="flex-shrink-0 self-center mr-0.5 -ml-1 w-5 h-5 text-green-500" />
-                          <span className="sr-only">Increased by</span>
-                          999%
-                        </div>
-                      </dd>
-                    </div> */}
-                  </div>
-                </section>
-                <section className="py-5 sm:py-6 px-4 sm:px-6 my-8 bg-gray-100 rounded-md">
-                  <h3 className="mb-4 subtitle-section">いま読んでいる本</h3>
-                  <div>
-                    {loading ?
-                    <div>
-                      <div className="relative mx-auto w-24 h-32">
-                        <Skeleton height="100%"/>
-                      </div>
-                      <dl className="mt-4">
-                        <dt className="text-sm font-bold">
-                          タイトル
-                        </dt>
-                        <dd><Skeleton /></dd>
-                        <dt className="mt-2 text-sm font-bold">
-                          著者
-                        </dt>
-                        <Skeleton count={2} width="50%"/>
-                      </dl>
-                    </div>
-                    :
-                    userInfo.isReading && bookList ? (
-                      <>
-                        {bookList.filter(({ bookInfo }) => {
-                            return bookInfo.bid == userInfo.isReading
-                          })
-                          .map(({ bookInfo }) => {
-                            return (
-                              <div key={bookInfo.bid}>
-                                <div className="relative mx-auto w-24 h-32">
-                                  <Image
-                                    className="object-contain filter drop-shadow-md"
-                                    layout={'fill'}
-                                    src={
-                                      bookInfo.image
-                                        ? bookInfo.image
-                                        : '/img/placeholder/noimage_480x640.jpg'
-                                    }
-                                    alt="book-cover"
-                                  />
-                                </div>
-                                <dl className="mt-4">
-                                  <dt className="text-sm font-bold">
-                                    タイトル
-                                  </dt>
-                                  <dd>{bookInfo.title}</dd>
-                                  <dt className="mt-2 text-sm font-bold">
-                                    著者
-                                  </dt>
-                                  {bookInfo.authors.map((author) => {
-                                    return <dd key={author}>{author}</dd>
-                                  })}
-                                </dl>
-                              </div>
-                            )
-                          })}
-                      </>
-                    ) : (
-                      <div className="text-center">
-                        <p className="text-sm sm:text-base text-gray-900">
-                          『いま読んでいる本』は選択されていません。
-                        </p>
-                        <p className="mt-2 text-xs sm:text-sm text-gray-500">
-                          <Link href="/booklist">
-                            <a className="text-blue-500">ブックリスト</a>
-                          </Link>
-                          から選択できます。
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </section>
-                {/* 新規機能:みんなのリストが実装されたら解放*/}
-                {/* <section className="mb-8">
-                  <h3 className="subtitle-section">みんなのリスト(人気)</h3>
-                </section> */}
+                <HomeReadTimeSection />
+                <HomeIsReadingSection />
               </div>
               {/* 右カラム -- START */}
             </div>
@@ -541,7 +152,7 @@ export default function Home() {
       <Footer />
 
       {/* スマホ時、コンテンツとNavbarが重なるのを防ぐ */}
-      <div className="sm:hidden h-16 bg-gray" />
+      <div className="sm:hidden h-16 bg-gray-50" />
     </div>
   )
 }
