@@ -1,3 +1,4 @@
 import AddBookModal from './AddBookModal'
+import SelectPlannedReadingBookModal from './SelectPlannedReadingBookModal'
 
-export { AddBookModal }
+export { AddBookModal, SelectPlannedReadingBookModal }
