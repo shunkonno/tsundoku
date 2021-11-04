@@ -1,25 +1,24 @@
 // ============================================================
 // Imports
 // ============================================================
-import { Fragment, useState, useEffect, useCallback, useRef } from 'react'
+import { Fragment, useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import moment from 'moment'
 import DayPicker from 'react-day-picker'
 
 // Vercel
 import Image from 'next/image'
-import Link from 'next/link'
 
 // Assets
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
-import { SearchIcon, XIcon } from '@heroicons/react/outline'
 import 'react-day-picker/lib/style.css'
 
 // Components
 import { SEO } from '../../components/Meta'
 import { AppHeader } from '../../components/Header'
 import { Footer } from '../../components/Footer'
-import { Dialog, Listbox, Transition } from '@headlessui/react'
+import { SelectPlannedReadingBookModal } from '../../components/Modal'
+import { Listbox, Transition } from '@headlessui/react'
 
 // Context
 import { useUserInfo } from '../../context/useUserInfo'
@@ -32,8 +31,7 @@ import { useAuth } from '../../lib/auth'
 import { addSession } from '../../lib/db'
 import { formatISOStringToTime } from '../../utils/formatDateTime'
 import { ChevronRightIcon } from '@heroicons/react/outline'
-import { updateIsReading } from '../../lib/db'
-import { filter } from 'lodash'
+import classNames from '../../utils/classNames'
 
 // ============================================================
 // Constants
@@ -141,16 +139,13 @@ const durationData = [30, 45, 60, 90]
 
 export default function NewSession() {
   // ============================================================
-  // Helper Functions
+  // Context
   // ============================================================
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-  }
+  const { setAlertAssort } = useAlertState()
 
   // ============================================================
   // State
   // ============================================================
-
   const [selectedDay, setSelectedDay] = useState(new Date())
   const [selectedYear, setSelectedYear] = useState('')
   const [selectedMonth, setSelectedMonth] = useState('')
@@ -160,15 +155,9 @@ export default function NewSession() {
   const [duration, setDuration] = useState(durationData[2])
   const [ownerReadBook, setOwnerReadBook] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
-  let closeModalButtonRef = useRef(null)
 
-  console.log(modalOpen)
-  console.log(ownerReadBook)
-
-  // ============================================================
-  // Context
-  // ============================================================
-  const { setAlertAssort } = useAlertState()
+  console.log('modalOpen : ',modalOpen)
+  console.log('ownerReadBook',ownerReadBook)
 
   // ============================================================
   // Auth
@@ -381,20 +370,6 @@ export default function NewSession() {
       .catch((err) => console.error('error:' + err))
   }
 
-  const handleOwnerReadBook = async(e, bid) => {
-    e.preventDefault()
-
-    let readBook = {}
-    
-    readBook = bookList?.filter((book) => {
-      return book.bookInfo.bid === bid
-    })
-    if(readBook){
-      await setOwnerReadBook(readBook[0].bookInfo)
-    }
-
-    await setModalOpen(false)
-  }
   // ============================================================
   // Return
   // ============================================================
@@ -622,7 +597,10 @@ export default function NewSession() {
 
             <div className="flex flex-col mt-8 bg-white border border-gray-300 px-6 py-4 rounded-lg h-48">
               <div className="flex flex-shrink-0 justify-between items-center w-full">
-                <h2 className="font-bold">読む予定の本</h2>
+                <div className="flex items-center">
+                  <h2 className="font-bold">読む予定の本</h2>
+                  <p className="text-xs font-medium text-gray-500 ml-3">(あとで変更できます。)</p>
+                </div>
                 {ownerReadBook == "" ?
                 <>
                 </>
@@ -665,7 +643,9 @@ export default function NewSession() {
                 :
                   <div className="flex justify-center items-center w-full">
                     <div>
-                      <p className="text-center text-gray-500">読む予定の本を選択してください</p>
+                      <p className="text-center text-gray-500">
+                        読む予定の本を選択できます。
+                      </p>
                       <p 
                         className="text-center text-blue-500 cursor-pointer mt-2"
                         onClick={()=> setModalOpen(true)}
@@ -694,149 +674,12 @@ export default function NewSession() {
               </div>
               {/* 作成ボタン - END */}
             </div>
-            <Transition show={modalOpen} as={Fragment}>
-              <Dialog
-                as="div"
-                initialFocus={closeModalButtonRef}
-                className="overflow-y-scroll fixed inset-0 z-10"
-                onClose={() => setModalOpen(false)}
-              >
-                <div className="sm:px-4 min-h-screen text-center">
-                  <Transition.Child
-                    as={Fragment}
-                    enter="ease-out duration-300"
-                    enterFrom="opacity-0"
-                    enterTo="opacity-100"
-                    leave="ease-in duration-200"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                  >
-                    <Dialog.Overlay className="fixed inset-0 bg-gray-400 bg-opacity-50 transition-opacity" />
-                  </Transition.Child>
 
-                  <span
-                    className="inline-block h-screen align-middle"
-                    aria-hidden="true"
-                  >
-                    &#8203;
-                  </span>
-                  <Transition.Child
-                    as={Fragment}
-                    enter="ease-out duration-300"
-                    enterFrom="opacity-0 scale-95"
-                    enterTo="opacity-100 scale-100"
-                    leave="ease-in duration-200"
-                    leaveFrom="opacity-100 scale-100"
-                    leaveTo="opacity-0 scale-95"
-                  >
-                    
-                    <div className="inline-block relative p-6 w-full overflow-y-hidden max-w-4xl h-80v text-left align-middle bg-white rounded-2xl shadow-xl transition-all transform">
-                      <div className="flex-shrink-0">
-                        <div className="flex justify-between items-center">
-                          <div className="font-bold text-lg">
-                            ブックリストから選ぶ
-                          </div>
-                          <button
-                            ref={closeModalButtonRef}
-                            onClick={() => setModalOpen(false)}
-                          >
-                            <XIcon
-                              className="w-8 h-8 text-gray-500 hover:text-gray-600"
-                            />
-                          </button>
-                        </div>
-                        {/* <div className="flex flex-col flex-1 justify-center h-4/5">
-                          <div>
-                            <Dialog.Title
-                              as="h3"
-                              className="text-xl font-medium leading-6 text-gray-900"
-                            >
-                              タイトル・著者名で検索
-                            </Dialog.Title>
-                            <div className=" mt-2">
-
-                              <div className="relative mt-1 rounded-md shadow-sm">
-                                <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                  <SearchIcon
-                                    className="w-5 h-5 text-gray-400"
-                                    aria-hidden="true"
-                                  />
-                                </div>
-                                <input
-                                  type="text"
-                                  className="block pl-10 w-full sm:text-sm rounded-md border-gray-300 focus:ring-tsundoku-blue-main focus:border-tsundoku-blue-main"
-                                  placeholder="ここに入力"
-                                  onInput={(input) =>
-                                    input.target.value.length > 1
-                                      ? searchBooksDebounced(input.target.value)
-                                      : null
-                                  }
-                                />
-                              </div>
-
-                            </div>
-                          </div>
-                        </div> */}
-                      </div>
-                      <div className="overflow-y-auto flex-1 h-full">
-                        <div className="flow-root mt-6">
-                          {bookList?.length > 0 ?
-                            <ul role="list" className="divide-y divide-gray-200">
-                              {bookList?.map(({bookInfo}) => (
-                                <li className="py-4" key={bookInfo.bid}>
-                                  <div className="flex items-center space-x-4">
-                                    <div className="flex-shrink-0">
-                                      <Image
-                                        className="w-12 h-16"
-                                        width={90}
-                                        height={120}
-                                        src={
-                                          bookInfo.image
-                                            ? bookInfo.image
-                                            : '/img/placeholder/noimage_480x640.jpg'
-                                        }
-                                        alt={bookInfo.title}
-                                      />
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                      <p className="text-sm font-medium text-gray-900 truncate">
-                                        {bookInfo.title}
-                                      </p>
-                                    </div>
-                                    <div>
-                                      <button
-                                        value={bookInfo.bid}
-                                        className="inline-flex items-center py-1 px-3 text-base font-medium leading-5 text-blue-600 hover:text-white bg-white hover:bg-blue-500 rounded-full border border-blue-600 hover:border-blue-500 shadow-sm"
-                                        onClick={(e) => handleOwnerReadBook(e, bookInfo.bid)}
-                                      >
-                                        選択
-                                      </button>
-                                    </div>
-                                  </div>
-                                </li>
-                              ))}
-                            </ul>
-                          :
-                          <div className="flex justify-center items-center w-full">
-                            <div>
-                              <p className="text-center text-gray-500">ブックリストに本がありません。</p>
-                              <Link href='/booklist'>
-                              <a 
-                                className="inline-block text-center text-blue-500 mt-2 text-sm"
-                              >
-                                  『ブックリスト』から本を追加する
-                              </a>
-                              </Link>
-                            </div>
-                          </div>
-                          }
-                        </div>
-                      </div>
-                    </div>
-                  </Transition.Child>
-                </div>
-              </Dialog>
-            </Transition>
+            <SelectPlannedReadingBookModal 
+              modalOpen={modalOpen} 
+              setModalOpen={setModalOpen}
+              setOwnerReadBook={setOwnerReadBook}
+            />
           </main>
         </div>
       </div>
