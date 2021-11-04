@@ -199,7 +199,7 @@ export default function SessionDetail({ session }) {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
-        Authorization: 'Bearer ' + process.env.DAILY_API_KEY
+        Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_DAILY_API_KEY
       }
     }
 
@@ -242,8 +242,10 @@ export default function SessionDetail({ session }) {
   return (
     <div className="flex flex-col h-screen bg-gray-50">
       <SEO
-        title={"Tsundoku | ルーム詳細"} 
-        description={"Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。集中した読書は自己研鑽だけでなく、リラックス効果もあります。"} 
+        title={'Tsundoku | ルーム詳細'}
+        description={
+          'Tsundoku (積ん読・ツンドク) は他の誰かと読書する、ペア読書サービスです。集中した読書は自己研鑽だけでなく、リラックス効果もあります。'
+        }
       />
 
       <AppHeader />
