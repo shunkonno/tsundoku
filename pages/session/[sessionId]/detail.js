@@ -3,27 +3,34 @@
 // ============================================================
 import { Fragment, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
-import useSWR from 'swr'
 import moment from 'moment'
+
+// Vercel
+import useSWR from 'swr'
+import Image from 'next/image'
+import Link from 'next/link'
+
+//Assets
+import { PlusSmIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
+import { TrashIcon, XCircleIcon } from '@heroicons/react/outline'
 
 // Components
 import { SEO } from '../../../components/Meta'
 import { AppHeader } from '../../../components/Header'
 import { Footer } from '../../../components/Footer'
+import { SelectPlannedReadingBookModal } from '../../../components/Modal'
 import { Menu, Transition } from '@headlessui/react'
 
 //Context
 import { useAlertState } from '../../../context/AlertProvider'
 
-//Assets
-import { PlusSmIcon, ChevronLeftIcon } from '@heroicons/react/solid'
-import { TrashIcon, XCircleIcon } from '@heroicons/react/outline'
+// Context
+import { useOneBookInfo } from '../../../context/useOneBookInfo'
+import { useUserInfo } from '../../../context/useUserInfo'
 
 // Functions
 import uselocalesFilter from '../../../utils/translate'
 import { useAuth } from '../../../lib/auth'
-import fetcher from '../../../utils/fetcher'
 import {
   updateSession,
   deleteSession,
@@ -33,6 +40,7 @@ import {
 import { fetchOneSession, fetchAllSessions } from '../../../lib/db-admin'
 import { DotsVerticalIcon } from '@heroicons/react/outline'
 import classNames from '../../../utils/classNames'
+
 
 // ============================================================
 // Fetch static data
@@ -67,6 +75,16 @@ export default function SessionDetail({ session }) {
   const { setAlertAssort } = useAlertState()
 
   // ============================================================
+  // State
+  // ============================================================
+  const [count, setCount] = useState(0)
+  const [enterRoomOpen, setEnterRoomOpen] = useState(false)
+  const [ownerReadBook, setOwnerReadBook] = useState({})
+  const [modalOpen, setModalOpen] = useState(false)
+
+  console.log(ownerReadBook)
+
+  // ============================================================
   // Auth
   // ============================================================
   const auth = useAuth()
@@ -76,17 +94,11 @@ export default function SessionDetail({ session }) {
   // Fetch Data
   // ============================================================
 
-  // Fetch logged user info on client side
-  const { data: userInfo } = useSWR(
-    user ? ['/api/user', user.token] : null,
-    fetcher,
-    {
-      onErrorRetry: ({ retryCount }) => {
-        // Retry up to 10 times
-        if (retryCount >= 10) return
-      }
-    }
-  )
+  // ユーザー情報をfetch
+  const userInfo = useUserInfo()
+
+  // ownerのReadBookInfoをfetch
+  const ownerBookInfo = useOneBookInfo(session?.ownerReadBookId)
 
   // ============================================================
   // Routing
@@ -98,17 +110,22 @@ export default function SessionDetail({ session }) {
       // If the access isn't authenticated, redirect to index page
       router.push('/')
     }
-  })
+  },[user,router])
 
   // Set locale
   const { locale } = router
   const t = uselocalesFilter('detail', locale)
 
   // ============================================================
-  // Initialize State
+  // Default OwnerReadingBook Setting
   // ============================================================
-  const [count, setCount] = useState(0)
-  const [enterRoomOpen, setEnterRoomOpen] = useState(false)
+  useEffect(()=> {
+    if(ownerBookInfo){
+      setOwnerReadBook(ownerBookInfo)
+    }else {
+      setOwnerReadBook({})
+    }
+  },[ownerBookInfo])
 
   // ============================================================
   // Helper Functions
@@ -367,6 +384,62 @@ export default function SessionDetail({ session }) {
                       )}
                     </dd>
                   </div>
+                  <div className="py-3">
+                    <dt className="text-sm font-bold text-gray-900">このルームで読む予定の本</dt>
+                    <dd className="flex items-center mt-3 text-base p-4 text-gray-900 rounded-lg h-32 space-x-4">
+                    {!(ownerReadBook == {})?
+                      <>
+                        <div className="flex flex-shrink-0 h-full">
+                          <div className="relative flex-shrink-0 w-12 sm:w-20">
+                            <Image
+                              className="object-contain"
+                              layout={'fill'}
+                              src={
+                                ownerReadBook.image
+                                  ? ownerReadBook.image
+                                  : '/img/placeholder/noimage_480x640.jpg'
+                              }
+                              alt="book cover"
+                            />
+                          </div>
+                        </div>
+                        <div className="flex-1 h-full">
+                          <div>
+                            <div className="font-bold text-sm">
+                              タイトル
+                            </div>
+                            <div className="overflow-ellipsis line-clamp-2">
+                              {ownerReadBook.title}
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                        <div 
+                          className="text-sm text-blue-500 inline-flex items-center cursor-pointer"
+                          onClick={()=> setModalOpen(true)}
+                        >
+                          <span>変更する</span>
+                        </div>
+                        </div>
+                      </>
+                    :
+                      <div className="flex justify-center items-center w-full">
+                        <div>
+                          <p className="text-center text-gray-500">
+                            読む予定の本を選択をできます。
+                          </p>
+                          <p 
+                            className="text-center text-blue-500 cursor-pointer mt-2"
+                            onClick={()=> setModalOpen(true)}
+                          >
+                              選択する
+                          </p>
+                        </div>
+                      </div>
+                    }
+                    </dd>
+                    
+                  </div>
                 </dl>
               </div>
             </div>
@@ -398,6 +471,12 @@ export default function SessionDetail({ session }) {
                 )}
               </div>
             </div>
+            <SelectPlannedReadingBookModal 
+              modalOpen={modalOpen} 
+              setModalOpen={setModalOpen}
+              setOwnerReadBook={setOwnerReadBook}
+              sessionId={session?.sessionId}
+            />
           </main>
         </div>
       </div>
