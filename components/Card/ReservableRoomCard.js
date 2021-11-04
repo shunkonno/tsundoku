@@ -1,6 +1,7 @@
 
 // Vercel
 import { useSWRConfig } from 'swr'
+import Image from 'next/image'
 
 //Component
 import { Disclosure, Transition } from '@headlessui/react'
@@ -10,12 +11,13 @@ import 'react-loading-skeleton/dist/skeleton.css'
 // Context
 import { useAlertState } from '../../context/AlertProvider'
 import { useUserInfo } from '../../context/useUserInfo'
+import { useOneBookInfo } from '../../context/useOneBookInfo' 
 
 //Functions
 import { updateSession } from '../../lib/db'
 import { formatISOStringToTime } from '../../utils/formatDateTime'
 
-export default function ReservableRoomCard({sessionId, ownerName, guestId, startDateTime, endDateTime, duration, loading}) {
+export default function ReservableRoomCard({sessionId, ownerId, ownerName, guestId, ownerReadBookId, startDateTime, endDateTime, duration, loading}) {
 
   // Context
   const { setAlertAssort } = useAlertState()
@@ -25,6 +27,9 @@ export default function ReservableRoomCard({sessionId, ownerName, guestId, start
 
   // ユーザー情報
   const { userInfo, error } = useUserInfo()
+
+  // オーナーのブック
+  const ownerBookInfo = useOneBookInfo(ownerReadBookId)
 
   // セッション予約ボタン
   const reserveSession = async (sessionId, guestId) => {
@@ -115,8 +120,43 @@ export default function ReservableRoomCard({sessionId, ownerName, guestId, start
                 leaveTo="transform scale-95 opacity-0"
               >
                 <Disclosure.Panel>
-                  <div className="flex justify-end items-center p-3 -mt-px divide-x divide-gray-200">
-                    <div className="flex items-center -ml-px">
+                  <div className="block sm:flex justify-between items-center p-3 -mt-px divide-y sm:divide-y-0 sm:divide-x divide-gray-200">
+                    <div className="flex-1">
+                      <div className="font-bold text-sm">
+                        開催者が読む予定の本
+                      </div>
+                      {ownerBookInfo ?
+                        <div className="flex h-36 space-x-4">
+                          <div className="flex flex-shrink-0 w-1/4">
+                            <div className="relative flex-shrink-0 w-16 sm:w-20 mx-auto">
+                              <Image
+                                src={
+                                  ownerBookInfo.image ?
+                                    ownerBookInfo.image
+                                  :
+                                  '/img/placeholder/noimage_480x640.jpg'
+                                }
+                                objectFit={'contain'}
+                                layout={'fill'}
+                                alt='book cover'
+                              />
+                            </div>
+                          </div>
+                          <div className="flex-1 flex items-center px-3">
+                            <p className="overflow-y-hidden text-base sm:text-lg font-medium leading-5 text-gray-900 overflow-ellipsis line-clamp-3">
+                              {ownerBookInfo.title}
+                            </p>
+                          </div>
+                        </div>
+                      :
+                        <div className="text-center text-sm text-gray-500 mt-2 sm:mt-4 mb-2">
+                          <p>開催者は読む予定の本を</p>
+                          <p>選択していません。</p>
+                        </div>
+                      }
+                      
+                    </div>
+                    <div className="flex flex-shrink-0 justify-end items-center -ml-px pt-2 sm:pt-0 sm:pl-2">
                       <p className="mr-4 text-sm text-black">
                         このルームを予約しますか？
                       </p>
