@@ -13,7 +13,7 @@ export default async function tokenHandler(req, res) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.DAILY_API_KEY}`
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_DAILY_API_KEY}`
       },
       body: JSON.stringify({
         properties: { room_name: roomName, is_owner: isOwner, user_id: userId }
