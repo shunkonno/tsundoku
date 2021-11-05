@@ -388,9 +388,9 @@ export default function SessionDetail({ session }) {
                   </div>
                   <div className="py-3">
                     <dt className="text-sm font-bold text-gray-900">このルームで読む予定の本</dt>
-                    <dd className="flex items-center mt-3 text-base p-4 text-gray-900 rounded-lg h-32 space-x-4">
-                    {!(ownerReadBook == {})?
-                      <>
+                    
+                    {!(Object.keys(ownerReadBook).length === 0)?
+                      <dd className="flex items-center mt-3 text-base p-4 text-gray-900 rounded-lg h-32 space-x-4">
                         <div className="flex flex-shrink-0 h-full">
                           <div className="relative flex-shrink-0 w-12 sm:w-20">
                             <Image
@@ -423,24 +423,26 @@ export default function SessionDetail({ session }) {
                           <span>変更する</span>
                         </div>
                         </div>
-                      </>
+                      </dd>
                     :
-                      <div className="flex justify-center items-center w-full">
-                        <div>
+                    <dd className="flex items-center mt-3 text-base pr-4 text-gray-900 rounded-lg h-20 space-x-4">
+                      <div className="flex justify-between items-center w-full">
                           <p className="text-center text-gray-500">
-                            読む予定の本を選択をできます。
+                            {user?.uid == session?.ownerId ?
+                              "読む予定の本を選択をできます。"
+                            :
+                              "開催者は読む予定の本を設定していません。"
+                            }
                           </p>
                           <p 
-                            className="text-center text-blue-500 cursor-pointer mt-2"
+                            className="text-center flex-shrink-0 text-blue-500 cursor-pointer mt-2"
                             onClick={()=> setModalOpen(true)}
                           >
                               選択する
                           </p>
-                        </div>
                       </div>
-                    }
                     </dd>
-                    
+                    }
                   </div>
                 </dl>
               </div>
