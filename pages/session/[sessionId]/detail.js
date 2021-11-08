@@ -6,7 +6,6 @@ import { useRouter } from 'next/router'
 import moment from 'moment'
 
 // Vercel
-import useSWR from 'swr'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -450,14 +449,14 @@ export default function SessionDetail({ session }) {
             <div className="flex justify-center items-start py-6">
               <div className="flex">
                 {enterRoomOpen ? (
-                  <a onClick={(e) => joinSession(e)}>
+                  <div onClick={(e) => joinSession(e)}>
                     <span
                       type="button"
                       className="inline-flex items-center py-3 px-6 text-base font-medium text-white hover:bg-blue-600 rounded-md border border-transparent focus:ring-2 focus:ring-offset-2 shadow-sm cursor-pointer focus:outline-none bg-tsundoku-blue-main focus:ring-tsundoku-blue-main"
                     >
                       ルームに入室する
                     </span>
-                  </a>
+                  </div>
                 ) : (
                   <div>
                     <span
